@@ -11,3 +11,7 @@
 
 src/main/antlr4/fr/ensimag/deca/syntax/.antlr
 examples/calc/src/main/antlr4/calc/.antlr
+
+.idea/
+gen/
+src/main/antlr4/fr/ensimag/deca/syntax/DecaLexer.tokens
