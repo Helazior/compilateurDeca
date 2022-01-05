@@ -8,3 +8,6 @@
 .project
 .metadata
 .settings
+
+src/main/antlr4/fr/ensimag/deca/syntax/.antlr
+examples/calc/src/main/antlr4/calc/.antlr
