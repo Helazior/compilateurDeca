@@ -14,7 +14,8 @@ ASM: 'asm';
 //CLASS: 'class';
 EXTENDS: 'extends';
 ELSE: 'else';
-EOL: '\n';
+EOL: '\n' {skip(); };
+SPACE: ' ' {skip(); };
 FALSE: 'false';
 IF: 'if';
 //INSTANCEOF: 'instanceof';
@@ -31,9 +32,10 @@ RETURN: 'return';
 THIS: 'this';
 TRUE: 'true';
 WHILE: 'while';
+SEMI: ';' {skip(); };
 
-DIGIT: ('0' .. '9');
-LETTER: ('a' .. 'z' | 'A' .. 'Z');
+fragment DIGIT: ('0' .. '9');
+fragment LETTER: ('a' .. 'z' | 'A' .. 'Z');
 IDENT: (LETTER + '$' + '_')(LETTER + DIGIT + '$' + '_')*;
 
 INF: '<';
@@ -50,8 +52,9 @@ OPARENT: '(';
 CPARENT: ')';
 OCROC: '{';
 CCROC: '}';
+OBRACE: '[';
+CBRACE: ']';
 EX: '!';
-DOTCOMMA: ';';
 EQ: '==';
 NEQ: '!=';
 SUPEQ: '>=';
@@ -59,9 +62,14 @@ INFEQ: '<=';
 AND: '&&';
 OR: '||';
 
-STRING_CAR: ~('/' | '"' | '\n');
-STRING: '"' (STRING_CAR + '\\"' + '\\\\')* '"';
-MULTI_LINE_STRING: '"' (STRING_CAR + '\\"' + '\\\\' + EOL)* '"';
+fragment STRING_CAR: ~('"' | '\\' | '\n');
+STRING:'"' (STRING_CAR | '\\"' | '\\\\')* '"';
+MULTI_LINE_STRING: '"' (STRING_CAR | EOL | '\\"' | '\\\\')* '"';
 
-DUMMY_TOKEN: .;
+OCOMMENT: '//';
+COMMENT: OCOMMENT .*? EOL {skip(); };
+
+OML_COMMENT: '/*';
+CML_COMMENT: '*/';
+MULTI_LINE_COMMENT : OML_COMMENT .*? CML_COMMENT {skip(); };
 // Deca lexer rules.
