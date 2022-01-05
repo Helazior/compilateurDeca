@@ -95,15 +95,21 @@ decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
         }
     ;
 
-list_inst returns[ListInst tree]
+// MODIFIED
+list_inst returns[ListInst tree] 
 @init {
+    $tree = new ListInst();
 }
     : (inst {
+        assert($inst.tree != null);
+        $tree.add($inst.tree);
+        setLocation($tree, $inst.start);
         }
       )*
     ;
 
-inst returns[AbstractInst tree]
+// MODIFIED
+inst returns[AbstractInst tree] 
     : e1=expr SEMI {
             assert($e1.tree != null);
         }
@@ -111,15 +117,23 @@ inst returns[AbstractInst tree]
         }
     | PRINT OPARENT list_expr CPARENT SEMI {
             assert($list_expr.tree != null);
+            $tree = new Print(false, $list_expr.tree);
+            setLocation($tree, $list_expr.start);
         }
     | PRINTLN OPARENT list_expr CPARENT SEMI {
             assert($list_expr.tree != null);
+            $tree = new Println(false, $list_expr.tree);
+            setLocation($tree, $list_expr.start);
         }
     | PRINTX OPARENT list_expr CPARENT SEMI {
             assert($list_expr.tree != null);
+            $tree = new Print(true, $list_expr.tree);
+            setLocation($tree, $list_expr.start);
         }
     | PRINTLNX OPARENT list_expr CPARENT SEMI {
             assert($list_expr.tree != null);
+            $tree = new Println(true, $list_expr.tree);
+            setLocation($tree, $list_expr.start);
         }
     | if_then_else {
             assert($if_then_else.tree != null);
@@ -146,16 +160,24 @@ if_then_else returns[IfThenElse tree]
       )?
     ;
 
+// TO DO
 list_expr returns[ListExpr tree]
-@init   {
-        }
+@init {
+    $tree = new ListExpr();
+}
     : (e1=expr {
+        assert($e1.tree != null);
+        $tree.add($e1.tree);
         }
        (COMMA e2=expr {
+            assert($e2.tree != null);
+            //$tree.add(;);
+            $tree.add($e2.tree);
         }
        )* )?
     ;
 
+// TO DO
 expr returns[AbstractExpr tree]
     : assign_expr {
             assert($assign_expr.tree != null);
