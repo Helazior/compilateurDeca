@@ -32,13 +32,15 @@ public class CompilerOptions {
             "des fichiers en parallèle (pour accélérer la compilation)", 0)),
         entry("-d", new OptionData("debug", 
             "active les traces de debug. Répéter l'option plusieurs fois " +
-            "pour avoir plus de traces.", 0))
+            "pour avoir plus de traces.", 0)),
+        entry("-h", new OptionData("help", "Affiche cette aide", 0))
     );
     
     private int debug = 0;
     private boolean parallel = false;
     private boolean printBanner = false;
     private List<File> sourceFiles = new ArrayList<File>();
+    private String cmd;
     
 
     public int getDebug() {
@@ -52,7 +54,11 @@ public class CompilerOptions {
     public boolean getPrintBanner() {
         return options.get("-b").isInvoked();
     }
-    
+
+    public boolean getHelp() {
+        return options.get("-h").isInvoked();
+    }
+
     public List<File> getSourceFiles() {
         return Collections.unmodifiableList(sourceFiles);
     }
@@ -98,7 +104,20 @@ public class CompilerOptions {
     }
 
     protected void displayUsage() {
-        throw new UnsupportedOperationException("not yet implemented");
+        System.out.println("USAGE: decac [OPTIONS] file");
+        System.out.println("DECAC is a deca compiler.");
+        System.out.println("");
+        System.out.println("The argument `file` should be a file," +
+                           " unless stated otherwise by a used option.");
+        System.out.println("");
+        System.out.println("Available options:");
+        for (String optionName : options.keySet()) {
+            OptionData option = options.get(optionName);
+            String profile = "  " + optionName + "  (" + option.name + ")\t: ";
+            int indent = profile.length();
+            System.out.print(profile);
+            System.out.println(option.description);
+        }
     }
 }
 
