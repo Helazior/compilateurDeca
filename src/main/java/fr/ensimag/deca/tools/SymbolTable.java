@@ -28,9 +28,9 @@ public class SymbolTable {
         if(map.containsKey(name)){
             return map.get(name);
         } else{
-            Symbol newSymbol = new Symbol(name);
-            map.put(name, newSymbol);
-            return newSymbol;
+            Symbol sym = new Symbol(name);
+            map.put(name, sym);
+            return sym;
         }
         //throw new UnsupportedOperationException("Symbol creation");
     }
