@@ -39,13 +39,14 @@ public class Program extends AbstractProgram {
         // LOG.debug("verify program: end");
     }
 
+
     @Override
     public void codeGenProgram(DecacCompiler compiler) {
-        // A FAIRE: compléter ce squelette très rudimentaire de code
         compiler.addComment("Main program");
+        // parcours de l'arbre. On écrit dans le main :
         main.codeGenMain(compiler);
-        // print "Hello World!"
-        compiler.addInstruction(new WSTR("Hello World!"));
+
+        // termine le programme
         compiler.addInstruction(new HALT());
     }
 
