@@ -76,6 +76,7 @@ decl_var_set[ListDeclVar l]
     : type list_decl_var[$l,$type.tree] SEMI
     ;
 
+//TODO
 list_decl_var[ListDeclVar l, AbstractIdentifier t]
     : dv1=decl_var[$t] {
         $l.add($dv1.tree);
@@ -84,6 +85,7 @@ list_decl_var[ListDeclVar l, AbstractIdentifier t]
       )*
     ;
 
+//TODO
 decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
 @init   {
         }
@@ -112,11 +114,11 @@ list_inst returns[ListInst tree]
 inst returns[AbstractInst tree] 
     : e1=expr SEMI {
             assert($e1.tree != null);
-            $tree = &e1.tree
-            setLocation($tree, $e1.start)
+            $tree = $e1.tree;
+            setLocation($tree, $e1.start);
         }
     | SEMI {
-            &tree = new NoOperation();
+            $tree = new NoOperation();
         }
     | PRINT OPARENT list_expr CPARENT SEMI {
             assert($list_expr.tree != null);
@@ -138,18 +140,22 @@ inst returns[AbstractInst tree]
             $tree = new Println(true, $list_expr.tree);
             setLocation($tree, $list_expr.start);
         }
+    //TODO
     | if_then_else {
             assert($if_then_else.tree != null);
         }
+    //TODO
     | WHILE OPARENT condition=expr CPARENT OBRACE body=list_inst CBRACE {
             assert($condition.tree != null);
             assert($body.tree != null);
         }
+    //TODO
     | RETURN expr SEMI {
             assert($expr.tree != null);
         }
     ;
 
+//TODO
 if_then_else returns[IfThenElse tree]
 @init {
 }
@@ -201,7 +207,7 @@ assign_expr returns[AbstractExpr tree]
         EQUALS e2=assign_expr {
             assert($e.tree != null);
             assert($e2.tree != null);
-            $tree = new Assign($e.tree, $e2.tree);
+            $tree = new Assign((AbstractLValue)$e.tree, $e2.tree);
             setLocation($tree, $e.start);
         }
       | /* epsilon */ {
@@ -249,7 +255,7 @@ eq_neq_expr returns[AbstractExpr tree]
             $tree = $e.tree;
             setLocation($tree, $e.start);
         }
-    | e1=eq_neq_expr EQEQ e2=inequality_expr {
+    | e1=eq_neq_expr EQ e2=inequality_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new Equals($e1.tree, $e2.tree);

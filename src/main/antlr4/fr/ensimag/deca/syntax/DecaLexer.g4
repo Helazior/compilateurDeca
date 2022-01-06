@@ -10,6 +10,7 @@ options {
 
 @members {
 }
+// Deca lexer rules.
 
 //RESERVED WORDS
    ASM: 'asm';
@@ -100,6 +101,9 @@ OR: '||';
    FLOAT: (FLOATDEC | FLOATHEX);
 //
 
-//CLASS
+//INCLUDE
+   fragment FILENAME: (LETTER | DIGIT | '.' | '-' | '_')+;
+   INCLUDE: '#include' (' ')* '"' FILENAME '"';
+//
 
-// Deca lexer rules.
+//CLASS
