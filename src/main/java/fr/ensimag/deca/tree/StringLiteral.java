@@ -11,6 +11,7 @@ import fr.ensimag.ima.pseudocode.instructions.WSTR;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
+import org.apache.log4j.Logger;
 /**
  * String literal
  *
@@ -18,6 +19,7 @@ import org.apache.commons.lang.Validate;
  * @date 01/01/2022
  */
 public class StringLiteral extends AbstractStringLiteral {
+    private static final Logger LOG = Logger.getLogger(StringLiteral.class);
 
     @Override
     public String getValue() {
@@ -40,6 +42,7 @@ public class StringLiteral extends AbstractStringLiteral {
 
     @Override
     protected void codeGenPrint(DecacCompiler compiler) {
+        LOG.debug("codegen str litteral: value is " + value);
         compiler.addInstruction(new WSTR(new ImmediateString(value)));
     }
 

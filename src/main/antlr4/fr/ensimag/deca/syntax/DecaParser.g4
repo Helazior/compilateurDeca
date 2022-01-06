@@ -442,7 +442,8 @@ literal returns[AbstractExpr tree]
         }
     | STRING {
         assert($STRING.text != null);
-        $tree = new StringLiteral($STRING.text);
+        /* On enlève les guillemets */
+        $tree = new StringLiteral($STRING.text.substring(1, $STRING.text.length() - 2));
         }
     | TRUE {
         }

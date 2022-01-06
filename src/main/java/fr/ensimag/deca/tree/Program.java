@@ -48,8 +48,6 @@ public class Program extends AbstractProgram {
         // A FAIRE: compléter ce squelette très rudimentaire de code
         compiler.addComment("Main program");
         main.codeGenMain(compiler);
-        // print "Hello World!"
-        compiler.addInstruction(new WSTR("Hello World!"));
         compiler.addInstruction(new HALT());
     }
 
