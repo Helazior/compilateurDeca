@@ -14,9 +14,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.apache.log4j.Logger;
+
+import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.tools.SymbolTable;
+import fr.ensimag.deca.context.StringType;
+import fr.ensimag.deca.context.VoidType;
 
 /**
  * Decac compiler instance.
@@ -116,7 +122,19 @@ public class DecacCompiler {
      * The main program. Every instruction generated will eventually end up here.
      */
     private final IMAProgram program = new IMAProgram();
- 
+
+    /**
+     * Permet d'avoir des types dans la partie B
+     * (demander à Gwennan en cas de PB)
+     */
+    private final SymbolTable symbolTable = new SymbolTable();
+
+    public Type stringType() {
+        return new StringType(symbolTable.create("string"));
+    }
+    public Type voidType() {
+        return new VoidType(symbolTable.create("void"));
+    }
 
     /**
      * Run the compiler (parse source file, generate code)
@@ -126,8 +144,11 @@ public class DecacCompiler {
     public boolean compile() {
         String sourceFile = source.getAbsolutePath();
         String destFile = null;
-        // A FAIRE: calculer le nom du fichier .ass à partir du nom du
-        // A FAIRE: fichier .deca.
+        // Done: calculer le nom du fichier .ass à partir du nom du
+        // Done: FAIRE: fichier .deca.
+        // TODO: est-ce qu'il faut vérifier le format du nom en entrée ?
+        destFile = sourceFile.substring(0, sourceFile.length() - 5) + ".ass";
+
         PrintStream err = System.err;
         PrintStream out = System.out;
         LOG.debug("Compiling file " + sourceFile + " to assembly file " + destFile);
