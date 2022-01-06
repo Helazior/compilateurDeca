@@ -19,6 +19,11 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.apache.log4j.Logger;
 
+import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.tools.SymbolTable;
+import fr.ensimag.deca.context.StringType;
+import fr.ensimag.deca.context.VoidType;
+
 /**
  * Decac compiler instance.
  *
@@ -117,7 +122,19 @@ public class DecacCompiler {
      * The main program. Every instruction generated will eventually end up here.
      */
     private final IMAProgram program = new IMAProgram();
- 
+
+    /**
+     * Permet d'avoir des types dans la partie B
+     * (demander à Gwennan en cas de PB)
+     */
+    private final SymbolTable symbolTable = new SymbolTable();
+
+    public Type stringType() {
+        return new StringType(symbolTable.create("string"));
+    }
+    public Type voidType() {
+        return new VoidType(symbolTable.create("void"));
+    }
 
     /**
      * Run the compiler (parse source file, generate code)

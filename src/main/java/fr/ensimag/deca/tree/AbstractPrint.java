@@ -12,6 +12,8 @@ import fr.ensimag.ima.pseudocode.Label;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
+import fr.ensimag.deca.context.ContextualPrintTypeError;
+
 /**
  * Print statement (print, println, ...).
  *
@@ -39,7 +41,12 @@ public abstract class AbstractPrint extends AbstractInst {
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass, Type returnType)
             throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        for (AbstractExpr expr : arguments.getList()) { // TODO: use insts.iterChildren ?
+            Type exprType = expr.verifyExpr(compiler, localEnv, currentClass);
+            if (!exprType.isInt() && !exprType.isFloat() && !exprType.isString()) {
+                throw new ContextualPrintTypeError(exprType, getLocation());
+            }
+        }
     }
 
     @Override
