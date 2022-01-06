@@ -255,7 +255,7 @@ eq_neq_expr returns[AbstractExpr tree]
             $tree = $e.tree;
             setLocation($tree, $e.start);
         }
-    | e1=eq_neq_expr EQ e2=inequality_expr {
+    | e1=eq_neq_expr EQEQ e2=inequality_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new Equals($e1.tree, $e2.tree);
