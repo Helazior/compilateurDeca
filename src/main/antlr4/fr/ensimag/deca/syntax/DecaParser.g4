@@ -408,6 +408,7 @@ select_expr returns[AbstractExpr tree]
     | e1=select_expr DOT i=ident {
             assert($e1.tree != null);
             assert($i.tree != null);
+            $tree = 
 
         }
         (o=OPARENT args=list_expr CPARENT {
