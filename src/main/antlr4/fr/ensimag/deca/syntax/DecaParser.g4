@@ -64,23 +64,24 @@ block returns[ListDeclVar decls, ListInst insts]
             $insts = $list_inst.tree;
         }
     ;
-
+//DONE
 list_decl returns[ListDeclVar tree]
 @init   {
             $tree = new ListDeclVar();
         }
     : decl_var_set[$tree]*
     ;
-
+//DONE
 decl_var_set[ListDeclVar l]
     : type list_decl_var[$l,$type.tree] SEMI
     ;
 
-
+//TO DO
 list_decl_var[ListDeclVar l, AbstractIdentifier t]
     : dv1=decl_var[$t] {
         $l.add($dv1.tree);
         } (COMMA dv2=decl_var[$t] {
+            $l.add($dv2.tree);
         }
       )*
     ;
@@ -88,6 +89,7 @@ list_decl_var[ListDeclVar l, AbstractIdentifier t]
 //TODO
 decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
 @init   {
+            $tree = new DeclVar;
         }
     : i=ident {
         }
@@ -395,7 +397,7 @@ select_expr returns[AbstractExpr tree]
         )
     ;
 
-// MODIFIED
+// MODIFIED-TO DO
 primary_expr returns[AbstractExpr tree]
     : ident {
             assert($ident.tree != null);
@@ -434,7 +436,7 @@ type returns[AbstractIdentifier tree]
         }
     ;
 
-// MODIFIED
+// MODIFIED-TO DO
 literal returns[AbstractExpr tree]
     : INT {
         }
@@ -455,6 +457,7 @@ literal returns[AbstractExpr tree]
         }
     ;
 
+//TO DO
 ident returns[AbstractIdentifier tree]
     : IDENT {
         }
