@@ -160,11 +160,11 @@ inst returns[AbstractInst tree]
             $tree = if_then_else.tree;
             setLocation($tree, $if_then_else.start);
         }
-    //TODO
+    //DONE
     | WHILE OPARENT condition=expr CPARENT OBRACE body=list_inst CBRACE {
             assert($condition.tree != null);
             assert($body.tree != null);
-            $tree = 
+            $tree = new While(condition, body);
         }
     //DONE
     | RETURN expr SEMI {
@@ -180,11 +180,19 @@ if_then_else returns[IfThenElse tree]
     $tree = new IfThenElse(); 
 }
     : if1=IF OPARENT condition=expr CPARENT OBRACE li_if=list_inst CBRACE {
+        assert(condition.tree != null);
+        assert(li_if != null);
+        $tree.condition = condition;
+        $tree.thenBranch = li_if;
+        setLocation($tree, condition.start);
         }
       (ELSE elsif=IF OPARENT elsif_cond=expr CPARENT OBRACE elsif_li=list_inst CBRACE {
+
         }
       )*
       (ELSE OBRACE li_else=list_inst CBRACE {
+            assert(li_else != null);
+            $tree.thenBranch = li_else;
         }
       )?
     ;
@@ -405,6 +413,7 @@ select_expr returns[AbstractExpr tree]
         (o=OPARENT args=list_expr CPARENT {
             // we matched "e1.i(args)"
             assert($args.tree != null);
+            $tree = $args.tree
         }
         | /* epsilon */ {
             // we matched "e.i"
