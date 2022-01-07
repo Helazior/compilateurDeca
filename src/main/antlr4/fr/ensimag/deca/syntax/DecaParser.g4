@@ -174,7 +174,7 @@ inst returns[AbstractInst tree]
         }
     ;
 
-//TODO
+//TODO-pas de déclaration de treebis
 if_then_else returns[IfThenElse tree]
 @init { 
     $tree = new IfThenElse(); 
@@ -184,15 +184,20 @@ if_then_else returns[IfThenElse tree]
         assert(li_if != null);
         $tree.condition = condition;
         $tree.thenBranch = li_if;
-        setLocation($tree, condition.start);
+        setLocation($tree, $condition.start);
         }
       (ELSE elsif=IF OPARENT elsif_cond=expr CPARENT OBRACE elsif_li=list_inst CBRACE {
-
+            treebis = new IfThenElse();
+            assert(elsif_cond.tree != null);
+            assert(elsif_li.tree != null);
+            treebis.condition = elsif_cond;
+            treebis.thenBranch = elsif_li;
+            tree.thenBranch = treebis
         }
       )*
       (ELSE OBRACE li_else=list_inst CBRACE {
             assert(li_else != null);
-            $tree.thenBranch = li_else;
+            treebis.thenBranch = li_else;
         }
       )?
     ;
@@ -466,6 +471,9 @@ literal returns[AbstractExpr tree]
     : INT {
         }
     | fd=FLOAT {
+        assert($FLOAT.text != null);
+        /* On enlève les guillemets */
+        $tree = new FloatLiteral($FLOAT.text);
         }
     | STRING {
         assert($STRING.text != null);
@@ -484,7 +492,9 @@ literal returns[AbstractExpr tree]
 
 //TO DO
 ident returns[AbstractIdentifier tree]
-    : IDENT {
+    : IDENT { 
+        assert (IDENT.text != null)
+        $tree = new Identifier();
         }
     ;
 
