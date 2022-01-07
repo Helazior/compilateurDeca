@@ -79,23 +79,35 @@ decl_var_set[ListDeclVar l]
 //TO DO
 list_decl_var[ListDeclVar l, AbstractIdentifier t]
     : dv1=decl_var[$t] {
+        assert($dv1.tree != null)
         $l.add($dv1.tree);
+        setLocation($l, $dv1.start);
+        
         } (COMMA dv2=decl_var[$t] {
+            assert($dv2.tree != null);
             $l.add($dv2.tree);
+            setLocation($l, $dv2.start);
         }
       )*
     ;
 
-//TODO
+//DONE pas sur du dollar devant la déclaration de name et initialisation
 decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
 @init   {
-            $tree = new DeclVar;
+            name = new Identifier();
+            initialisation = new NoInitialization();
         }
     : i=ident {
+        assert($i.tree != null);
+            name = $i.tree;
         }
       (EQUALS e=expr {
+            assert($e.tree != null);
+            initialisation = $e.tree;
         }
       )? {
+            $tree = new DeclVar(t, name, initialisation);
+            setLocation($tree, $i.start);
         }
     ;
 
