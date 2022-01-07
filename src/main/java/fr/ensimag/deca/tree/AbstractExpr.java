@@ -134,7 +134,7 @@ public abstract class AbstractExpr extends AbstractInst {
         // Classes filles de AbstractExpr :
         // AbstractStringLiteral; AbstractBinaryExpr; AbstractReadExpr; AbstractLValue; AbstractUnaryExpr;
         // BooleanLiteral; FloatLiteral; IntLiteral
-
+        // Et ses filles !
         throw new UnsupportedOperationException("This expr is not supported");
     }
     

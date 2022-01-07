@@ -38,6 +38,7 @@ public class ListInst extends TreeList<AbstractInst> {
             // donc si i = AbstractPrint, il va aller au codeGenInst de la Class AbstractPrint.
             // Class qui extends AbstractInst :
             // IfThenElse; AbstractExpr; AbstractPrint; NoOperation; While
+            // Et ses filles !
             i.codeGenInst(compiler);
         }
     }
