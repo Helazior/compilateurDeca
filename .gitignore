@@ -8,4 +8,14 @@
 .project
 .metadata
 .settings
+<<<<<<< HEAD
 .antlr
+=======
+
+src/main/antlr4/fr/ensimag/deca/syntax/.antlr
+examples/calc/src/main/antlr4/calc/.antlr
+
+.idea/
+gen/
+src/main/antlr4/fr/ensimag/deca/syntax/DecaLexer.tokens
+>>>>>>> bd71484710eb7cb48b7214a6e6381fa0a1eef73b
