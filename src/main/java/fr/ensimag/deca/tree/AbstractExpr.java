@@ -117,9 +117,25 @@ public abstract class AbstractExpr extends AbstractInst {
         throw new UnsupportedOperationException("Error: Unsupported expession type for Print");
     }
 
+    protected void codeGenExpr(DecacCompiler compiler){
+        throw new UnsupportedOperationException("Expr not yet implemented");
+    }
+
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("not yet implemented");
+        // assign_expr
+        //      → or_expr (
+        //      { condition : expressione must be a "lvalue" }
+        //      '= ' assign_expr
+        //      | ε )
+        //
+        //      -> and....
+
+        // Classes filles de AbstractExpr :
+        // AbstractStringLiteral; AbstractBinaryExpr; AbstractReadExpr; AbstractLValue; AbstractUnaryExpr;
+        // BooleanLiteral; FloatLiteral; IntLiteral
+
+        throw new UnsupportedOperationException("This expr is not supported");
     }
     
 

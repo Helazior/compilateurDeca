@@ -31,9 +31,11 @@ public class ListInst extends TreeList<AbstractInst> {
     }
 
     public void codeGenListInst(DecacCompiler compiler) {
+        //list_inst
+        //    → ( inst) ∗
         for (AbstractInst i : getList()) {
-            // va aller au codeGenInst correspondant à i
-            // donc si i = AbstractPrint, il va y aller.
+            // va aller au codeGenInst correspondant à l'inst i
+            // donc si i = AbstractPrint, il va aller au codeGenInst de la Class AbstractPrint.
             // Class qui extends AbstractInst :
             // IfThenElse; AbstractExpr; AbstractPrint; NoOperation; While
             i.codeGenInst(compiler);

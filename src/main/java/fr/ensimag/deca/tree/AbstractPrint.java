@@ -46,6 +46,16 @@ public abstract class AbstractPrint extends AbstractInst {
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
+        // inst
+        //  → 'print ' '( ' list_expr ') ' '; '
+
+        // list_expr
+        //      → ( expr
+        //        ( ',' expr) ∗ ) ?
+        // Les filles de AbstractExpr sont :
+        // (Done)IntLiteral, (~Done)FloatLiteral, Minus, Plus, Times, AbstractBinaryExpr, AbstractLvalue,
+        // AbstractReadExpr, AbstractUnaryExpr, (Done)AbstractStringLiteral
+        // + Les petites filles....
         for (AbstractExpr a : getArguments().getList()) {
             a.codeGenPrint(compiler);
         }
