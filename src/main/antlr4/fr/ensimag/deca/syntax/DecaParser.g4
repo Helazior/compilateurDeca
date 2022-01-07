@@ -142,24 +142,30 @@ inst returns[AbstractInst tree]
             $tree = new Println(true, $list_expr.tree);
             setLocation($tree, $list_expr.start);
         }
-    //TODO
+    //DONE
     | if_then_else {
             assert($if_then_else.tree != null);
+            $tree = if_then_else.tree;
+            setLocation($tree, $if_then_else.start);
         }
     //TODO
     | WHILE OPARENT condition=expr CPARENT OBRACE body=list_inst CBRACE {
             assert($condition.tree != null);
             assert($body.tree != null);
+            $tree = 
         }
-    //TODO
+    //DONE
     | RETURN expr SEMI {
             assert($expr.tree != null);
+            $tree = expr.tree;
+            setLocation($tree, $expr.start);
         }
     ;
 
 //TODO
 if_then_else returns[IfThenElse tree]
-@init {
+@init { 
+    $tree = new IfThenElse(); 
 }
     : if1=IF OPARENT condition=expr CPARENT OBRACE li_if=list_inst CBRACE {
         }
