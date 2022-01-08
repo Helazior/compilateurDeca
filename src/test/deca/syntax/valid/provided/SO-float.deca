@@ -1,0 +1,5 @@
+//On teste l'utilisation la plus basique possible des float.
+
+{
+    float i;
+}

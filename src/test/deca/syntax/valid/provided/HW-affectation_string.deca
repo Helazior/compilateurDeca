@@ -1,0 +1,5 @@
+//On test l'affectation sur les string.
+
+{
+    string i = "Hello World";
+}

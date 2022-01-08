@@ -192,7 +192,7 @@ if_then_else returns[IfThenElse tree]
             assert(elsif_li.tree != null);
             treebis.condition = elsif_cond;
             treebis.thenBranch = elsif_li;
-            tree.thenBranch = treebis
+            tree.elseBranch = treebis;
         }
       )*
       (ELSE OBRACE li_else=list_inst CBRACE {
@@ -419,7 +419,7 @@ select_expr returns[AbstractExpr tree]
         (o=OPARENT args=list_expr CPARENT {
             // we matched "e1.i(args)"
             assert($args.tree != null);
-            $tree = $args.tree
+            $tree = $args.tree;
         }
         | /* epsilon */ {
             // we matched "e.i"
@@ -469,10 +469,15 @@ type returns[AbstractIdentifier tree]
 // MODIFIED-TO DO
 literal returns[AbstractExpr tree]
     : INT {
+        assert($INT.text != null);
+        value = $INT.text;
+        valint = Integer.parseInt(value);
+        $tree = new IntLiteral(valint);
         }
     | fd=FLOAT {
         assert($FLOAT.text != null);
-        /* On enlève les guillemets */
+        value = $FLOAT.text;
+        valint = Integer.parseInt(value);
         $tree = new FloatLiteral($FLOAT.text);
         }
     | STRING {
@@ -481,19 +486,22 @@ literal returns[AbstractExpr tree]
         $tree = new StringLiteral($STRING.text.substring(1, $STRING.text.length() - 2));
         }
     | TRUE {
+        $tree = new Booleanliteral(true);
         }
     | FALSE {
+        $tree = new Booleanliteral(false);
         }
     | THIS {
         }
     | NULL {
+        $tree = null;
         }
     ;
 
 //TO DO
 ident returns[AbstractIdentifier tree]
     : IDENT { 
-        assert (IDENT.text != null)
+        assert (IDENT.text != null);
         $tree = new Identifier();
         }
     ;
