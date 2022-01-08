@@ -501,8 +501,7 @@ literal returns[AbstractExpr tree]
 //TO DO
 ident returns[AbstractIdentifier tree]
     : IDENT { 
-        assert (IDENT.text != null);
-        $tree = new Identifier();
+        
         }
     ;
 

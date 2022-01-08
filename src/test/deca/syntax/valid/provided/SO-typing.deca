@@ -1,0 +1,7 @@
+//On test l'utilisation la plus basique possible du typing.
+
+{
+    string s;
+    int i;
+    float f;
+}

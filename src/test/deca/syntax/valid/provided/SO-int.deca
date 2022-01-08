@@ -1,4 +1,4 @@
-//On test l'utilisation la plus basique possible des int.
+//On teste l'utilisation la plus basique possible des int.
 {
-    int i = 10;
+    int i;
 }
