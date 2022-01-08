@@ -1,9 +1,85 @@
-#!/bin/sh
+#!/bin/bash
 
-for i in ./src/test/deca/syntax/valid/provided/*.deca
-do
-echo "$i"
-# Remplacer <executable> par test_synt ou test_lex
-# ou test_context ou decac
-test_lex "$i" > "${i%.deca}".lis
+# for i in ./src/test/deca/syntax/valid/provided/*.deca
+# do
+# echo "$i"
+# # Remplacer <executable> par test_synt ou test_lex
+# # ou test_context ou decac
+# test_lex "$i" > "${i%.deca}".lis
+# done
+
+# Ansi color code variables
+red="\e[0;91m"
+green="\e[0;92m"
+white="\e[0;97m"
+
+#Tout s'est bien passé
+exit_value=0
+
+
+function simplifyResult {
+    while read line; do
+        new_line=${line%%"["*}
+
+        symbol=${line#*"='"}
+        symbol=${symbol%"',"*}
+
+        new_line+=$symbol
+        echo -e "$new_line" >> $2
+    done < $1
+}
+
+
+function resultGeneration {
+    path=$1/lexer
+    file_src=$2
+    file_name=$3
+
+    #recuperation de la solution attendu
+    sol_file=$path/solution/$file_name.sol
+
+    #generation du resultat
+    test_lex $file_src > $path/generated/$file_name.lis
+    res_file=$path/generated/$file_name.lis
+
+    #simplification du resultat
+    > $path/generated/tmp_file.lis
+    tmp_file=$path/generated/tmp_file.lis
+
+    simplifyResult $res_file $tmp_file
+
+    mv $tmp_file $res_file
+
+	#On compare les fichiers
+    if cmp -s $res_file $sol_file; then
+		echo -e "${green} ${bold} PASSED $file_name ${reset}"
+	else
+		exit_value=1
+		echo -e "${red} ${bold} FAILED $file_name ${reset}"
+	fi
+}
+
+
+
+generic_test=$@/provided/*.deca
+specific_test=$@/lexer/provided/*.deca
+
+for file_src in $specific_test; do
+
+    #nom du fichier
+    file_name=${file_src##$@/lexer/provided/}
+    file_name=${file_name%%".deca"}
+
+    resultGeneration $@ $file_src $file_name
 done
+
+for file_src in $generic_test; do
+
+    #nom du fichier
+    file_name=${file_src##$@/provided/}
+    file_name=${file_name%%".deca"}
+
+    resultGeneration $@ $file_src $file_name
+done
+
+exit $exit_value
