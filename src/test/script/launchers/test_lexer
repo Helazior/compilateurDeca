@@ -61,14 +61,14 @@ function resultGeneration {
 
 
 
-generic_test=$@/provided/*.deca
-specific_test=$@/lexer/provided/*.deca
+generic_test=$@/provided/*.decaf
+specific_test=$@/lexer/provided/*.decaf
 
 for file_src in $specific_test; do
 
     #nom du fichier
     file_name=${file_src##$@/lexer/provided/}
-    file_name=${file_name%%".deca"}
+    file_name=${file_name%%".decaf"}
 
     resultGeneration $@ $file_src $file_name
 done
@@ -77,7 +77,7 @@ for file_src in $generic_test; do
 
     #nom du fichier
     file_name=${file_src##$@/provided/}
-    file_name=${file_name%%".deca"}
+    file_name=${file_name%%".decaf"}
 
     resultGeneration $@ $file_src $file_name
 done
