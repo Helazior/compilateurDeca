@@ -1,7 +1,0 @@
-//On test l'affectation sur les string.
-
-{
-    string s = "Hello World";
-    int i = 143110;
-    float f = 143110.0510; 
-}

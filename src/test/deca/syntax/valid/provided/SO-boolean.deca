@@ -1,5 +1,5 @@
 // Description:
-//    On teste l'instanciation la plus basique possible des entiers.
+//    On teste l'instanciation de booléen.
 //
 // Resultats:
 //    Hello
@@ -8,5 +8,5 @@
 //    cree le 08/01/2022
 
 {
-    int i;
+    bool b;
 }

@@ -1,4 +1,13 @@
-//On teste l'utilisation la plus basique possible des float.
+
+//Description:
+//    On teste l'instanciation la plus basique possible des flottants.
+//
+// Resultats:
+//    Hello
+//
+// Historique:
+//    cree le 08/01/2022
+
 
 {
     float i;

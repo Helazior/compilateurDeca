@@ -1,0 +1,27 @@
+// Description:
+//    On teste l'opérateur "and" sur toutes les combinaisons possibles.
+//
+// Resultats:
+//    b1=false
+//    b2=false
+//    b3=true
+//    b4=true
+//    b5=false
+//    b6=false
+//
+// Historique:
+//    cree le 08/01/2022
+
+{
+    bool b1 = true;
+    bool b2 = false;
+    b1 = b1 and b2;
+
+    bool b3 = true;
+    bool b4 = true;
+    b3 = b4 and b3; 
+
+    bool b5 = false;
+    bool b6 = false;
+    b5 = b5 and b6;
+}

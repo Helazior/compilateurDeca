@@ -1,5 +1,5 @@
 // Description:
-//    On teste l'instanciation la plus basique possible des entiers.
+//    On test juste les string sans meme en instancier un.
 //
 // Resultats:
 //    Hello
@@ -7,6 +7,7 @@
 // Historique:
 //    cree le 08/01/2022
 
+
 {
-    int i;
+    "Hello World"
 }
