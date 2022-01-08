@@ -15,13 +15,13 @@
 {
     bool b1 = true;
     bool b2 = false;
-    b1 = b1 and b2;
+    b1 = b1 && b2;
 
     bool b3 = true;
     bool b4 = true;
-    b3 = b4 and b3; 
+    b3 = b4 && b3; 
 
     bool b5 = false;
     bool b6 = false;
-    b5 = b5 and b6;
+    b5 = b5 && b6;
 }

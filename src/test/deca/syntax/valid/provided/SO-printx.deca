@@ -1,0 +1,19 @@
+// Description:
+//    On teste l'utilisation de printx.
+//
+// Resultats:
+//    Les deux premiers print sont identiques, alors que les deux printx diffèrent.
+//
+// Historique:
+//    cree le 08/01/2022
+
+{
+    int i1 = 0x1.0p1;
+    int i2 = 0x1.FFFFFEp0;
+
+    print(i1);
+    print(i2);
+
+    printx(i1);
+    printx(i2);
+}
