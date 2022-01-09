@@ -63,6 +63,12 @@ function resultGeneration {
 
 folder_path=./src/test/deca/syntax/valid
 
+# Creation de la hierarchie de dossier
+mkdir -p $folder_path/lexer
+mkdir -p $folder_path/lexer/provided
+mkdir -p $folder_path/lexer/generated
+mkdir -p $folder_path/lexer/solution
+
 generic_test=$folder_path/provided
 specific_test=$folder_path/lexer/provided
 

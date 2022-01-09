@@ -35,6 +35,11 @@ function resultGeneration {
 
 folder_path=./src/test/deca/syntax/valid
 
+# Creation de la hierarchie de dossier
+mkdir -p $folder_path/decompile
+mkdir -p $folder_path/decompile/provided
+mkdir -p $folder_path/decompile/generated
+
 generic_test=$folder_path/provided
 specific_test=$folder_path/decompile/provided
 
