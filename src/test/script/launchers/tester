@@ -1,0 +1,89 @@
+#!/bin/python
+
+"""
+Lance les tests spécifiés, avec trois possibilités :
+
+ - Soit on lance tout
+   (commande "tester")
+
+ - Soit on lance les tests notés comme fonctionnant
+   (commande "tester working" ou "tester work")
+
+ - Soit on lance les tests notés comme de non-regression
+   (commande "tester regression" ou "tester reg")
+
+Ils lance tous les tests se trouvant dans les dossiers spécifiés en clés de
+DIRS, avec les commandes données en valeur de DIRS. Concrètement,
+pour une entrée `"dossier": ["cmd"]`, il lance `cmd dossier`.
+
+Pour connaître quels test sont marqués fonctionnant ou de non-regression,
+Tester lis respectivement les fichiers working.txt ou regression.txt, et
+y récupère la liste des tests à faire. Dans ce cas, il ajoute en argument
+à la commande la liste des fichiers à tester (en plus du dosser, qui est
+alors considéré comme le dossier que la commande peut utiliser pour faire
+ses tests)
+"""
+
+import sys
+import os
+import subprocess
+
+BASEDIR = "./src/test"
+DIRS = {
+    "deca/syntax/valid": ["test_lexer", "test_decompile"]
+}
+
+REGRESSION = len(sys.argv) > 1 and sys.argv[1] in ["reg", "regression"]
+WORKING = len(sys.argv) > 1 and sys.argv[1] in ["work", "working"]
+
+if REGRESSION:
+    print("Running regression tests.")
+elif WORKING:
+    print("Running all tests supposed to work.")
+else:
+    print("Running all tests.")
+
+
+def file_content(file, file_dir):
+    assert os.path.isfile(file)
+    with open(file) as file:
+        lines = file.readlines()
+        lines = [os.path.join(file_dir, line.rstrip()) for line in lines]
+    return lines
+
+
+errors = []
+
+for work_dir in DIRS:
+    curr_dir = os.path.join(BASEDIR, work_dir)
+    print()
+    print(" ===============")
+    print("===> DIRECTORY: ", curr_dir)
+    print(" ===============")
+
+    args = []
+    if REGRESSION:
+        args = file_content(
+            os.path.join(curr_dir, "regression.txt"), curr_dir)
+
+    elif WORKING:
+        args += file_content(
+            os.path.join(curr_dir, "working.txt"), curr_dir)
+
+    for cmd in DIRS[work_dir]:
+        print(f"==> Running command '{cmd}' on dir '{curr_dir}'")
+        results = subprocess.run([cmd, curr_dir] + args)
+        if results.returncode != 0:
+            errors.append((results, curr_dir))
+
+print("")
+if len(errors) == 0:
+    print("Everything went fine !")
+else:
+    print("Got errors on calls :")
+    for err in errors:
+        print(
+            "-> for directory",
+            err[1],
+            ", got error when calling",
+            err[0].args)
