@@ -53,6 +53,7 @@ function resultGeneration {
 	#On compare les fichiers
     if cmp -s $res_file $sol_file; then
 		echo -e "${green} ${bold} PASSED $file_name ${reset}"
+        rm $res_file
 	else
 		exit_value=1
 		echo -e "${red} ${bold} FAILED $file_name ${reset}"
@@ -60,26 +61,30 @@ function resultGeneration {
 }
 
 
+folder_path=./src/test/deca/syntax/valid
 
-generic_test=$@/provided/*.decaf
-specific_test=$@/lexer/provided/*.decaf
+generic_test=$folder_path/provided
+specific_test=$folder_path/lexer/provided
 
-for file_src in $specific_test; do
 
-    #nom du fichier
-    file_name=${file_src##$@/lexer/provided/}
-    file_name=${file_name%%".decaf"}
-
-    resultGeneration $@ $file_src $file_name
-done
-
-for file_src in $generic_test; do
+for file_src in $specific_test/*.deca; do
 
     #nom du fichier
-    file_name=${file_src##$@/provided/}
-    file_name=${file_name%%".decaf"}
+    file_name=${file_src##$specific_test/}
+    file_name=${file_name%%".deca"}
 
-    resultGeneration $@ $file_src $file_name
+    resultGeneration $folder_path $file_src $file_name
 done
+
+
+for file_src in $generic_test/*.deca; do
+
+    #nom du fichier
+    file_name=${file_src##$generic_test/}
+    file_name=${file_name%%".deca"}
+
+    resultGeneration $folder_path $file_src $file_name
+done
+
 
 exit $exit_value

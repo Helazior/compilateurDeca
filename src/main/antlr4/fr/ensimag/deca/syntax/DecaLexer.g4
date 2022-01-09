@@ -38,11 +38,15 @@ options {
 
 SEMI: ';';
 EOL: '\n' {skip(); };
+CR: '\r' {skip(); };
+TAB: '\t' {skip(); };
 SPACE: ' ' {skip(); };
 DOT: '.';
 COMMA: ',';
 EXCLAM: '!';
+GUI: '\'';
 
+*
 OPARENT: '(';
 CPARENT: ')';
 OBRACE: '{';
@@ -53,6 +57,7 @@ PLUS: '+';
 MINUS: '-';
 TIMES: '*';
 SLASH: '/';
+ANTISLASH: '\\';
 PERCENT: '%';
 
 GT: '<';
