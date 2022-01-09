@@ -1,0 +1,19 @@
+// Description:
+//    On teste l'opérateur "not" sur toutes les combinaisons possibles.
+//
+// Resultats:
+//    b1=true
+//    b2=false
+//    b3=false
+//    b4=true
+//
+// Historique:
+//    cree le 08/01/2022
+
+{
+    bool b1 = true;
+    bool b2 = false;
+
+    bool b3 = !b1;
+    bool b4 = !b2;
+}
