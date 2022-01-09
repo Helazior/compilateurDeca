@@ -46,7 +46,7 @@ COMMA: ',';
 EXCLAM: '!';
 GUI: '\'';
 
-*
+
 OPARENT: '(';
 CPARENT: ')';
 OBRACE: '{';
