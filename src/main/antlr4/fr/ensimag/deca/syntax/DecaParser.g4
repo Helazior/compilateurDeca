@@ -79,7 +79,7 @@ decl_var_set[ListDeclVar l]
 //TO DO
 list_decl_var[ListDeclVar l, AbstractIdentifier t]
     : dv1=decl_var[$t] {
-        assert($dv1.tree != null)
+        assert($dv1.tree != null);
         $l.add($dv1.tree);
         setLocation($l, $dv1.start);
         
@@ -94,8 +94,8 @@ list_decl_var[ListDeclVar l, AbstractIdentifier t]
 //DONE pas sur du dollar devant la déclaration de name et initialisation
 decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
 @init   {
-            name = new Identifier();
-            initialisation = new NoInitialization();
+            AbstractIdentifier name;
+            AbstractInitialization initialisation = new NoInitialization();
         }
     : i=ident {
         assert($i.tree != null);
@@ -103,7 +103,7 @@ decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
         }
       (EQUALS e=expr {
             assert($e.tree != null);
-            initialisation = $e.tree;
+            initialisation = new Initialization($e.tree);
         }
       )? {
             $tree = new DeclVar(t, name, initialisation);
@@ -157,49 +157,69 @@ inst returns[AbstractInst tree]
     //DONE
     | if_then_else {
             assert($if_then_else.tree != null);
-            $tree = if_then_else.tree;
+            $tree = $if_then_else.tree;
             setLocation($tree, $if_then_else.start);
         }
     //DONE
     | WHILE OPARENT condition=expr CPARENT OBRACE body=list_inst CBRACE {
             assert($condition.tree != null);
             assert($body.tree != null);
-            $tree = new While(condition, body);
+            $tree = new While($condition.tree, $body.tree);
         }
     //DONE
     | RETURN expr SEMI {
             assert($expr.tree != null);
-            $tree = expr.tree;
+            $tree = $expr.tree;
             setLocation($tree, $expr.start);
         }
     ;
 
 //TODO-pas de déclaration de treebis
 if_then_else returns[IfThenElse tree]
-@init { 
-    $tree = new IfThenElse(); 
+@init {
+    // Pour pouvoir construire l'arbre dans le bon ordre, on liste les conditions
+    // et instructions, puis on construit l'arbre depuis la fin
+    List<AbstractExpr> conditions = new ArrayList<AbstractExpr>();  
+    List<ListInst> thens = new ArrayList<ListInst>();
+    ListInst elseListInst = new ListInst(); // Si le else n'est pas spécifié, il est vide
 }
     : if1=IF OPARENT condition=expr CPARENT OBRACE li_if=list_inst CBRACE {
-        assert(condition.tree != null);
-        assert(li_if != null);
-        $tree.condition = condition;
-        $tree.thenBranch = li_if;
+        assert($condition.tree != null);
+        assert($li_if.tree != null);
+        conditions.add($condition.tree);
+        thens.add($li_if.tree);
         setLocation($tree, $condition.start);
         }
       (ELSE elsif=IF OPARENT elsif_cond=expr CPARENT OBRACE elsif_li=list_inst CBRACE {
-            treebis = new IfThenElse();
-            assert(elsif_cond.tree != null);
-            assert(elsif_li.tree != null);
-            treebis.condition = elsif_cond;
-            treebis.thenBranch = elsif_li;
-            tree.elseBranch = treebis;
+            assert($elsif_cond.tree != null);
+            assert($elsif_li.tree != null);
+            conditions.add($elsif_cond.tree);
+            thens.add($elsif_li.tree);
         }
       )*
       (ELSE OBRACE li_else=list_inst CBRACE {
-            assert(li_else != null);
-            treebis.thenBranch = li_else;
+            assert($li_else.tree != null);
+            elseListInst = $li_else.tree;
         }
       )?
+      {
+        // On est sûrs d'avoir au moins 1 élément
+        $tree = new IfThenElse(
+            conditions.remove(conditions.size() - 1),
+            thens.remove(thens.size() - 1),
+            elseListInst
+        );
+        // On s'occupe du reste
+        while (!conditions.isEmpty()) {
+            assert(!thens.isEmpty());
+            $tree = new IfThenElse(
+                conditions.remove(conditions.size() - 1),
+                thens.remove(thens.size() - 1),
+                elseListInst
+            );
+        }
+        assert(thens.isEmpty());
+      }
     ;
 
 // DONE
@@ -411,15 +431,15 @@ select_expr returns[AbstractExpr tree]
             setLocation($tree, $e.start);
         }
     | e1=select_expr DOT i=ident {
+            // TODO: Implémenter la classe Selection et implémenter ça
             assert($e1.tree != null);
             assert($i.tree != null);
-            $tree = 
-
+            System.err.println("Attention: Selection n'est pas implémenté !!");
         }
         (o=OPARENT args=list_expr CPARENT {
-            // we matched "e1.i(args)"
+            // TODO: Implémenter la classe MethodCall et implémenter ça
             assert($args.tree != null);
-            $tree = $args.tree;
+            System.err.println("Attention: MethodCall n'est pas implémenté !!");
         }
         | /* epsilon */ {
             // we matched "e.i"
@@ -470,26 +490,26 @@ type returns[AbstractIdentifier tree]
 literal returns[AbstractExpr tree]
     : INT {
         assert($INT.text != null);
-        value = $INT.text;
-        valint = Integer.parseInt(value);
+        String value = $INT.text;
+        int valint = Integer.parseInt(value);
         $tree = new IntLiteral(valint);
         }
-    | fd=FLOAT {
+    | FLOAT {
         assert($FLOAT.text != null);
-        value = $FLOAT.text;
-        valint = Integer.parseInt(value);
-        $tree = new FloatLiteral($FLOAT.text);
+        String value = $FLOAT.text;
+        float valfloat = Float.parseFloat(value);
+        $tree = new FloatLiteral(valfloat);
         }
     | STRING {
         assert($STRING.text != null);
         /* On enlève les guillemets */
-        $tree = new StringLiteral($STRING.text.substring(1, $STRING.text.length() - 2));
+        $tree = new StringLiteral($STRING.text);
         }
     | TRUE {
-        $tree = new Booleanliteral(true);
+        $tree = new BooleanLiteral(true);
         }
     | FALSE {
-        $tree = new Booleanliteral(false);
+        $tree = new BooleanLiteral(false);
         }
     | THIS {
         }
