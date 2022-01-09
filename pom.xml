@@ -188,6 +188,22 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.0.0</version>
                 <executions>
+
+                    <!-- Execs ajoutés -->
+                    <execution>
+                        <id>tester-working</id>
+                        <configuration>
+                            <executable>./src/test/script/launchers/tester</executable>
+                            <arguments>
+                                <argument>working</argument>
+                              </arguments>
+                        </configuration>
+                        <phase>test</phase>
+                        <goals><goal>exec</goal></goals>
+                    </execution>
+
+                    <!-- Execs fournis -->
+
                     <!-- One <execution> per executable to launch. Execution
                     failure (exit status != 0) will stop the tests. -->
                     <execution>

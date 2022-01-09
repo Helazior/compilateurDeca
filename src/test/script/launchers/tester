@@ -87,3 +87,4 @@ else:
             err[1],
             ", got error when calling",
             err[0].args)
+    exit(1)
