@@ -84,6 +84,8 @@ list_decl_var[ListDeclVar l, AbstractIdentifier t]
         assert($dv1.tree != null);
         $l.add($dv1.tree);
         } (COMMA dv2=decl_var[$t] {
+            assert($dv2.tree != null);
+            $l.add($dv2.tree);
         }
       )*
     ;
@@ -92,15 +94,20 @@ list_decl_var[ListDeclVar l, AbstractIdentifier t]
 decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
 @init   {
             AbstractIdentifier name;
-            AbstractInitialization initialisation = new NoInitialization();
+            AbstractInitialization initialization = new NoInitialization();
         }
     : i=ident {
+            assert($i.tree != null);
+            name = $i.tree;
+            
         }
       (EQUALS e=expr {
             assert($e.tree != null);
-            initialisation = new Initialization($e.tree);
+            initialization = new Initialization($e.tree);
         }
       )? {
+            $tree = new DeclVar(t, name, initialization);
+            setLocation($tree, $i.start);
         }
     ;
 
@@ -112,7 +119,6 @@ list_inst returns[ListInst tree]
     : (inst {
             assert($inst.tree != null);
             $tree.add($inst.tree);
-            setLocation($tree, $inst.start);
         }
       )*
     ;
@@ -168,7 +174,7 @@ inst returns[AbstractInst tree]
         }
     ;
 
-//TODO
+//TODO-Regarder en détail la position du setLocation
 if_then_else returns[IfThenElse tree]
 @init {
     // Pour pouvoir construire l'arbre dans le bon ordre, on liste les conditions
@@ -224,12 +230,10 @@ list_expr returns[ListExpr tree]
     : (e1=expr {
             assert($e1.tree != null);
             $tree.add($e1.tree);
-            setLocation($tree, $e1.start);
         }
        (COMMA e2=expr {
             assert($e2.tree != null);
             $tree.add($e2.tree);
-            setLocation($tree, $e2.start);
         }
        )* )?
     ;
@@ -517,13 +521,15 @@ literal returns[AbstractExpr tree]
     | THIS {
         }
     | NULL {
+        $tree = null;
         }
     ;
 
 ident returns[AbstractIdentifier tree]
     : IDENT {
-            // DecacCompiler compiler = getDecacCompiler();
-            // SymbolTable table = compiler.creatSymbol();
+            DecacCompiler compiler = getDecacCompiler();
+            $tree = new Identifier(compiler.createSymbol($IDENT.text));
+
         }
     ;
 
