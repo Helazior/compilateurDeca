@@ -42,10 +42,10 @@ public class DeclVar extends AbstractDeclVar {
     @Override
     public void decompile(IndentPrintStream s) {
         type.decompile(s);
-        s.println(" ");
+        s.print(" ");
         varName.decompile(s);
         initialization.decompile(s);
-        s.println(";");
+        s.print(" ;");
     }
 
     @Override
