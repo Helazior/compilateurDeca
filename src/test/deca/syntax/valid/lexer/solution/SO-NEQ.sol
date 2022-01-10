@@ -11,6 +11,12 @@ INT: 4
 SEMI: ;
 IDENT: bool
 IDENT: b1
+COMMA: ,
+IDENT: b2
+COMMA: ,
+IDENT: b3
+SEMI: ;
+IDENT: b1
 EQUALS: =
 IDENT: i1
 NEQ: !=
@@ -19,7 +25,7 @@ SEMI: ;
 IDENT: i2
 EQUALS: =
 INT: 1
-IDENT: bool
+SEMI: ;
 IDENT: b2
 EQUALS: =
 IDENT: i1
@@ -30,7 +36,6 @@ IDENT: i1
 EQUALS: =
 INT: 1
 SEMI: ;
-IDENT: bool
 IDENT: b3
 EQUALS: =
 IDENT: i1

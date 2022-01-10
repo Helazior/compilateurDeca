@@ -7,7 +7,7 @@ SEMI: ;
 WHILE: while
 OPARENT: (
 IDENT: i1
-GT: <
+LT: <
 INT: 6
 CPARENT: )
 OBRACE: {
