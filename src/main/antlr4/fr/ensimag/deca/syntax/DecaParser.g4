@@ -219,7 +219,7 @@ if_then_else returns[IfThenElse tree]
                 subtree
             );
         }
-        //assert(thens.isEmpty());
+        assert(thens.isEmpty());
         setLocation($tree, $condition.start);
       }
     ;
