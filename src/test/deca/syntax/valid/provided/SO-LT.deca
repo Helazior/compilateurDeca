@@ -12,11 +12,13 @@
 {
     int i1 = 2;
     int i2 = 4;
-    boolean b1 = (i1 < i2);
-    boolean b2;
+    bool b1, b2, b3;
+
+    b1= i1 < i2;
+
     i2 = 1;
-    b2 = (i1 < i2);
+    b2 = i1 < i2;
 
     i1=1;
-    b3 = (i1 < i2);
+    b3 = i1 < i2;
 }
