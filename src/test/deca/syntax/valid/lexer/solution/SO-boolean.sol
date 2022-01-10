@@ -1,0 +1,5 @@
+OBRACE: {
+IDENT: bool
+IDENT: b
+SEMI: ;
+CBRACE: }

@@ -1,0 +1,7 @@
+OBRACE: {
+PRINT: print
+OPARENT: (
+STRING: "Hello"
+CPARENT: )
+SEMI: ;
+CBRACE: }

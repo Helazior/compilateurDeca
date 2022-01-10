@@ -37,7 +37,7 @@ public class Program extends AbstractProgram {
         LOG.debug("verify program: start");
         //TODO: les 3 passes
 
-        //TODO: check classes
+        //TODO: check classes  
 
         main.verifyMain(compiler);
         LOG.debug("verify program: end");
@@ -67,4 +67,4 @@ public class Program extends AbstractProgram {
         classes.prettyPrint(s, prefix, false);
         main.prettyPrint(s, prefix, true);
     }
-}
+}   

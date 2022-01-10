@@ -147,6 +147,7 @@ public class DecacCompiler {
         // Done: calculer le nom du fichier .ass à partir du nom du
         // Done: FAIRE: fichier .deca.
         // TODO: est-ce qu'il faut vérifier le format du nom en entrée ?
+
         destFile = sourceFile.substring(0, sourceFile.length() - 5) + ".ass";
 
         PrintStream err = System.err;
@@ -199,6 +200,10 @@ public class DecacCompiler {
         }
         assert(prog.checkAllLocations());
 
+        if(compilerOptions.getDecompile()){
+            prog.decompile(out);
+            return false;
+        }
 
         prog.verifyProgram(this);
         assert(prog.checkAllDecorations());

@@ -7,6 +7,8 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
+import java.util.jar.Attributes.Name;
+
 import org.apache.commons.lang.Validate;
 
 /**
@@ -38,7 +40,11 @@ public class DeclVar extends AbstractDeclVar {
     
     @Override
     public void decompile(IndentPrintStream s) {
-        throw new UnsupportedOperationException("not yet implemented");
+        type.decompile(s);
+        s.println(" ");
+        varName.decompile(s);
+        initialization.decompile(s);
+        s.println(";");
     }
 
     @Override

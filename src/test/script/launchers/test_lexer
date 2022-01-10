@@ -1,9 +1,92 @@
-#!/bin/sh
+#!/bin/bash
 
-for i in ./src/test/deca/syntax/valid/provided/*.deca
-do
-echo "$i"
-# Remplacer <executable> par test_synt ou test_lex
-# ou test_context ou decac
-test_lex "$i" > "${i%.deca}".lis
+# for i in ./src/test/deca/syntax/valid/provided/*.deca
+# do
+# echo "$i"
+# # Remplacer <executable> par test_synt ou test_lex
+# # ou test_context ou decac
+# test_lex "$i" > "${i%.deca}".lis
+# done
+
+# Ansi color code variables
+red="\e[0;91m"
+green="\e[0;92m"
+white="\e[0;97m"
+reset="\e[0;0m"
+
+#Tout s'est bien passé
+exit_value=0
+
+
+function simplifyResult {
+    while read line; do
+        new_line=${line%%"["*}
+
+        symbol=${line#*"='"}
+        symbol=${symbol%"',"*}
+
+        new_line+=$symbol
+        echo -e "$new_line" >> $2
+    done < $1
+}
+
+
+function resultGeneration {
+    path=$1/lexer
+    file_src=$2
+    file_name=$3
+
+    #recuperation de la solution attendu
+    sol_file=$path/solution/$file_name.sol
+
+    #generation du resultat
+    test_lex $file_src > $path/generated/$file_name.lis
+    res_file=$path/generated/$file_name.lis
+
+    #simplification du resultat
+    > $path/generated/tmp_file.lis
+    tmp_file=$path/generated/tmp_file.lis
+
+    simplifyResult $res_file $tmp_file
+
+    mv $tmp_file $res_file
+
+	#On compare les fichiers
+    if cmp -s $res_file $sol_file; then
+		echo -e "${green} ${bold} PASSED $file_name ${reset}"
+        rm $res_file
+	else
+		exit_value=1
+		echo -e "${red} ${bold} FAILED $file_name ${reset}"
+	fi
+}
+
+# Récupération du dossier de travail
+if [[ $# -eq 0 ]]; then
+    folder_path=./src/test/deca/syntax/valid
+else
+    folder_path=$1
+fi
+
+# Creation de la hierarchie de dossier
+mkdir -p $folder_path/lexer
+mkdir -p $folder_path/lexer/provided
+mkdir -p $folder_path/lexer/generated
+mkdir -p $folder_path/lexer/solution
+
+# Récupération des fichiers à tester
+if [[ $# -le 1 ]]; then
+    files="$(echo $folder_path/provided/*.deca) $(echo $folder_path/lexer/provided/*.deca)"
+else
+    files=$@
+    files=${files#* } # On enlève le premier élément (qui est le dossier de travail)
+fi
+
+for file_src in $files; do
+
+    #nom du fichier
+    file_name=$(basename ${file_src%%".deca"})
+    resultGeneration $folder_path $file_src $file_name
 done
+
+exit $exit_value

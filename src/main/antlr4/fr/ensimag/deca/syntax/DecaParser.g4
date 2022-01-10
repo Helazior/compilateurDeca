@@ -64,50 +64,41 @@ block returns[ListDeclVar decls, ListInst insts]
             $insts = $list_inst.tree;
         }
     ;
-//DONE
+
 list_decl returns[ListDeclVar tree]
 @init   {
             $tree = new ListDeclVar();
         }
     : decl_var_set[$tree]*
     ;
-//DONE
+
 decl_var_set[ListDeclVar l]
     : type list_decl_var[$l,$type.tree] SEMI
     ;
 
-//TO DO
+
 list_decl_var[ListDeclVar l, AbstractIdentifier t]
     : dv1=decl_var[$t] {
         assert($dv1.tree != null);
         $l.add($dv1.tree);
-        setLocation($l, $dv1.start);
-        
         } (COMMA dv2=decl_var[$t] {
-            assert($dv2.tree != null);
-            $l.add($dv2.tree);
-            setLocation($l, $dv2.start);
         }
       )*
     ;
 
-//DONE pas sur du dollar devant la déclaration de name et initialisation
+//TODO
 decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
 @init   {
             AbstractIdentifier name;
             AbstractInitialization initialisation = new NoInitialization();
         }
     : i=ident {
-        assert($i.tree != null);
-            name = $i.tree;
         }
       (EQUALS e=expr {
             assert($e.tree != null);
             initialisation = new Initialization($e.tree);
         }
       )? {
-            $tree = new DeclVar(t, name, initialisation);
-            setLocation($tree, $i.start);
         }
     ;
 
@@ -154,20 +145,20 @@ inst returns[AbstractInst tree]
             $tree = new Println(true, $list_expr.tree);
             setLocation($tree, $list_expr.start);
         }
-    //DONE
+    //TODO
     | if_then_else {
             assert($if_then_else.tree != null);
             $tree = $if_then_else.tree;
             setLocation($tree, $if_then_else.start);
         }
-    //DONE
+    //TODO
     | WHILE OPARENT condition=expr CPARENT OBRACE body=list_inst CBRACE {
             assert($condition.tree != null);
             assert($body.tree != null);
             $tree = new While($condition.tree, $body.tree);
             setLocation($tree, $condition.start);
         }
-    //DONE
+    //TODO
     | RETURN expr SEMI {
             assert($expr.tree != null);
             $tree = $expr.tree;
@@ -175,7 +166,7 @@ inst returns[AbstractInst tree]
         }
     ;
 
-//TODO-pas de déclaration de treebis
+//TODO
 if_then_else returns[IfThenElse tree]
 @init {
     // Pour pouvoir construire l'arbre dans le bon ordre, on liste les conditions
@@ -236,6 +227,7 @@ list_expr returns[ListExpr tree]
        (COMMA e2=expr {
             assert($e2.tree != null);
             $tree.add($e2.tree);
+            setLocation($tree, $e2.start);
         }
        )* )?
     ;
@@ -255,16 +247,18 @@ assign_expr returns[AbstractExpr tree]
             if (! ($e.tree instanceof AbstractLValue)) {
                 throw new InvalidLValue(this, $ctx);
             }
-            setLocation($tree, $e.start);
+
         }
         EQUALS e2=assign_expr {
             assert($e.tree != null);
             assert($e2.tree != null);
             $tree = new Assign((AbstractLValue)$e.tree, $e2.tree);
+            setLocation($tree, $e.start);
         }
       | /* epsilon */ {
             assert($e.tree != null);
             $tree = $e.tree;
+            setLocation($tree, $e.start);
         }
       )
     ;
@@ -448,7 +442,7 @@ select_expr returns[AbstractExpr tree]
         )
     ;
 
-// MODIFIED-TO DO
+// MODIFIED
 primary_expr returns[AbstractExpr tree]
     : ident {
             assert($ident.tree != null);
@@ -489,7 +483,7 @@ type returns[AbstractIdentifier tree]
         }
     ;
 
-// MODIFIED-TO DO
+// MODIFIED
 literal returns[AbstractExpr tree]
     : INT {
         assert($INT.text != null);
@@ -517,14 +511,16 @@ literal returns[AbstractExpr tree]
     | THIS {
         }
     | NULL {
-        $tree = null;
         }
     ;
 
-//TO DO
 ident returns[AbstractIdentifier tree]
+<<<<<<< HEAD
     : IDENT { 
             $tree = new Identifier();
+=======
+    : IDENT {
+>>>>>>> CLI
         }
     ;
 

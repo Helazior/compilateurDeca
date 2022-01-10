@@ -1,0 +1,5 @@
+OBRACE: {
+IDENT: float
+IDENT: i
+SEMI: ;
+CBRACE: }

@@ -33,15 +33,15 @@ public class CompilerOptions {
         entry("-d", new OptionData("debug", 
             "active les traces de debug. Répéter l'option plusieurs fois " +
             "pour avoir plus de traces.", 0)),
-        entry("-h", new OptionData("help", "Affiche cette aide", 0))
+        entry("-h", new OptionData("help", "Affiche cette aide", 0)),
+        entry("-p", new OptionData("decompilation", "decompile l'arbre" +
+            " abstrait obtenu à la suite du lexer et du parser" , 0))
     );
-    
+
     private int debug = 0;
     private boolean parallel = false;
     private boolean printBanner = false;
     private List<File> sourceFiles = new ArrayList<File>();
-    private String cmd;
-    
 
     public int getDebug() {
         return options.get("-d").getNbInvoked();
@@ -57,6 +57,10 @@ public class CompilerOptions {
 
     public boolean getHelp() {
         return options.get("-h").isInvoked();
+    }
+
+    public boolean getDecompile() {
+        return options.get("-p").isInvoked();
     }
 
     public List<File> getSourceFiles() {
