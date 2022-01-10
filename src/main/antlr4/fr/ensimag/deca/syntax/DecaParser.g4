@@ -424,6 +424,7 @@ select_expr returns[AbstractExpr tree]
     : e=primary_expr {
             assert($e.tree != null);
             $tree = $e.tree;
+            setLocation($tree, $e.start);
         }
     | e1=select_expr DOT i=ident {
             // TODO: Implémenter la classe Selection et implémenter ça
