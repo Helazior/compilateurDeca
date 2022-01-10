@@ -48,6 +48,7 @@ public class Program extends AbstractProgram {
         // de sa définition via la méthode Definition.setOperand() : voir les classes VariableDefinition et ExpDefinition
         // Récupéré avec getOperand
 
+
         compiler.addComment("Main program");
         // parcours de l'arbre. On écrit dans le main :
         main.codeGenMain(compiler);

@@ -4,6 +4,9 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.ADD;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.POP;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 /**
  * @author gl60
@@ -16,9 +19,15 @@ public class Plus extends AbstractOpArith {
 
     @Override
     public void codeGenExpr(DecacCompiler compiler) {
-    //public void codeGenPlus(DecacCompiler compiler) {
-        //compiler.addInstruction(new ADD(Register.R0, Register.R1));
-        //codeGenPlusOr(compiler, getLeftOperand(), getRightOperand());
+        AbstractExpr left = getLeftOperand();
+        left.codeGenExpr(compiler);
+        AbstractExpr right = getRightOperand();
+        right.codeGenExpr(compiler);
+        compiler.addInstruction(new POP(Register.R0));
+        compiler.addInstruction(new POP(Register.R1));
+        compiler.addInstruction(new ADD(Register.R0, Register.R1));
+        compiler.addInstruction(new PUSH(Register.R1));
+        //compiler.addInstruction(compiler, getLeftOperand(), getRightOperand());
     }
     @Override
     protected String getOperatorName() {
