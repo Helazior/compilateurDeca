@@ -5,6 +5,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
 
 /**
  * Variable declaration
@@ -13,7 +14,7 @@ import fr.ensimag.deca.context.EnvironmentExp;
  * @date 01/01/2022
  */
 public abstract class AbstractDeclVar extends Tree {
-    
+
     /**
      * Implements non-terminal "decl_var" of [SyntaxeContextuelle] in pass 3
      * @param compiler contains "env_types" attribute
@@ -29,4 +30,6 @@ public abstract class AbstractDeclVar extends Tree {
     protected abstract void verifyDeclVar(DecacCompiler compiler,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError;
+
+    abstract public AbstractIdentifier codeGenDecl(ImmediateInteger place);
 }
