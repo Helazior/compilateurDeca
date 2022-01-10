@@ -1,0 +1,40 @@
+---- From the following Abstract Syntax Tree ----
+`> Program
+   +> ListDeclClass [List with 0 elements]
+   `> Main
+      +> ListDeclVar [List with 0 elements]
+      `> ListInst [List with 1 elements]
+         []> Print
+             `> ListExpr [List with 1 elements]
+                []> Plus
+                    type: float
+                    +> Plus
+                    |  type: float
+                    |  +> Float (3.2)
+                    |  `> Float (2.9)
+                    `> Float (4.0)
+---- We generate the following assembly code ----
+; Main program
+; Beginning of main instructions:
+	LOAD #0x1.99999ap1, R1
+	PUSH R1
+	LOAD #0x1.733334p1, R1
+	PUSH R1
+; codeGenExpr AbstractOpArith -> Début parcours
+	POP R0
+	POP R1
+; codeGenExpr AbstractOpArith -> Fin parcours
+	ADD R0, R1
+	PUSH R1
+	LOAD #0x1.0p2, R1
+	PUSH R1
+; codeGenExpr AbstractOpArith -> Début parcours
+	POP R0
+	POP R1
+; codeGenExpr AbstractOpArith -> Fin parcours
+	ADD R0, R1
+	PUSH R1
+	POP R1
+	WFLOAT
+	HALT
+

@@ -1,0 +1,24 @@
+; Main program
+; Beginning of main instructions:
+	LOAD #0x1.99999ap1, R1
+	PUSH R1
+	LOAD #0x1.733334p1, R1
+	PUSH R1
+; codeGenExpr AbstractOpArith -> Début parcours
+	POP R0
+	POP R1
+; codeGenExpr AbstractOpArith -> Fin parcours
+	ADD R0, R1
+	PUSH R1
+	LOAD #0x1.0p2, R1
+	PUSH R1
+; codeGenExpr AbstractOpArith -> Début parcours
+	POP R0
+	POP R1
+; codeGenExpr AbstractOpArith -> Fin parcours
+	ADD R0, R1
+	PUSH R1
+	POP R1
+	WFLOAT
+	HALT
+

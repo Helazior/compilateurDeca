@@ -5,6 +5,10 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.DIV;
+import fr.ensimag.ima.pseudocode.instructions.QUO;
+import fr.ensimag.ima.pseudocode.instructions.REM;
 
 /**
  *
@@ -23,6 +27,27 @@ public class Modulo extends AbstractOpArith {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
+    @Override
+    public void codeGenOp(DecacCompiler compiler) {
+        // TODO : COMMENT ON FAIT SI C'EST FLOAT ? Dans l'assembleur ?
+        Type type = getType();
+        if (type.isInt()) {
+            compiler.addInstruction(new REM(Register.R0, Register.R1));
+        } else {
+            throw new UnsupportedOperationException("Error: modulo with float. Expected : int");
+        }
+    }
+
+    /**
+     *
+     * Generate code to print the expression
+     *
+     * @param compiler
+     */
+    @Override
+    protected void codeGenPrint(DecacCompiler compiler) {
+        super.codeGenPrint(compiler);
+    }
 
     @Override
     protected String getOperatorName() {
