@@ -83,9 +83,11 @@ list_decl_var[ListDeclVar l, AbstractIdentifier t]
     : dv1=decl_var[$t] {
         assert($dv1.tree != null);
         $l.add($dv1.tree);
+        setLocation($dv1.tree, $dv1.start);
         } (COMMA dv2=decl_var[$t] {
             assert($dv2.tree != null);
             $l.add($dv2.tree);
+            setLocation($dv2.tree, $dv2.start);
         }
       )*
     ;
@@ -489,7 +491,6 @@ type returns[AbstractIdentifier tree]
     : ident {
             assert($ident.tree != null);
             $tree = $ident.tree;
-            setLocation($tree, $ident.start);
         }
     ;
 
@@ -529,7 +530,7 @@ ident returns[AbstractIdentifier tree]
     : IDENT {
             DecacCompiler compiler = getDecacCompiler();
             $tree = new Identifier(compiler.createSymbol($IDENT.text));
-
+            setLocation($tree, $IDENT);
         }
     ;
 
