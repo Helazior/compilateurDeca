@@ -15,13 +15,14 @@
 {
     boolean b1 = true;
     boolean b2 = false;
+    boolean b5 = false;
+    boolean b6 = false;
+    boolean b3 = true;
+    boolean b4 = true;
+
     b1 = b1 && b2;
 
-    //boolean b3 = true;
-    //boolean b4 = true;
-    //b3 = b4 && b3; 
+    b3 = b4 && b3; 
 
-    //boolean b5 = false;
-    //boolean b6 = false;
-    //b5 = b5 && b6;
+    b5 = b5 && b6;
 }
