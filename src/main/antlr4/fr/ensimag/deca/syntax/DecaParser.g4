@@ -165,6 +165,7 @@ inst returns[AbstractInst tree]
             assert($condition.tree != null);
             assert($body.tree != null);
             $tree = new While($condition.tree, $body.tree);
+            setLocation($tree, $condition.start);
         }
     //DONE
     | RETURN expr SEMI {
