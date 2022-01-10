@@ -19,6 +19,17 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
     }
 
     @Override
+    public void codeGenExpr(DecacCompiler compiler) {
+        super.codeGenExpr(compiler);
+        // TODO: tout revoir ça quand je pourrai tester.
+        // Chaque enfant doit mettre la stack le résultat !
+        AbstractExpr leftOperand = getLeftOperand();
+        AbstractExpr rightOperand = getLeftOperand();
+        //compiler.addInstruction(new OPP(leftOperand, rightOperand));
+       // appeler PLUS
+    }
+
+    @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
         throw new UnsupportedOperationException("not yet implemented");

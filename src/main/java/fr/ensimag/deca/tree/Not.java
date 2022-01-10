@@ -5,6 +5,8 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.ima.pseudocode.ImmediateString;
+import fr.ensimag.ima.pseudocode.instructions.WSTR;
 
 /**
  *
@@ -23,6 +25,13 @@ public class Not extends AbstractUnaryExpr {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
+    @Override
+    public void codeGenExpr(DecacCompiler compiler) {
+        // TODO: pas d'instrcution not, faut faire comment ?
+        // TODO : En mettant 0 si 1 et 1 si 0 ?
+        // Faire : 1 xor ... ?
+        throw new UnsupportedOperationException("LOL PTDR JE FÉ COMMEN ?");
+    }
 
     @Override
     protected String getOperatorName() {

@@ -38,5 +38,6 @@ public class ListDeclVar extends TreeList<AbstractDeclVar> {
             ClassDefinition currentClass) throws ContextualError {
     }
 
+    void genVarListDecl()
 
 }

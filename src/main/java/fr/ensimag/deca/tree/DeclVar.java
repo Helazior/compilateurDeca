@@ -37,6 +37,7 @@ public class DeclVar extends AbstractDeclVar {
             throws ContextualError {
     }
 
+    // TODO: codeGen : utiliser le décorateur Definition.setOperand() pour retrouver facilement l'opérande à utiliser avec getOperand()
     
     @Override
     public void decompile(IndentPrintStream s) {

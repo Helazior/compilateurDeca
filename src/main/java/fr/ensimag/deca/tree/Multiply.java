@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 
+import fr.ensimag.deca.DecacCompiler;
 
 /**
  * @author gl60
@@ -11,6 +12,10 @@ public class Multiply extends AbstractOpArith {
         super(leftOperand, rightOperand);
     }
 
+    @Override
+    public void codeGenExpr(DecacCompiler compiler) {
+        //codeGenMultiplyAnd(compiler, getLeftOperand(), getRightOperand());
+    }
 
     @Override
     protected String getOperatorName() {
