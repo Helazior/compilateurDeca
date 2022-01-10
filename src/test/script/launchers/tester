@@ -1,4 +1,4 @@
-#!/bin/python
+#!/bin/python3
 
 """
 Lance les tests spécifiés, avec trois possibilités :
