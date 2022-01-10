@@ -26,6 +26,8 @@ options {
 @header {
     import fr.ensimag.deca.tree.*;
     import java.io.PrintStream;
+    import fr.ensimag.deca.DecacCompiler;
+    import fr.ensimag.deca.tools.SymbolTable.Symbol;
 }
 
 @members {
@@ -455,10 +457,14 @@ primary_expr returns[AbstractExpr tree]
         }
     | OPARENT expr CPARENT {
             assert($expr.tree != null);
+            $tree = $expr.tree;
+            setLocation($tree, $expr.start);
         }
     | READINT OPARENT CPARENT {
+            $tree = new ReadInt();
         }
     | READFLOAT OPARENT CPARENT {
+            $tree = new ReadFloat();
         }
     | NEW ident OPARENT CPARENT {
             assert($ident.tree != null);
@@ -515,12 +521,9 @@ literal returns[AbstractExpr tree]
     ;
 
 ident returns[AbstractIdentifier tree]
-<<<<<<< HEAD
-    : IDENT { 
-            $tree = new Identifier();
-=======
     : IDENT {
->>>>>>> CLI
+            // DecacCompiler compiler = getDecacCompiler();
+            // SymbolTable table = compiler.creatSymbol();
         }
     ;
 
