@@ -515,12 +515,7 @@ literal returns[AbstractExpr tree]
     ;
 
 ident returns[AbstractIdentifier tree]
-<<<<<<< HEAD
-    : IDENT { 
-            $tree = new Identifier();
-=======
     : IDENT {
->>>>>>> CLI
         }
     ;
 
