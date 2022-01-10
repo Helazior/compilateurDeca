@@ -99,20 +99,20 @@ decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
     : i=ident {
             assert($i.tree != null);
             name = $i.tree;
-            
         }
       (EQUALS e=expr {
             assert($e.tree != null);
             initialization = new Initialization($e.tree);
+            setLocation(initialization, $e.start);
         }
       )? {
-            $tree = new DeclVar(t, name, initialization);
+            $tree = new DeclVar($t, name, initialization);
             setLocation($tree, $i.start);
         }
     ;
 
 // DONE
-list_inst returns[ListInst tree] 
+list_inst returns[ListInst tree]
 @init {
     $tree = new ListInst();
 }
@@ -124,7 +124,7 @@ list_inst returns[ListInst tree]
     ;
 
 // DONE
-inst returns[AbstractInst tree] 
+inst returns[AbstractInst tree]
     : e1=expr SEMI {
             assert($e1.tree != null);
             $tree = $e1.tree;
@@ -157,7 +157,6 @@ inst returns[AbstractInst tree]
     | if_then_else {
             assert($if_then_else.tree != null);
             $tree = $if_then_else.tree;
-            
         }
     //TODO
     | WHILE OPARENT condition=expr CPARENT OBRACE body=list_inst CBRACE {
@@ -178,22 +177,28 @@ if_then_else returns[IfThenElse tree]
 @init {
     // Pour pouvoir construire l'arbre dans le bon ordre, on liste les conditions
     // et instructions, puis on construit l'arbre depuis la fin
-    List<AbstractExpr> conditions = new ArrayList<AbstractExpr>();  
+    List<AbstractExpr> conditions = new ArrayList<AbstractExpr>();
+    List<Token> treeNodes = new ArrayList<Token>();
     List<ListInst> thens = new ArrayList<ListInst>();
     ListInst elseListInst = new ListInst(); // Si le else n'est pas spécifié, il est vide
 }
     : if1=IF OPARENT condition=expr CPARENT OBRACE li_if=list_inst CBRACE {
         assert($condition.tree != null);
         assert($li_if.tree != null);
+
         conditions.add($condition.tree);
         thens.add($li_if.tree);
-        
+
+        treeNodes.add($condition.start);
         }
       (ELSE elsif=IF OPARENT elsif_cond=expr CPARENT OBRACE elsif_li=list_inst CBRACE {
             assert($elsif_cond.tree != null);
             assert($elsif_li.tree != null);
+
             conditions.add($elsif_cond.tree);
             thens.add($elsif_li.tree);
+
+            treeNodes.add($elsif_cond.start);
         }
       )*
       (ELSE OBRACE li_else=list_inst CBRACE {
@@ -203,24 +208,30 @@ if_then_else returns[IfThenElse tree]
       )?
       {
         // On est sûrs d'avoir au moins 1 élément
-        $tree = new IfThenElse(
-            conditions.remove(conditions.size() - 1),
-            thens.remove(thens.size() - 1),
-            elseListInst
-        );
+        AbstractExpr cond = conditions.remove(conditions.size() - 1);
+        ListInst then = thens.remove(thens.size() - 1);
+        Token node = treeNodes.remove(treeNodes.size() -1);
+
+        $tree = new IfThenElse(cond, then, elseListInst);
+        setLocation($tree, node);
+
         // On s'occupe du reste
         while (!conditions.isEmpty()) {
             assert(!thens.isEmpty());
+            assert(!treeNodes.isEmpty());
+
             ListInst subtree = new ListInst();
             subtree.add($tree);
-            $tree = new IfThenElse(
-                conditions.remove(conditions.size() - 1),
-                thens.remove(thens.size() - 1),
-                subtree
-            );
+
+            cond = conditions.remove(conditions.size() - 1);
+            then = thens.remove(thens.size() - 1);
+            node = treeNodes.remove(treeNodes.size() -1);
+
+            $tree = new IfThenElse(cond, then, subtree);
+            setLocation($tree, node);
         }
         assert(thens.isEmpty());
-        setLocation($tree, $condition.start);
+        assert(treeNodes.isEmpty());
       }
     ;
 
@@ -245,9 +256,10 @@ expr returns[AbstractExpr tree]
     : assign_expr {
             assert($assign_expr.tree != null);
             $tree = $assign_expr.tree;
-            
+            setLocation($tree, $assign_expr.start);
         }
     ;
+
 // DONE
 assign_expr returns[AbstractExpr tree]
     : e=or_expr (
@@ -266,7 +278,7 @@ assign_expr returns[AbstractExpr tree]
       | /* epsilon */ {
             assert($e.tree != null);
             $tree = $e.tree;
-            //setLocation($tree, $e.start);
+            setLocation($tree, $e.start);
         }
       )
     ;
