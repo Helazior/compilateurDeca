@@ -480,10 +480,12 @@ primary_expr returns[AbstractExpr tree]
         }
     ;
 
+// DONE
 type returns[AbstractIdentifier tree]
     : ident {
             assert($ident.tree != null);
-            
+            $tree = $ident.tree;
+            setLocation($tree, $ident.start);
         }
     ;
 
@@ -522,7 +524,7 @@ literal returns[AbstractExpr tree]
 //TO DO
 ident returns[AbstractIdentifier tree]
     : IDENT { 
-        
+            $tree = new Identifier();
         }
     ;
 
