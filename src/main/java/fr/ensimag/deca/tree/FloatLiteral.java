@@ -43,6 +43,7 @@ public class FloatLiteral extends AbstractExpr {
 
     @Override
     protected void codeGenPrint(DecacCompiler compiler) {
+        //TODO : à changer avec une dval !
         compiler.addInstruction(new LOAD(value, Register.R1));
         compiler.addInstruction(new WFLOAT());
     }

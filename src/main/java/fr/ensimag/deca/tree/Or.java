@@ -8,7 +8,7 @@ import fr.ensimag.deca.DecacCompiler;
  * @author gl60
  * @date 01/01/2022
  */
-public class Or extends AbstractOpBool implements InterfaceCodePlusOr {
+public class Or extends AbstractOpBool {
 
     public Or(AbstractExpr leftOperand, AbstractExpr rightOperand) {
         super(leftOperand, rightOperand);
@@ -16,7 +16,7 @@ public class Or extends AbstractOpBool implements InterfaceCodePlusOr {
 
     @Override
     public void codeGenExpr(DecacCompiler compiler) {
-        codeGenPlusOr(compiler, getLeftOperand(), getRightOperand());
+        //codeGenPlusOr(compiler, getLeftOperand(), getRightOperand());
     }
     @Override
     protected String getOperatorName() {
