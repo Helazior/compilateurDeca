@@ -13,15 +13,16 @@
 //    cree le 08/01/2022
 
 {
-    bool b1 = true;
-    bool b2 = false;
+    boolean b1 = true;
+    boolean b2 = false;
+    boolean b5 = false;
+    boolean b6 = false;
+    boolean b3 = true;
+    boolean b4 = true;
+
     b1 = b1 && b2;
 
-    bool b3 = true;
-    bool b4 = true;
     b3 = b4 && b3; 
 
-    bool b5 = false;
-    bool b6 = false;
     b5 = b5 && b6;
 }

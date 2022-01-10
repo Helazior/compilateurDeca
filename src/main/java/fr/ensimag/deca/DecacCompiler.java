@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.SymbolTable;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.context.StringType;
 import fr.ensimag.deca.context.VoidType;
 
@@ -135,6 +136,11 @@ public class DecacCompiler {
     public Type voidType() {
         return new VoidType(symbolTable.create("void"));
     }
+
+    public Symbol createSymbol(String name) {
+        return symbolTable.create(name);
+    }
+
 
     /**
      * Run the compiler (parse source file, generate code)
