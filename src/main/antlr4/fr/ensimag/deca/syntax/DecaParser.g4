@@ -187,7 +187,7 @@ if_then_else returns[IfThenElse tree]
         assert($li_if.tree != null);
         conditions.add($condition.tree);
         thens.add($li_if.tree);
-        setLocation($tree, $condition.start);
+        
         }
       (ELSE elsif=IF OPARENT elsif_cond=expr CPARENT OBRACE elsif_li=list_inst CBRACE {
             assert($elsif_cond.tree != null);
@@ -211,13 +211,16 @@ if_then_else returns[IfThenElse tree]
         // On s'occupe du reste
         while (!conditions.isEmpty()) {
             assert(!thens.isEmpty());
+            ListInst subtree = new ListInst();
+            subtree.add($tree);
             $tree = new IfThenElse(
                 conditions.remove(conditions.size() - 1),
                 thens.remove(thens.size() - 1),
-                elseListInst
+                subtree
             );
         }
-        assert(thens.isEmpty());
+        //assert(thens.isEmpty());
+        setLocation($tree, $condition.start);
       }
     ;
 
@@ -424,14 +427,16 @@ select_expr returns[AbstractExpr tree]
         }
     | e1=select_expr DOT i=ident {
             // TODO: Implémenter la classe Selection et implémenter ça
+            System.err.println("Attention: Selection n'est pas implémenté !!");
             assert($e1.tree != null);
             assert($i.tree != null);
-            System.err.println("Attention: Selection n'est pas implémenté !!");
+            
         }
         (o=OPARENT args=list_expr CPARENT {
             // TODO: Implémenter la classe MethodCall et implémenter ça
-            assert($args.tree != null);
             System.err.println("Attention: MethodCall n'est pas implémenté !!");
+            assert($args.tree != null);
+            
         }
         | /* epsilon */ {
             // we matched "e.i"
