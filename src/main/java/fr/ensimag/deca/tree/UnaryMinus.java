@@ -15,6 +15,8 @@ import fr.ensimag.ima.pseudocode.instructions.SUB;
 
 import java.awt.image.RescaleOp;
 
+import fr.ensimag.deca.codegen.RegisterManager;
+
 /**
  * @author gl60
  * @date 01/01/2022
@@ -33,10 +35,12 @@ public class UnaryMinus extends AbstractUnaryExpr {
 
     @Override
     public void codeGenExpr(DecacCompiler compiler) {
+        RegisterManager regMan = compiler.getRegMan();
         AbstractExpr operand = getOperand();
         operand.codeGenExpr(compiler);
 
-        compiler.addInstruction(new POP(Register.R0));
+
+        regMan.pop(Register.R0);
         Type type = getType();
         if (type.isInt()) {
             compiler.addInstruction(new LOAD(0, Register.R1));
@@ -44,7 +48,7 @@ public class UnaryMinus extends AbstractUnaryExpr {
             compiler.addInstruction(new LOAD(new ImmediateFloat(0.0f), Register.R1));
         }
         compiler.addInstruction(new SUB(Register.R0, Register.R1));
-        compiler.addInstruction(new PUSH(Register.R1));
+        regMan.push(Register.R1);
     }
 
     @Override

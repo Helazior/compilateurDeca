@@ -29,7 +29,6 @@ public class Modulo extends AbstractOpArith {
 
     @Override
     public void codeGenOp(DecacCompiler compiler) {
-        // TODO : COMMENT ON FAIT SI C'EST FLOAT ? Dans l'assembleur ?
         Type type = getType();
         if (type.isInt()) {
             compiler.addInstruction(new REM(Register.R0, Register.R1));
@@ -44,10 +43,10 @@ public class Modulo extends AbstractOpArith {
      *
      * @param compiler
      */
-    @Override
+    /*@Override
     protected void codeGenPrint(DecacCompiler compiler) {
         super.codeGenPrint(compiler);
-    }
+    }*/
 
     @Override
     protected String getOperatorName() {

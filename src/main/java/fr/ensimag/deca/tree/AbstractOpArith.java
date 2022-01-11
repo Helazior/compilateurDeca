@@ -8,6 +8,8 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.*;
 
+import fr.ensimag.deca.codegen.RegisterManager;
+
 import static fr.ensimag.ima.pseudocode.Register.R1;
 
 /**
@@ -28,22 +30,23 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
 
     @Override
     public void codeGenExpr(DecacCompiler compiler) {
+        RegisterManager regMan = compiler.getRegMan();
         //super.codeGenExpr(compiler);
         AbstractExpr left = getLeftOperand();
         left.codeGenExpr(compiler);
         AbstractExpr right = getRightOperand();
         right.codeGenExpr(compiler);
 
-        compiler.addInstruction(new POP(Register.R0));
-        compiler.addInstruction(new POP(Register.R1));
+        regMan.pop(Register.R0);
+        regMan.pop(Register.R1);
         codeGenOp(compiler);
-        compiler.addInstruction(new PUSH(Register.R1));
+        regMan.push(Register.R1);
     }
 
     protected void codeGenPrint(DecacCompiler compiler) {
         // TODO : C'est ça ou pas ? Ça a l'air de marcher mais pas sûr à 100%
         codeGenExpr(compiler);
-        compiler.addInstruction(new POP(R1));
+        compiler.getRegMan().pop(R1);
         // si type = int
         Type type = getType();
         if (type.isInt()) {

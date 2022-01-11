@@ -16,7 +16,7 @@ public class Or extends AbstractOpBool {
 
     @Override
     public void codeGenExpr(DecacCompiler compiler) {
-        //codeGenPlusOr(compiler, getLeftOperand(), getRightOperand());
+        throw new UnsupportedOperationException("not yet implemented");
     }
     @Override
     protected String getOperatorName() {
