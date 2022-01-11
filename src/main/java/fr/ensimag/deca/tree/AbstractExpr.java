@@ -9,7 +9,13 @@ import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
 import java.io.PrintStream;
+
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.POP;
+import fr.ensimag.ima.pseudocode.instructions.WINT;
 import org.apache.commons.lang.Validate;
+
+import static fr.ensimag.ima.pseudocode.Register.R1;
 
 /**
  * Expression, i.e. anything that has a value.
@@ -114,7 +120,7 @@ public abstract class AbstractExpr extends AbstractInst {
      * @param compiler
      */
     protected void codeGenPrint(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("Error: Unsupported expession type for Print");
+        throw new UnsupportedOperationException("Print not yet implemented");
     }
 
     protected void codeGenExpr(DecacCompiler compiler){
@@ -135,7 +141,7 @@ public abstract class AbstractExpr extends AbstractInst {
         // AbstractStringLiteral; AbstractBinaryExpr; AbstractReadExpr; AbstractLValue; AbstractUnaryExpr;
         // BooleanLiteral; FloatLiteral; IntLiteral
         // Et ses filles !
-        throw new UnsupportedOperationException("This expr is not supported");
+        codeGenExpr(compiler);
     }
     
 

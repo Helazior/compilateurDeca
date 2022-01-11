@@ -3,7 +3,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.instructions.ADD;
+import fr.ensimag.ima.pseudocode.instructions.*;
 
 /**
  * @author gl60
@@ -14,12 +14,23 @@ public class Plus extends AbstractOpArith {
         super(leftOperand, rightOperand);
     }
 
+
     @Override
-    public void codeGenExpr(DecacCompiler compiler) {
-    //public void codeGenPlus(DecacCompiler compiler) {
-        //compiler.addInstruction(new ADD(Register.R0, Register.R1));
-        //codeGenPlusOr(compiler, getLeftOperand(), getRightOperand());
+    public void codeGenOp(DecacCompiler compiler) {
+        compiler.addInstruction(new ADD(Register.R0, Register.R1));
     }
+
+    /**
+     * Generate code to print the expression
+     *
+     * @param compiler
+     */
+    @Override
+    protected void codeGenPrint(DecacCompiler compiler) {
+        super.codeGenPrint(compiler);
+    }
+
+
     @Override
     protected String getOperatorName() {
         return "+";

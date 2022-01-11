@@ -11,13 +11,15 @@ import java.util.jar.Attributes.Name;
 
 import org.apache.commons.lang.Validate;
 
+import fr.ensimag.ima.pseudocode.instructions.*;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
+
 /**
  * @author gl60
  * @date 01/01/2022
  */
 public class DeclVar extends AbstractDeclVar {
 
-    
     final private AbstractIdentifier type;
     final private AbstractIdentifier varName;
     final private AbstractInitialization initialization;
@@ -61,5 +63,11 @@ public class DeclVar extends AbstractDeclVar {
         type.prettyPrint(s, prefix, false);
         varName.prettyPrint(s, prefix, false);
         initialization.prettyPrint(s, prefix, true);
+    }
+
+    @Override
+    public AbstractIdentifier codeGenDecl(ImmediateInteger place) {
+        // TODO: init!
+        return varName;
     }
 }
