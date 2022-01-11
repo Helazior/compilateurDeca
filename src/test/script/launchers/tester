@@ -30,7 +30,8 @@ import subprocess
 
 BASEDIR = "./src/test"
 DIRS = {
-    "deca/syntax/valid": ["test_lexer", "test_decompile"]
+    "deca/syntax/valid": ["test_lexer", "test_decompile"],
+    "deca/exec/invalid": ["test_exec"],
 }
 
 REGRESSION = len(sys.argv) > 1 and sys.argv[1] in ["reg", "regression"]

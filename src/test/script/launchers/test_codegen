@@ -20,7 +20,6 @@ CP="$DECAC_HOME"/target/test-classes/:"$DECAC_HOME"/target/classes/:$(cat "$CP_F
 #java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintMODintGencode "$@" > tmp.ass
 #java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintUnaryMinusIntGencode "$@" > tmp.ass
 #java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintUnaryMinusFloatGencode "$@" > tmp.ass
-#java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintDIVparZeroGencode "$@" > tmp.ass
-#java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintDIVZerofloatGencode "$@" > tmp.ass
-cat tmp.ass
+java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintDIVparZeroGencode "$@" > tmp.ass
+#cat tmp.ass
 ima tmp.ass
