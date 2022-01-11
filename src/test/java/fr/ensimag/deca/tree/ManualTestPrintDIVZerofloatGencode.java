@@ -6,29 +6,28 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.context.IntType;
+import fr.ensimag.deca.context.FloatType;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.SymbolTable;
-import fr.ensimag.deca.CompilerOptions;
 
 /**
  *
  * @author Ensimag
  * @date 01/01/2022
  */
-public class ManualTestPrintDIVparZeroGencode {
+public class ManualTestPrintDIVZerofloatGencode {
 
     public static AbstractProgram initTest1() {
         SymbolTable st = new SymbolTable();
-        Type int_t = new IntType(st.create("int"));
+        Type float_t = new FloatType(st.create("float"));
         ListInst linst = new ListInst();
         ListExpr exp1 = new ListExpr();
         linst.add(new Print(false,exp1));
-        // (50/2)/0 -----> erreur
-        Divide p1 = new Divide(new IntLiteral(50), new IntLiteral(2));
-        Divide p2 = new Divide(p1, new IntLiteral(0));
-        p1.setType(int_t);
-        p2.setType(int_t);
+        // 39.2 / 2.9 / 4.0 =
+        Divide p1 = new Divide(new FloatLiteral(39.2f), new FloatLiteral(2.9f));
+        Divide p2 = new Divide(p1, new FloatLiteral(0.0f));
+        p1.setType(float_t);
+        p2.setType(float_t);
         exp1.add(p2);
         AbstractProgram source =
                 new Program(
@@ -38,7 +37,7 @@ public class ManualTestPrintDIVparZeroGencode {
     }
 
     public static String gencodeSource(AbstractProgram source) {
-        DecacCompiler compiler = new DecacCompiler(new CompilerOptions(), null);
+        DecacCompiler compiler = new DecacCompiler(null,null);
         source.codeGenProgram(compiler);
         return compiler.displayIMAProgram();
     }
@@ -46,7 +45,7 @@ public class ManualTestPrintDIVparZeroGencode {
     public static void test1() {
         AbstractProgram source = initTest1();
         //System.out.println("---- From the following Abstract Syntax Tree ----");
-        //source.prettyPrint(System.out);
+        // source.prettyPrint(System.out);
         //System.out.println("---- We generate the following assembly code ----");
         String result = gencodeSource(source);
         System.out.println(result);
