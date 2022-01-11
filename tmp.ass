@@ -1,22 +1,18 @@
 ; Main program
 ; Beginning of main instructions:
-	LOAD #27, R1
+	LOAD #50, R1
 	PUSH R1
-	LOAD #10, R1
+	LOAD #2, R1
 	PUSH R1
-; codeGenExpr AbstractOpArith -> Début parcours
 	POP R0
 	POP R1
-; codeGenExpr AbstractOpArith -> Fin parcours
-	REM R0, R1
+	QUO R0, R1
 	PUSH R1
-	LOAD #10, R1
+	LOAD #4, R1
 	PUSH R1
-; codeGenExpr AbstractOpArith -> Début parcours
 	POP R0
 	POP R1
-; codeGenExpr AbstractOpArith -> Fin parcours
-	REM R0, R1
+	QUO R0, R1
 	PUSH R1
 	POP R1
 	WINT

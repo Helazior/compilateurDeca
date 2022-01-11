@@ -33,11 +33,9 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         left.codeGenExpr(compiler);
         AbstractExpr right = getRightOperand();
         right.codeGenExpr(compiler);
-        compiler.addComment("codeGenExpr AbstractOpArith -> Début parcours");
 
         compiler.addInstruction(new POP(Register.R0));
         compiler.addInstruction(new POP(Register.R1));
-        compiler.addComment("codeGenExpr AbstractOpArith -> Fin parcours");
         codeGenOp(compiler);
         compiler.addInstruction(new PUSH(Register.R1));
     }

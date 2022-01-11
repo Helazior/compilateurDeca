@@ -5,6 +5,15 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.ima.pseudocode.ImmediateFloat;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.POP;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
+import fr.ensimag.ima.pseudocode.instructions.SUB;
+
+import java.awt.image.RescaleOp;
 
 /**
  * @author gl60
@@ -22,10 +31,24 @@ public class UnaryMinus extends AbstractUnaryExpr {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
+    @Override
+    public void codeGenExpr(DecacCompiler compiler) {
+        AbstractExpr operand = getOperand();
+        operand.codeGenExpr(compiler);
+
+        compiler.addInstruction(new POP(Register.R0));
+        Type type = getType();
+        if (type.isInt()) {
+            compiler.addInstruction(new LOAD(0, Register.R1));
+        } else if (type.isFloat()) {
+            compiler.addInstruction(new LOAD(new ImmediateFloat(0.0f), Register.R1));
+        }
+        compiler.addInstruction(new SUB(Register.R0, Register.R1));
+        compiler.addInstruction(new PUSH(Register.R1));
+    }
 
     @Override
     protected String getOperatorName() {
         return "-";
     }
-
 }

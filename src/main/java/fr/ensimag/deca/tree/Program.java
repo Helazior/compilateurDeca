@@ -55,6 +55,8 @@ public class Program extends AbstractProgram {
 
         // termine le programme
         compiler.addInstruction(new HALT());
+
+        //compiler.addInstruction();
     }
 
     @Override

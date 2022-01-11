@@ -22,6 +22,9 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
         this.operand = operand;
     }
 
+    public void codeGenExpr(DecacCompiler compiler) {
+        throw new UnsupportedOperationException("not yet implemented");
+    }
 
     protected abstract String getOperatorName();
 
