@@ -35,7 +35,10 @@ public class CompilerOptions {
             "pour avoir plus de traces.", 0)),
         entry("-h", new OptionData("help", "Affiche cette aide", 0)),
         entry("-p", new OptionData("decompilation", "decompile l'arbre" +
-            " abstrait obtenu à la suite du lexer et du parser" , 0))
+            " abstrait obtenu à la suite du lexer et du parser" , 0)),
+        entry("-r", new OptionData("registers", "limite les registres " +
+            "banalisés disponibles. Doit être compris entre 4 et 16 inclus."
+            , 1))
     );
 
     private int debug = 0;
@@ -61,6 +64,18 @@ public class CompilerOptions {
 
     public boolean getDecompile() {
         return options.get("-p").isInvoked();
+    }
+
+    public int getNbReg() {
+        if (options.get("-r").getArgs() != null) {
+            int nbReg = Integer.parseInt(options.get("-r").getArgs()[0]);
+            if (nbReg < 4 || nbReg > 16) {
+                throw new UnsupportedOperationException("Can't use " + nbReg
+                    + " registers: we need between 4 and 16 registers.");
+            }
+            return nbReg;
+        }
+        return 16;
     }
 
     public List<File> getSourceFiles() {

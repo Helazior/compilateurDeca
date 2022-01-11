@@ -22,12 +22,12 @@ public class RegisterManager {
     // Number of variables on stack
     private int nbVarsStack = 0;
 
-    public final VariableTable varTable;
+    //public final VariableTable varTable;
     private DecacCompiler compiler;
 
-    public RegisterManager(DecacCompiler compiler, ListDeclVar vars, int nb_registres){
+    public RegisterManager(DecacCompiler compiler, int nb_registres){
         this.compiler = compiler;
-        varTable = new VariableTable(compiler, vars);
+        //varTable = new VariableTable(compiler, vars);
         nMax = nb_registres;
         this.registers = new int[nb_registres]; // Initialisé à 0
     }

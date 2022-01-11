@@ -24,6 +24,7 @@ import fr.ensimag.deca.tools.SymbolTable;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.context.StringType;
 import fr.ensimag.deca.context.VoidType;
+import fr.ensimag.deca.codegen.RegisterManager;
 
 /**
  * Decac compiler instance.
@@ -52,6 +53,7 @@ public class DecacCompiler {
         super();
         this.compilerOptions = compilerOptions;
         this.source = source;
+        this.regManager = new RegisterManager(this, compilerOptions.getNbReg());
     }
 
     /**
@@ -116,6 +118,10 @@ public class DecacCompiler {
     public String displayIMAProgram() {
         return program.display();
     }
+
+    public RegisterManager getRegMan() {
+        return regManager;
+    }
     
     private final CompilerOptions compilerOptions;
     private final File source;
@@ -129,6 +135,12 @@ public class DecacCompiler {
      * (demander à Gwennan en cas de PB)
      */
     private final SymbolTable symbolTable = new SymbolTable();
+
+    /**
+     * Permet d'avoir des types dans la partie B
+     * (demander à Gwennan en cas de PB)
+     */
+    private RegisterManager regManager;
 
     public Type stringType() {
         return new StringType(symbolTable.create("string"));
