@@ -11,6 +11,7 @@ public class RegisterManagerTest {
     public static void main(String[] args) {
         RegisterManagerTest test = new RegisterManagerTest();
         test.testPushPop();
+        test.testTooMuchPop();
         test.testOwnership();
     }
 
