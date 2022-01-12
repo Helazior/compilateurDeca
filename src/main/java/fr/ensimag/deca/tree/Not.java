@@ -43,7 +43,7 @@ public class Not extends AbstractUnaryExpr {
         if (type.isInt()) {
             compiler.addInstruction(new LOAD(1, Register.R1));
         } else if (type.isFloat()) {
-            compiler.addInstruction(new LOAD(new ImmediateFloat(0.0f), Register.R1));
+            compiler.addInstruction(new LOAD(new ImmediateFloat(1.0f), Register.R1));
         }
         compiler.addInstruction(new SUB(Register.R0, Register.R1));
         regMan.push(Register.R1);

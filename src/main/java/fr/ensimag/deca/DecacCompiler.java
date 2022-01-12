@@ -52,7 +52,8 @@ public class DecacCompiler {
     /**
      * To write the label name
      */
-    private static int numCond = 0;
+    private static int numIf = 0;
+    private static int numWhile = 0;
     /**
      * To show the div_zero error or not
      */
@@ -73,12 +74,20 @@ public class DecacCompiler {
         divideExist = true;
     }
 
-    public int getNumCond() {
-        return numCond;
+    public int getNumIf() {
+        return numIf;
     }
 
-    public void incrementNumCond() {
-        numCond++;
+    public void incrementNumIf() {
+        numIf++;
+    }
+
+    public int getNumWhile() {
+        return numWhile;
+    }
+
+    public void incrementNumWhile() {
+        numWhile++;
     }
 
     /**

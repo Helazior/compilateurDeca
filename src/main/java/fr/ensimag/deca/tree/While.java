@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -8,6 +9,11 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
 import java.io.PrintStream;
+
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.instructions.BNE;
+import fr.ensimag.ima.pseudocode.instructions.BRA;
 import org.apache.commons.lang.Validate;
 
 /**
@@ -34,16 +40,40 @@ public class While extends AbstractInst {
         this.body = body;
     }
 
+
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("not yet implemented");
-    }
+        // TODO :  avec l'extension, nommer les labels différemment
+        RegisterManager regMan = compiler.getRegMan();
 
+        String whileLabel = "while_" + compiler.getNumWhile();
+        String endWhileLabel = "end_while_" + compiler.getNumWhile();
+        compiler.incrementNumWhile();
+
+        compiler.addLabel(new Label(whileLabel));
+        // On execute la condition
+        condition.codeGenExpr(compiler);
+        // résultat de la condition dans la pile
+        regMan.pop(Register.R1);
+
+        // On termine le while si condition est fausse -> goto end_while_n
+        compiler.addInstruction(new BNE(new Label(endWhileLabel)));
+
+        // corps du while
+        for (AbstractInst inst : body.getList()) {
+            inst.codeGenInst(compiler);
+        }
+
+        // Fin du while
+        compiler.addInstruction(new BRA(new Label(whileLabel)));
+        compiler.addLabel(new Label(endWhileLabel));
+    }
     @Override
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass, Type returnType)
             throws ContextualError {
     }
+
 
     @Override
     public void decompile(IndentPrintStream s) {

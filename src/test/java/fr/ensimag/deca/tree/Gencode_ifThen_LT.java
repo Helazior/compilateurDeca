@@ -14,7 +14,7 @@ import fr.ensimag.deca.tools.SymbolTable;
  * @author Ensimag
  * @date 01/01/2022
  */
-public class Gencode_If_the_equals {
+public class Gencode_ifThen_LT {
 
     public static AbstractProgram initTest1() {
         SymbolTable st = new SymbolTable();
@@ -23,19 +23,19 @@ public class Gencode_If_the_equals {
         ListInst linstfalse = new ListInst();
         ListExpr exprtrue = new ListExpr();
         ListExpr exprfalse = new ListExpr();
-        exprtrue.add(new StringLiteral("EQUALS !"));
+        exprtrue.add(new StringLiteral("VRAI !"));
         exprfalse.add(new StringLiteral("FAUX !"));
         linsttrue.add(new Print(false, exprtrue));
         linstfalse.add(new Print(false, exprfalse));
-        Equals p1 = new Equals(new IntLiteral(50), new IntLiteral(50));     // true
-        Equals p2 = new Equals(p1, new BooleanLiteral(true));                    // false
-        IfThenElse ite = new IfThenElse(p2, linsttrue, linstfalse);
+        Lower p1 = new Lower(new IntLiteral(40), new IntLiteral(50));     // true
+        IfThenElse ite = new IfThenElse(p1, linsttrue, linstfalse);
         linst.add(ite);
         AbstractProgram source =
                 new Program(
                         new ListDeclClass(),
                         new Main(new ListDeclVar(),linst));
         return source;
+
     }
 
     public static String gencodeSource(AbstractProgram source) {

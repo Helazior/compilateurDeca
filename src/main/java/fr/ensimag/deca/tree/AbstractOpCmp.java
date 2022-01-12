@@ -25,5 +25,4 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
             ClassDefinition currentClass) throws ContextualError {
         throw new UnsupportedOperationException("not yet implemented");
     }
-
 }

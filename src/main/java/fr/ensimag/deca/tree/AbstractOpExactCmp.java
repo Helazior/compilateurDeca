@@ -16,7 +16,4 @@ public abstract class AbstractOpExactCmp extends AbstractOpCmp {
         super(leftOperand, rightOperand);
     }
 
-
-
-
 }

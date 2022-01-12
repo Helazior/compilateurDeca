@@ -54,9 +54,9 @@ public class IfThenElse extends AbstractInst {
         // résultat de la condition dans la pile
         regMan.pop(Register.R1);
         // On saute au label else_n si la condition == 0
-        String elseLabel = "else_" + compiler.getNumCond();
-        String endIfLabel = "end_if_" + compiler.getNumCond();
-        compiler.incrementNumCond();
+        String elseLabel = "else_" + compiler.getNumIf();
+        String endIfLabel = "end_if_" + compiler.getNumIf();
+        compiler.incrementNumIf();
         compiler.addInstruction(new BEQ(new Label(elseLabel)));
         // On execute la thenBranch
         for (AbstractInst inst:thenBranch.getList()) {
