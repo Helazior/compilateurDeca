@@ -21,16 +21,13 @@ public class Gencode_while {
         SymbolTable st = new SymbolTable();
         ListInst linst = new ListInst();
         ListInst linsttrue = new ListInst();
-        ListInst linstfalse = new ListInst();
         ListExpr exprtrue = new ListExpr();
         ListExpr exprfalse = new ListExpr();
-        exprtrue.add(new StringLiteral("EQUALS !"));
-        exprfalse.add(new StringLiteral("FAUX !"));
-        linsttrue.add(new Print(false, exprtrue));
-        linstfalse.add(new Print(false, exprfalse));
+        exprtrue.add(new StringLiteral("Dans le While !"));
+        linsttrue.add(new Println(false, exprtrue));
         Equals p1 = new Equals(new IntLiteral(50), new IntLiteral(50));     // true
-        Equals p2 = new Equals(p1, new BooleanLiteral(true));                    // false
-        IfThenElse ite = new IfThenElse(p2, linsttrue, linstfalse);
+        Equals p2 = new Equals(p1, new BooleanLiteral(true));                    // true
+        While ite = new While(p2, linsttrue);
         linst.add(ite);
         AbstractProgram source =
                 new Program(

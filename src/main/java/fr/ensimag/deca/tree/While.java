@@ -14,6 +14,7 @@ import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.BNE;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 import org.apache.commons.lang.Validate;
 
 /**
@@ -57,6 +58,7 @@ public class While extends AbstractInst {
         regMan.pop(Register.R1);
 
         // On termine le while si condition est fausse -> goto end_while_n
+        compiler.addInstruction(new CMP(1, Register.R1));
         compiler.addInstruction(new BNE(new Label(endWhileLabel)));
 
         // corps du while
