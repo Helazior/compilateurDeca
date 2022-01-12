@@ -14,6 +14,20 @@ import java.io.PrintStream;
  */
 public class DeclClass extends AbstractDeclClass {
 
+    final private AbstractIdentifier name;
+    final private AbstractIdentifier extension;
+    final private BodyClass body;
+
+    public DeclClass(AbstractIdentifier name, AbstractIdentifier extension, ... body) {
+        Validate.notNull(name);
+        Validate.notNull(extension);
+        Validate.notNull(body);
+        this.name = name;
+        this.extension = extension;
+        this.body = body;
+    }
+
+
     @Override
     public void decompile(IndentPrintStream s) {
         s.print("class { ... A FAIRE ... }");

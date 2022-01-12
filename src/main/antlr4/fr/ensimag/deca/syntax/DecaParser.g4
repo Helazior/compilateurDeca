@@ -539,27 +539,46 @@ list_classes returns[ListDeclClass tree]
 }
     :
       (c1=class_decl {
+          assert(c1.tree != null)
+          $tree.add($c1.tree);
         }
       )*
     ;
 
-class_decl
+class_decl returns [AbstractDeclClass tree]
     : CLASS name=ident superclass=class_extension OBRACE class_body CBRACE {
+            $tree = new DeclClass($name.tree, $superclass.tree, $class_body.tree);
+            setLocation($tree, $name.start);
         }
     ;
 
 class_extension returns[AbstractIdentifier tree]
     : EXTENDS ident {
+            assert($ident.tree != null);
+            $tree = $ident.tree;
         }
     | /* epsilon */ {
+            $tree = new Identifier(compiler.createSymbol("Object));
         }
     ;
 
-class_body
+class_body returns[BodyClass tree]
+@init {
+    List<DeclMethod> methodes = new ListDeclMethode();
+    List<DeclFieldSet> fieldsSet = new ListDeclFieldSet();
+}
     : (m=decl_method {
+            assert($m.tree != null);
+            methodes.add($m.tree);
         }
-      | decl_field_set
-      )*
+      |n=decl_field_set {
+            assert($n.tree != null);
+            fieldsSet.add($n.tree);
+        }
+      )* {
+            $tree = new BodyClass(methodes, fieldsSet);
+            setLocation($tree, $m.start);
+        }
     ;
 
 decl_field_set
@@ -589,20 +608,42 @@ decl_field
         }
     ;
 
-decl_method
+decl_method returns[DeclMethod tree]
 @init {
+    // C'était là mais de la manière dont je m'y suis pris ça sers à rien
 }
     : type ident OPARENT params=list_params CPARENT (block {
+            assert($type.tree != null);
+            assert($ident.tree != null);
+            assert($params.tree != null);
+            assert($block.decls != null);
+            assert($block.insts != null);
+            
+            MethodBody body = new MethodBody($block.decls, $block.insts);
+            $tree = new DeclMethodClassique($type.tree, $ident.tree, $params.tree, body);
+            setLocation($tree, $type.start);
+
         }
       | ASM OPARENT code=multi_line_string CPARENT SEMI {
+          assert($code.tree != null);
+          $tree = new DeclMethodAsm($code.text, $code.location);
+          setLocation($tree, $code.start);
         }
       ) {
+          // C'était là mais de la manière dont je m'y suis pris ça sers à rien
         }
     ;
 
-list_params
+list_params returns[ListParams tree]
+@init {
+    $tree = new ListParams();
+}
     : (p1=param {
+            assert($p1).tree != null);
+            $tree.add($p1).tree);
         } (COMMA p2=param {
+            assert($p2).tree != null);
+            $tree.add($p2).tree);
         }
       )*)?
     ;
@@ -618,7 +659,11 @@ multi_line_string returns[String text, Location location]
         }
     ;
 
-param
+param returns[Param tree]
     : type ident {
+            assert($type.tree != null);
+            assert($ident.tree != null);
+            $tree = new Param($type.tree, $name.tree);
+            setLocation($tree, $type.start);
         }
     ;

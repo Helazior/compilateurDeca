@@ -2,7 +2,6 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
-import org.apache.commons.lang.Validate;
 
 
 /**
@@ -12,16 +11,15 @@ import org.apache.commons.lang.Validate;
 
 // CRÉÉE
 
-public class MethodBody extends Tree {
+public class DeclMethodAsm extends AbstractDeclMethod{
     
-    private ListDeclVar declVariables;
-    private ListInst insts;
+    private String text;
+    private Location location;
 
-    public MethodBody(ListDeclVar declVariables, ListInst insts) {
-        Validate.notNull(declVariables);
-        Validate.notNull(insts);
-        this.declVariables = declVariables;
-        this.insts = insts;
+
+    public DeclMethodAsm(String text, Location location) { 
+        this.text = text;
+        this.location = location;
     }
 
     
