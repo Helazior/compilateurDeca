@@ -7,15 +7,10 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.ima.pseudocode.Label;
+
 import java.io.PrintStream;
 
-import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.instructions.POP;
-import fr.ensimag.ima.pseudocode.instructions.WINT;
 import org.apache.commons.lang.Validate;
-
-import static fr.ensimag.ima.pseudocode.Register.R1;
 
 /**
  * Expression, i.e. anything that has a value.
@@ -118,8 +113,9 @@ public abstract class AbstractExpr extends AbstractInst {
      * Generate code to print the expression
      *
      * @param compiler
+     * @param printHex
      */
-    protected void codeGenPrint(DecacCompiler compiler) {
+    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
         throw new UnsupportedOperationException("Print not yet implemented");
     }
 

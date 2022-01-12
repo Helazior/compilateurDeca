@@ -5,11 +5,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
-import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.*;
-import fr.ensimag.deca.codegen.RegisterManager;
-
-import fr.ensimag.deca.codegen.RegisterManager;
 
 import static fr.ensimag.ima.pseudocode.Register.R1;
 
@@ -26,7 +22,7 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
     }
 
 
-    protected void codeGenPrint(DecacCompiler compiler) {
+    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
         // TODO : C'est ça ou pas ? Ça a l'air de marcher mais pas sûr à 100%
         codeGenExpr(compiler);
         compiler.getRegMan().pop(R1);

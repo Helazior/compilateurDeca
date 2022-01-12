@@ -15,6 +15,7 @@ CP="$DECAC_HOME"/target/test-classes/:"$DECAC_HOME"/target/classes/:$(cat "$CP_F
 #java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintMULfloatGencode "$@" > tmp.ass
 #java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintMULintGencode "$@" > tmp.ass
 #java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintSUBintGencode "$@" > tmp.ass
+#java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintSUBfloatGencode "$@" > tmp.ass
 #java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintDIVfloatGencode "$@" > tmp.ass
 #java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintDIVintGencode "$@" > tmp.ass
 #java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintMODintGencode "$@" > tmp.ass
@@ -30,7 +31,8 @@ CP="$DECAC_HOME"/target/test-classes/:"$DECAC_HOME"/target/classes/:$(cat "$CP_F
 #java -enableassertions -cp "$CP" fr.ensimag.deca.tree.Gencode_AND_false_1st_arg "$@" > tmp.ass
 #java -enableassertions -cp "$CP" fr.ensimag.deca.tree.Gencode_AND_false_2nd_arg "$@" > tmp.ass
 #java -enableassertions -cp "$CP" fr.ensimag.deca.tree.Gencode_AND_false_3rd_arg "$@" > tmp.ass
-java -enableassertions -cp "$CP" fr.ensimag.deca.tree.Gencode_OR_false "$@" > tmp.ass
+#java -enableassertions -cp "$CP" fr.ensimag.deca.tree.Gencode_OR_false "$@" > tmp.ass
+java -enableassertions -cp "$CP" fr.ensimag.deca.tree.Gencode_Print_Float_Hexa "$@" > tmp.ass
 cat tmp.ass
 
 ima tmp.ass
