@@ -1,11 +1,16 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.ima.pseudocode.ImmediateFloat;
 import fr.ensimag.ima.pseudocode.ImmediateString;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.SUB;
 import fr.ensimag.ima.pseudocode.instructions.WSTR;
 
 /**
@@ -25,13 +30,25 @@ public class Not extends AbstractUnaryExpr {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
+    // TODO : à mettre au dessus
     @Override
     public void codeGenExpr(DecacCompiler compiler) {
-        // TODO: pas d'instrcution not, faut faire comment ?
-        // TODO : En mettant 0 si 1 et 1 si 0 ?
-        // Faire : 1 xor ... ?
-        throw new UnsupportedOperationException("LOL PTDR JE FÉ COMMEN ?");
+        RegisterManager regMan = compiler.getRegMan();
+        AbstractExpr operand = getOperand();
+        operand.codeGenExpr(compiler);
+
+
+        regMan.pop(Register.R0);
+        Type type = getType();
+        if (type.isInt()) {
+            compiler.addInstruction(new LOAD(1, Register.R1));
+        } else if (type.isFloat()) {
+            compiler.addInstruction(new LOAD(new ImmediateFloat(0.0f), Register.R1));
+        }
+        compiler.addInstruction(new SUB(Register.R0, Register.R1));
+        regMan.push(Register.R1);
     }
+
 
     @Override
     protected String getOperatorName() {

@@ -22,5 +22,6 @@ CP="$DECAC_HOME"/target/test-classes/:"$DECAC_HOME"/target/classes/:$(cat "$CP_F
 #java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintUnaryMinusFloatGencode "$@" > tmp.ass
 #java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintDIVparZeroGencode "$@" > tmp.ass
 #java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintDIVZerofloatGencode "$@" > tmp.ass
+java -enableassertions -cp "$CP" fr.ensimag.deca.tree.Gencode_else_equals "$@" > tmp.ass
 cat tmp.ass
 ima tmp.ass

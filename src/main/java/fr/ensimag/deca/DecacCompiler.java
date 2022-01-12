@@ -49,11 +49,36 @@ public class DecacCompiler {
      */
     private static final String nl = System.getProperty("line.separator", "\n");
 
+    /**
+     * To write the label name
+     */
+    private static int numCond = 0;
+    /**
+     * To show the div_zero error or not
+     */
+    private static boolean divideExist = false;
+
     public DecacCompiler(CompilerOptions compilerOptions, File source) {
         super();
         this.compilerOptions = compilerOptions;
         this.source = source;
         this.regManager = new RegisterManager(this, compilerOptions.getNbReg());
+    }
+
+    public boolean getDivideExist() {
+        return divideExist;
+    }
+
+    public void setDivideExistTrue() {
+        divideExist = true;
+    }
+
+    public int getNumCond() {
+        return numCond;
+    }
+
+    public void incrementNumCond() {
+        numCond++;
     }
 
     /**

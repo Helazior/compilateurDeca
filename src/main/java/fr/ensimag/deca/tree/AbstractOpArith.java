@@ -25,24 +25,6 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         super(leftOperand, rightOperand);
     }
 
-    public void codeGenOp(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("not yet implemented");
-    }
-
-    @Override
-    public void codeGenExpr(DecacCompiler compiler) {
-        RegisterManager regMan = compiler.getRegMan();
-        //super.codeGenExpr(compiler);
-        AbstractExpr left = getLeftOperand();
-        left.codeGenExpr(compiler);
-        AbstractExpr right = getRightOperand();
-        right.codeGenExpr(compiler);
-
-        regMan.pop(Register.R0);
-        regMan.pop(Register.R1);
-        codeGenOp(compiler);
-        regMan.push(Register.R1);
-    }
 
     protected void codeGenPrint(DecacCompiler compiler) {
         // TODO : C'est ça ou pas ? Ça a l'air de marcher mais pas sûr à 100%
