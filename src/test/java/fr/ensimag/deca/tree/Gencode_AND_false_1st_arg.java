@@ -14,7 +14,7 @@ import fr.ensimag.deca.tools.SymbolTable;
  * @author Ensimag
  * @date 01/01/2022
  */
-public class Gencode_else_LT {
+public class Gencode_AND_false_1st_arg {
 
     public static AbstractProgram initTest1() {
         SymbolTable st = new SymbolTable();
@@ -23,12 +23,15 @@ public class Gencode_else_LT {
         ListInst linstfalse = new ListInst();
         ListExpr exprtrue = new ListExpr();
         ListExpr exprfalse = new ListExpr();
-        exprtrue.add(new StringLiteral("VRAI !"));
-        exprfalse.add(new StringLiteral("FAUX !"));
+        exprtrue.add(new StringLiteral("true !"));
+        exprfalse.add(new StringLiteral("false !"));
         linsttrue.add(new Print(false, exprtrue));
         linstfalse.add(new Print(false, exprfalse));
-        Lower p1 = new Lower(new IntLiteral(50), new IntLiteral(50));     // false
-        IfThenElse ite = new IfThenElse(p1, linsttrue, linstfalse);
+        And p1 = new And(
+                new Equals(new IntLiteral(49), new IntLiteral(50)),         // false
+                new BooleanLiteral(true));                                        // true
+        And p2 = new And(p1, new BooleanLiteral(true));                     // true
+        IfThenElse ite = new IfThenElse(p2, linsttrue, linstfalse);
         linst.add(ite);
         AbstractProgram source =
                 new Program(

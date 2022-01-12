@@ -54,6 +54,8 @@ public class DecacCompiler {
      */
     private static int numIf = 0;
     private static int numWhile = 0;
+    private static int numAnd = 0;
+    private static int numOr = 0;
     /**
      * To show the div_zero error or not
      */
@@ -88,6 +90,22 @@ public class DecacCompiler {
 
     public void incrementNumWhile() {
         numWhile++;
+    }
+
+    public int getNumAnd() {
+        return numAnd;
+    }
+
+    public void incrementNumAnd() {
+        numAnd++;
+    }
+
+    public int getNumOr() {
+        return numOr;
+    }
+
+    public void incrementNumOr() {
+        numOr++;
     }
 
     /**

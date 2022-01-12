@@ -49,14 +49,17 @@ public class IfThenElse extends AbstractInst {
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
         // TODO :  avec l'extension, nommer les labels différemment
+        String elseLabel = "else_" + compiler.getNumIf();
+        String endIfLabel = "end_if_" + compiler.getNumIf();
+        compiler.incrementNumIf();
+
         RegisterManager regMan = compiler.getRegMan();
+
         condition.codeGenExpr(compiler);
         // résultat de la condition dans la pile
         regMan.pop(Register.R1);
         // On saute au label else_n si la condition == 0
-        String elseLabel = "else_" + compiler.getNumIf();
-        String endIfLabel = "end_if_" + compiler.getNumIf();
-        compiler.incrementNumIf();
+;
         compiler.addInstruction(new BEQ(new Label(elseLabel)));
         // On execute la thenBranch
         for (AbstractInst inst:thenBranch.getList()) {
