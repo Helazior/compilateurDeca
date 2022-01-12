@@ -32,6 +32,11 @@ public class Assign extends AbstractBinaryExpr {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
+    @Override
+    protected void codeGenExpr(DecacCompiler compiler) {
+        getRightOperand().codeGenExpr(compiler);
+        getLeftOperand().codeGenStoreLValue(compiler);
+    }
 
     @Override
     protected String getOperatorName() {

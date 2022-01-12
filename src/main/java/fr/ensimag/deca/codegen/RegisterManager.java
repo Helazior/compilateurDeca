@@ -24,17 +24,13 @@ public class RegisterManager {
 
     //public final VariableTable varTable;
     private DecacCompiler compiler;
+    private VariableTable namedVars;
 
     public RegisterManager(DecacCompiler compiler, int nb_registres){
         this.compiler = compiler;
         //varTable = new VariableTable(compiler, vars);
         nMax = nb_registres;
         this.registers = new int[nb_registres]; // Initialisé à 0
-    }
-
-    public void push(GPRegister src) {
-        nbVarsStack += 1;
-        compiler.addInstruction(new PUSH(src));
     }
 
     public static class RegisterManagerException extends RuntimeException {
@@ -55,6 +51,11 @@ public class RegisterManager {
     public static class InexistingRegister extends RegisterManagerException {
     }
 
+    public void push(GPRegister src) {
+        nbVarsStack += 1;
+        compiler.addInstruction(new PUSH(src));
+    }
+
     public void pop(GPRegister dst) {
         if (nbVarsStack < 1) {
             throw new EmptyStackException();
@@ -63,7 +64,7 @@ public class RegisterManager {
         compiler.addInstruction(new POP(dst));
     }
 
-    public GPRegister takeUnusedAndPop() {
+    public GPRegister pop() {
         if (nbVarsStack < 1) {
             throw new EmptyStackException();
         }
@@ -73,7 +74,7 @@ public class RegisterManager {
         return dst;
     }
 
-    public void pushAndGive(GPRegister reg) {
+    public void giveAndPush(GPRegister reg) {
         push(reg);
         give(reg);
     }
@@ -91,21 +92,7 @@ public class RegisterManager {
         registers[register.getNumber()] = -1;
     }
 
-    public boolean isTaken(GPRegister register) {
-        if (register.getNumber() < 0 || register.getNumber() >= nMax) {
-            throw new InexistingRegister();
-        }
-        return registers[register.getNumber()] == -1;
-    }
-
-    public boolean isUsed(GPRegister register) {
-        if (register.getNumber() < 0 || register.getNumber() >= nMax) {
-            throw new InexistingRegister();
-        }
-        return registers[register.getNumber()] != 0;
-    }
-
-    public GPRegister takeUnused() {
+    public GPRegister take() {
         int min = -1;
         int min_index = -1;
         for (int i = 2; i < nMax; i++) {
@@ -137,5 +124,49 @@ public class RegisterManager {
             throw new AlreadyHaveException();
         }
         registers[register.getNumber()] = 0;
+    }
+
+    public boolean isTaken(GPRegister register) {
+        if (register.getNumber() < 0 || register.getNumber() >= nMax) {
+            throw new InexistingRegister();
+        }
+        return registers[register.getNumber()] == -1;
+    }
+
+    public boolean isUsed(GPRegister register) {
+        if (register.getNumber() < 0 || register.getNumber() >= nMax) {
+            throw new InexistingRegister();
+        }
+        return registers[register.getNumber()] != 0;
+    }
+
+    public void declareVars(ListDeclVar vars) {
+        if (namedVars != null) {
+            throw new UnsupportedOperationException("Not able to declare new variables");
+        }
+        namedVars = new VariableTable(compiler, vars);
+    }
+
+    public void load(Symbol s, GPRegister dst) {
+        assert(namedVars != null);
+        namedVars.load(Symbol s, GPRegister dst);
+    }
+    
+    public GPRegister load(Symbol s) {
+        assert(namedVars != null);
+        GPRegister dst = this.takeUnused();
+        load(s, dst);
+        return dst;
+    }
+
+    public void store(Symbol s, GPRegister register) {
+        assert(namedVars != null);
+        namedVars.store(s, register);
+    }
+
+    public void giveAndStore(Symbol s, GPRegister register) {
+        assert(namedVars != null);
+        store(s, register);
+        give(register);
     }
 }

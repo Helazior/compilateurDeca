@@ -142,6 +142,7 @@ public abstract class AbstractExpr extends AbstractInst {
         // BooleanLiteral; FloatLiteral; IntLiteral
         // Et ses filles !
         codeGenExpr(compiler);
+        compiler.getRegMan().give(compiler.getRegMan().pop());
     }
     
 
