@@ -1,6 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.VariableDefinition;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -13,6 +15,7 @@ import org.apache.commons.lang.Validate;
 
 import fr.ensimag.ima.pseudocode.instructions.*;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 /**
  * @author gl60
@@ -37,6 +40,18 @@ public class DeclVar extends AbstractDeclVar {
     protected void verifyDeclVar(DecacCompiler compiler,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
+        Type t = type.verifyType(compiler);
+        if( t == compiler.voidType()){
+            throw new ContextualError("Cannot have a 'void' type", getLocation());
+        }
+        Symbol name = varName.getName();
+        initialization.verifyInitialization(compiler, t, localEnv, currentClass);
+
+        try{
+            localEnv.declare(name, new VariableDefinition(t, getLocation()));
+        }catch(DoubleDefException e){
+            System.out.println("Exception :" + e);
+        }
     }
 
     // TODO: codeGen : utiliser le décorateur Definition.setOperand() pour retrouver facilement l'opérande à utiliser avec getOperand()

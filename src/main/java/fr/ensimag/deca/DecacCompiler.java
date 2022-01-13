@@ -23,7 +23,14 @@ import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.SymbolTable;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.context.StringType;
+import fr.ensimag.deca.context.IntType;
+import fr.ensimag.deca.context.FloatType;
+import fr.ensimag.deca.context.BooleanType;
 import fr.ensimag.deca.context.VoidType;
+import fr.ensimag.deca.context.ClassType;
+import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.tree.Location;
+import java.lang.instrument.ClassDefinition;
 
 /**
  * Decac compiler instance.
@@ -127,18 +134,45 @@ public class DecacCompiler {
     /**
      * Permet d'avoir des types dans la partie B
      * (demander à Gwennan en cas de PB)
+     * 
+     * Cela correspond en fait à la definition de
+     * l'environnmeent des types de base du compilateur
      */
-    private final SymbolTable symbolTable = new SymbolTable();
+
+    private final SymbolTable typeTable = new SymbolTable();
+
+    public SymbolTable getTypeTable(){
+        return typeTable;
+    }
 
     public Type stringType() {
-        return new StringType(symbolTable.create("string"));
+        return new StringType(typeTable.create("string"));
     }
     public Type voidType() {
-        return new VoidType(symbolTable.create("void"));
+        return new VoidType(typeTable.create("void"));
     }
 
+    public Type intType() {
+        return new IntType(typeTable.create("int"));
+    }
+
+    public Type floatType() {
+        return new FloatType(typeTable.create("float"));
+    }
+
+    public Type booleanType(){
+        return new BooleanType(typeTable.create("boolean"));
+    }
+
+    /**
+    * correspond à un environement de symboles hors des class et méthodes
+    * ne sert que pour le parser en principe, car ensuite les symboles sont tous placé
+    * dans les environnements des classes qui leurs correpondent
+    **/
+    private final SymbolTable identifierTable = new SymbolTable();
+
     public Symbol createSymbol(String name) {
-        return symbolTable.create(name);
+        return identifierTable.create(name);
     }
 
 
