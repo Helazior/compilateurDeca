@@ -26,7 +26,7 @@ public class ManualTestPrintDIVfloatGencode {
         ListInst linst = new ListInst();
         ListExpr exp1 = new ListExpr();
         linst.add(new Print(false,exp1));
-        // 39.2 / 2.9 / 4.0 =
+        // 39.2 / 2.9 / 4.0 = 3.37931034
         Divide p1 = new Divide(new FloatLiteral(39.2f), new FloatLiteral(2.9f));
         Divide p2 = new Divide(p1, new FloatLiteral(4.0f));
         p1.setType(float_t);

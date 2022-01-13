@@ -12,12 +12,12 @@ CP="$DECAC_HOME"/target/test-classes/:"$DECAC_HOME"/target/classes/:$(cat "$CP_F
 # exec java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestADDintGencode "$@"
 # exec java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintADDintGencode "$@"
 #java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintADDfloatGencode "$@" > tmp.ass
-java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintADDintGencode "$@" > tmp.ass
+#java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintADDintGencode "$@" > tmp.ass
 #java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintMULfloatGencode "$@" > tmp.ass
 #java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintMULintGencode "$@" > tmp.ass
 #java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintSUBintGencode "$@" > tmp.ass
 #java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintSUBfloatGencode "$@" > tmp.ass
-#java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintDIVfloatGencode "$@" > tmp.ass
+java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintDIVfloatGencode "$@" > tmp.ass
 #java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintDIVintGencode "$@" > tmp.ass
 #java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintMODintGencode "$@" > tmp.ass
 #java -enableassertions -cp "$CP" fr.ensimag.deca.tree.ManualTestPrintUnaryMinusIntGencode "$@" > tmp.ass
