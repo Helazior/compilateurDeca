@@ -25,10 +25,11 @@ public class Not extends AbstractUnaryExpr {
         Type opType = getOperand().verifyExpr(compiler, localEnv, currentClass);
 
         if(opType.isBoolean()){
-            return compiler.booleanType();
+            setType(compiler.booleanType());
         }else {
             throw new ContextualError("Error: Unsupported operands. Expected : boolean", getLocation());
         }
+        return getType();
     }
 
     @Override

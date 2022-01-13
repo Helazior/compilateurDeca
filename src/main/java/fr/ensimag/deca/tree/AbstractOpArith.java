@@ -66,12 +66,13 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         if((leftType.isInt() || leftType.isFloat()) &&
         (rightType.isInt() || rightType.isFloat())){
             if(leftType.isInt() && rightType.isInt()){
-                return compiler.intType();
+                setType(compiler.intType());
             } else {
-                return compiler.floatType();
+                setType(compiler.floatType());
             }
         }else {
             throw new ContextualError("Error: Unsupported operands. Expected : int or float", getLocation());
         }
+        return getType();
     }
 }

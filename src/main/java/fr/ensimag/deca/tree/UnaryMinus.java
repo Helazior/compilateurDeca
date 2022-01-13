@@ -31,12 +31,13 @@ public class UnaryMinus extends AbstractUnaryExpr {
         Type opType = getOperand().verifyExpr(compiler, localEnv, currentClass);
 
         if(opType.isInt()){
-            return compiler.intType();
+            setType(compiler.intType());
         }else if(opType.isFloat()){
-            return compiler.floatType();
+            setType(compiler.floatType());
         } else {
             throw new ContextualError("Error: Unsupported operands. Expected : int or float", getLocation());
         }
+        return getType();
 }
 
     @Override

@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -30,7 +31,8 @@ public class Identifier extends AbstractIdentifier {
     @Override
     protected void checkDecoration() {
         if (getDefinition() == null) {
-            throw new DecacInternalError("Identifier " + this.getName() + " has no attached Definition");
+            throw new DecacInternalError("Identifier " + this.getName() +
+            " at " + getLocation() + " has no attached Definition");
         }
     }
 
@@ -168,11 +170,15 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        try{
-            localEnv.declare(name, getExpDefinition());
-        } catch(DoubleDefException e){
-            System.out.println("Exception :" + e);
-        }
+
+        System.out.println(localEnv.get(getName()));
+
+        setType(localEnv.get(getName()).getType());
+        Definition def = new VariableDefinition(getType(), getLocation());
+        setDefinition(def);
+
+        System.out.println(def);
+
         return getType();
     }
 
@@ -184,23 +190,30 @@ public class Identifier extends AbstractIdentifier {
     public Type verifyType(DecacCompiler compiler) throws ContextualError {
         switch (name.getName()) {
             case "int":
-                return compiler.intType();
+                setType(compiler.intType());
+                break;
 
             case "float":
-                return compiler.floatType();
+                setType(compiler.floatType());
+                break;
 
             case "boolean":
-                return compiler.booleanType();
+                setType(compiler.booleanType());
+                break;
 
             case "string":
-                return compiler.stringType();
+                setType(compiler.stringType());
+                break;
 
             case "void":
-                return compiler.voidType();
+                setType(compiler.voidType());
+                break;
 
             default:
                 throw new ContextualError(name + "cannot be recognise as a type", getLocation());
         }
+        setDefinition(new TypeDefinition(getType(), getLocation()));
+        return getType();
     }
 
 

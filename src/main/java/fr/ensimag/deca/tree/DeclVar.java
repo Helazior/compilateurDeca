@@ -6,6 +6,7 @@ import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
@@ -47,10 +48,11 @@ public class DeclVar extends AbstractDeclVar {
         Symbol name = varName.getName();
         initialization.verifyInitialization(compiler, t, localEnv, currentClass);
 
+        varName.setDefinition(new VariableDefinition(t, getLocation()));
         try{
-            localEnv.declare(name, new VariableDefinition(t, getLocation()));
-        }catch(DoubleDefException e){
-            System.out.println("Exception :" + e);
+            localEnv.declare(name, varName.getVariableDefinition());
+        } catch (DoubleDefException e) {
+            throw new ContextualError(e + " This varibale is already defined in this context", getLocation());
         }
     }
 

@@ -90,7 +90,9 @@ public abstract class AbstractExpr extends AbstractInst {
             Type expectedType)
             throws ContextualError {
         Type actualType = this.verifyExpr(compiler, localEnv, currentClass);
-        if(expectedType.isFloat() && actualType.isInt()){
+        if(expectedType.sameType(actualType)){
+            return this;
+        } else if(expectedType.isFloat() && actualType.isInt()){
             return this;
         } else if(expectedType.isClass() && actualType.isClass()
         && ((ClassType)expectedType).isSubClassOf((ClassType)actualType)) {

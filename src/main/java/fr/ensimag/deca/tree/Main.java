@@ -31,9 +31,9 @@ public class Main extends AbstractMain {
         LOG.debug("verify Main: start");
         // in `bloc`, with env_exp_sup = {}, env_exp = {}, class = 0, ret = void
 
-        declVariables.verifyListDeclVariable(compiler, new EnvironmentExp(null), null);
-
-        insts.verifyListInst(compiler, new EnvironmentExp(null), null, compiler.voidType());
+        EnvironmentExp envSup = new EnvironmentExp(null);
+        declVariables.verifyListDeclVariable(compiler, envSup, null);
+        insts.verifyListInst(compiler, envSup, null, compiler.voidType());
 
         LOG.debug("verify Main: end");
     }
