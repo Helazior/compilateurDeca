@@ -44,6 +44,7 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         regMan.push(Register.R1);
     }
 
+    @Override
     protected void codeGenPrint(DecacCompiler compiler) {
         // TODO : C'est ça ou pas ? Ça a l'air de marcher mais pas sûr à 100%
         codeGenExpr(compiler);

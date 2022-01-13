@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import fr.ensimag.deca.codegen.VariableTable;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.*;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.GPRegister;
@@ -58,7 +59,7 @@ public class RegisterManager {
 
     public void pop(GPRegister dst) {
         if (nbVarsStack < 1) {
-            throw new EmptyStackException();
+            //throw new EmptyStackException();
         }
         nbVarsStack -= 1;
         compiler.addInstruction(new POP(dst));
@@ -66,9 +67,9 @@ public class RegisterManager {
 
     public GPRegister pop() {
         if (nbVarsStack < 1) {
-            throw new EmptyStackException();
+            //throw new EmptyStackException();
         }
-        GPRegister dst = takeUnused();
+        GPRegister dst = take();
         nbVarsStack -= 1;
         compiler.addInstruction(new POP(dst));
         return dst;
@@ -149,12 +150,12 @@ public class RegisterManager {
 
     public void load(Symbol s, GPRegister dst) {
         assert(namedVars != null);
-        namedVars.load(Symbol s, GPRegister dst);
+        namedVars.load(s, dst);
     }
     
     public GPRegister load(Symbol s) {
         assert(namedVars != null);
-        GPRegister dst = this.takeUnused();
+        GPRegister dst = this.take();
         load(s, dst);
         return dst;
     }

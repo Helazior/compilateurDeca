@@ -66,8 +66,8 @@ public class DeclVar extends AbstractDeclVar {
     }
 
     @Override
-    public AbstractIdentifier codeGenDecl(ImmediateInteger place) {
-        // TODO: init!
+    public AbstractIdentifier codeGenDecl(DecacCompiler compiler, int offset) {
+        initialization.codeGenInit(compiler, offset);
         return varName;
     }
 }

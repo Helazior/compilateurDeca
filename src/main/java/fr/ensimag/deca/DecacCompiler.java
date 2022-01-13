@@ -22,8 +22,7 @@ import org.apache.log4j.Logger;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.SymbolTable;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
-import fr.ensimag.deca.context.StringType;
-import fr.ensimag.deca.context.VoidType;
+import fr.ensimag.deca.context.*;
 import fr.ensimag.deca.codegen.RegisterManager;
 
 /**
@@ -142,6 +141,12 @@ public class DecacCompiler {
      */
     private RegisterManager regManager;
 
+    public Type intType() {
+        return new IntType(symbolTable.create("int"));
+    }
+    public Type floatType() {
+        return new FloatType(symbolTable.create("float"));
+    }
     public Type stringType() {
         return new StringType(symbolTable.create("string"));
     }

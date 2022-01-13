@@ -188,7 +188,7 @@ public class Identifier extends AbstractIdentifier {
         Symbol name = getName();
         GPRegister reg = regMan.pop();
         regMan.store(name, reg);
-        regMan.giveAndPush();
+        regMan.giveAndPush(reg);
     }
 
     @Override

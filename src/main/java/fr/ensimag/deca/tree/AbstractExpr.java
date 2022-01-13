@@ -11,9 +11,10 @@ import fr.ensimag.ima.pseudocode.Label;
 import java.io.PrintStream;
 
 import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.instructions.POP;
-import fr.ensimag.ima.pseudocode.instructions.WINT;
+import fr.ensimag.ima.pseudocode.instructions.*;
 import org.apache.commons.lang.Validate;
+
+import fr.ensimag.deca.codegen.RegisterManager;
 
 import static fr.ensimag.ima.pseudocode.Register.R1;
 
@@ -120,7 +121,17 @@ public abstract class AbstractExpr extends AbstractInst {
      * @param compiler
      */
     protected void codeGenPrint(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("Print not yet implemented");
+        RegisterManager regMan = compiler.getRegMan();
+        codeGenExpr(compiler);
+        regMan.pop(R1);
+        Type exprType = getType();
+        if (exprType.isInt()) {
+            compiler.addInstruction(new WINT());
+        } else if (exprType.isFloat()) {
+            compiler.addInstruction(new WFLOAT());
+        } else {
+            throw new UnsupportedOperationException("Expr not printable");
+        }
     }
 
     protected void codeGenExpr(DecacCompiler compiler){
