@@ -40,7 +40,7 @@ public class FloatLiteral extends AbstractExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        setType(compiler.floatType());
+        setType(compiler.getType("float"));
         return getType();
     }
 

@@ -19,21 +19,14 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.apache.log4j.Logger;
 
-import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.SymbolTable;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
-import fr.ensimag.deca.context.StringType;
-import fr.ensimag.deca.context.IntType;
-import fr.ensimag.deca.context.FloatType;
-import fr.ensimag.deca.context.BooleanType;
-import fr.ensimag.deca.context.VoidType;
-import fr.ensimag.deca.context.ClassType;
-import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tree.Location;
 import java.lang.instrument.ClassDefinition;
-import fr.ensimag.deca.context.*;
 import fr.ensimag.deca.codegen.RegisterManager;
 
+import fr.ensimag.deca.context.*;
+import fr.ensimag.deca.context.EnvironmentType.DoubleDefException;
 /**
  * Decac compiler instance.
  *
@@ -74,6 +67,12 @@ public class DecacCompiler {
         this.compilerOptions = compilerOptions;
         this.source = source;
         this.regManager = new RegisterManager(this, compilerOptions.getNbReg());
+
+        try{
+            initTypes();
+        }catch(ContextualError e){
+            System.out.println("a basic type is inizialise 2 times");
+        }
     }
 
     public boolean getDivideExist() {
@@ -190,6 +189,12 @@ public class DecacCompiler {
      */
     private final IMAProgram program = new IMAProgram();
 
+
+    /**
+     * (demander à Gwennan en cas de PB)
+     */
+    private RegisterManager regManager;
+
     /**
      * Permet d'avoir des types dans la partie B
      * (demander à Gwennan en cas de PB)
@@ -198,37 +203,51 @@ public class DecacCompiler {
      * l'environnmeent des types de base du compilateur
      */
 
+    private final EnvironmentType typeEnv = new EnvironmentType(null);
     private final SymbolTable typeTable = new SymbolTable();
 
-    public SymbolTable getTypeTable(){
-        return typeTable;
+    public void initTypes() throws ContextualError{
+        Symbol symbol = typeTable.create("string");
+        Type type = new StringType(symbol);
+        addType(symbol, type);
+
+        symbol = typeTable.create("void");
+        type = new VoidType(symbol);
+        addType(symbol, type);
+
+        symbol = typeTable.create("int");
+        type = new IntType(symbol);
+        addType(symbol, type);
+
+        symbol = typeTable.create("float");
+        type = new FloatType(symbol);
+        addType(symbol, type);
+
+        symbol = typeTable.create("boolean");
+        type = new BooleanType(symbol);
+        addType(symbol, type);
     }
 
-    /**
-     * Permet d'avoir des types dans la partie B
-     * (demander à Gwennan en cas de PB)
-     */
-    private RegisterManager regManager;
-
-    public Type stringType() {
-        return new StringType(typeTable.create("string"));
+    private void addType(Symbol symbol, Type type) throws ContextualError{
+        try {
+            typeEnv.declare(symbol, new TypeDefinition(type, null));
+        } catch (DoubleDefException e) {
+            throw new ContextualError(e + " This type is already defined", null);
+        }
     }
 
-    public Type voidType() {
-        return new VoidType(typeTable.create("void"));
+    public EnvironmentType getTypeEnv(){
+        return typeEnv;
     }
 
-    public Type intType() {
-        return new IntType(typeTable.create("int"));
+    public Type getType(String typeName){
+        return typeEnv.get(typeTable.create(typeName)).getType();
     }
 
-    public Type floatType() {
-        return new FloatType(typeTable.create("float"));
+    public Type getType(Symbol typeName){
+        return typeEnv.get(typeName).getType();
     }
 
-    public Type booleanType(){
-        return new BooleanType(typeTable.create("boolean"));
-    }
 
     /**
     * correspond à un environement de symboles hors des class et méthodes

@@ -28,7 +28,7 @@ public class Modulo extends AbstractOpArith {
         Type rightType = getRightOperand().verifyExpr(compiler, localEnv, currentClass);
 
         if(leftType.isInt() && rightType.isInt()){
-            setType(compiler.intType());
+            setType(compiler.getType("int"));
         } else {
             throw new ContextualError("Error: Unsupported operands. Expected : int", getLocation());
         }

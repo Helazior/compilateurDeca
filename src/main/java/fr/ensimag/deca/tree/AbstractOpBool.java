@@ -24,7 +24,7 @@ public abstract class AbstractOpBool extends AbstractBinaryExpr {
         Type rightType = getRightOperand().verifyExpr(compiler, localEnv, currentClass);
 
         if((leftType.isBoolean() && rightType.isBoolean())){
-            setType(compiler.booleanType());
+            setType(compiler.getType("boolean"));
         }else {
             throw new ContextualError("Error: Unsupported operands. Expected : boolean", getLocation());
         }

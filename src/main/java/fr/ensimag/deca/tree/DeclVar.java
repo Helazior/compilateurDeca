@@ -42,7 +42,7 @@ public class DeclVar extends AbstractDeclVar {
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
         Type t = type.verifyType(compiler);
-        if( t == compiler.voidType()){
+        if( t.isVoid()){
             throw new ContextualError("Cannot have a 'void' type", getLocation());
         }
         Symbol name = varName.getName();

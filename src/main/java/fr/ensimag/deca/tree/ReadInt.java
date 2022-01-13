@@ -18,7 +18,7 @@ public class ReadInt extends AbstractReadExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        setType(compiler.intType());
+        setType(compiler.getType("int"));
         return getType();
     }
 

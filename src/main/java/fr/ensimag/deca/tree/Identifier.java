@@ -187,34 +187,11 @@ public class Identifier extends AbstractIdentifier {
      */
     @Override
     public Type verifyType(DecacCompiler compiler) throws ContextualError {
-        switch (name.getName()) {
-            case "int":
-                setType(compiler.intType());
-                break;
-
-            case "float":
-                setType(compiler.floatType());
-                break;
-
-            case "boolean":
-                setType(compiler.booleanType());
-                break;
-
-            case "string":
-                setType(compiler.stringType());
-                break;
-
-            case "void":
-                setType(compiler.voidType());
-                break;
-
-            default:
-                throw new ContextualError(name + "cannot be recognise as a type", getLocation());
-        }
+        setType(compiler.getType(name.getName()));
         setDefinition(new TypeDefinition(getType(), getLocation()));
         return getType();
     }
-    
+
     @Override
     protected void codeGenStoreLValue(DecacCompiler compiler) {
         RegisterManager regMan = compiler.getRegMan();

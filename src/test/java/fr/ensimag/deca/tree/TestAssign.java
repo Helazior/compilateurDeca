@@ -44,11 +44,11 @@ public class TestAssign {
         ListExpr exprs2 = new ListExpr();
         ListExpr exprs3 = new ListExpr();
         Identifier identifier1 = new Identifier(symTab.create("a"));
-        identifier1.setType(compiler.intType());
+        identifier1.setType(compiler.getType("int"));
         Identifier identifier2 = new Identifier(symTab.create("b"));
-        identifier2.setType(compiler.intType());
+        identifier2.setType(compiler.getType("int"));
         Identifier identifier3 = new Identifier(symTab.create("c"));
-        identifier3.setType(compiler.floatType());
+        identifier3.setType(compiler.getType("float"));
         exprs1.add(identifier1);
         exprs2.add(identifier2);
         exprs3.add(identifier3);

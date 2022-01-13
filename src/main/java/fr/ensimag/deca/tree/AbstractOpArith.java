@@ -72,9 +72,9 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         if((leftType.isInt() || leftType.isFloat()) &&
         (rightType.isInt() || rightType.isFloat())){
             if(leftType.isInt() && rightType.isInt()){
-                setType(compiler.intType());
+                setType(compiler.getType("int"));
             } else {
-                setType(compiler.floatType());
+                setType(compiler.getType("float"));
             }
         }else {
             throw new ContextualError("Error: Unsupported operands. Expected : int or float", getLocation());

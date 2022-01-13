@@ -28,7 +28,7 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
 
         if((leftType.isInt() || leftType.isFloat()) &&
         (rightType.isInt() || rightType.isFloat())){
-            setType(compiler.booleanType());
+            setType(compiler.getType("boolean"));
         } else{
             throw new ContextualError("Error: Unsupported operands. Expected : int or float", getLocation());
         }

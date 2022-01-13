@@ -29,9 +29,9 @@ public abstract class AbstractOpExactCmp extends AbstractOpCmp {
         Type rightType = getRightOperand().verifyExpr(compiler, localEnv, currentClass);
 
         if(leftType.isClassOrNull() && rightType.isClassOrNull()){
-            setType(compiler.booleanType());
+            setType(compiler.getType("boolean"));
         } else if(leftType.isBoolean() && rightType.isBoolean()){
-            setType(compiler.booleanType());
+            setType(compiler.getType("boolean"));
         }else{
             setType(super.verifyExpr(compiler, localEnv, currentClass));
         }
