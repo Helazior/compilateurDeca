@@ -11,6 +11,7 @@ import fr.ensimag.deca.context.FloatType;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.SymbolTable;
 import net.bytebuddy.implementation.bytecode.Division;
+import fr.ensimag.deca.CompilerOptions;
 
 /**
  *
@@ -39,7 +40,7 @@ public class ManualTestPrintDIVfloatGencode {
     }
 
     public static String gencodeSource(AbstractProgram source) {
-        DecacCompiler compiler = new DecacCompiler(null,null);
+        DecacCompiler compiler = new DecacCompiler(new CompilerOptions(), null);
         source.codeGenProgram(compiler);
         return compiler.displayIMAProgram();
     }

@@ -20,6 +20,9 @@ import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
+import fr.ensimag.deca.codegen.RegisterManager;
+import fr.ensimag.ima.pseudocode.GPRegister;
+
 /**
  * Deca Identifier
  *
@@ -215,7 +218,22 @@ public class Identifier extends AbstractIdentifier {
         setDefinition(new TypeDefinition(getType(), getLocation()));
         return getType();
     }
+    
+    @Override
+    protected void codeGenStoreLValue(DecacCompiler compiler) {
+        RegisterManager regMan = compiler.getRegMan();
+        Symbol name = getName();
+        GPRegister reg = regMan.pop();
+        regMan.store(name, reg);
+        regMan.giveAndPush(reg);
+    }
 
+    @Override
+    protected void codeGenExpr(DecacCompiler compiler){
+        RegisterManager regMan = compiler.getRegMan();
+        Symbol name = getName();
+        regMan.giveAndPush(regMan.load(name));
+    }
 
     private Definition definition;
 

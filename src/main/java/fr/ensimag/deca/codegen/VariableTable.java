@@ -18,9 +18,10 @@ public class VariableTable {
     public VariableTable(DecacCompiler compiler, ListDeclVar vars) {
         this.compiler = compiler;
         List<AbstractDeclVar> varsList = vars.getList();
+        compiler.addInstruction(new ADDSP(varsList.size()));
         for (int i = 0; i < varsList.size(); i++) {
             AbstractDeclVar variable = varsList.get(i);
-            Symbol varname = variable.codeGenDecl(new ImmediateInteger(nextKey + i)).getName();
+            Symbol varname = variable.codeGenDecl(compiler, nextKey + i).getName();
             table.put(varname, nextKey + i);
         }
         nextKey += varsList.size();

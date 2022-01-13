@@ -9,6 +9,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.IntType;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.SymbolTable;
+import fr.ensimag.deca.CompilerOptions;
 
 /**
  *
@@ -25,7 +26,7 @@ public class ManualTestPrintDIVparZeroGencode {
         linst.add(new Print(false,exp1));
         // (50/2)/0 -----> erreur
         Divide p1 = new Divide(new IntLiteral(50), new IntLiteral(2));
-        Divide p2 = new Divide(p1, new IntLiteral(4));
+        Divide p2 = new Divide(p1, new IntLiteral(0));
         p1.setType(int_t);
         p2.setType(int_t);
         exp1.add(p2);
@@ -37,7 +38,7 @@ public class ManualTestPrintDIVparZeroGencode {
     }
 
     public static String gencodeSource(AbstractProgram source) {
-        DecacCompiler compiler = new DecacCompiler(null,null);
+        DecacCompiler compiler = new DecacCompiler(new CompilerOptions(), null);
         source.codeGenProgram(compiler);
         return compiler.displayIMAProgram();
     }

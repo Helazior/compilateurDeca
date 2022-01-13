@@ -24,10 +24,11 @@ public class Plus extends AbstractOpArith {
      * Generate code to print the expression
      *
      * @param compiler
+     * @param printHex
      */
     @Override
-    protected void codeGenPrint(DecacCompiler compiler) {
-        super.codeGenPrint(compiler);
+    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
+        super.codeGenPrint(compiler, printHex);
     }
 
 

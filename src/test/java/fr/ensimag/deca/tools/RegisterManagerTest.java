@@ -11,6 +11,7 @@ public class RegisterManagerTest {
     public static void main(String[] args) {
         RegisterManagerTest test = new RegisterManagerTest();
         test.testPushPop();
+        test.testTooMuchPop();
         test.testOwnership();
     }
 
@@ -27,9 +28,7 @@ public class RegisterManagerTest {
     @Test
     public void testPushPop() {
         DecacCompiler compiler = new DecacCompiler(new CompilerOptions(), null);
-        ListDeclVar vars = new ListDeclVar();
-
-        RegisterManager rm = new RegisterManager(compiler, vars, 6);
+        RegisterManager rm = new RegisterManager(compiler, 6);
         rm.push(Register.R1);
         rm.pop(Register.R0);
         String programm = compiler.displayIMAProgram();
@@ -40,9 +39,7 @@ public class RegisterManagerTest {
     @Test
     public void testTooMuchPop() {
         DecacCompiler compiler = new DecacCompiler(new CompilerOptions(), null);
-        ListDeclVar vars = new ListDeclVar();
-
-        RegisterManager rm = new RegisterManager(compiler, vars, 6);
+        RegisterManager rm = new RegisterManager(compiler, 6);
         rm.push(Register.R1);
         rm.pop(Register.R0);
         try {
@@ -56,9 +53,7 @@ public class RegisterManagerTest {
     @Test
     public void testOwnership() {
         DecacCompiler compiler = new DecacCompiler(new CompilerOptions(), null);
-        ListDeclVar vars = new ListDeclVar();
-
-        RegisterManager rm = new RegisterManager(compiler, vars, 6);
+        RegisterManager rm = new RegisterManager(compiler, 6);
         for (int i = 2; i < 6; i++) {
             assertFalse(rm.isTaken(Register.getR(i)));
         }

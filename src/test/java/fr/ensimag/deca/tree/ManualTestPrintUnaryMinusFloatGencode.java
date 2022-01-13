@@ -10,6 +10,7 @@ import fr.ensimag.deca.context.FloatType;
 import fr.ensimag.deca.context.IntType;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.SymbolTable;
+import fr.ensimag.deca.CompilerOptions;
 
 /**
  *
@@ -24,7 +25,7 @@ public class ManualTestPrintUnaryMinusFloatGencode {
         ListInst linst = new ListInst();
         ListExpr exp1 = new ListExpr();
         linst.add(new Print(false,exp1));
-        // -(5 + 2) * 3 = -21
+        // -(5. + 2.4) * 3. = -22.2
         UnaryMinus p1 = new UnaryMinus(
                 new Plus(
                         new FloatLiteral(5.0f),
@@ -44,7 +45,7 @@ public class ManualTestPrintUnaryMinusFloatGencode {
 
 
     public static String gencodeSource(AbstractProgram source) {
-        DecacCompiler compiler = new DecacCompiler(null,null);
+        DecacCompiler compiler = new DecacCompiler(new CompilerOptions(), null);
         source.codeGenProgram(compiler);
         return compiler.displayIMAProgram();
     }

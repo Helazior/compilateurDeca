@@ -11,6 +11,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable;
 
 import java.io.PrintStream;
+import fr.ensimag.deca.CompilerOptions;
 
 /**
  *
@@ -34,7 +35,6 @@ public class ManualTestDeclaGencode {
         return source;
 
         */
-
         SymbolTable t = new SymbolTable();
         ListDeclVar vars = new ListDeclVar();
         ListInst instrs = new ListInst();
@@ -45,35 +45,28 @@ public class ManualTestDeclaGencode {
         ));
         instrs.add(new Assign(new Identifier(t.create("a")), new IntLiteral(1)));
         ListExpr printexpr = new ListExpr();
-        printexpr.add(new IntLiteral(1));
         instrs.add(new Print(false, printexpr));
         return new Program(
                 new ListDeclClass(),
                 new Main(vars, instrs) {
                 }
         );
+
     }
 
     public static String gencodeSource(AbstractProgram source) {
-        DecacCompiler compiler = new DecacCompiler(null,null);
+        DecacCompiler compiler = new DecacCompiler(new CompilerOptions(), null);
         source.codeGenProgram(compiler);
         return compiler.displayIMAProgram();
     }
 
     public static void test1() {
         AbstractProgram source = initTest1();
-        System.out.println("---- From the following Abstract Syntax Tree ----");
+        //System.out.println("---- From the following Abstract Syntax Tree ----");
         source.prettyPrint(System.out);
-        System.out.println("---- We generate the following assembly code ----");
+        //System.out.println("---- We generate the following assembly code ----");
         String result = gencodeSource(source);
         System.out.println(result);
-        assert(result.equals(
-                "; Main program\n" +
-                        "; Beginning of main function:\n" +
-                        "	WSTR \"Hello \"\n" +
-                        "	WSTR \"everybody !\"\n" +
-                        "	WNL\n" +
-                        "	HALT\n"));
     }
 
 

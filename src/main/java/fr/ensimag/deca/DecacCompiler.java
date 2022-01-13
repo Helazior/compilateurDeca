@@ -31,6 +31,8 @@ import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tree.Location;
 import java.lang.instrument.ClassDefinition;
+import fr.ensimag.deca.context.*;
+import fr.ensimag.deca.codegen.RegisterManager;
 
 /**
  * Decac compiler instance.
@@ -55,10 +57,63 @@ public class DecacCompiler {
      */
     private static final String nl = System.getProperty("line.separator", "\n");
 
+    /**
+     * To write the label name
+     */
+    private static int numIf = 0;
+    private static int numWhile = 0;
+    private static int numAnd = 0;
+    private static int numOr = 0;
+    /**
+     * To show the div_zero error or not
+     */
+    private static boolean divideExist = false;
+
     public DecacCompiler(CompilerOptions compilerOptions, File source) {
         super();
         this.compilerOptions = compilerOptions;
         this.source = source;
+        this.regManager = new RegisterManager(this, compilerOptions.getNbReg());
+    }
+
+    public boolean getDivideExist() {
+        return divideExist;
+    }
+
+    public void setDivideExistTrue() {
+        divideExist = true;
+    }
+
+    public int getNumIf() {
+        return numIf;
+    }
+
+    public void incrementNumIf() {
+        numIf++;
+    }
+
+    public int getNumWhile() {
+        return numWhile;
+    }
+
+    public void incrementNumWhile() {
+        numWhile++;
+    }
+
+    public int getNumAnd() {
+        return numAnd;
+    }
+
+    public void incrementNumAnd() {
+        numAnd++;
+    }
+
+    public int getNumOr() {
+        return numOr;
+    }
+
+    public void incrementNumOr() {
+        numOr++;
     }
 
     /**
@@ -123,6 +178,10 @@ public class DecacCompiler {
     public String displayIMAProgram() {
         return program.display();
     }
+
+    public RegisterManager getRegMan() {
+        return regManager;
+    }
     
     private final CompilerOptions compilerOptions;
     private final File source;
@@ -145,9 +204,16 @@ public class DecacCompiler {
         return typeTable;
     }
 
+    /**
+     * Permet d'avoir des types dans la partie B
+     * (demander à Gwennan en cas de PB)
+     */
+    private RegisterManager regManager;
+
     public Type stringType() {
         return new StringType(typeTable.create("string"));
     }
+
     public Type voidType() {
         return new VoidType(typeTable.create("void"));
     }

@@ -9,6 +9,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.FloatType;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.SymbolTable;
+import fr.ensimag.deca.CompilerOptions;
 
 /**
  *
@@ -23,6 +24,7 @@ public class ManualTestPrintSUBfloatGencode {
         ListInst linst = new ListInst();
         ListExpr exp1 = new ListExpr();
         linst.add(new Print(false,exp1));
+        //(3.2 - 2.9) * 4 = 1.2
         Minus p1 = new Minus(new FloatLiteral(3.2f), new FloatLiteral(2.9f));
         Multiply p2 = new Multiply(p1, new FloatLiteral(4.0f));
         p1.setType(float_t);
@@ -36,7 +38,7 @@ public class ManualTestPrintSUBfloatGencode {
     }
 
     public static String gencodeSource(AbstractProgram source) {
-        DecacCompiler compiler = new DecacCompiler(null,null);
+        DecacCompiler compiler = new DecacCompiler(new CompilerOptions(), null);
         source.codeGenProgram(compiler);
         return compiler.displayIMAProgram();
     }

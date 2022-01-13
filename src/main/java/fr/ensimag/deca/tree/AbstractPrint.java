@@ -60,7 +60,7 @@ public abstract class AbstractPrint extends AbstractInst {
         // AbstractReadExpr, AbstractUnaryExpr, (Done)AbstractStringLiteral
         // + Les petites filles....
         for (AbstractExpr a : getArguments().getList()) {
-            a.codeGenPrint(compiler);
+            a.codeGenPrint(compiler, getPrintHex());
         }
     }
 
