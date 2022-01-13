@@ -1,5 +1,7 @@
 package fr.ensimag.deca;
 
+import fr.ensimag.deca.syntax.DecaLexer;
+import fr.ensimag.deca.syntax.DecaParser;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tree.AbstractProgram;
 import fr.ensimag.deca.tree.LocationException;
@@ -25,6 +27,7 @@ import fr.ensimag.deca.context.IntType;
 import fr.ensimag.deca.context.FloatType;
 import fr.ensimag.deca.context.BooleanType;
 import fr.ensimag.deca.context.VoidType;
+import fr.ensimag.deca.context.*;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -206,6 +209,7 @@ public class DecacCompiler {
      * (demander à Gwennan en cas de PB)
      */
     private RegisterManager regManager;
+
 
     public Type stringType() {
         return new StringType(typeTable.create("string"));

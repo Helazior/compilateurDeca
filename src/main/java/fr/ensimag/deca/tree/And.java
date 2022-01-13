@@ -29,7 +29,6 @@ public class And extends AbstractOpBool {
     @Override
     public void codeGenOp(DecacCompiler compiler) {
         // TODO :  avec l'extension, nommer les labels différemment
-        compiler.addComment(getOperatorName());
         RegisterManager regMan = compiler.getRegMan();
         String falseLabel = "false_and_" + compiler.getNumAnd();
         String endLabel = "end_and_" + compiler.getNumAnd();

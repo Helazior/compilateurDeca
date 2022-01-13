@@ -18,7 +18,6 @@ public class LowerOrEqual extends AbstractOpIneq {
 
     @Override
     public void codeGenOpIneq(DecacCompiler compiler) {
-        compiler.addComment("<=");
         compiler.addInstruction(new SLE(Register.R1));
     }
 

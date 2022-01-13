@@ -29,7 +29,6 @@ public class Or extends AbstractOpBool {
     @Override
     public void codeGenOp(DecacCompiler compiler) {
         // TODO :  avec l'extension, nommer les labels différemment
-        compiler.addComment(getOperatorName());
         RegisterManager regMan = compiler.getRegMan();
         String trueLabel = "true_or_" + compiler.getNumOr();
         String endLabel = "end_or_" + compiler.getNumOr();

@@ -20,7 +20,6 @@ public class GreaterOrEqual extends AbstractOpIneq {
 
     @Override
     public void codeGenOpIneq(DecacCompiler compiler) {
-        compiler.addComment(">=");
         compiler.addInstruction(new SGE(Register.R1));
     }
 

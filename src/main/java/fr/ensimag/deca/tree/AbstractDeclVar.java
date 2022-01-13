@@ -31,5 +31,5 @@ public abstract class AbstractDeclVar extends Tree {
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError;
 
-    abstract public AbstractIdentifier codeGenDecl(ImmediateInteger place);
+    abstract public AbstractIdentifier codeGenDecl(DecacCompiler compiler, int offset);
 }

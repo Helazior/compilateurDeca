@@ -35,6 +35,14 @@ public class Assign extends AbstractBinaryExpr {
         return expectedType;
     }
 
+    @Override
+    public void codeGenExpr(DecacCompiler compiler) {
+        compiler.addComment("Assign");
+        getRightOperand().codeGenExpr(compiler);
+        compiler.addComment("Store assign");
+        getLeftOperand().codeGenStoreLValue(compiler);
+        compiler.addComment("End assign");
+    }
 
     @Override
     protected String getOperatorName() {
