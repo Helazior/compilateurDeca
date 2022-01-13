@@ -1,0 +1,17 @@
+ifThenElse_equals_false.test
+ifThenElse_equals_true.test
+ifThenElse_LT_false.test
+ifThenElse_LT_true.test
+AND_false_1st_arg.test
+AND_false_2nd_arg.test
+AND_false_3rd_arg.test
+AND_true.test
+OR_true_1st_arg.test
+OR_true_2nd_arg.test
+OR_true_3rd_arg.test
+OR_false.test
+UnaryMinus_Int.test
+UnaryMinus_Float.test
+Minus_Int.test
+Minus_Float.test
+Print_Hexa.test

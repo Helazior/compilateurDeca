@@ -24,6 +24,7 @@ public class ManualTestPrintSUBfloatGencode {
         ListInst linst = new ListInst();
         ListExpr exp1 = new ListExpr();
         linst.add(new Print(false,exp1));
+        //(3.2 - 2.9) * 4 = 1.2
         Minus p1 = new Minus(new FloatLiteral(3.2f), new FloatLiteral(2.9f));
         Multiply p2 = new Multiply(p1, new FloatLiteral(4.0f));
         p1.setType(float_t);

@@ -5,6 +5,7 @@
  */
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.CompilerOptions;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.FloatType;
 import fr.ensimag.deca.context.Type;
@@ -37,7 +38,7 @@ public class ManualTestPrintDIVZerofloatGencode {
     }
 
     public static String gencodeSource(AbstractProgram source) {
-        DecacCompiler compiler = new DecacCompiler(null,null);
+        DecacCompiler compiler = new DecacCompiler(new CompilerOptions(),null);
         source.codeGenProgram(compiler);
         return compiler.displayIMAProgram();
     }

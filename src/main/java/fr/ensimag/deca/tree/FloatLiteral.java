@@ -9,11 +9,10 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 
 import fr.ensimag.ima.pseudocode.ImmediateFloat;
-import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
+import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
 import org.apache.commons.lang.Validate;
 
 /**
@@ -45,9 +44,13 @@ public class FloatLiteral extends AbstractExpr {
     }
 
     @Override
-    protected void codeGenPrint(DecacCompiler compiler) {
+    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
         compiler.addInstruction(new LOAD(new ImmediateFloat(value), Register.R1));
-        compiler.addInstruction(new WFLOAT());
+        if (printHex) {
+            compiler.addInstruction(new WFLOATX());
+        } else {
+            compiler.addInstruction(new WFLOAT());
+        }
     }
 
     @Override

@@ -23,7 +23,8 @@ public class Divide extends AbstractOpArith {
 
     @Override
     public void codeGenOp(DecacCompiler compiler) {
-        // TODO : COMMENT ON VÉRIFIE QUE R1 N'EST PAS 0 ? Dans l'assembleur ?
+        // On indique qu'on veut placer le label d'erreur à la fin pour la division, car la division exist
+        compiler.setDivideExistTrue();
         Type type = getType();
         if (type.isInt()) {
             compiler.addInstruction(new CMP(0, Register.R0));
@@ -43,10 +44,11 @@ public class Divide extends AbstractOpArith {
      * Generate code to print the expression
      *
      * @param compiler
+     * @param printHex
      */
     @Override
-    protected void codeGenPrint(DecacCompiler compiler) {
-        super.codeGenPrint(compiler);
+    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
+        super.codeGenPrint(compiler, printHex);
     }
 
     @Override

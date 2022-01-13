@@ -8,6 +8,7 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
+
 import java.io.PrintStream;
 
 import fr.ensimag.ima.pseudocode.Register;
@@ -119,8 +120,12 @@ public abstract class AbstractExpr extends AbstractInst {
      * Generate code to print the expression
      *
      * @param compiler
+     * @param printHex
      */
-    protected void codeGenPrint(DecacCompiler compiler) {
+    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
+        if(printHex) {
+            throw new UnsupportedOperationException("Hex not implemented TODO");
+        }
         RegisterManager regMan = compiler.getRegMan();
         codeGenExpr(compiler);
         regMan.pop(R1);

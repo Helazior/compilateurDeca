@@ -61,7 +61,9 @@ public class Program extends AbstractProgram {
         // termine le programme
         compiler.addInstruction(new HALT());
 
-        codeGenError.divByZeroError(compiler);
+        if (compiler.getDivideExist()) {
+            codeGenError.divByZeroError(compiler);
+        }
 
     }
 
