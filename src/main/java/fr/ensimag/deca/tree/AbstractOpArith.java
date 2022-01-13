@@ -5,8 +5,10 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.*;
 
+import fr.ensimag.deca.codegen.RegisterManager;
 import static fr.ensimag.ima.pseudocode.Register.R1;
 
 /**

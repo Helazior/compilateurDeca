@@ -33,7 +33,7 @@ public class Assign extends AbstractBinaryExpr {
     }
 
     @Override
-    protected void codeGenExpr(DecacCompiler compiler) {
+    public void codeGenExpr(DecacCompiler compiler) {
         compiler.addComment("Assign");
         getRightOperand().codeGenExpr(compiler);
         compiler.addComment("Store assign");

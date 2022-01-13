@@ -37,8 +37,8 @@ public class TestAssign {
             new Identifier(symTab.create("c")),
             new Initialization(new FloatLiteral(5))
         ));
-        //insts.add(new Assign(new Identifier(symTab.create("a")), new IntLiteral(4)));
-        //insts.add(new Assign(new Identifier(symTab.create("c")), new FloatLiteral(4.3f)));
+        insts.add(new Assign(new Identifier(symTab.create("a")), new IntLiteral(4)));
+        insts.add(new Assign(new Identifier(symTab.create("c")), new FloatLiteral(4.3f)));
 
         ListExpr exprs1 = new ListExpr();
         ListExpr exprs2 = new ListExpr();
