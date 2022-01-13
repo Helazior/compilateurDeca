@@ -37,13 +37,8 @@ public class Not extends AbstractUnaryExpr {
     }
 
     @Override
-    public void codeGenExpr(DecacCompiler compiler) {
+    public void codeGenOp(DecacCompiler compiler) {
         RegisterManager regMan = compiler.getRegMan();
-        AbstractExpr operand = getOperand();
-        operand.codeGenExpr(compiler);
-
-
-        regMan.pop(Register.R0);
         Type type = getType();
         if (type.isInt()) {
             compiler.addInstruction(new LOAD(1, Register.R1));

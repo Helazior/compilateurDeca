@@ -10,9 +10,12 @@ OR_true_1st_arg.test
 OR_true_2nd_arg.test
 OR_true_3rd_arg.test
 OR_false.test
+Not_true.test
 UnaryMinus_Int.test
 UnaryMinus_Float.test
 Minus_Int.test
 Minus_Float.test
 Print_Hexa.test
+Plus_Float.test
+Div_Int.test
 DeclareAssign.test
