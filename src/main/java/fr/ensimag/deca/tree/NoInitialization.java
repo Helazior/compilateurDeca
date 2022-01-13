@@ -8,6 +8,10 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 
+import fr.ensimag.ima.pseudocode.instructions.*;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
+
 /**
  * Absence of initialization (e.g. "int x;" as opposed to "int x =
  * 42;").
@@ -23,7 +27,6 @@ public class NoInitialization extends AbstractInitialization {
             throws ContextualError {
         throw new UnsupportedOperationException("not yet implemented");
     }
-
 
     /**
      * Node contains no real information, nothing to check.
@@ -48,4 +51,9 @@ public class NoInitialization extends AbstractInitialization {
         // leaf node => nothing to do
     }
 
+    @Override
+    public void codeGenInit(DecacCompiler compiler, int offset) {
+        //...welll.... I'd like to put 0, but IDK the type :upside_down:
+        //#TODO
+    }
 }

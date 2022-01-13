@@ -7,10 +7,17 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.Label;
 
 import java.io.PrintStream;
 
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.*;
 import org.apache.commons.lang.Validate;
+
+import fr.ensimag.deca.codegen.RegisterManager;
+
+import static fr.ensimag.ima.pseudocode.Register.R1;
 
 /**
  * Expression, i.e. anything that has a value.
@@ -116,7 +123,20 @@ public abstract class AbstractExpr extends AbstractInst {
      * @param printHex
      */
     protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
-        throw new UnsupportedOperationException("Print not yet implemented");
+        if(printHex) {
+            throw new UnsupportedOperationException("Hex not implemented TODO");
+        }
+        RegisterManager regMan = compiler.getRegMan();
+        codeGenExpr(compiler);
+        regMan.pop(R1);
+        Type exprType = getType();
+        if (exprType.isInt()) {
+            compiler.addInstruction(new WINT());
+        } else if (exprType.isFloat()) {
+            compiler.addInstruction(new WFLOAT());
+        } else {
+            throw new UnsupportedOperationException("Expr not printable");
+        }
     }
 
     protected void codeGenExpr(DecacCompiler compiler){
@@ -138,6 +158,7 @@ public abstract class AbstractExpr extends AbstractInst {
         // BooleanLiteral; FloatLiteral; IntLiteral
         // Et ses filles !
         codeGenExpr(compiler);
+        compiler.getRegMan().give(compiler.getRegMan().pop());
     }
     
 
