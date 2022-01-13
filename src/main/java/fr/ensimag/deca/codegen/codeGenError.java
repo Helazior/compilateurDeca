@@ -14,4 +14,18 @@ public class codeGenError {
         compiler.addInstruction(new WNL());
         compiler.addInstruction(new ERROR());
     }
+
+    static public void ioError (DecacCompiler compiler) {
+        /*
+        io_error:
+        WSTR "Error: Input/Output error"
+        WNL
+        ERROR
+        */
+        compiler.addComment("Manage io error");
+        compiler.addLabel(new Label("io_error"));
+        compiler.addInstruction(new WSTR("Error: Input/Output error"));
+        compiler.addInstruction(new WNL());
+        compiler.addInstruction(new ERROR());
+    }
 }

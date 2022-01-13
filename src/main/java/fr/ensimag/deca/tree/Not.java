@@ -36,7 +36,6 @@ public class Not extends AbstractUnaryExpr {
         }
     }
 
-    // TODO : à mettre au dessus
     @Override
     public void codeGenExpr(DecacCompiler compiler) {
         RegisterManager regMan = compiler.getRegMan();
