@@ -539,27 +539,46 @@ list_classes returns[ListDeclClass tree]
 }
     :
       (c1=class_decl {
+          assert(c1.tree != null)
+          $tree.add($c1.tree);
         }
       )*
     ;
 
-class_decl
+class_decl returns [AbstractDeclClass tree]
     : CLASS name=ident superclass=class_extension OBRACE class_body CBRACE {
+            $tree = new DeclClass($name.tree, $superclass.tree, $class_body.tree);
+            setLocation($tree, $name.start);
         }
     ;
 
 class_extension returns[AbstractIdentifier tree]
     : EXTENDS ident {
+            assert($ident.tree != null);
+            $tree = $ident.tree;
         }
     | /* epsilon */ {
+            $tree = new Identifier(compiler.createSymbol("Object));
         }
     ;
 
-class_body
+class_body returns[BodyClass tree]
+@init {
+    List<DeclMethod> methodes = new ListDeclMethode();
+    List<DeclFieldSet> fieldsSet = new ListDeclFieldSet();
+}
     : (m=decl_method {
+            assert($m.tree != null);
+            methodes.add($m.tree);
         }
-      | decl_field_set
-      )*
+      |n=decl_field_set {
+            assert($n.tree != null);
+            fieldsSet.add($n.tree);
+        }
+      )* {
+            $tree = new BodyClass(methodes, fieldsSet);
+            setLocation($tree, $m.start);
+        }
     ;
 
 decl_field_set
