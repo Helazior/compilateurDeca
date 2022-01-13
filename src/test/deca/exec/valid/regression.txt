@@ -11,7 +11,9 @@ OR_true_2nd_arg.test
 OR_true_3rd_arg.test
 OR_false.test
 UnaryMinus_Int.test
-UnaryMinus_Float.test
+UnaryMinus_Float.test t
 Minus_Int.test
 Minus_Float.test
 Print_Hexa.test
+Plus_Float.test
+Div_Int.test
