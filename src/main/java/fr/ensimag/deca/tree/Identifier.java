@@ -174,13 +174,9 @@ public class Identifier extends AbstractIdentifier {
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
 
-        System.out.println(localEnv.get(getName()));
-
         setType(localEnv.get(getName()).getType());
         Definition def = new VariableDefinition(getType(), getLocation());
         setDefinition(def);
-
-        System.out.println(def);
 
         return getType();
     }
