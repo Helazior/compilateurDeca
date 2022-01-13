@@ -31,12 +31,10 @@ public class Main extends AbstractMain {
         LOG.debug("verify Main: start");
         // in `bloc`, with env_exp_sup = {}, env_exp = {}, class = 0, ret = void
 
-        // TODO: check declVariables
+        declVariables.verifyListDeclVariable(compiler, new EnvironmentExp(null), null);
 
-        for (AbstractInst inst : insts.getList()) { // TODO: use insts.iterChildren
-            inst.verifyInst(compiler, new EnvironmentExp(null),
-                null, compiler.voidType());
-        }
+        insts.verifyListInst(compiler, new EnvironmentExp(null), null, compiler.voidType());
+
         LOG.debug("verify Main: end");
     }
 

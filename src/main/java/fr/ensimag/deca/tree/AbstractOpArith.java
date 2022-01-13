@@ -9,6 +9,8 @@ import fr.ensimag.ima.pseudocode.instructions.*;
 
 import static fr.ensimag.ima.pseudocode.Register.R1;
 
+import org.mockito.internal.matchers.InstanceOf;
+
 /**
  * Arithmetic binary operations (+, -, /, ...)
  * 
@@ -40,6 +42,18 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        Type leftType = getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+        Type rightType = getRightOperand().verifyExpr(compiler, localEnv, currentClass);
+
+        if((leftType.isInt() || leftType.isFloat()) &&
+        (rightType.isInt() || rightType.isFloat())){
+            if(leftType.isInt() && rightType.isInt()){
+                return compiler.intType();
+            } else {
+                return compiler.floatType();
+            }
+        }else {
+            throw new ContextualError("Error: Unsupported operands. Expected : int or float", getLocation());
+        }
     }
 }

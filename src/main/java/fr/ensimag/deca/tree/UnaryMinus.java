@@ -30,8 +30,16 @@ public class UnaryMinus extends AbstractUnaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
-    }
+        Type opType = getOperand().verifyExpr(compiler, localEnv, currentClass);
+
+        if(opType.isInt()){
+            return compiler.intType();
+        }else if(opType.isFloat()){
+            return compiler.floatType();
+        } else {
+            throw new ContextualError("Error: Unsupported operands. Expected : int or float", getLocation());
+        }
+}
 
     @Override
     public void codeGenExpr(DecacCompiler compiler) {

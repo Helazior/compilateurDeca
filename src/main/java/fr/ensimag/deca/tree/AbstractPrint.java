@@ -39,7 +39,7 @@ public abstract class AbstractPrint extends AbstractInst {
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass, Type returnType)
             throws ContextualError {
-        for (AbstractExpr expr : arguments.getList()) { // TODO: use insts.iterChildren ?
+        for (AbstractExpr expr : arguments.getList()) {
             Type exprType = expr.verifyExpr(compiler, localEnv, currentClass);
             if (!exprType.isInt() && !exprType.isFloat() && !exprType.isString()) {
                 throw new ContextualPrintTypeError(exprType, getLocation());
