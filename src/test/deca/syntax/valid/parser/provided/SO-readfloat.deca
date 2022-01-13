@@ -1,0 +1,11 @@
+// Description:
+//    On teste readfloat
+//
+//    
+//
+// Historique:
+//    cree le 12/01/2022
+
+{
+    readFloat();
+}

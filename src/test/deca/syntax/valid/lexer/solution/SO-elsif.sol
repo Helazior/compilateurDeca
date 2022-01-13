@@ -21,7 +21,8 @@ EQUALS: =
 INT: 11
 SEMI: ;
 CBRACE: }
-IDENT: elsif
+ELSE: else
+IF: if
 OPARENT: (
 IDENT: i2
 EQEQ: ==
@@ -45,7 +46,8 @@ EQUALS: =
 INT: 7
 SEMI: ;
 CBRACE: }
-IDENT: elsif
+ELSE: else
+IF: if
 OPARENT: (
 IDENT: i1
 EQEQ: ==
@@ -53,7 +55,7 @@ INT: 42
 CPARENT: )
 OBRACE: {
 IDENT: i2
-EQEQ: ==
+EQUALS: =
 INT: 42
 SEMI: ;
 CBRACE: }

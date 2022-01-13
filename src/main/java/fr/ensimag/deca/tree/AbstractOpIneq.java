@@ -1,10 +1,14 @@
 package fr.ensimag.deca.tree;
 
 
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.SUB;
+
 /**
  *
  * @author gl60
- * @date 01/01/2022
+ * @date 12/01/2022
  */
 public abstract class AbstractOpIneq extends AbstractOpCmp {
 
@@ -12,5 +16,12 @@ public abstract class AbstractOpIneq extends AbstractOpCmp {
         super(leftOperand, rightOperand);
     }
 
+    public void codeGenOpIneq(DecacCompiler compiler) {
+        throw new UnsupportedOperationException("not yet implemented");
+    }
 
+    public void codeGenOp(DecacCompiler compiler) {
+        compiler.addInstruction(new SUB(Register.R0, Register.R1));
+        codeGenOpIneq(compiler);
+    }
 }

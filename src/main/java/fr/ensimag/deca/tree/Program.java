@@ -7,6 +7,7 @@ import fr.ensimag.ima.pseudocode.instructions.*;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
+import fr.ensimag.deca.codegen.codeGenError;
 
 /**
  * Deca complete program (class definition plus main block)
@@ -48,12 +49,27 @@ public class Program extends AbstractProgram {
         LOG.debug("verify program: end");
     }
 
+
     @Override
     public void codeGenProgram(DecacCompiler compiler) {
-        // A FAIRE: compléter ce squelette très rudimentaire de code
+        // liste des déclarations de variables
+        // Les adresses des variables globales sont de la forme
+        // 1(GB), 2(GB), 3(GB).... Associer une adresse à chaque variable consiste à modifier le champ `operand`
+        // de sa définition via la méthode Definition.setOperand() : voir les classes VariableDefinition et ExpDefinition
+        // Récupéré avec getOperand
+
+
         compiler.addComment("Main program");
+        // parcours de l'arbre. On écrit dans le main :
         main.codeGenMain(compiler);
+
+        // termine le programme
         compiler.addInstruction(new HALT());
+
+        if (compiler.getDivideExist()) {
+            codeGenError.divByZeroError(compiler);
+        }
+
     }
 
     @Override

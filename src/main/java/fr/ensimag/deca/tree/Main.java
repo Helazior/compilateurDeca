@@ -31,18 +31,17 @@ public class Main extends AbstractMain {
         LOG.debug("verify Main: start");
         // in `bloc`, with env_exp_sup = {}, env_exp = {}, class = 0, ret = void
 
-        // TODO: check declVariables
+        EnvironmentExp envSup = new EnvironmentExp(null);
+        declVariables.verifyListDeclVariable(compiler, envSup, null);
+        insts.verifyListInst(compiler, envSup, null, compiler.voidType());
 
-        for (AbstractInst inst : insts.getList()) { // TODO: use insts.iterChildren
-            inst.verifyInst(compiler, new EnvironmentExp(null),
-                null, compiler.voidType());
-        }
         LOG.debug("verify Main: end");
     }
 
     @Override
     protected void codeGenMain(DecacCompiler compiler) {
-        // A FAIRE: traiter les déclarations de variables.
+        compiler.getRegMan().declareVars(declVariables);
+
         compiler.addComment("Beginning of main instructions:");
         insts.codeGenListInst(compiler);
     }

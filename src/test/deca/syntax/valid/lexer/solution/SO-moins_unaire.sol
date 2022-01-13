@@ -9,4 +9,5 @@ IDENT: i2
 EQUALS: =
 MINUS: -
 IDENT: i1
+SEMI: ;
 CBRACE: }

@@ -1,0 +1,11 @@
+// Description:
+//    On teste readint
+//
+//    
+//
+// Historique:
+//    cree le 12/01/2022
+
+{
+    readInt();
+}

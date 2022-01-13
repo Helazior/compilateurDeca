@@ -1,0 +1,12 @@
+OBRACE: {
+IDENT: int
+IDENT: x
+SEMI: ;
+IDENT: int
+IDENT: i
+EQUALS: =
+INT: 5
+SEMI: ;
+IDENT: int
+SEMI: ;
+CBRACE: }

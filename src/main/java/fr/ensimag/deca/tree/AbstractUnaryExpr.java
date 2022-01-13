@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -21,14 +22,18 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
         this.operand = operand;
     }
 
+    public void codeGenExpr(DecacCompiler compiler) {
+        throw new UnsupportedOperationException("not yet implemented");
+    }
 
     protected abstract String getOperatorName();
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.println("(");
+        s.print("(");
+        s.print(" " + getOperatorName() + " ");
         operand.decompile(s);
-        s.println(")");
+        s.print(")");
     }
 
     @Override

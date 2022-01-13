@@ -60,8 +60,8 @@ SLASH: '/';
 ANTISLASH: '\\';
 PERCENT: '%';
 
-GT: '<';
-LT: '>';
+GT: '>';
+LT: '<';
 EQEQ: '==';
 NEQ: '!=';
 GEQ: '>=';
