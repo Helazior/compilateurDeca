@@ -34,7 +34,9 @@ public class And extends AbstractOpBool {
         String endLabel = "end_and_" + compiler.getNumAnd();
         compiler.incrementNumAnd();
         // On teste la condition leftOp
+        compiler.addComment("AND:");
         getLeftOperand().codeGenExpr(compiler);
+        compiler.addComment("AND end left");
         // On récupère le résultat de la condition dans la pile
         regMan.pop(Register.R1);
         // 0 : cond false -> goto falseLabel
@@ -43,6 +45,7 @@ public class And extends AbstractOpBool {
         // cond true :
         // On teste rightOp
         getRightOperand().codeGenExpr(compiler);
+        compiler.addComment("AND end right");
         regMan.pop(Register.R1);
         // 0 : cond false -> goto false_and_n
         compiler.addInstruction(new CMP(0, Register.R1));
@@ -56,6 +59,15 @@ public class And extends AbstractOpBool {
         compiler.addInstruction(new LOAD(0, Register.R1));
         // lbl end_and_n
         compiler.addLabel(new Label(endLabel));
+        regMan.push(Register.R1);
+    }
+
+    /*
+     *On ne veut pas utiliser le codeGenExpr de abstract binary
+     */
+    @Override
+    public void codeGenExpr(DecacCompiler compiler) {
+        codeGenOp(compiler);
     }
 
     @Override

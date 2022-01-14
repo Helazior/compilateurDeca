@@ -52,6 +52,7 @@ public class IfThenElse extends AbstractInst {
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
+        compiler.addComment("Start IF");
         // TODO :  avec l'extension, nommer les labels différemment
         String elseLabel = "else_" + compiler.getNumIf();
         String endIfLabel = "end_if_" + compiler.getNumIf();
@@ -59,6 +60,7 @@ public class IfThenElse extends AbstractInst {
 
         RegisterManager regMan = compiler.getRegMan();
 
+        compiler.addComment("cond IF");
         condition.codeGenExpr(compiler);
         // résultat de la condition dans la pile
         regMan.pop(Register.R1);
@@ -66,6 +68,7 @@ public class IfThenElse extends AbstractInst {
 ;
         compiler.addInstruction(new BEQ(new Label(elseLabel)));
         // On execute la thenBranch
+        compiler.addComment("IF then_body");
         for (AbstractInst inst:thenBranch.getList()) {
             inst.codeGenInst(compiler);
         }
@@ -75,10 +78,12 @@ public class IfThenElse extends AbstractInst {
         // On met le label else_n
         compiler.addLabel(new Label(elseLabel));
         // On execute la elseBranch
+        compiler.addComment("IF else_body");
         for (AbstractInst inst:elseBranch.getList()) {
             inst.codeGenInst(compiler);
         }
         // On met le label end_if_n
+        compiler.addComment("FI");
         compiler.addLabel(new Label(endIfLabel));
     }
 

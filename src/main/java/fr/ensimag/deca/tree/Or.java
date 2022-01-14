@@ -56,6 +56,15 @@ public class Or extends AbstractOpBool {
         compiler.addInstruction(new LOAD(1, Register.R1));
         // lbl end_and_n
         compiler.addLabel(new Label(endLabel));
+        regMan.push(Register.R1);
+    }
+
+    /*
+     *On ne veut pas utiliser le codeGenExpr de abstract binary
+     */
+    @Override
+    public void codeGenExpr(DecacCompiler compiler) {
+        codeGenOp(compiler);
     }
 
     @Override

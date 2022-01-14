@@ -1,0 +1,44 @@
+// Description:
+//    Utilisation de beaucoup des fonctionnalités sans-objet de sans-objet
+//
+// Resultats:
+//    
+
+//#include "SO-big.import.decah"
+{
+    int x = 3;
+    float y = 3.4;
+    int z;
+    print("Enter a number: ");
+    z = readInt();
+    while (z > 4 || z < 0) {
+        println("Please enter number between 0 and 4 included.");
+        z = readInt();
+    }
+    println("x was of value ", x);
+    println("y is of value ", y);
+    println("And z is of value ", z);
+    if(z > 2) {
+        print("Enter a float: ");
+        y = y * readFloat();
+        println("y's new value is ", y);
+    } else {
+        print("z is quite small, let's increase y: ");
+        y = y * 4.0;
+        println(y);
+    }
+
+    x = z + 1;
+    println("Enter an int:");
+    if(false && readInt() == 0) {
+        println("Well, this is strange ! There's an error, I'm sure");
+    } else if (true || (x = z) == z) {
+        if(x == z) {
+            println("Err... the OR is bugged");
+        } else {
+            println("Finally it's OK, and good news: if no int was requested from you, the AND and OR works well !");
+        }
+    } else {
+        println("Err... That's stange");
+    }
+}
