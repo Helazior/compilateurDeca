@@ -11,21 +11,18 @@ import java.util.jar.Attributes.Name;
  * Declaration of a class (<code>class name extends superClass {members}<code>).
  * 
  * @author gl60
- * @date 01/01/2022
+ * @date 14/01/2022
  */
-public class DeclClass extends AbstractDeclClass {
+public class DeclClass extends AbstractDeclParam {
+    private AbstractIdentifier type;
     private AbstractIdentifier name;
-    private AbstractIdentifier superclass;
-    private ListDeclField fields;
-    private ListDeclMethod methodes;
-
-    public DeclClass(AbstractIdentifier name, AbstractIdentifier superclass, ListDeclField fields, ListDeclMethod methodes){
-        this.name = name;
-        this.superclass = superclass;
-        this.fields = fields;
-        this.methodes = methodes;
+    
+    public DeclClass(AbstractIdentifier typeParam, AbstractIdentifier nameParam){
+        this.name = nameParam;
+        this.type = typeParam;
     }
 
+    //TODO
     @Override
     public void decompile(IndentPrintStream s) {
         s.print("class { ... A FAIRE ... }");
