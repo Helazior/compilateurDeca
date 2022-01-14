@@ -5,10 +5,11 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.ima.pseudocode.ImmediateFloat;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.instructions.DIV;
-import fr.ensimag.ima.pseudocode.instructions.QUO;
-import fr.ensimag.ima.pseudocode.instructions.REM;
+import fr.ensimag.ima.pseudocode.instructions.*;
 
 /**
  *
@@ -37,21 +38,20 @@ public class Modulo extends AbstractOpArith {
 
     @Override
     public void codeGenOp(DecacCompiler compiler) {
+        compiler.setModuloExistTrue();
         Type type = getType();
         if (type.isInt()) {
+            compiler.addInstruction(new CMP(new ImmediateInteger(0), Register.R0));
+            compiler.addInstruction(new BEQ(new Label("mod_by_zero_error")));
             compiler.addInstruction(new REM(Register.R0, Register.R1));
         } else {
             throw new UnsupportedOperationException("Error: modulo with float. Expected : int");
         }
     }
 
-    /**
-     *
-     * Generate code to print the expression
-     *
-     * @param compiler
-     */
-    /*@Override
+
+    /*
+    @Override
     protected void codeGenPrint(DecacCompiler compiler) {
         super.codeGenPrint(compiler);
     }*/

@@ -138,9 +138,6 @@ public abstract class AbstractExpr extends AbstractInst {
      * @param printHex
      */
     protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
-        if(printHex) {
-            throw new UnsupportedOperationException("Hex not implemented TODO");
-        }
         RegisterManager regMan = compiler.getRegMan();
         codeGenExpr(compiler);
         regMan.pop(R1);
@@ -148,7 +145,11 @@ public abstract class AbstractExpr extends AbstractInst {
         if (exprType.isInt()) {
             compiler.addInstruction(new WINT());
         } else if (exprType.isFloat()) {
-            compiler.addInstruction(new WFLOAT());
+            if (printHex) {
+                compiler.addInstruction(new WFLOATX());
+            } else {
+                compiler.addInstruction(new WFLOAT());
+            }
         } else {
             throw new UnsupportedOperationException("Expr not printable");
         }

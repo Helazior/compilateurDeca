@@ -46,18 +46,17 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
 
     @Override
     protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
-        if(printHex) {
-            throw new UnsupportedOperationException("Hex not implemented TODO");
-        }
-        // TODO : C'est ça ou pas ? Ça a l'air de marcher mais pas sûr à 100%
         codeGenExpr(compiler);
         compiler.getRegMan().pop(R1);
-        // si type = int
         Type type = getType();
         if (type.isInt()) {
             compiler.addInstruction(new WINT());
         } else if(type.isFloat()) {
-            compiler.addInstruction(new WFLOAT());
+            if (printHex) {
+                compiler.addInstruction(new WFLOATX());
+            } else {
+                compiler.addInstruction(new WFLOAT());
+            }
         }
         //throw new UnsupportedOperationException("not yet implemented");
     }
