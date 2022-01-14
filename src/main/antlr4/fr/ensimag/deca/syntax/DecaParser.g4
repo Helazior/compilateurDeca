@@ -649,7 +649,8 @@ decl_method returns[DeclMethod tree]
             assert($type.tree != null);
             assert($ident.tree != null);
             assert($list_params.tree != null);
-            $tree.type = $type.tree 
+            $tree.type = $type.tree;
+            
         }
     ;
 
