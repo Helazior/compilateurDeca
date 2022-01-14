@@ -539,7 +539,7 @@ list_classes returns[ListDeclClass tree]
     }
     :
       (c1=class_decl {
-          assert(c1.tree != null)
+          assert(c1.tree != null);
           $tree.add($c1.tree);
         }
       )*
@@ -566,10 +566,10 @@ class_extension returns[AbstractIdentifier tree]
         }
     ;
 
-class_body returns[ListDeclMethode methodes, ListDeclField fields]
+class_body returns[ListDeclMethod methodes, ListDeclField fields]
 @init {
-    $methodes = new ListDeclMethode();
-    $fields = new ListDeclField());
+    $methodes = new ListDeclMethod();
+    $fields = new ListDeclField();
 }
     : (m=decl_method {
             assert($m.tree != null);
@@ -583,8 +583,7 @@ class_body returns[ListDeclMethode methodes, ListDeclField fields]
     ;
 
 decl_field_set [ListDeclField f]
-    : v=visibility t=type list_decl_field[$f, $t.tree, $v.tree]
-      SEMI
+    : v=visibility t=type list_decl_field[$f, $t.tree, $v.tree] SEMI
     ;
 
 visibility returns[Visibility tree]
@@ -601,7 +600,8 @@ visibility returns[Visibility tree]
 list_decl_field [ListDeclField f, AbstractIdentifier t, Visibility v] 
     : dv1=decl_field[$t, $v]{
         assert($dv1.tree != null);
-        $f.add($dv1.tree);}
+        $f.add($dv1.tree);
+        }
         (COMMA dv2=decl_field[$t, $v]{
             assert($dv2.tree != null);
             $f.add($dv2.tree);
@@ -674,7 +674,7 @@ multi_line_string returns[String text, Location location]
         }
     ;
 
-param returns[Param tree]
+param returns[DeclParam tree]
     : type ident { 
         assert(type.tree != null);
         assert( ident.tree != null);
@@ -696,6 +696,6 @@ import_decl returns[AbstractProgram tree]
     : FILENAME {
         $tree = getDecaCompiler().compileImport($FILENAME.text);
         assert($tree != null);
-        setLocation($tree, $FILENAME)
+        setLocation($tree, $FILENAME);
     }
     ;
