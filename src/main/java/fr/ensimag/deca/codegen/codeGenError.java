@@ -50,7 +50,7 @@ public class codeGenError {
         compiler.addInstruction(new ERROR());
     }
 
-    static public void stack_overflow_error(DecacCompiler compiler) {
+    static public void stackOverflowError(DecacCompiler compiler) {
         compiler.addLabel(new Label("stack_overflow_error"));
         compiler.addInstruction(new WSTR("Error: Stack Overflow"));
         compiler.addInstruction(new WNL());

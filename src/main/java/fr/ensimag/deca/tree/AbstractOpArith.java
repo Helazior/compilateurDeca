@@ -5,6 +5,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.*;
 
@@ -25,10 +26,7 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         super(leftOperand, rightOperand);
     }
 
-    public void codeGenOp(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("not yet implemented");
-    }
-
+    /*
     @Override
     public void codeGenExpr(DecacCompiler compiler) {
         RegisterManager regMan = compiler.getRegMan();
@@ -40,9 +38,17 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
 
         regMan.pop(Register.R0);
         regMan.pop(Register.R1);
+        compiler.addComment(getOperatorName());
         codeGenOp(compiler);
+        if (getType().isFloat()) {
+            compiler.setOpOvExist();
+            compiler.addInstruction(new BOV(new Label("overflow_error")));
+        }
         regMan.push(Register.R1);
     }
+
+    */
+
 
     @Override
     protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {

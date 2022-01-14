@@ -163,7 +163,7 @@ public abstract class AbstractExpr extends AbstractInst {
     protected void codeGenInst(DecacCompiler compiler) {
         // assign_expr
         //      → or_expr (
-        //      { condition : expressione must be a "lvalue" }
+        //      { condition : expression must be a "lvalue" }
         //      '= ' assign_expr
         //      | ε )
         //

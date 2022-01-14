@@ -74,7 +74,7 @@ public class Program extends AbstractProgram {
             codeGenError.overflowError(compiler);
         }
 
-        codeGenError.stack_overflow_error(compiler);
+        codeGenError.stackOverflowError(compiler);
     }
 
     @Override
