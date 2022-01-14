@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -11,12 +12,16 @@ import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.VariableDefinition;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
+
+import fr.ensimag.deca.codegen.RegisterManager;
+import fr.ensimag.ima.pseudocode.GPRegister;
 
 /**
  * Deca Identifier
@@ -29,7 +34,8 @@ public class Identifier extends AbstractIdentifier {
     @Override
     protected void checkDecoration() {
         if (getDefinition() == null) {
-            throw new DecacInternalError("Identifier " + this.getName() + " has no attached Definition");
+            throw new DecacInternalError("Identifier " + this.getName() +
+            " at " + getLocation() + " has no attached Definition");
         }
     }
 
@@ -167,7 +173,12 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+
+        setType(localEnv.get(getName()).getType());
+        Definition def = new VariableDefinition(getType(), getLocation());
+        setDefinition(def);
+
+        return getType();
     }
 
     /**
@@ -176,10 +187,27 @@ public class Identifier extends AbstractIdentifier {
      */
     @Override
     public Type verifyType(DecacCompiler compiler) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        setType(compiler.getType(name.getName()));
+        setDefinition(new TypeDefinition(getType(), getLocation()));
+        return getType();
     }
-    
-    
+
+    @Override
+    protected void codeGenStoreLValue(DecacCompiler compiler) {
+        RegisterManager regMan = compiler.getRegMan();
+        Symbol name = getName();
+        GPRegister reg = regMan.pop();
+        regMan.store(name, reg);
+        regMan.giveAndPush(reg);
+    }
+
+    @Override
+    protected void codeGenExpr(DecacCompiler compiler){
+        RegisterManager regMan = compiler.getRegMan();
+        Symbol name = getName();
+        regMan.giveAndPush(regMan.load(name));
+    }
+
     private Definition definition;
 
 

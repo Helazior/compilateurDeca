@@ -1,0 +1,13 @@
+// Description:
+//    On teste l'instanciation la plus basique possible des chaînes de caractères.
+//
+// Resultats:
+//    Hello
+//
+// Historique:
+//    cree le 08/01/2022
+//On test l'instanciation la plus basique possible des string.
+
+{
+    string s;
+}

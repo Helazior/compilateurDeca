@@ -38,10 +38,14 @@ options {
 
 SEMI: ';';
 EOL: '\n' {skip(); };
+CR: '\r' {skip(); };
+TAB: '\t' {skip(); };
 SPACE: ' ' {skip(); };
 DOT: '.';
 COMMA: ',';
 EXCLAM: '!';
+GUI: '\'';
+
 
 OPARENT: '(';
 CPARENT: ')';
@@ -53,10 +57,11 @@ PLUS: '+';
 MINUS: '-';
 TIMES: '*';
 SLASH: '/';
+ANTISLASH: '\\';
 PERCENT: '%';
 
-GT: '<';
-LT: '>';
+GT: '>';
+LT: '<';
 EQEQ: '==';
 NEQ: '!=';
 GEQ: '>=';

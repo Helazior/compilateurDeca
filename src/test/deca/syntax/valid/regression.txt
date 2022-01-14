@@ -1,0 +1,4 @@
+provided/hello.deca
+provided/HW-print.deca
+provided/HW-println.deca
+provided/HW-string_sans_instanciation.deca

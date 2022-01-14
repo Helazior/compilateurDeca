@@ -36,19 +36,19 @@ public class StringLiteral extends AbstractStringLiteral {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        setType(compiler.stringType());
-        return compiler.stringType();
+        setType(compiler.getType("string"));
+        return getType();
     }
 
     @Override
-    protected void codeGenPrint(DecacCompiler compiler) {
+    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
         LOG.debug("codegen str litteral: value is " + value);
-        compiler.addInstruction(new WSTR(new ImmediateString(value)));
+        compiler.addInstruction(new WSTR(new ImmediateString(value.substring(1, value.length() - 1))));
     }
 
     @Override
     public void decompile(IndentPrintStream s) {
-        throw new UnsupportedOperationException("not yet implemented");
+        s.print(value);
     }
 
     @Override

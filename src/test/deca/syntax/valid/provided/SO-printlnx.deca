@@ -1,0 +1,19 @@
+// Description:
+//    On teste l'utilisation de printlnx.
+//
+// Resultats:
+//    Les deux premiers println sont identiques, alors que les deux printlnx diffèrent.
+//
+// Historique:
+//    cree le 08/01/2022
+
+{
+    int i1 = 0x1.0p1;
+    int i2 = 0x1.FFFFFEp0;
+
+    println(i1);
+    println(i2);
+
+    printlnx(i1);
+    printlnx(i2);
+}

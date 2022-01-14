@@ -1,10 +1,15 @@
 package fr.ensimag.deca.tree;
 
 
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
+import fr.ensimag.ima.pseudocode.instructions.SEQ;
+
 /**
  *
- * @author gl60
- * @date 01/01/2022
+ * @author Clément
+ * @date 11/01/2022
  */
 public class Equals extends AbstractOpExactCmp {
 
@@ -12,10 +17,15 @@ public class Equals extends AbstractOpExactCmp {
         super(leftOperand, rightOperand);
     }
 
+    public void codeGenOp(DecacCompiler compiler) {
+        compiler.addInstruction(new CMP(Register.R0, Register.R1));
+        compiler.addInstruction(new SEQ(Register.R1));
+    }
+
 
     @Override
     protected String getOperatorName() {
         return "==";
-    }    
-    
+    }
+
 }

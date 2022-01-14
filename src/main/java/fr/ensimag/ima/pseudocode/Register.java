@@ -47,7 +47,21 @@ public class Register extends DVal {
     /**
      * Convenience shortcut for R[1]
      */
-    public static final GPRegister R1 = R[1];
+    public static final GPRegister R1  = R[1];
+    public static final GPRegister R2  = R[2];
+    public static final GPRegister R3  = R[3];
+    public static final GPRegister R4  = R[4];
+    public static final GPRegister R5  = R[5];
+    public static final GPRegister R6  = R[6];
+    public static final GPRegister R7  = R[7];
+    public static final GPRegister R8  = R[8];
+    public static final GPRegister R9  = R[9];
+    public static final GPRegister R10 = R[10];
+    public static final GPRegister R11 = R[11];
+    public static final GPRegister R12 = R[12];
+    public static final GPRegister R13 = R[13];
+    public static final GPRegister R14 = R[14];
+    public static final GPRegister R15 = R[15];
     static private GPRegister[] initRegisters() {
         GPRegister [] res = new GPRegister[16];
         for (int i = 0; i <= 15; i++) {

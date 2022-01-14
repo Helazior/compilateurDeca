@@ -19,11 +19,25 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.apache.log4j.Logger;
 
-import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.SymbolTable;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.deca.tree.Location;
+import java.lang.instrument.ClassDefinition;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.StringType;
+import fr.ensimag.deca.context.IntType;
+import fr.ensimag.deca.context.FloatType;
+import fr.ensimag.deca.context.BooleanType;
 import fr.ensimag.deca.context.VoidType;
+import fr.ensimag.deca.context.*;
+import fr.ensimag.deca.codegen.RegisterManager;
+import fr.ensimag.deca.context.ClassType;
+import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.tree.Location;
+import java.lang.instrument.ClassDefinition;
 
+import fr.ensimag.deca.context.*;
+import fr.ensimag.deca.context.EnvironmentType.DoubleDefException;
 /**
  * Decac compiler instance.
  *
@@ -47,10 +61,78 @@ public class DecacCompiler {
      */
     private static final String nl = System.getProperty("line.separator", "\n");
 
+    /**
+     * To write the label name
+     */
+    private static int numIf = 0;
+    private static int numWhile = 0;
+    private static int numAnd = 0;
+    private static int numOr = 0;
+    /**
+     * To show the div_zero error or not
+     */
+    private static boolean divideExist = false;
+    private static boolean ioExist = false;
+
     public DecacCompiler(CompilerOptions compilerOptions, File source) {
         super();
         this.compilerOptions = compilerOptions;
         this.source = source;
+        this.regManager = new RegisterManager(this, compilerOptions.getNbReg());
+
+        try{
+            initTypes();
+        }catch(ContextualError e){
+            System.out.println("a basic type is inizialise 2 times");
+        }
+    }
+
+    public boolean getDivideExist() {
+        return divideExist;
+    }
+
+    public void setDivideExistTrue() {
+        divideExist = true;
+    }
+
+    public boolean getIoExist() {
+        return ioExist;
+    }
+
+    public void setIoExistTrue() {
+        ioExist = true;
+    }
+
+    public int getNumIf() {
+        return numIf;
+    }
+
+    public void incrementNumIf() {
+        numIf++;
+    }
+
+    public int getNumWhile() {
+        return numWhile;
+    }
+
+    public void incrementNumWhile() {
+        numWhile++;
+    }
+
+    public int getNumAnd() {
+        return numAnd;
+    }
+
+    public void incrementNumAnd() {
+        numAnd++;
+    }
+
+    public int getNumOr() {
+        return numOr;
+    }
+
+    public void incrementNumOr() {
+        numOr++;
     }
 
     /**
@@ -115,6 +197,10 @@ public class DecacCompiler {
     public String displayIMAProgram() {
         return program.display();
     }
+
+    public RegisterManager getRegMan() {
+        return regManager;
+    }
     
     private final CompilerOptions compilerOptions;
     private final File source;
@@ -123,18 +209,77 @@ public class DecacCompiler {
      */
     private final IMAProgram program = new IMAProgram();
 
+
+    /**
+     * (demander à Gwennan en cas de PB)
+     */
+    private RegisterManager regManager;
+
     /**
      * Permet d'avoir des types dans la partie B
      * (demander à Gwennan en cas de PB)
+     * 
+     * Cela correspond en fait à la definition de
+     * l'environnmeent des types de base du compilateur
      */
-    private final SymbolTable symbolTable = new SymbolTable();
 
-    public Type stringType() {
-        return new StringType(symbolTable.create("string"));
+    private final EnvironmentType typeEnv = new EnvironmentType(null);
+    private final SymbolTable typeTable = new SymbolTable();
+
+    public void initTypes() throws ContextualError{
+        Symbol symbol = typeTable.create("string");
+        Type type = new StringType(symbol);
+        addType(symbol, type);
+
+        symbol = typeTable.create("void");
+        type = new VoidType(symbol);
+        addType(symbol, type);
+
+        symbol = typeTable.create("int");
+        type = new IntType(symbol);
+        addType(symbol, type);
+
+        symbol = typeTable.create("float");
+        type = new FloatType(symbol);
+        addType(symbol, type);
+
+        symbol = typeTable.create("boolean");
+        type = new BooleanType(symbol);
+        addType(symbol, type);
     }
-    public Type voidType() {
-        return new VoidType(symbolTable.create("void"));
+
+    private void addType(Symbol symbol, Type type) throws ContextualError{
+        try {
+            typeEnv.declare(symbol, new TypeDefinition(type, null));
+        } catch (DoubleDefException e) {
+            throw new ContextualError(e + " This type is already defined", null);
+        }
     }
+
+    public EnvironmentType getTypeEnv(){
+        return typeEnv;
+    }
+
+    public Type getType(String typeName){
+        return typeEnv.get(typeTable.create(typeName)).getType();
+    }
+
+    public Type getType(Symbol typeName){
+        return typeEnv.get(typeName).getType();
+    }
+
+
+    /**
+    * correspond à un environement de symboles hors des class et méthodes
+    * ne sert que pour le parser en principe, car ensuite les symboles sont tous placé
+    * dans les environnements des classes qui leurs correpondent
+    **/
+    private final SymbolTable identifierTable = new SymbolTable();
+
+    public Symbol createSymbol(String name) {
+        return identifierTable.create(name);
+    }
+
 
     /**
      * Run the compiler (parse source file, generate code)
@@ -147,6 +292,7 @@ public class DecacCompiler {
         // Done: calculer le nom du fichier .ass à partir du nom du
         // Done: FAIRE: fichier .deca.
         // TODO: est-ce qu'il faut vérifier le format du nom en entrée ?
+
         destFile = sourceFile.substring(0, sourceFile.length() - 5) + ".ass";
 
         PrintStream err = System.err;
@@ -199,6 +345,10 @@ public class DecacCompiler {
         }
         assert(prog.checkAllLocations());
 
+        if(compilerOptions.getDecompile()){
+            prog.decompile(out);
+            return false;
+        }
 
         prog.verifyProgram(this);
         assert(prog.checkAllDecorations());

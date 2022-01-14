@@ -1,8 +1,14 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
+
+import fr.ensimag.ima.pseudocode.Register;
 import org.apache.commons.lang.Validate;
+
+import javax.naming.AuthenticationNotSupportedException;
 
 /**
  * Unary expression.
@@ -21,12 +27,30 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
         this.operand = operand;
     }
 
+    public void codeGenOp(DecacCompiler compiler) {
+        throw new UnsupportedOperationException("not yet implemented");
+    }
+
+    public void codeGenExpr(DecacCompiler compiler) {
+        RegisterManager regMan = compiler.getRegMan();
+
+        AbstractExpr operand = getOperand();
+        operand.codeGenExpr(compiler);
+
+        regMan.pop(Register.R0);
+        compiler.addComment(getOperatorName());
+        codeGenOp(compiler);
+        regMan.push(Register.R1);
+    }
 
     protected abstract String getOperatorName();
-  
+
     @Override
     public void decompile(IndentPrintStream s) {
-        throw new UnsupportedOperationException("not yet implemented");
+        s.print("(");
+        s.print(" " + getOperatorName() + " ");
+        operand.decompile(s);
+        s.print(")");
     }
 
     @Override

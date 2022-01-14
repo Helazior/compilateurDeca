@@ -1,0 +1,7 @@
+OBRACE: {
+PRINTLN: println
+OPARENT: (
+STRING: "Hello"
+CPARENT: )
+SEMI: ;
+CBRACE: }

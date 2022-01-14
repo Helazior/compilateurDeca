@@ -1,0 +1,14 @@
+// Description:
+//    On teste la différence sur deux entiers.
+//
+// Resultats:
+//    i1=-4
+//    i2=11
+// Historique:
+//    cree le 08/01/2022
+
+{
+    int i1 = 7;
+    int i2 = 11;
+    i1 = i1 - i2;
+}

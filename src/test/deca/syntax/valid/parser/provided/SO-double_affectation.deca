@@ -1,0 +1,12 @@
+// Description:
+//    On teste une affectation plus compliquée.
+//
+//    
+//
+// Historique:
+//    cree le 12/01/2022
+
+{
+    int a = 1;
+    int b = a;
+}

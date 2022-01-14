@@ -1,0 +1,12 @@
+// Description:
+//    On teste l'instanciation la plus basique possible des entiers.
+//
+// Resultats:
+//    Hello
+//
+// Historique:
+//    cree le 08/01/2022
+
+{
+    int i;
+}

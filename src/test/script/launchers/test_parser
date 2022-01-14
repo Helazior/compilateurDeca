@@ -1,0 +1,61 @@
+#!/bin/bash
+
+# Ansi color code variables
+red="\e[0;91m"
+green="\e[0;92m"
+white="\e[0;97m"
+
+#Tout s'est bien passé
+exit_value=0
+
+function resultGeneration {
+    path=$1/parser
+    file_src=$2
+    file_name=$3
+
+    #generation du premier resultat
+    decac -p $file_src > $path/generated/$file_name.deca
+    file_res=$path/generated/$file_name.deca
+
+    #Modification pour avoir l'equivalence
+
+	#On compare le fichier d'entré et celui de sorti
+    if cmp -s $file_src $file_res; then
+		echo -e "${green} ${bold} PASSED $file_name ${reset}"
+        rm $file_res
+	else
+		exit_value=1
+		echo -e "${red} ${bold} FAILED $file_name ${reset}"
+	fi
+}
+
+
+folder_path=./src/test/deca/syntax/valid
+
+# Creation de la hierarchie de dossier
+mkdir -p $folder_path/parser
+mkdir -p $folder_path/parser/provided
+mkdir -p $folder_path/parser/generated
+
+generic_test=$folder_path/provided
+specific_test=$folder_path/parser/provided
+
+
+#for file_src in $specific_test/*.deca; do
+#
+#    #nom du fichier
+#    file_name=${file_src##$specific_test}
+#    file_name=${file_name%%".deca"}
+#
+#    resultGeneration $folder_path $file_src $file_name
+#done
+
+
+for file_src in $generic_test/*.deca; do
+
+    #nom du fichier
+    file_name=${file_src##$generic_test/}
+    file_name=${file_name%%".deca"}
+
+    resultGeneration $folder_path $file_src $file_name
+done

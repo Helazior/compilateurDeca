@@ -1,0 +1,22 @@
+// Description:
+//    On teste l'utilisation du mot réservé 'if'.
+//
+// Resultats:
+//    i1=11
+//    i2=11
+//
+// Historique:
+//    cree le 08/01/2022
+
+{
+    int i1 = 7;
+    int i2 = 11;
+    
+    if (i2 == 11){
+        i1 = 11;
+    }
+
+    if (i1 == 7){
+        i2 = 7;
+    }
+}

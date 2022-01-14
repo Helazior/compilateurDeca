@@ -5,6 +5,10 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.DIV;
+import fr.ensimag.ima.pseudocode.instructions.QUO;
+import fr.ensimag.ima.pseudocode.instructions.REM;
 
 /**
  *
@@ -20,9 +24,37 @@ public class Modulo extends AbstractOpArith {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        Type leftType = getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+        Type rightType = getRightOperand().verifyExpr(compiler, localEnv, currentClass);
+
+        if(leftType.isInt() && rightType.isInt()){
+            setType(compiler.getType("int"));
+        } else {
+            throw new ContextualError("Error: Unsupported operands. Expected : int", getLocation());
+        }
+        return getType();
     }
 
+    @Override
+    public void codeGenOp(DecacCompiler compiler) {
+        Type type = getType();
+        if (type.isInt()) {
+            compiler.addInstruction(new REM(Register.R0, Register.R1));
+        } else {
+            throw new UnsupportedOperationException("Error: modulo with float. Expected : int");
+        }
+    }
+
+    /**
+     *
+     * Generate code to print the expression
+     *
+     * @param compiler
+     */
+    /*@Override
+    protected void codeGenPrint(DecacCompiler compiler) {
+        super.codeGenPrint(compiler);
+    }*/
 
     @Override
     protected String getOperatorName() {
