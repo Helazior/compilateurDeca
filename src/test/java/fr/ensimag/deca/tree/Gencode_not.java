@@ -5,38 +5,43 @@
  */
 package fr.ensimag.deca.tree;
 
-import com.sun.org.apache.xpath.internal.operations.Div;
+import fr.ensimag.deca.CompilerOptions;
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.context.FloatType;
+import fr.ensimag.deca.context.IntType;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.SymbolTable;
-import net.bytebuddy.implementation.bytecode.Division;
-import fr.ensimag.deca.CompilerOptions;
 
 /**
  *
  * @author Ensimag
  * @date 01/01/2022
  */
-public class ManualTestPrintDIVfloatGencode {
+public class Gencode_not {
 
     public static AbstractProgram initTest1() {
         SymbolTable st = new SymbolTable();
-        Type float_t = new FloatType(st.create("float"));
+        Type int_t = new IntType(st.create("int"));
         ListInst linst = new ListInst();
-        ListExpr exp1 = new ListExpr();
-        linst.add(new Print(false,exp1));
-        // 39.2 / 2.9 / 4.0 = 3.37931034
-        Divide p1 = new Divide(new FloatLiteral(39.2f), new FloatLiteral(2.9f));
-        Divide p2 = new Divide(p1, new FloatLiteral(4.0f));
-        p1.setType(float_t);
-        p2.setType(float_t);
-        exp1.add(p2);
+        ListInst linsttrue = new ListInst();
+        ListInst linstfalse = new ListInst();
+        ListExpr exprtrue = new ListExpr();
+        ListExpr exprfalse = new ListExpr();
+        exprtrue.add(new StringLiteral("True !"));
+        exprfalse.add(new StringLiteral("False !"));
+        linsttrue.add(new Print(false, exprtrue));
+        linstfalse.add(new Print(false, exprfalse));
+        Not p1 = new Not(new Equals(new IntLiteral(50), new IntLiteral(50)));     // false
+        Equals p2 = new Equals(p1, new BooleanLiteral(false));                    // true
+        p1.setType(int_t);
+        p2.setType(int_t);
+        IfThenElse ite = new IfThenElse(p2, linsttrue, linstfalse);
+        linst.add(ite);
         AbstractProgram source =
                 new Program(
                         new ListDeclClass(),
                         new Main(new ListDeclVar(),linst));
         return source;
+
     }
 
     public static String gencodeSource(AbstractProgram source) {
@@ -48,7 +53,7 @@ public class ManualTestPrintDIVfloatGencode {
     public static void test1() {
         AbstractProgram source = initTest1();
         //System.out.println("---- From the following Abstract Syntax Tree ----");
-        // source.prettyPrint(System.out);
+        //source.prettyPrint(System.out);
         //System.out.println("---- We generate the following assembly code ----");
         String result = gencodeSource(source);
         System.out.println(result);

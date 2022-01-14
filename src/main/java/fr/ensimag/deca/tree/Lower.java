@@ -18,7 +18,6 @@ public class Lower extends AbstractOpIneq {
 
     @Override
     public void codeGenOpIneq(DecacCompiler compiler) {
-        compiler.addComment("<");
         compiler.addInstruction(new SLT(Register.R1));
     }
 

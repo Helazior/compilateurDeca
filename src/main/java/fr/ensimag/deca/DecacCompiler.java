@@ -24,6 +24,17 @@ import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.Location;
 import java.lang.instrument.ClassDefinition;
 import fr.ensimag.deca.codegen.RegisterManager;
+import fr.ensimag.deca.context.StringType;
+import fr.ensimag.deca.context.IntType;
+import fr.ensimag.deca.context.FloatType;
+import fr.ensimag.deca.context.BooleanType;
+import fr.ensimag.deca.context.VoidType;
+import fr.ensimag.deca.context.*;
+import fr.ensimag.deca.codegen.RegisterManager;
+import fr.ensimag.deca.context.ClassType;
+import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.tree.Location;
+import java.lang.instrument.ClassDefinition;
 
 import fr.ensimag.deca.context.*;
 import fr.ensimag.deca.context.EnvironmentType.DoubleDefException;
@@ -61,6 +72,7 @@ public class DecacCompiler {
      * To show the div_zero error or not
      */
     private static boolean divideExist = false;
+    private static boolean ioExist = false;
 
     public DecacCompiler(CompilerOptions compilerOptions, File source) {
         super();
@@ -81,6 +93,14 @@ public class DecacCompiler {
 
     public void setDivideExistTrue() {
         divideExist = true;
+    }
+
+    public boolean getIoExist() {
+        return ioExist;
+    }
+
+    public void setIoExistTrue() {
+        ioExist = true;
     }
 
     public int getNumIf() {

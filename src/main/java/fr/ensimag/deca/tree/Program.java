@@ -64,7 +64,9 @@ public class Program extends AbstractProgram {
         if (compiler.getDivideExist()) {
             codeGenError.divByZeroError(compiler);
         }
-
+        if (compiler.getIoExist()) {
+            codeGenError.ioError(compiler);
+        }
     }
 
     @Override

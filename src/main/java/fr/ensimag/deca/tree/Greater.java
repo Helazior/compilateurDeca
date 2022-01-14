@@ -19,7 +19,6 @@ public class Greater extends AbstractOpIneq {
 
     @Override
     public void codeGenOpIneq(DecacCompiler compiler) {
-        compiler.addComment(">");
         compiler.addInstruction(new SGT(Register.R1));
     }
 

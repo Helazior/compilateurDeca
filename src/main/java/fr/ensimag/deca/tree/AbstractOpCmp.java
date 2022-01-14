@@ -34,5 +34,4 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
         }
         return getType();
     }
-
 }

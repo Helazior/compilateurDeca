@@ -20,7 +20,6 @@ public class NotEquals extends AbstractOpExactCmp {
     }
 
     public void codeGenOp(DecacCompiler compiler) {
-        compiler.addComment("!=");
         // EQUALS
         compiler.addInstruction(new CMP(Register.R0, Register.R1));
         compiler.addInstruction(new SEQ(Register.R1));
