@@ -88,11 +88,135 @@ Cette passe peut également être remplacée par une collection des noms de mét
 
 L'ensemble des classes créé à la passe 0 est ajoutée en argument de chaque non-terminal, 2 non terminaux sont ajoutés, et il y a une modification additionnelle des terminaux **program** et **decl_class**.
 
-(Définition formelle en chemin)
+**program** ↓*set_classes* ↑*env_types_1*
+		-> <u>Program</u>[
+			**list_import** ↓*env_types_predef* ↓*set_classes* ↑*env_types_0*
+			**list_decl_class** ↓*env_types_0* ↓*set_classes* ↑*env_types_1*
+			***MAIN***
+		]
+
+
+
+**list_import** ↓*env_types* ↓*set_classes* ↑*env_types*
+		-> [(**import** ↓*env_types* ↓*set_classes* ↑*env_types*)\*]
+
+
+
+**import** ↓*env_types_in*, ↓*set_classes* ↑*env_types_out*
+		-> <u>Program</u>[
+			**list_import** ↓*env_types_in* ↓*set_classes*  ↑*env_types*
+			**list_decl_class** ↓*env_types* ↓*set_classes*  ↑*env_types_out*
+			***MAIN***
+		]
+
+
+
+**list_decl_class** ↓*env_types* ↓*set_classes* ↑*env_types*
+		-> [(**decl_class** ↓*env_types* ↓*set_classes* ↑*env_types*)\*]
+
+
+
+**decl_class** ↓*nv_types* ↓*set_classes* ↑({*name ->* (class*(super, {}),* type_class*(name)*)} + env_types)
+		-> <u>DeclClass</u> [
+						Identifier ↑*name* 
+						Identifier ↑*super*
+						***LIST_DECL_FIELD*** ***LIST_DECL_METHOD***
+		]
+	**condition** *super* in *set_classes*
 
 ## Passe 2
 
 Pour cette passe, les mêmes non-terminaux sont ajoutés à la grammaire que sur la passe 1, et **program** est modifié pour permettre de passer par les classes importées.
+
+**program** ↓*env_types* ↑*env_types_r*
+		-> Program[
+			**list_import** ↓*env_types* ↑*env_types_0*
+			**list_decl_class** ↓*env_types_0* ↑*env_types_r*
+			***MAIN*** ]
+
+
+
+**list_import** ↓*env_types*  ↑*env_types*
+		-> [(**import** ↓*env_types* ↑*env_types*)\*]
+
+
+
+**import** ↓*env_types_in* ↑*env_types_out*
+		-> Program[
+			**list_import** ↓*env_types_in*  ↑*env_types*
+			**list_decl_class** ↓*env_types*  ↑*env_types_out*
+			***MAIN*** ]
+
+
+
+**list_decl_class** ↓*env_types*  ↑*env_types*
+		-> [(**decl_class** ↓*env_types* ↑*env_types*)\*]
+
+
+
+**decl_class** ↓*env_types* ↑*env_types*
+		-> DeclClass [
+						Identifier ↑*name* 
+						Identifier ↑*super*
+						**list_decl_field** ↓*env_types* ↓*super* ↓*name* ↑*env_exp_f*
+						**list_decl_method** ↓*env_types* ↓*super* ↑*env_exp_m*
+		]
+	**condition** *(*class*(_, env_exp_super), _)* = *env_types(super)*
+	**affectation** *new_def* = *(*class*(super, (env_exp_f + env_exp_m)/env_exp_super),* type_class*(name))*
+							 *env_types* = *{name -> new_def} / env_types*
+
+
+
+**list_decl_field** ↓*env_types* ↓*super* ↓*class* ↑*env_exp*
+		-> {*env_exp_r* = {}}
+			 [( **decl_field** ↓*env_types* ↓*super* ↓*class* ↑*env_exp* 
+			 		{*env_exp_r* = *env_exp_r* + *env_exp*} )\*]
+
+
+
+**decl_field** ↓*env_types* ↓*super* ↓*class* ↑{*name -> (*field*(visib, class, type))*}
+		-> DeclField ↑*visib* [
+			**type** ↓*env_types* ↑*type*
+			Identifier ↑*name* 
+			***INITIALIZATION***]
+	**condition** *type* != void &&
+							if (class*(_, env_exp_super), _*) = *env_types(super)* && *env_exp_super(name)* défini
+							then *env_exp_super(name)* = (field*(_,_),_*)
+
+
+
+**list_decl_method** ↓*env_types* ↓*super* ↑*env_exp_r*
+		-> {*env_exp_r* = {}}
+			 [( **decl_method** ↓*env_types* ↓*super* ↑*env_exp* 
+			 		{*env_exp_r* = *env_exp_r* + *env_exp*} )\*]
+
+
+
+**decl_method** ↓*env_types* ↓*super* ↑{*name -> (*method*(sig), type)*}
+		-> DeclMethod [
+				**type** ↓*env_types* ↑*type*
+				Identifier ↑*name* 
+				**list_decl_param** ↓*env_types* ↑*sig* 
+				***METHOD_BODY***
+			]
+	**condition** if (class*(_, env_exp_super), _*) = *env_types(super)* && *env_exp_super(name)* défini
+							then (method *(sig2), type2)* = *env_exp_super(name)*
+								&& *sig* == *sig2* && subtype*(env_types, type, type2)*
+
+
+
+**list_decl_param** ↓*env_types* ↑*sig*
+		-> {*sig* = []}
+			 [( **decl_param** ↓*env_types* ↑*type*
+			 		{*sig* = *sig* @ [type]} )\*]
+
+
+
+**decl_param** ↓*env_types* ↑*type*
+		-> DeclParam[
+			**type** ↓*env_types* ↑*type*
+			Identifier |> \_]
+	**condition** *type* != *void*
 
 ## Passe 3
 
@@ -100,7 +224,7 @@ Dans cette passe, les imports sont ignorés, et le comportement de la passe n'es
 
 # Étape C
 
-L'étape C ne se voir pas beaucoup changée. La génération de la table des méthodes doit cependant inclure les classes importées. Il faut ainsi faire attention au nommage des labels, pour qu'il n'y ait pas de collision, mais également que lors de chaque compilation, les mêmes méthodes portent le même label. 
+L'étape C ne se voit pas beaucoup changée. La génération de la table des méthodes doit cependant inclure les classes importées. Il faut ainsi faire attention au nommage des labels, pour qu'il n'y ait pas de collision, mais également que lors de chaque compilation, les mêmes méthodes portent le même label. 
 
 # Étape D
 
