@@ -26,13 +26,16 @@ public class ManualTestPrintUnaryMinusFloatGencode {
         ListExpr exp1 = new ListExpr();
         linst.add(new Print(false,exp1));
         // -(5. + 2.4) * 3. = -22.2
-        UnaryMinus p1 = new UnaryMinus(
-                new Plus(
-                        new FloatLiteral(5.0f),
-                        new FloatLiteral(2.4f)));
+        Plus p0 = new Plus(
+                new FloatLiteral(5.0f),
+                new FloatLiteral(2.4f)
+        );
+
+        UnaryMinus p1 = new UnaryMinus(p0);
         Multiply p2 = new Multiply(
                 p1,
                 new FloatLiteral(3));
+        p0.setType(type);
         p1.setType(type);
         p2.setType(type);
         exp1.add(p2);

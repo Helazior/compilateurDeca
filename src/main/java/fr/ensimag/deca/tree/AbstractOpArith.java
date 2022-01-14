@@ -48,6 +48,14 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
     }
 
     */
+    @Override
+    public void codeGenOvError(DecacCompiler compiler) {
+        if (getType().isFloat()) {
+            compiler.setOpOvExist();
+            compiler.addInstruction(new BOV(new Label("overflow_error")));
+        }
+        codeGenOp(compiler);
+    }
 
 
     @Override

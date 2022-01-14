@@ -53,6 +53,10 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
+    public void codeGenOvError(DecacCompiler compiler) {
+        codeGenOp(compiler);
+    }
+
 
     @Override
     public void codeGenExpr(DecacCompiler compiler) {
@@ -66,7 +70,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         regMan.pop(Register.R0);
         regMan.pop(Register.R1);
         compiler.addComment(getOperatorName());
-        codeGenOp(compiler);
+        codeGenOvError(compiler);
 
         regMan.push(Register.R1);
     }
