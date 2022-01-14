@@ -639,13 +639,17 @@ decl_method returns[DeclMethod tree]
     : type ident OPARENT params=list_params[$p] CPARENT (block {
             assert($block.decls != null);
             assert($block.insts != null);
-            $tree = new ($block.decls, $block.insts);
+            $tree.decl = $block.decls; 
+            $tree.insts = $block.insts;
             setLocation($tree, $block.start);
         }
       | ASM OPARENT code=multi_line_string CPARENT SEMI {
         }
       ) {
-// On set les valeures de l'arbres indpendamment de si on rentre dans block ou dans asm
+            assert($type.tree != null);
+            assert($ident.tree != null);
+            assert($list_params.tree != null);
+            $tree.type = $type.tree 
         }
     ;
 
