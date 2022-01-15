@@ -33,11 +33,9 @@ public class ConvFloat extends AbstractUnaryExpr {
 
     @Override
     public void codeGenOp(DecacCompiler compiler) {
-        // TODO: à tester
         RegisterManager regMan = compiler.getRegMan();
 
         compiler.addInstruction(new FLOAT(Register.R0, Register.R1));
-        regMan.push(Register.R1);
     }
 
     @Override
