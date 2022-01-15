@@ -3,6 +3,14 @@ package fr.ensimag.deca;
 import java.io.File;
 import org.apache.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 /**
  * Main class for the command-line Deca compiler.
  *
@@ -25,22 +33,43 @@ public class DecacMain {
             options.displayUsage();
             System.exit(1);
         }
-        if (options.getHelp()) {
+        if (compilerOptions.getVerification() && compilerOptions.getDecompile()) {
+            System.err.println("Error: options -v and -p are incompatible.");
             options.displayUsage();
             System.exit(1);
         }
+        if (options.getHelp()) {
+            options.displayUsage();
+            System.exit(0);
+        }
         if (options.getPrintBanner()) {
-            throw new UnsupportedOperationException("decac -b not yet implemented");
+            System.out.println("=================================================");
+            System.out.println("====           Projet GL groupe 60           ====");
+            System.out.println("=================================================");
+            System.exit(0);
         }
         if (options.getSourceFiles().isEmpty()) {
-            throw new UnsupportedOperationException("decac without argument not yet implemented");
+            options.displayUsage();
+            System.exit(0);
         }
         if (options.getParallel()) {
-            // A FAIRE : instancier DecacCompiler pour chaque fichier à
-            // compiler, et lancer l'exécution des méthodes compile() de chaque
-            // instance en parallèle. Il est conseillé d'utiliser
-            // java.util.concurrent de la bibliothèque standard Java.
-            throw new UnsupportedOperationException("Parallel build not yet implemented");
+            List<Callable<Boolean>> tasks = new ArrayList<Callable<Boolean>>();
+            for (File source : options.getSourceFiles()) {
+                Callable<Boolean> c = new Callable<Boolean>() {
+                    @Override
+                    public Boolean call() throws Exception {
+                        DecacCompiler compiler = new DecacCompiler(options, source);
+                        return new Boolean(compiler.compile());
+                    }
+                };
+                tasks.add(c);
+            }
+            ExecutorService exec = Executors.newCachedThreadPool();
+            List<Future<Boolean>> results = exec.invokeAll(tasks);
+            for (Future<Boolean> future : results) {
+                // if this error is true or a previous one is, stays at true
+                error ||= future.get();
+            }
         } else {
             for (File source : options.getSourceFiles()) {
                 DecacCompiler compiler = new DecacCompiler(options, source);

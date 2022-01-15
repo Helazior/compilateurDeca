@@ -27,15 +27,25 @@ public class CompilerOptions {
     private static final Map<String, OptionData> options = Map.ofEntries(
         entry("-b", new OptionData("banner", 
             "affiche une bannière indiquant le nom de l'équipe", 0)),
+        entry("-p", new OptionData("decompilation", "decompile l'arbre" +
+            " abstrait obtenu à la suite du lexer et du parser" , 0)),
+        entry("-v", new OptionData("verification", 
+            "ne produit aucun executable. " +
+            "Sert à vérifier que le programme peut compiler.", 0)),
         entry("-P", new OptionData("parallel", 
             "s'il y a plusieurs fichiers sources, lance la compilation " +
             "des fichiers en parallèle (pour accélérer la compilation)", 0)),
+        entry("-n", new OptionData("no check", 
+            "Supprime les tests de division par 0, de débordement arithmétique " +
+            "sur les flottants, de l'absence de `return` à une méthode, " +
+            "de convesion de type impossible, de déréférencement de null, " +
+            "de débordement mémoire, d'accès à des variables non-initialisées, " +
+            "avec l’assembleur généré par le compilateur.", 0)),
+            "d'utilisation d'une méthode écrite en assembleur non compatible " +
         entry("-d", new OptionData("debug", 
             "active les traces de debug. Répéter l'option plusieurs fois " +
             "pour avoir plus de traces.", 0)),
         entry("-h", new OptionData("help", "Affiche cette aide", 0)),
-        entry("-p", new OptionData("decompilation", "decompile l'arbre" +
-            " abstrait obtenu à la suite du lexer et du parser" , 0)),
         entry("-r", new OptionData("registers", "limite les registres " +
             "banalisés disponibles. Doit être compris entre 4 et 16 inclus."
             , 1))
@@ -52,6 +62,14 @@ public class CompilerOptions {
 
     public boolean getParallel() {
         return options.get("-P").isInvoked();
+    }
+
+    public boolean getVerification() {
+        return options.get("-v").isInvoked();
+    }
+
+    public boolean getNoCheck() {
+        return options.get("-n").isInvoked();
     }
 
     public boolean getPrintBanner() {
@@ -95,6 +113,9 @@ public class CompilerOptions {
                 }
                 option.invoke(optArgs);
             } else {
+                if (arg.charAt(0) == '-') {
+                    throw CLIException("Unknown option '"+arg+"'.");
+                }
                 sourceFiles.add(new File(arg));
             }
         }
