@@ -21,21 +21,10 @@ public abstract class AbstractOpBool extends AbstractBinaryExpr {
         super(leftOperand, rightOperand);
     }
 
+
     @Override
     public void codeGenExpr(DecacCompiler compiler) {
-        RegisterManager regMan = compiler.getRegMan();
-        //super.codeGenExpr(compiler);
-        AbstractExpr left = getLeftOperand();
-        left.codeGenExpr(compiler);
-        AbstractExpr right = getRightOperand();
-        right.codeGenExpr(compiler);
-
-        regMan.pop(Register.R0);
-        regMan.pop(Register.R1);
-        compiler.addComment(getOperatorName());
         codeGenOp(compiler);
-
-        regMan.push(Register.R1);
     }
 
     @Override

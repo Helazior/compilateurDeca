@@ -6,6 +6,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Line;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BOV;
 import org.apache.commons.lang.Validate;
@@ -64,6 +65,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         //super.codeGenExpr(compiler);
         AbstractExpr left = getLeftOperand();
         left.codeGenExpr(compiler);
+        //compiler.addComment("");
         AbstractExpr right = getRightOperand();
         right.codeGenExpr(compiler);
 
