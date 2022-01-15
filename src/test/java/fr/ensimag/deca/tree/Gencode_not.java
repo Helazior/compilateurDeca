@@ -26,8 +26,8 @@ public class Gencode_not {
         ListInst linstfalse = new ListInst();
         ListExpr exprtrue = new ListExpr();
         ListExpr exprfalse = new ListExpr();
-        exprtrue.add(new StringLiteral("True !"));
-        exprfalse.add(new StringLiteral("False !"));
+        exprtrue.add(new StringLiteral("\"True !\""));
+        exprfalse.add(new StringLiteral("\"False !\""));
         linsttrue.add(new Print(false, exprtrue));
         linstfalse.add(new Print(false, exprfalse));
         Not p1 = new Not(new Equals(new IntLiteral(50), new IntLiteral(50)));     // false

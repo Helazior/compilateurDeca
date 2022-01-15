@@ -23,8 +23,8 @@ public class Gencode_else_LT {
         ListInst linstfalse = new ListInst();
         ListExpr exprtrue = new ListExpr();
         ListExpr exprfalse = new ListExpr();
-        exprtrue.add(new StringLiteral("VRAI !"));
-        exprfalse.add(new StringLiteral("FAUX !"));
+        exprtrue.add(new StringLiteral("\"VRAI !\""));
+        exprfalse.add(new StringLiteral("\"FAUX !\""));
         linsttrue.add(new Print(false, exprtrue));
         linstfalse.add(new Print(false, exprfalse));
         Lower p1 = new Lower(new IntLiteral(50), new IntLiteral(50));     // false

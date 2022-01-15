@@ -23,7 +23,7 @@ public class Gencode_while {
         ListInst linsttrue = new ListInst();
         ListExpr exprtrue = new ListExpr();
         ListExpr exprfalse = new ListExpr();
-        exprtrue.add(new StringLiteral("Dans le While !"));
+        exprtrue.add(new StringLiteral("\"Dans le While !\""));
         linsttrue.add(new Println(false, exprtrue));
         Equals p1 = new Equals(new IntLiteral(50), new IntLiteral(50));     // true
         Equals p2 = new Equals(p1, new BooleanLiteral(true));                    // true

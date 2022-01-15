@@ -23,8 +23,8 @@ public class Gencode_ifThen_GE {
         ListInst linstfalse = new ListInst();
         ListExpr exprtrue = new ListExpr();
         ListExpr exprfalse = new ListExpr();
-        exprtrue.add(new StringLiteral("VRAI !"));
-        exprfalse.add(new StringLiteral("FAUX !"));
+        exprtrue.add(new StringLiteral("\"VRAI !\""));
+        exprfalse.add(new StringLiteral("\"FAUX !\""));
         linsttrue.add(new Print(false, exprtrue));
         linstfalse.add(new Print(false, exprfalse));
         GreaterOrEqual p1 = new GreaterOrEqual(new IntLiteral(50), new IntLiteral(50));     // true

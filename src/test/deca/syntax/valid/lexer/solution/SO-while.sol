@@ -17,5 +17,10 @@ IDENT: i1
 PLUS: +
 INT: 1
 SEMI: ;
+PRINTLN: println
+OPARENT: (
+IDENT: i1
+CPARENT: )
+SEMI: ;
 CBRACE: }
 CBRACE: }
