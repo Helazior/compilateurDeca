@@ -76,7 +76,7 @@ mkdir -p $folder_path/lexer/solution
 
 # Récupération des fichiers à tester
 if [[ $# -le 1 ]]; then
-    files="$(echo $folder_path/provided/*.deca) $(echo $folder_path/lexer/provided/*.deca)"
+    files="$(echo $folder_path/lexer/provided/*.deca)" #$(echo $folder_path/provided/*.deca)
 else
     files=$@
     files=${files#* } # On enlève le premier élément (qui est le dossier de travail)

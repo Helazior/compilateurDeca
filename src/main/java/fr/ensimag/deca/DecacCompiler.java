@@ -23,21 +23,16 @@ import fr.ensimag.deca.tools.SymbolTable;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.Location;
 import java.lang.instrument.ClassDefinition;
+import java.rmi.registry.LocateRegistry;
+import java.util.LinkedList;
+import java.util.List;
+
 import fr.ensimag.deca.codegen.RegisterManager;
-import fr.ensimag.deca.context.StringType;
-import fr.ensimag.deca.context.IntType;
-import fr.ensimag.deca.context.FloatType;
-import fr.ensimag.deca.context.BooleanType;
-import fr.ensimag.deca.context.VoidType;
-import fr.ensimag.deca.context.*;
-import fr.ensimag.deca.codegen.RegisterManager;
+
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.EnvironmentExp;
-import fr.ensimag.deca.tree.Location;
-import java.lang.instrument.ClassDefinition;
 
 import fr.ensimag.deca.context.*;
-import fr.ensimag.deca.context.EnvironmentType.DoubleDefException;
 /**
  * Decac compiler instance.
  *
@@ -244,47 +239,49 @@ public class DecacCompiler {
     private final EnvironmentType typeEnv = new EnvironmentType(null);
     private final SymbolTable typeTable = new SymbolTable();
 
-    public void initTypes() throws ContextualError{
-        Symbol symbol = typeTable.create("string");
-        Type type = new StringType(symbol);
-        addType(symbol, type);
-
-        symbol = typeTable.create("void");
-        type = new VoidType(symbol);
-        addType(symbol, type);
-
-        symbol = typeTable.create("int");
-        type = new IntType(symbol);
-        addType(symbol, type);
-
-        symbol = typeTable.create("float");
-        type = new FloatType(symbol);
-        addType(symbol, type);
-
-        symbol = typeTable.create("boolean");
-        type = new BooleanType(symbol);
-        addType(symbol, type);
-    }
-
-    private void addType(Symbol symbol, Type type) throws ContextualError{
-        try {
-            typeEnv.declare(symbol, new TypeDefinition(type, null));
-        } catch (DoubleDefException e) {
-            throw new ContextualError(e + " This type is already defined", null);
-        }
-    }
-
     public EnvironmentType getTypeEnv(){
         return typeEnv;
     }
 
-    public Type getType(String typeName){
-        return typeEnv.get(typeTable.create(typeName)).getType();
+    public void initTypes() throws ContextualError{
+
+        List<TypeDefinition> typeDefList = new LinkedList<>();
+
+        typeDefList.add(new TypeDefinition(new IntType(typeTable.create("int")), null));
+        typeDefList.add(new TypeDefinition(new FloatType(typeTable.create("float")), null));
+        typeDefList.add(new TypeDefinition(new StringType(typeTable.create("string")), null));
+        typeDefList.add(new TypeDefinition(new BooleanType(typeTable.create("boolean")), null));
+        typeDefList.add(new TypeDefinition(new VoidType(typeTable.create("void")), null));
+
+        for(TypeDefinition typeDef : typeDefList){
+            createType(typeDef.getType().getName(), typeDef);
+        }
     }
 
-    public Type getType(Symbol typeName){
-        return typeEnv.get(typeName).getType();
+    private void createType(Symbol symbol, TypeDefinition typeDef) throws ContextualError{
+        try {
+            typeEnv.declare(symbol, typeDef);
+        } catch (EnvironmentType.DoubleDefException e) {
+            throw new ContextualError(e + " This type is already defined", null);
+        }
     }
+
+
+
+    public Type getType(Symbol type, Location location) throws ContextualError {
+        TypeDefinition typeDef = typeEnv.get(type);
+        if(typeDef == null){
+            throw new ContextualError(type.getName() + " is not recognise as a type", location);
+        }
+        return typeDef.getType();
+    }
+
+    public Type getType(String typeName) throws ContextualError{
+        Symbol type = typeTable.create(typeName);
+        return getType(type, null);
+    }
+
+
 
 
     /**
@@ -292,11 +289,32 @@ public class DecacCompiler {
     * ne sert que pour le parser en principe, car ensuite les symboles sont tous placé
     * dans les environnements des classes qui leurs correpondent
     **/
-    private final SymbolTable identifierTable = new SymbolTable();
 
-    public Symbol createSymbol(String name) {
-        return identifierTable.create(name);
+    private final EnvironmentExp expEnv = new EnvironmentExp(null);
+    private final SymbolTable expTable = new SymbolTable();
+
+    /**
+     * Creer l'expression dans l'environnement, ou redéfini sa Définition si celle-ci est à null
+     * Sinon renvoie une ContextualError
+     * @param exp
+     * @param expDef
+     * @throws ContextualError
+     */
+    public void createExp(Symbol exp, ExpDefinition expDef, Location location) throws ContextualError{
+        try {
+            expEnv.declare(exp, expDef);
+        } catch (EnvironmentExp.DoubleDefException e) {
+            throw new ContextualError(exp.getName() + " is already defined", location);
+        }
     }
+
+    public Symbol createSymbol(String expName) {
+        return expTable.create(expName);
+    }
+
+
+
+
 
 
     /**
