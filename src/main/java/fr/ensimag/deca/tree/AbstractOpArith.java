@@ -5,6 +5,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.*;
 
@@ -25,10 +26,7 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         super(leftOperand, rightOperand);
     }
 
-    public void codeGenOp(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("not yet implemented");
-    }
-
+    /*
     @Override
     public void codeGenExpr(DecacCompiler compiler) {
         RegisterManager regMan = compiler.getRegMan();
@@ -40,24 +38,39 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
 
         regMan.pop(Register.R0);
         regMan.pop(Register.R1);
+        compiler.addComment(getOperatorName());
         codeGenOp(compiler);
+        if (getType().isFloat()) {
+            compiler.setOpOvExist();
+            compiler.addInstruction(new BOV(new Label("overflow_error")));
+        }
         regMan.push(Register.R1);
     }
 
+    */
+    @Override
+    public void codeGenOvError(DecacCompiler compiler) {
+        if (getType().isFloat()) {
+            compiler.setOpOvExist();
+            compiler.addInstruction(new BOV(new Label("overflow_error")));
+        }
+        codeGenOp(compiler);
+    }
+
+
     @Override
     protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
-        if(printHex) {
-            throw new UnsupportedOperationException("Hex not implemented TODO");
-        }
-        // TODO : C'est ça ou pas ? Ça a l'air de marcher mais pas sûr à 100%
         codeGenExpr(compiler);
         compiler.getRegMan().pop(R1);
-        // si type = int
         Type type = getType();
         if (type.isInt()) {
             compiler.addInstruction(new WINT());
         } else if(type.isFloat()) {
-            compiler.addInstruction(new WFLOAT());
+            if (printHex) {
+                compiler.addInstruction(new WFLOATX());
+            } else {
+                compiler.addInstruction(new WFLOAT());
+            }
         }
         //throw new UnsupportedOperationException("not yet implemented");
     }
@@ -69,16 +82,26 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         Type leftType = getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
         Type rightType = getRightOperand().verifyExpr(compiler, localEnv, currentClass);
 
-        if((leftType.isInt() || leftType.isFloat()) &&
-        (rightType.isInt() || rightType.isFloat())){
-            if(leftType.isInt() && rightType.isInt()){
-                setType(compiler.getType("int"));
-            } else {
-                setType(compiler.getType("float"));
-            }
-        }else {
+        if(leftType.isInt() && rightType.isInt()){
+            setType(compiler.getType("int"));
+        }
+        else if(leftType.isInt() && rightType.isFloat()){
+            setLeftOperand(new ConvFloat(getLeftOperand()));
+            getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+            setType(compiler.getType("float"));
+        }
+        else if(leftType.isFloat() && rightType.isInt()){
+            setRightOperand(new ConvFloat(getRightOperand()));
+            getRightOperand().verifyExpr(compiler, localEnv, currentClass);
+            setType(compiler.getType("float"));
+        }
+        else if(leftType.isFloat() && rightType.isFloat()){
+            setType(compiler.getType("float"));
+        }
+        else {
             throw new ContextualError("Error: Unsupported operands. Expected : int or float", getLocation());
         }
+
         return getType();
     }
 }

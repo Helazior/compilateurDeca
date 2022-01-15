@@ -30,6 +30,7 @@ public class Or extends AbstractOpBool {
     public void codeGenOp(DecacCompiler compiler) {
         // TODO :  avec l'extension, nommer les labels différemment
         RegisterManager regMan = compiler.getRegMan();
+        compiler.addComment("Start Or");
         String trueLabel = "true_or_" + compiler.getNumOr();
         String endLabel = "end_or_" + compiler.getNumOr();
         compiler.incrementNumOr();
@@ -38,6 +39,7 @@ public class Or extends AbstractOpBool {
         // On récupère le résultat de la condition dans la pile
         regMan.pop(Register.R1);
         // 1 : cond true -> goto trueLabel
+        compiler.addComment(getOperatorName());
         compiler.addInstruction(new CMP(1, Register.R1));
         compiler.addInstruction(new BEQ(new Label(trueLabel)));
         // cond false :
@@ -59,13 +61,6 @@ public class Or extends AbstractOpBool {
         regMan.push(Register.R1);
     }
 
-    /*
-     *On ne veut pas utiliser le codeGenExpr de abstract binary
-     */
-    @Override
-    public void codeGenExpr(DecacCompiler compiler) {
-        codeGenOp(compiler);
-    }
 
     @Override
     protected String getOperatorName() {

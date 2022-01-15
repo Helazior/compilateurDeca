@@ -1,10 +1,14 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
 
 /**
  *
@@ -15,6 +19,12 @@ public abstract class AbstractOpBool extends AbstractBinaryExpr {
 
     public AbstractOpBool(AbstractExpr leftOperand, AbstractExpr rightOperand) {
         super(leftOperand, rightOperand);
+    }
+
+
+    @Override
+    public void codeGenExpr(DecacCompiler compiler) {
+        codeGenOp(compiler);
     }
 
     @Override

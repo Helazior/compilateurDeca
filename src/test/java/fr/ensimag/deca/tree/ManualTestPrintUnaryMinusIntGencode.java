@@ -25,13 +25,16 @@ public class ManualTestPrintUnaryMinusIntGencode {
         ListExpr exp1 = new ListExpr();
         linst.add(new Print(false,exp1));
         // -(5 + 2) * 3 = -21
-        UnaryMinus p1 = new UnaryMinus(
-                new Plus(
-                        new IntLiteral(5),
-                        new IntLiteral(2)));
+        Plus p0 = new Plus(
+                new IntLiteral(5),
+                new IntLiteral(2)
+        );
+        UnaryMinus p1 = new UnaryMinus(p0);
+
         Multiply p2 = new Multiply(
                 p1,
                 new IntLiteral(3));
+        p0.setType(int_t);
         p1.setType(int_t);
         p2.setType(int_t);
         exp1.add(p2);

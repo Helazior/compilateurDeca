@@ -1,5 +1,6 @@
 package fr.ensimag.deca.context;
 
+import fr.ensimag.deca.CompilerOptions;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tree.AbstractExpr;
 import fr.ensimag.deca.tree.Plus;
@@ -23,7 +24,8 @@ public class TestPlusPlain {
 
     @Test
     public void testType() throws ContextualError {
-        DecacCompiler compiler = new DecacCompiler(null, null);
+        DecacCompiler compiler = new DecacCompiler(new CompilerOptions(), null);
+
         AbstractExpr left = Mockito.mock(AbstractExpr.class);
         when(left.verifyExpr(compiler, null, null)).thenReturn(INT);
         AbstractExpr right = Mockito.mock(AbstractExpr.class);

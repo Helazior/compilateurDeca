@@ -1,5 +1,6 @@
 package fr.ensimag.deca.context;
 
+import fr.ensimag.deca.CompilerOptions;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tree.AbstractExpr;
@@ -63,7 +64,7 @@ public class TestPlusWithoutMock {
 
     @Test
     public void testType() throws ContextualError {
-        DecacCompiler compiler = new DecacCompiler(null, null);
+        DecacCompiler compiler = new DecacCompiler(new CompilerOptions(), null);
         DummyIntExpression left = new DummyIntExpression();
         DummyIntExpression right = new DummyIntExpression();
         Plus t = new Plus(left, right);
