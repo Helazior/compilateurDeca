@@ -87,12 +87,12 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         }
         else if(leftType.isInt() && rightType.isFloat()){
             setLeftOperand(new ConvFloat(getLeftOperand()));
-            getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+            getLeftOperand().updateType(compiler);
             setType(compiler.getType("float"));
         }
         else if(leftType.isFloat() && rightType.isInt()){
             setRightOperand(new ConvFloat(getRightOperand()));
-            getRightOperand().verifyExpr(compiler, localEnv, currentClass);
+            getRightOperand().updateType(compiler);
             setType(compiler.getType("float"));
         }
         else if(leftType.isFloat() && rightType.isFloat()){
