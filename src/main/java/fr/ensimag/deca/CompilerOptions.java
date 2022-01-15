@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import fr.ensimag.deca.CLIException;
 import static java.util.Map.entry;
 
 import org.apache.log4j.Level;
@@ -40,8 +41,8 @@ public class CompilerOptions {
             "sur les flottants, de l'absence de `return` à une méthode, " +
             "de convesion de type impossible, de déréférencement de null, " +
             "de débordement mémoire, d'accès à des variables non-initialisées, " +
-            "avec l’assembleur généré par le compilateur.", 0)),
             "d'utilisation d'une méthode écrite en assembleur non compatible " +
+            "avec l’assembleur généré par le compilateur.", 0)),
         entry("-d", new OptionData("debug", 
             "active les traces de debug. Répéter l'option plusieurs fois " +
             "pour avoir plus de traces.", 0)),
@@ -109,12 +110,12 @@ public class CompilerOptions {
                 /* boucle qui, pour chaque argument requis, prend le prochain 
                  * argument, et met i à l'indice de ce nouvel argument */
                 for (int j = 0; j < option.nbArgs; j++) {
-                    optArgs[j] = args[i++];
+                    optArgs[j] = args[++i];
                 }
                 option.invoke(optArgs);
             } else {
                 if (arg.charAt(0) == '-') {
-                    throw CLIException("Unknown option '"+arg+"'.");
+                    throw new CLIException("Unknown option '"+arg+"'.");
                 }
                 sourceFiles.add(new File(arg));
             }

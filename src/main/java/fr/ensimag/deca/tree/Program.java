@@ -75,6 +75,8 @@ public class Program extends AbstractProgram {
         }
 
         codeGenError.stackOverflowError(compiler);
+
+        assert(compiler.getRegMan().isStackEmpty());
     }
 
     @Override

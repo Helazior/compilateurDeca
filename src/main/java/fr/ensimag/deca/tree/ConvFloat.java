@@ -32,7 +32,11 @@ public class ConvFloat extends AbstractUnaryExpr {
     }
 
     public void updateType(DecacCompiler compiler) {
-        setType(compiler.getType("float"));
+        try {
+            setType(compiler.getType("float"));
+        } catch (ContextualError e) {
+            throw new RuntimeException("ConvFloat can't access float type");
+        }
     }
 
     @Override

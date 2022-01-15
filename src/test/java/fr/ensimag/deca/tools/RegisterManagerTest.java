@@ -11,7 +11,6 @@ public class RegisterManagerTest {
     public static void main(String[] args) {
         RegisterManagerTest test = new RegisterManagerTest();
         test.testPushPop();
-        test.testTooMuchPop();
         test.testOwnership();
     }
 
@@ -32,22 +31,11 @@ public class RegisterManagerTest {
         rm.push(Register.R1);
         rm.pop(Register.R0);
         String programm = compiler.displayIMAProgram();
-        String[] req = {"PUSH R1","POP R0"}; // TODO: check program output instead
+        String[] req = {
+            "LOAD R1, R2",
+            "LOAD R2, R0"
+        };
         assertProgram(programm, req);
-    }
-
-    @Test
-    public void testTooMuchPop() {
-        DecacCompiler compiler = new DecacCompiler(new CompilerOptions(), null);
-        RegisterManager rm = new RegisterManager(compiler, 6);
-        rm.push(Register.R1);
-        rm.pop(Register.R0);
-        try {
-            rm.pop(Register.R1);
-        } catch (RegisterManager.EmptyStackException e) {
-            return;
-        }
-        assertTrue(false);
     }
 
     @Test
