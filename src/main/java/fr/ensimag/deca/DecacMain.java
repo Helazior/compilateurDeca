@@ -33,7 +33,7 @@ public class DecacMain {
             options.displayUsage();
             System.exit(1);
         }
-        if (compilerOptions.getVerification() && compilerOptions.getDecompile()) {
+        if (options.getVerification() && options.getDecompile()) {
             System.err.println("Error: options -v and -p are incompatible.");
             options.displayUsage();
             System.exit(1);
@@ -65,10 +65,18 @@ public class DecacMain {
                 tasks.add(c);
             }
             ExecutorService exec = Executors.newCachedThreadPool();
-            List<Future<Boolean>> results = exec.invokeAll(tasks);
-            for (Future<Boolean> future : results) {
-                // if this error is true or a previous one is, stays at true
-                error ||= future.get();
+            try {
+                List<Future<Boolean>> results = exec.invokeAll(tasks);
+                for (Future<Boolean> future : results) {
+                    // if this error is true or a previous one is, stays at true
+                    error = error || future.get();
+                }
+            } catch (InterruptedException e) {
+                System.err.println("Execution interrupted");
+                System.exit(1);
+            } catch (ExecutionException e) {
+                System.err.println("Error: "+e);
+                System.exit(1);
             }
         } else {
             for (File source : options.getSourceFiles()) {
