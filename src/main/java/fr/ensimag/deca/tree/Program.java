@@ -67,6 +67,7 @@ public class Program extends AbstractProgram {
         if (compiler.getIoExist()) {
             codeGenError.ioError(compiler);
         }
+        assert(compiler.getRegMan().isStackEmpty());
     }
 
     @Override

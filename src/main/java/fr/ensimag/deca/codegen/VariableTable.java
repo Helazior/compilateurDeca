@@ -15,8 +15,10 @@ public class VariableTable {
     private Map<Symbol, Integer> table = new HashMap<>();
     private int nextKey = 1;
     private DecacCompiler compiler;
-    public VariableTable(DecacCompiler compiler, ListDeclVar vars) {
+    public VariableTable(DecacCompiler compiler) {
         this.compiler = compiler;
+    }
+    public void init(ListDeclVar vars) {
         List<AbstractDeclVar> varsList = vars.getList();
         compiler.addInstruction(new ADDSP(varsList.size()));
         for (int i = 0; i < varsList.size(); i++) {

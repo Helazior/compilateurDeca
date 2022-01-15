@@ -91,7 +91,7 @@ public class CompilerOptions {
                 /* boucle qui, pour chaque argument requis, prend le prochain 
                  * argument, et met i à l'indice de ce nouvel argument */
                 for (int j = 0; j < option.nbArgs; j++) {
-                    optArgs[j] = args[i++];
+                    optArgs[j] = args[++i];
                 }
                 option.invoke(optArgs);
             } else {
