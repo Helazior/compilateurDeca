@@ -5,7 +5,10 @@ import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Line;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
 import org.apache.commons.lang.Validate;
 
 /**
@@ -51,21 +54,30 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
+    public void codeGenOvError(DecacCompiler compiler) {
+        codeGenOp(compiler);
+    }
+
+
     @Override
     public void codeGenExpr(DecacCompiler compiler) {
         RegisterManager regMan = compiler.getRegMan();
         //super.codeGenExpr(compiler);
         AbstractExpr left = getLeftOperand();
         left.codeGenExpr(compiler);
+        //compiler.addComment("");
         AbstractExpr right = getRightOperand();
         right.codeGenExpr(compiler);
 
         regMan.pop(Register.R0);
         regMan.pop(Register.R1);
         compiler.addComment(getOperatorName());
-        codeGenOp(compiler);
+        codeGenOvError(compiler);
+
         regMan.push(Register.R1);
     }
+
+
 
     @Override
     public void decompile(IndentPrintStream s) {

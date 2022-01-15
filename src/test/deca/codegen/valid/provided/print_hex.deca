@@ -1,0 +1,7 @@
+{
+	printlnx(6.0 + 15.0);
+	printlnx(6.0 / 15.0);
+	printlnx(6.0 - 15.0);
+	printlnx(-15.0);
+	printx(6.0 * 15.0);
+}

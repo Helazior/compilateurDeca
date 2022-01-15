@@ -23,8 +23,8 @@ public class Gencode_if_then_equals {
         ListInst linstfalse = new ListInst();
         ListExpr exprtrue = new ListExpr();
         ListExpr exprfalse = new ListExpr();
-        exprtrue.add(new StringLiteral("EQUALS !"));
-        exprfalse.add(new StringLiteral("FAUX !"));
+        exprtrue.add(new StringLiteral("\"EQUALS !\""));
+        exprfalse.add(new StringLiteral("\"FAUX !\""));
         linsttrue.add(new Print(false, exprtrue));
         linstfalse.add(new Print(false, exprfalse));
         Equals p1 = new Equals(new IntLiteral(50), new IntLiteral(50));     // true

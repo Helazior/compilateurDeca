@@ -23,8 +23,8 @@ public class Gencode_OR_true_3rd_arg {
         ListInst linstfalse = new ListInst();
         ListExpr exprtrue = new ListExpr();
         ListExpr exprfalse = new ListExpr();
-        exprtrue.add(new StringLiteral("true !"));
-        exprfalse.add(new StringLiteral("false !"));
+        exprtrue.add(new StringLiteral("\"true !\""));
+        exprfalse.add(new StringLiteral("\"false !\""));
         linsttrue.add(new Print(false, exprtrue));
         linstfalse.add(new Print(false, exprfalse));
         Or p1 = new Or(

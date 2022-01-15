@@ -67,7 +67,9 @@ public class DecacCompiler {
      * To show the div_zero error or not
      */
     private static boolean divideExist = false;
+    private static boolean modExist = false;
     private static boolean ioExist = false;
+    private static boolean opOvExist = false;
 
     public DecacCompiler(CompilerOptions compilerOptions, File source) {
         super();
@@ -88,6 +90,22 @@ public class DecacCompiler {
 
     public void setDivideExistTrue() {
         divideExist = true;
+    }
+
+    public boolean getModuloExist() {
+        return modExist;
+    }
+
+    public void setModuloExistTrue() {
+        modExist = true;
+    }
+
+    public boolean getOpOvExist() {
+        return opOvExist;
+    }
+
+    public void setOpOvExist() {
+        opOvExist = true;
     }
 
     public boolean getIoExist() {

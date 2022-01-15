@@ -52,7 +52,6 @@ public class UnaryMinus extends AbstractUnaryExpr {
             compiler.addInstruction(new LOAD(new ImmediateFloat(0.0f), Register.R1));
         }
         compiler.addInstruction(new SUB(Register.R0, Register.R1));
-        regMan.push(Register.R1);
     }
 
     @Override

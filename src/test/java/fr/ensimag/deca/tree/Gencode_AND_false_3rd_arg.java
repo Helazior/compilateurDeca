@@ -23,8 +23,8 @@ public class Gencode_AND_false_3rd_arg {
         ListInst linstfalse = new ListInst();
         ListExpr exprtrue = new ListExpr();
         ListExpr exprfalse = new ListExpr();
-        exprtrue.add(new StringLiteral("true !"));
-        exprfalse.add(new StringLiteral("false !"));
+        exprtrue.add(new StringLiteral("\"true !\""));
+        exprfalse.add(new StringLiteral("\"false !\""));
         linsttrue.add(new Print(false, exprtrue));
         linstfalse.add(new Print(false, exprfalse));
         And p1 = new And(
