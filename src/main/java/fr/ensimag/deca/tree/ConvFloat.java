@@ -4,6 +4,7 @@ import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.ima.pseudocode.ImmediateFloat;
 import fr.ensimag.ima.pseudocode.Register;
@@ -24,8 +25,10 @@ public class ConvFloat extends AbstractUnaryExpr {
 
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) {
-        throw new UnsupportedOperationException("not yet implemented");
+            ClassDefinition currentClass) throws ContextualError{
+        assert(getOperand().verifyExpr(compiler, localEnv, currentClass).isInt());
+        setType(compiler.getType("float"));
+        return getType();
     }
 
     @Override

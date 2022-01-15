@@ -69,16 +69,26 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         Type leftType = getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
         Type rightType = getRightOperand().verifyExpr(compiler, localEnv, currentClass);
 
-        if((leftType.isInt() || leftType.isFloat()) &&
-        (rightType.isInt() || rightType.isFloat())){
-            if(leftType.isInt() && rightType.isInt()){
-                setType(compiler.getType("int"));
-            } else {
-                setType(compiler.getType("float"));
-            }
-        }else {
+        if(leftType.isInt() && rightType.isInt()){
+            setType(compiler.getType("int"));
+        }
+        else if(leftType.isInt() && rightType.isFloat()){
+            setLeftOperand(new ConvFloat(getLeftOperand()));
+            getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+            setType(compiler.getType("float"));
+        }
+        else if(leftType.isFloat() && rightType.isInt()){
+            setRightOperand(new ConvFloat(getRightOperand()));
+            getRightOperand().verifyExpr(compiler, localEnv, currentClass);
+            setType(compiler.getType("float"));
+        }
+        else if(leftType.isFloat() && rightType.isFloat()){
+            setType(compiler.getType("float"));
+        }
+        else {
             throw new ContextualError("Error: Unsupported operands. Expected : int or float", getLocation());
         }
+
         return getType();
     }
 }

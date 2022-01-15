@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import org.junit.jupiter.api.Test;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.CompilerOptions;
 import fr.ensimag.deca.tools.SymbolTable;
 /**
@@ -44,11 +45,15 @@ public class TestAssign {
         ListExpr exprs2 = new ListExpr();
         ListExpr exprs3 = new ListExpr();
         Identifier identifier1 = new Identifier(symTab.create("a"));
-        identifier1.setType(compiler.getType("int"));
         Identifier identifier2 = new Identifier(symTab.create("b"));
-        identifier2.setType(compiler.getType("int"));
         Identifier identifier3 = new Identifier(symTab.create("c"));
-        identifier3.setType(compiler.getType("float"));
+        try {
+            identifier1.setType(compiler.getType("int"));
+            identifier2.setType(compiler.getType("int"));
+            identifier3.setType(compiler.getType("float"));
+        } catch (ContextualError e) {
+            System.out.println("les types entrés ne sont pas défini");
+        }
         exprs1.add(identifier1);
         exprs2.add(identifier2);
         exprs3.add(identifier3);
