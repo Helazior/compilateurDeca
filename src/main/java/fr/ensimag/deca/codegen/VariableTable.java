@@ -27,6 +27,8 @@ public class VariableTable {
             table.put(varname, nextKey + i);
         }
         nextKey += varsList.size();
+        // add the number of variables in the TSTO stack's max size
+        compiler.getRegMan().addSizeStack(varsList.size());
     }
     public void load(Symbol s, GPRegister dst) {
         int i = get(s);

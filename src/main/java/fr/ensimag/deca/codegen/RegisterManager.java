@@ -28,6 +28,9 @@ public class RegisterManager {
     private final int nMax;
     // Number of variables on stack
     private int nbVarsStack = 0;
+    // maximum size of the stack for the TSTO instruction
+    private int maxSizeStack = 0;
+    private int sizeStack = 0;
 
     //public final VariableTable varTable;
     private DecacCompiler compiler;
@@ -57,6 +60,28 @@ public class RegisterManager {
     }
 
     public static class InexistingRegister extends RegisterManagerException {
+    }
+
+    public int getMaxSizeStack() {
+        return maxSizeStack;
+    }
+
+    /**
+     * calculate the stack's size max
+     */
+    private void setMaxSizeStack() {
+        if (sizeStack > maxSizeStack) {
+            maxSizeStack = sizeStack;
+        }
+    }
+
+    public void addSizeStack(int nb) {
+        sizeStack += nb;
+        setMaxSizeStack();
+    }
+
+    private void decrementSizeStack() {
+        sizeStack--;
     }
 
     public boolean isStackEmpty() {
@@ -102,6 +127,7 @@ public class RegisterManager {
         // Element is in stack
         GPRegister dst = take();
         nbVarsStack -= 1;
+        decrementSizeStack();
         compiler.addInstruction(new POP(dst));
         LOG.trace("REGMAN pop end");
         return dst;
@@ -129,6 +155,7 @@ public class RegisterManager {
         }
         // Element is in stack
         nbVarsStack -= 1;
+        decrementSizeStack();
         compiler.addInstruction(new POP(dst));
         LOG.trace("REGMAN pop(dst) end");
     }
@@ -146,6 +173,7 @@ public class RegisterManager {
             int saveIndex = lastRegisters.indexOf(register.getNumber());
             assert(saveIndex != -1);
             lastRegisters.remove(saveIndex);
+            addSizeStack(1);
             compiler.addInstruction(new PUSH(register));
         } else { // Register is unused
             registers[register.getNumber()] = -1;
