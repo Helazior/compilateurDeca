@@ -13,11 +13,11 @@ import java.util.jar.Attributes.Name;
  * @author gl60
  * @date 14/01/2022
  */
-public class DeclClass extends AbstractDeclParam {
+public class DeclParam extends AbstractDeclParam {
     private AbstractIdentifier type;
     private AbstractIdentifier name;
     
-    public DeclClass(AbstractIdentifier typeParam, AbstractIdentifier nameParam){
+    public DeclParam(AbstractIdentifier typeParam, AbstractIdentifier nameParam){
         this.name = nameParam;
         this.type = typeParam;
     }
@@ -25,22 +25,17 @@ public class DeclClass extends AbstractDeclParam {
     //TODO
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print("class { ... A FAIRE ... }");
+        s.print("Param { ... A FAIRE ... }");
     }
 
     @Override
-    protected void verifyClass(DecacCompiler compiler) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
-    }
-
-    @Override
-    protected void verifyClassMembers(DecacCompiler compiler)
+    protected void verifyParamSignature(DecacCompiler compiler)
             throws ContextualError {
         throw new UnsupportedOperationException("not yet implemented");
     }
-    
+
     @Override
-    protected void verifyClassBody(DecacCompiler compiler) throws ContextualError {
+    protected void verifyParamType(DecacCompiler compiler) throws ContextualError {
         throw new UnsupportedOperationException("not yet implemented");
     }
 

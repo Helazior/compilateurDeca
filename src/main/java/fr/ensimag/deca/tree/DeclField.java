@@ -17,7 +17,6 @@ import org.apache.commons.lang.Validate;
  */
 public class DeclField extends AbstractDeclField {
 
-    
     final private AbstractIdentifier type;
     final private AbstractIdentifier field;
     final private AbstractInitialization initialization;
@@ -33,17 +32,24 @@ public class DeclField extends AbstractDeclField {
 
     //TODO toute la suite
     @Override
-    protected void verifyDeclVar(DecacCompiler compiler,
-            EnvironmentExp localEnv, ClassDefinition currentClass)
+    protected void verifyFieldVisibility(DecacCompiler compiler,
+            ClassDefinition superClass, ClassDefinition currentClass)
             throws ContextualError {
+        throw new UnsupportedOperationException("not yet implemented");
     }
 
-    
+    protected void verifyFieldType(DecacCompiler compiler,
+            EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
+        throw new UnsupportedOperationException("not yet implemented");
+    }
+
+
     @Override
     public void decompile(IndentPrintStream s) {
         type.decompile(s);
         s.println(" ");
-        varName.decompile(s);
+        field.decompile(s);
         initialization.decompile(s);
         s.println(";");
     }
@@ -52,14 +58,14 @@ public class DeclField extends AbstractDeclField {
     protected
     void iterChildren(TreeFunction f) {
         type.iter(f);
-        varName.iter(f);
+        field.iter(f);
         initialization.iter(f);
     }
-    
+
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         type.prettyPrint(s, prefix, false);
-        varName.prettyPrint(s, prefix, false);
+        field.prettyPrint(s, prefix, false);
         initialization.prettyPrint(s, prefix, true);
     }
 }

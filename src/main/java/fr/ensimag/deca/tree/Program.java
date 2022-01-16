@@ -17,7 +17,14 @@ import fr.ensimag.deca.codegen.codeGenError;
  */
 public class Program extends AbstractProgram {
     private static final Logger LOG = Logger.getLogger(Program.class);
-    
+
+    public Program(ListDeclClass classes, AbstractMain main) {
+        Validate.notNull(classes);
+        Validate.notNull(main);
+        this.classes = classes;
+        this.main = main;
+    }
+
     public Program(ListDeclImport imports, ListDeclClass classes, AbstractMain main) {
         Validate.notNull(imports);
         Validate.notNull(classes);

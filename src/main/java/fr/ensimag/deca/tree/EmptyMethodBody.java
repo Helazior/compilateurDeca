@@ -19,7 +19,7 @@ public class EmptyMethodBody extends AbstractMethodBody {
     }
 
     @Override
-    protected void codeGenMain(DecacCompiler compiler) {
+    protected void codeGenMethod(DecacCompiler compiler) {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
@@ -30,7 +30,7 @@ public class EmptyMethodBody extends AbstractMethodBody {
     protected void checkLocation() {
         // nothing
     }
-    
+
     @Override
     public void decompile(IndentPrintStream s) {
         // no main program => nothing
