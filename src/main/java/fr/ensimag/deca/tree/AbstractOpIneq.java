@@ -17,12 +17,12 @@ public abstract class AbstractOpIneq extends AbstractOpCmp {
         super(leftOperand, rightOperand);
     }
 
-    public void codeGenOpIneq(DecacCompiler compiler) {
+    public void codeGenOpIneq(DecacCompiler compiler, GPRegister register) {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
     public void codeGenOp(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
-        compiler.addInstruction(new SUB(Register.R0, Register.R1));
-        codeGenOpIneq(compiler);
+        compiler.addInstruction(new SUB(register0, register1));
+        codeGenOpIneq(compiler, register1);
     }
 }

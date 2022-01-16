@@ -18,7 +18,7 @@ public class Plus extends AbstractOpArith {
 
     @Override
     public void codeGenOp(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
-        compiler.addInstruction(new ADD(Register.R0, Register.R1));
+        compiler.addInstruction(new ADD(register0, register1));
     }
 
     /**

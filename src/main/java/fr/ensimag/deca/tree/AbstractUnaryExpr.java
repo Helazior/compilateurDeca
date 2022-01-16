@@ -38,10 +38,9 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
         AbstractExpr operand = getOperand();
         operand.codeGenExpr(compiler);
 
-        regMan.pop(Register.R0);
         compiler.addComment(getOperatorName());
-        GPRegister register0 = regMan.take();
-        GPRegister register1 = regMan.pop();
+        GPRegister register0 = regMan.pop();
+        GPRegister register1 = regMan.take();
 
         codeGenOp(compiler, register0, register1);
         regMan.push(register1);

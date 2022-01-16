@@ -17,7 +17,7 @@ public class Minus extends AbstractOpArith {
 
     @Override
     public void codeGenOp(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
-        compiler.addInstruction(new SUB(Register.R0, Register.R1));
+        compiler.addInstruction(new SUB(register0, register1));
     }
 
     /**

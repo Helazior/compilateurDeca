@@ -17,7 +17,7 @@ public class Multiply extends AbstractOpArith {
 
     @Override
     public void codeGenOp(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
-        compiler.addInstruction(new MUL(Register.R0, Register.R1));
+        compiler.addInstruction(new MUL(register0, register1));
     }
 
     /**
