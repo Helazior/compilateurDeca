@@ -40,7 +40,7 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
 
         regMan.pop(Register.R0);
         compiler.addComment(getOperatorName());
-        GPRegister register0 = regMan.pop();
+        GPRegister register0 = regMan.take();
         GPRegister register1 = regMan.pop();
 
         codeGenOp(compiler, register0, register1);
