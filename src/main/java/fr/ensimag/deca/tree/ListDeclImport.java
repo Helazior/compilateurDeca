@@ -13,4 +13,8 @@ import org.apache.log4j.Logger;
 public class ListDeclImport extends TreeList<AbstractProgram> {
 
     //TODO
+    @Override
+    public void decompile(IndentPrintStream s) {
+    }
+
 }

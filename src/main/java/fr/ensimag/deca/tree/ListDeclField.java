@@ -1,8 +1,12 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -11,42 +15,32 @@ import org.apache.log4j.Logger;
  * @date 14/01/2022
  */
 public class ListDeclField extends TreeList<AbstractDeclField> {
+
     //TODO
-    private static final Logger LOG = Logger.getLogger(ListDeclField.class);
-    
     @Override
     public void decompile(IndentPrintStream s) {
-        s.indent();
-        for (AbstractDeclClass declClass : getList()) {
-            declClass.decompile(s);
-            s.println();
+        for (AbstractDeclField declField : getList()) {
+            declField.decompile(s);
         }
-        s.unindent();
-    }
-
-    /**
-     * Pass 1 of [SyntaxeContextuelle]
-     */
-    void verifyListClass(DecacCompiler compiler) throws ContextualError {
-        LOG.debug("verify listClass: start");
-        throw new UnsupportedOperationException("not yet implemented");
-        // LOG.debug("verify listClass: end");
     }
 
     /**
      * Pass 2 of [SyntaxeContextuelle]
      */
-    public void verifyListClassMembers(DecacCompiler compiler) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
-    }
-    
-    /**
-     * Pass 3 of [SyntaxeContextuelle]
-     */
-    public void verifyListClassBody(DecacCompiler compiler) throws ContextualError {
+    public void verifyListFieldVisibility(DecacCompiler compiler,
+            ClassDefinition superClass, ClassDefinition currentClass)
+            throws ContextualError {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
+    /**
+     * Pass 3 of [SyntaxeContextuelle]
+     */
+    public void verifyListFieldType(DecacCompiler compiler,
+            EnvironmentExp localEnv, ClassDefinition currentClass)
+            throws ContextualError {
+        throw new UnsupportedOperationException("not yet implemented");
+    }
 
 }
 

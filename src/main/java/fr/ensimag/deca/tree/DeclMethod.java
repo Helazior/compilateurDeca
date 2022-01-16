@@ -1,8 +1,10 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 import java.util.jar.Attributes.Name;
@@ -17,13 +19,13 @@ public class DeclMethod extends AbstractDeclMethod {
     private AbstractIdentifier type;
     private AbstractIdentifier name;
     private ListDeclParam parameters;
-    private AbstractMethodBody methode;
+    private AbstractMethodBody method;
 
-    public DeclMethod(AbstractIdentifier typeReturn, AbstractIdentifier name, ListDeclParam parameters, AbstractMethodBody methodeBody){
+    public DeclMethod(AbstractIdentifier typeReturn, AbstractIdentifier name, ListDeclParam parameters, AbstractMethodBody methodBody){
         this.type = typeReturn;
         this.name = name;
         this.parameters = parameters;
-        this.methode = methodeBody;
+        this.method = methodBody;
     }
 
     //TODO
@@ -32,19 +34,17 @@ public class DeclMethod extends AbstractDeclMethod {
         s.print("class { ... A FAIRE ... }");
     }
 
+
     @Override
-    protected void verifyClass(DecacCompiler compiler) throws ContextualError {
+    protected void verifyMethodSignature(DecacCompiler compiler, ClassDefinition superClass) 
+            throws ContextualError {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
-    protected void verifyClassMembers(DecacCompiler compiler)
+    protected void verifyMethodBody(DecacCompiler compiler,
+            EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
-    }
-    
-    @Override
-    protected void verifyClassBody(DecacCompiler compiler) throws ContextualError {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
