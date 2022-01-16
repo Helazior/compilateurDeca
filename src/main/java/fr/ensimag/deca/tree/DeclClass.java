@@ -1,10 +1,14 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
+
+import org.apache.commons.lang.Validate;
 
 /**
  * Declaration of a class (<code>class name extends superClass {members}<code>).
@@ -14,6 +18,22 @@ import java.io.PrintStream;
  */
 public class DeclClass extends AbstractDeclClass {
 
+
+    final private AbstractIdentifier className;
+    final private AbstractIdentifier superName;
+    final private ListDeclField listDeclField;
+    final private ListDeclMethod listDeclMethod;
+
+    public DeclClass(AbstractIdentifier className, AbstractIdentifier superName, ListDeclField listDeclField, ListDeclMethod listDeclMethod) {
+        Validate.notNull(className);
+        Validate.notNull(superName);
+        this.className = className;
+        this.superName = superName;
+        this.listDeclField = listDeclField;
+        this.listDeclMethod = listDeclMethod;
+    }
+
+
     @Override
     public void decompile(IndentPrintStream s) {
         s.print("class { ... A FAIRE ... }");
@@ -21,7 +41,9 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     protected void verifyClass(DecacCompiler compiler) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        ClassDefinition superDef = (ClassDefinition)compiler.getType(superName.getName());
+        ClassType classType = new ClassType(className.getName(), getLocation(), superDef);
+        compiler.createType(className.getName(), classType.getDefinition());
     }
 
     @Override

@@ -1,5 +1,0 @@
-OBRACE: {
-IDENT: string
-IDENT: s
-SEMI: ;
-CBRACE: }
