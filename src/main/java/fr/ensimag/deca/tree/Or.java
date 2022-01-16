@@ -59,7 +59,7 @@ public class Or extends AbstractOpBool {
         compiler.addInstruction(new LOAD(1, register1));
         // lbl end_and_n
         compiler.addLabel(new Label(endLabel));
-        regMan.push(register1);
+        regMan.giveAndPush(register1);
     }
 
 

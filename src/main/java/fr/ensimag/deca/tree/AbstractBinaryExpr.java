@@ -79,9 +79,8 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         compiler.addComment(getOperatorName());
         codeGenOvError(compiler, registre0, registre1);
 
-        regMan.push(registre1);
+        regMan.giveAndPush(registre1);
         regMan.give(registre0);
-        regMan.give(registre1);
     }
 
 
