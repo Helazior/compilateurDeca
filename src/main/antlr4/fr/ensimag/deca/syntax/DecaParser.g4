@@ -594,15 +594,19 @@ class_body returns[BodyClass tree]
         }
     ;
 
-decl_field_set
+decl_field_set returns[]
     : v=visibility t=type list_decl_field
       SEMI
     ;
 
-visibility
-    : /* epsilon */ {
+visibility returns[Visibility tree]
+    : /* epsilon */ { 
+        $tree = PUBLIC;
+        assert(tree != null);
         }
     | PROTECTED {
+        $tree = PROTECTED;
+        assert(tree != null);
         }
     ;
 

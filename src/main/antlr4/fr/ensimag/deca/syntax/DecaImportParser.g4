@@ -1,4 +1,4 @@
-parser grammar DecaParser;
+parser grammar DecaImportParser;
 
 options {
     // Default language but name it anyway
