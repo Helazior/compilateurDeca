@@ -14,7 +14,7 @@ options {
 
 //RESERVED WORDS
    ASM: 'asm';
-   CLASS: 'class';
+   //CLASS: 'class';
    EXTENDS: 'extends';
    ELSE: 'else';
    FALSE: 'false';
@@ -107,9 +107,8 @@ OR: '||';
 //
 
 //INCLUDE
-   FILENAME: '"' (LETTER | DIGIT | '.' | '-' | '_')+ '"';
-   IMPORT: 'import';
-   INCLUDE: '#include' (' ')* FILENAME;
+   fragment FILENAME: (LETTER | DIGIT | '.' | '-' | '_')+;
+   INCLUDE: '#include' (' ')* '"' FILENAME '"';
 //
 
 //CLASS
