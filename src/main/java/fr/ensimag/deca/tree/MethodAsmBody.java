@@ -5,15 +5,15 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 
-public class MethodBody extends AbstractMethodBody{
+public class MethodAsmBody extends AbstractMethodBody{
 
-    private ListDeclVar declVariables;
-    private ListInst insts;
+    private String corps;
+    private Location loc;
 
 
-    public MethodBody(ListDeclVar declVariables, ListInst insts) {
-        this.declVariables = declVariables;
-        this.insts = insts;
+    public MethodAsmBody(String text, Location location) {
+        this.corps = text;
+        this.loc = location;
     }
     
     //TODO
@@ -37,23 +37,16 @@ public class MethodBody extends AbstractMethodBody{
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.println("{");
-        s.indent();
-        declVariables.decompile(s);
-        insts.decompile(s);
-        s.unindent();
-        s.println("}");    
+        
     }    
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        declVariables.iter(f);
-        insts.iter(f);
+        
     }
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        declVariables.prettyPrint(s, prefix, false);
-        insts.prettyPrint(s, prefix, true);
+        
     }
 }

@@ -599,14 +599,12 @@ decl_field_set [ListDeclField f]
     : v=visibility t=type list_decl_field[$f, $t.tree, $v.tree] SEMI
     ;
 
-visibility returns[Visibility tree]
+visibility
     : /* epsilon */ { 
-        $tree = PUBLIC;
-        assert(tree != null);
+        $tree = Visibility.PUBLIC;
         }
     | PROTECTED {
-        $tree = PROTECTED;
-        assert(tree != null);
+        $tree = Visibility.PROTECTED;
         }
     ;
 
@@ -654,7 +652,7 @@ decl_method returns[DeclMethod tree]
         }
       | ASM OPARENT code=multi_line_string CPARENT SEMI {
             assert(code.tree != null);
-            MethodAsmBody methodBody = new MethodAsmBody($code.text);
+            MethodAsmBody methodBody = new MethodAsmBody($code.text, $code.location);
         }
       ) {
             assert($type.tree != null);
