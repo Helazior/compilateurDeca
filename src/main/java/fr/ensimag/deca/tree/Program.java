@@ -18,11 +18,16 @@ import fr.ensimag.deca.codegen.codeGenError;
 public class Program extends AbstractProgram {
     private static final Logger LOG = Logger.getLogger(Program.class);
     
-    public Program(ListDeclClass classes, AbstractMain main) {
+    public Program(ListDeclImport imports, ListDeclClass classes, AbstractMain main) {
+        Validate.notNull(imports);
         Validate.notNull(classes);
         Validate.notNull(main);
+        this.imports = imports;
         this.classes = classes;
         this.main = main;
+    }
+    public ListDeclImport getimports(){
+        return imports;
     }
     public ListDeclClass getClasses() {
         return classes;
@@ -30,6 +35,7 @@ public class Program extends AbstractProgram {
     public AbstractMain getMain() {
         return main;
     }
+    private ListDeclImport imports;
     private ListDeclClass classes;
     private AbstractMain main;
 

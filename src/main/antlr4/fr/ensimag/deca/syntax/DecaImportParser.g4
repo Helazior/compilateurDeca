@@ -1,4 +1,4 @@
-parser grammar DecaParser;
+parser grammar DecaImportParser;
 
 options {
     // Default language but name it anyway
@@ -38,7 +38,7 @@ options {
 }
 
 prog returns[AbstractProgram tree]
-    : list_classes main EOF {
+    : list_imports list_classes main EOF {
             //assert($list_classes.tree != null);
             assert($main.tree != null);
             $tree = new Program($list_classes.tree, $main.tree);
@@ -49,190 +49,7 @@ prog returns[AbstractProgram tree]
 main returns[AbstractMain tree]
     : /* epsilon */ {
             $tree = new EmptyMain();
-        }
-    | block {
-            assert($block.decls != null);
-            assert($block.insts != null);
-            $tree = new Main($block.decls, $block.insts);
-            setLocation($tree, $block.start);
-        }
-    ;
-
-block returns[ListDeclVar decls, ListInst insts]
-    : OBRACE list_decl list_inst CBRACE {
-            assert($list_decl.tree != null);
-            assert($list_inst.tree != null);
-            $decls = $list_decl.tree;
-            $insts = $list_inst.tree;
-        }
-    ;
-
-list_decl returns[ListDeclVar tree]
-@init   {
-            $tree = new ListDeclVar();
-        }
-    : decl_var_set[$tree]*
-    ;
-
-decl_var_set[ListDeclVar l]
-    : type list_decl_var[$l,$type.tree] SEMI
-    ;
-
-
-list_decl_var[ListDeclVar l, AbstractIdentifier t]
-    : dv1=decl_var[$t] {
-        assert($dv1.tree != null);
-        $l.add($dv1.tree);
-        } (COMMA dv2=decl_var[$t] {
-            assert($dv2.tree != null);
-            $l.add($dv2.tree);
-        }
-      )*
-    ;
-
-//TODO
-decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
-@init   {
-            AbstractIdentifier name;
-            AbstractInitialization initialization = new NoInitialization();
-        }
-    : i=ident {
-            assert($i.tree != null);
-            name = $i.tree;
-        }
-      (EQUALS e=expr {
-            assert($e.tree != null);
-            initialization = new Initialization($e.tree);
-            setLocation(initialization, $e.start);
-        }
-      )? {
-            $tree = new DeclVar($t, name, initialization);
-            setLocation($tree, $i.start);
-        }
-    ;
-
-// DONE
-list_inst returns[ListInst tree]
-@init {
-    $tree = new ListInst();
-}
-    : (inst {
-            assert($inst.tree != null);
-            $tree.add($inst.tree);
-        }
-      )*
-    ;
-
-// DONE
-inst returns[AbstractInst tree]
-    : e1=expr SEMI {
-            assert($e1.tree != null);
-            $tree = $e1.tree;
-        }
-    | SEMI {
-            $tree = new NoOperation();
-            setLocation($tree, $SEMI);
-        }
-    | PRINT OPARENT list_expr CPARENT SEMI {
-            assert($list_expr.tree != null);
-            $tree = new Print(false, $list_expr.tree);
-            setLocation($tree, $list_expr.start);
-        }
-    | PRINTLN OPARENT list_expr CPARENT SEMI {
-            assert($list_expr.tree != null);
-            $tree = new Println(false, $list_expr.tree);
-            setLocation($tree, $list_expr.start);
-        }
-    | PRINTX OPARENT list_expr CPARENT SEMI {
-            assert($list_expr.tree != null);
-            $tree = new Print(true, $list_expr.tree);
-            setLocation($tree, $list_expr.start);
-        }
-    | PRINTLNX OPARENT list_expr CPARENT SEMI {
-            assert($list_expr.tree != null);
-            $tree = new Println(true, $list_expr.tree);
-            setLocation($tree, $list_expr.start);
-        }
-    //TODO
-    | if_then_else {
-            assert($if_then_else.tree != null);
-            $tree = $if_then_else.tree;
-        }
-    //TODO
-    | WHILE OPARENT condition=expr CPARENT OBRACE body=list_inst CBRACE {
-            assert($condition.tree != null);
-            assert($body.tree != null);
-            $tree = new While($condition.tree, $body.tree);
-            setLocation($tree, $condition.start);
-        }
-    //TODO
-    | RETURN expr SEMI {
-            assert($expr.tree != null);
-            $tree = $expr.tree;
-        }
-    ;
-
-//TODO-Regarder en détail la position du setLocation
-if_then_else returns[IfThenElse tree]
-@init {
-    // Pour pouvoir construire l'arbre dans le bon ordre, on liste les conditions
-    // et instructions, puis on construit l'arbre depuis la fin
-    List<AbstractExpr> conditions = new ArrayList<AbstractExpr>();
-    List<Token> treeNodes = new ArrayList<Token>();
-    List<ListInst> thens = new ArrayList<ListInst>();
-    ListInst elseListInst = new ListInst(); // Si le else n'est pas spécifié, il est vide
-}
-    : if1=IF OPARENT condition=expr CPARENT OBRACE li_if=list_inst CBRACE {
-        assert($condition.tree != null);
-        assert($li_if.tree != null);
-
-        conditions.add($condition.tree);
-        thens.add($li_if.tree);
-
-        treeNodes.add($condition.start);
-        }
-      (ELSE elsif=IF OPARENT elsif_cond=expr CPARENT OBRACE elsif_li=list_inst CBRACE {
-            assert($elsif_cond.tree != null);
-            assert($elsif_li.tree != null);
-
-            conditions.add($elsif_cond.tree);
-            thens.add($elsif_li.tree);
-
-            treeNodes.add($elsif_cond.start);
-        }
-      )*
-      (ELSE OBRACE li_else=list_inst CBRACE {
-            assert($li_else.tree != null);
-            elseListInst = $li_else.tree;
-        }
-      )?
-      {
-        // On est sûrs d'avoir au moins 1 élément
-        AbstractExpr cond = conditions.remove(conditions.size() - 1);
-        ListInst then = thens.remove(thens.size() - 1);
-        Token node = treeNodes.remove(treeNodes.size() -1);
-
-        $tree = new IfThenElse(cond, then, elseListInst);
-        setLocation($tree, node);
-
-        // On s'occupe du reste
-        while (!conditions.isEmpty()) {
-            assert(!thens.isEmpty());
-            assert(!treeNodes.isEmpty());
-
-            ListInst subtree = new ListInst();
-            subtree.add($tree);
-
-            cond = conditions.remove(conditions.size() - 1);
-            then = thens.remove(thens.size() - 1);
-            node = treeNodes.remove(treeNodes.size() -1);
-
-            $tree = new IfThenElse(cond, then, subtree);
-            setLocation($tree, node);
-        }
-        assert(thens.isEmpty());
-        assert(treeNodes.isEmpty());
-      }
+    }
     ;
 
 // DONE
@@ -256,10 +73,9 @@ expr returns[AbstractExpr tree]
     : assign_expr {
             assert($assign_expr.tree != null);
             $tree = $assign_expr.tree;
-            setLocation($tree, $assign_expr.start);
+            
         }
     ;
-
 // DONE
 assign_expr returns[AbstractExpr tree]
     : e=or_expr (
@@ -278,7 +94,7 @@ assign_expr returns[AbstractExpr tree]
       | /* epsilon */ {
             assert($e.tree != null);
             $tree = $e.tree;
-            setLocation($tree, $e.start);
+            //setLocation($tree, $e.start);
         }
       )
     ;
@@ -436,7 +252,6 @@ select_expr returns[AbstractExpr tree]
     : e=primary_expr {
             assert($e.tree != null);
             $tree = $e.tree;
-            setLocation($tree, $e.start);
         }
     | e1=select_expr DOT i=ident {
             // TODO: Implémenter la classe Selection et implémenter ça
@@ -596,7 +411,8 @@ class_body returns[ListDeclMethod methodes, ListDeclField fields]
     ;
 
 decl_field_set [ListDeclField f]
-    : v=visibility t=type list_decl_field[$f, $t.tree, $v.tree] SEMI
+    : v=visibility t=type list_decl_field[$f, $t.tree, $v.tree]
+      SEMI
     ;
 
 visibility returns[Visibility tree]
@@ -647,16 +463,8 @@ decl_method returns[DeclMethod tree]
     
     List<DeclParam> p = new ListDeclParam();
 }
-    : type ident OPARENT params=list_params[p] CPARENT (block {
-            assert($block.decls != null);
-            assert($block.insts != null);
-            MethodBody methodBody = new MethodBody($block.decls, $block.insts); 
-        }
-      | ASM OPARENT code=multi_line_string CPARENT SEMI {
-            assert(code.tree != null);
-            MethodAsmBody methodBody = new MethodAsmBody($code.text);
-        }
-      ) {
+    : type ident OPARENT params=list_params[p] CPARENT {
+            methodBody = new EmptyMethodBody();
             assert($type.tree != null);
             assert($ident.tree != null);
             assert(p != null);
@@ -674,17 +482,6 @@ list_params [ListDeclParam p]
             $p.add($p2.tree);
         }
       )*)?
-    ;
-    
-multi_line_string returns[String text, Location location]
-    : s=STRING {
-            $text = $s.text;
-            $location = tokenLocation($s);
-        }
-    | s=MULTI_LINE_STRING {
-            $text = $s.text;
-            $location = tokenLocation($s);
-        }
     ;
 
 param returns[DeclParam tree]
