@@ -21,6 +21,7 @@ public class Program extends AbstractProgram {
     public Program(ListDeclClass classes, AbstractMain main) {
         Validate.notNull(classes);
         Validate.notNull(main);
+        this.imports = imports;
         this.classes = classes;
         this.main = main;
     }
