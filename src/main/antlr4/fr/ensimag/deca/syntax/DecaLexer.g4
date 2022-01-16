@@ -108,7 +108,8 @@ OR: '||';
 
 //INCLUDE
    FILENAME: '"' (LETTER | DIGIT | '.' | '-' | '_')+ '"';
-   INCLUDE: '#include' (' ')*;
+   IMPORT: 'import';
+   INCLUDE: '#include' (' ')* FILENAME;
 //
 
 //CLASS

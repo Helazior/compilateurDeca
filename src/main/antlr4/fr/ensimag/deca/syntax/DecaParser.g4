@@ -549,7 +549,7 @@ ident returns[AbstractIdentifier tree]
 list_classes returns[ListDeclClass tree]
 @init {
     $tree = new ListDeclClass();
-}
+    }
     :
       (c1=class_decl {
           assert(c1.tree != null)
@@ -578,13 +578,13 @@ class_extension returns[AbstractIdentifier tree]
 class_body returns[BodyClass tree]
 @init {
     List<DeclMethod> methodes = new ListDeclMethode();
-    List<DeclFieldSet> fieldsSet = new ListDeclFieldSet();
+    List<DeclFieldSet> fieldsSet = new ListDeclField());
 }
     : (m=decl_method {
             assert($m.tree != null);
             methodes.add($m.tree);
         }
-      |n=decl_field_set {
+      |n=decl_field_set[fieldSet] {
             assert($n.tree != null);
             fieldsSet.add($n.tree);
         }
@@ -594,8 +594,8 @@ class_body returns[BodyClass tree]
         }
     ;
 
-decl_field_set returns[]
-    : v=visibility t=type list_decl_field
+decl_field_set [ListDeclField fS]
+    : v=visibility t=type list_decl_field[$fS, $t.tree, $v.tree]
       SEMI
     ;
 
@@ -610,13 +610,18 @@ visibility returns[Visibility tree]
         }
     ;
 
-list_decl_field
-    : dv1=decl_field
-        (COMMA dv2=decl_field
+list_decl_field [ListDeclField fS, AbstractIdentifier t, Visibility v] 
+    : dv1=decl_field[$t]{
+        assert($dv1.tree != null);
+        $fS.add($dv1.tree);}
+        (COMMA dv2=decl_field[$t]{
+            assert($dv2.tree != null);
+            $fS.add($dv2.tree);
+        }
       )*
     ;
 
-decl_field
+decl_field [AbstractIdentifier t] returns[AbstractDeclField tree]
     : i=ident {
         }
       (EQUALS e=expr {
