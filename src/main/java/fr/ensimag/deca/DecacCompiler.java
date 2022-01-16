@@ -269,8 +269,7 @@ public class DecacCompiler {
 
     //Renvoie null si le type demandé n'est pas trouvé
     public TypeDefinition getType(Symbol type) {
-        TypeDefinition typeDef = typeEnv.get(type);
-        return ((typeDef == null)? null : typeDef);
+        return typeEnv.get(type);
     }
 
     public Type getType(String typeName) {
@@ -305,9 +304,21 @@ public class DecacCompiler {
         }
     }
 
+    //Renvoie null si l'expression demandé n'est pas trouvé
+    public ExpDefinition getExp(Symbol type) {
+        return expEnv.get(type);
+    }
+
+    public EnvironmentExp getExpEnv() {
+        return expEnv;
+    }
+
     public Symbol createSymbol(String expName) {
         return expTable.create(expName);
     }
+
+
+
 
 
 

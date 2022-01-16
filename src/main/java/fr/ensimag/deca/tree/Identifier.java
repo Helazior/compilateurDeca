@@ -173,8 +173,12 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
+        ExpDefinition expDef = localEnv.get(getName());
+        if(expDef == null){
+            throw new ContextualError(getName() + " is undefined in this context", getLocation());
+        }
 
-        setType(localEnv.get(getName()).getType());
+        setType(expDef.getType());
         Definition def = new VariableDefinition(getType(), getLocation());
         setDefinition(def);
 
