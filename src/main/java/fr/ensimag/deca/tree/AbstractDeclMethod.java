@@ -10,7 +10,7 @@ import fr.ensimag.deca.context.ContextualError;
  * @date 12/01/2022
  */
 public abstract class AbstractDeclMethod extends Tree {
-
+//TODO
     /**
      * Pass 2 of [SyntaxeContextuelle]. Verify that the
      * method is OK looking at method body and field initialization.

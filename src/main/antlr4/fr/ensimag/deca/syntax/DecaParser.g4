@@ -562,9 +562,9 @@ class_decl returns [AbstractDeclClass tree]
     : CLASS name=ident superclass=class_extension OBRACE class_body CBRACE {
             assert($name.tree != null);
             assert($superclass.tree != null);
-            assert($class_body.fieldSet.tree != null);
+            assert($class_body.fields.tree != null);
             assert($class_body.methodes.tree != null);
-            $tree = new DeclClass($name.tree, $superclass.tree, $class_body.fieldSet.tree, $class_body.methodes.tree);
+            $tree = new DeclClass($name.tree, $superclass.tree, $class_body.fields.tree, $class_body.methodes.tree);
             setLocation($tree, $name.start);
         }
     ;
@@ -575,11 +575,11 @@ class_extension returns[AbstractIdentifier tree]
             $tree = $ident.tree;
         }
     | /* epsilon */ {
-            $tree = new Identifier(compiler.createSymbol("Object));
+            $tree = new Identifier(compiler.createSymbol("Object"));
         }
     ;
 
-class_body returns[ListDeclMethode methode, ListDeclField field]
+class_body returns[ListDeclMethode methodes, ListDeclField fields]
 @init {
     $methodes = new ListDeclMethode();
     $fields = new ListDeclField());
@@ -589,11 +589,9 @@ class_body returns[ListDeclMethode methode, ListDeclField field]
             methodes.add($m.tree);
         }
       |n=decl_field_set[fields] {
-          assert($n.tree != null);
         }
       )* {
-            $tree = new BodyClass(methodes, fieldsSet);
-            setLocation($tree, $m.start);
+//Aurais-je oublie quelque chose?
         }
     ;
 
@@ -614,17 +612,17 @@ visibility returns[Visibility tree]
     ;
 
 list_decl_field [ListDeclField f, AbstractIdentifier t, Visibility v] 
-    : dv1=decl_field[$t]{
+    : dv1=decl_field[$t, $v]{
         assert($dv1.tree != null);
         $f.add($dv1.tree);}
-        (COMMA dv2=decl_field[$t]{
+        (COMMA dv2=decl_field[$t, $v]{
             assert($dv2.tree != null);
             $f.add($dv2.tree);
         }
       )*
     ;
 
-decl_field [AbstractIdentifier t] returns[AbstractDeclField tree]
+decl_field [AbstractIdentifier t, Visibility v] returns[AbstractDeclField tree]
 @init   {
             AbstractIdentifier field;
             AbstractInitialization initialization = new NoInitialization();
@@ -646,28 +644,28 @@ decl_field [AbstractIdentifier t] returns[AbstractDeclField tree]
 
 decl_method returns[DeclMethod tree]
 @init {
-    $tree = new DeclMethod();
-    List<Param> p = new ListDeclParam();
+    
+    List<DeclParam> p = new ListDeclParam();
 }
-    : type ident OPARENT params=list_params[$p] CPARENT (block {
+    : type ident OPARENT params=list_params[p] CPARENT (block {
             assert($block.decls != null);
             assert($block.insts != null);
-            $tree.decl = $block.decls; 
-            $tree.insts = $block.insts;
-            setLocation($tree, $block.start);
+            MethodBody methodBody = new MethodBody($block.decls, $block.insts); 
         }
       | ASM OPARENT code=multi_line_string CPARENT SEMI {
+            assert(code.tree != null);
+            MethodAsmBody methodBody = new MethodAsmBody($code.text);
         }
       ) {
             assert($type.tree != null);
             assert($ident.tree != null);
-            assert($list_params.tree != null);
-            $tree.type = $type.tree;
-            
+            assert(p != null);
+            $tree = new DeclMethod($type.tree, $ident.tree, p, methodBody);
+            setLocation($tree, $type.start);
         }
     ;
 
-list_params [ListParam p]
+list_params [ListDeclParam p]
     : (p1=param {
         assert($p1.tree != null);
         $p.add($p1.tree);
@@ -694,5 +692,23 @@ param returns[Param tree]
         assert(type.tree != null);
         assert( ident.tree != null);
         $tree = new DeclParam(type, ident);
+        setLocation($tree, $type.start);
         }
+    ;
+
+/****     Imports related rules     ****/
+
+list_imports returns[ListDeclImport tree]
+    : (IMPORT import_decl EOL)*{
+        assert(import_decl != null);
+        $tree = import_decl.tree;
+    }
+    ;
+
+import_decl returns[AbstractProgram tree]
+    : FILENAME {
+        $tree = getDecaCompiler().compileImport($FILENAME.text);
+        assert($tree != null);
+        setLocation($tree, $FILENAME)
+    }
     ;

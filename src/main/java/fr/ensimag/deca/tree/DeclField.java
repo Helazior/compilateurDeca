@@ -13,13 +13,13 @@ import org.apache.commons.lang.Validate;
 
 /**
  * @author gl60
- * @date 01/01/2022
+ * @date 14/01/2022
  */
-public class DeclVar extends AbstractDeclVar {
+public class DeclField extends AbstractDeclField {
 
     
     final private AbstractIdentifier type;
-    final private AbstractIdentifier varName;
+    final private AbstractIdentifier field;
     final private AbstractInitialization initialization;
 
     public DeclField(AbstractIdentifier type, AbstractIdentifier field, AbstractInitialization initialization) {

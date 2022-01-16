@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
  * @author gl60
  * @date 12/01/2022
  */
-public class ListDeclImport extends TreeList<AbstractDeclImport> {
-    
+public class ListDeclImport extends TreeList<AbstractProgram> {
+
+    //TODO
 }

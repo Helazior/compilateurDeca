@@ -11,21 +11,22 @@ import java.util.jar.Attributes.Name;
  * Declaration of a class (<code>class name extends superClass {members}<code>).
  * 
  * @author gl60
- * @date 01/01/2022
+ * @date 14/01/2022
  */
-public class DeclClass extends AbstractDeclClass {
+public class DeclMethod extends AbstractDeclMethod {
+    private AbstractIdentifier type;
     private AbstractIdentifier name;
-    private AbstractIdentifier superclass;
-    private ListDeclField fields;
-    private ListDeclMethod methodes;
+    private ListDeclParam parameters;
+    private AbstractMethodBody methode;
 
-    public DeclClass(AbstractIdentifier name, AbstractIdentifier superclass, ListDeclField fields, ListDeclMethod methodes){
+    public DeclMethod(AbstractIdentifier typeReturn, AbstractIdentifier name, ListDeclParam parameters, AbstractmethodBody methodeBody){
+        this.type = typeReturn;
         this.name = name;
-        this.superclass = superclass;
-        this.fields = fields;
-        this.methodes = methodes;
+        this.parameters = parameters;
+        this.methode = methodeBody;
     }
 
+    //TODO
     @Override
     public void decompile(IndentPrintStream s) {
         s.print("class { ... A FAIRE ... }");
