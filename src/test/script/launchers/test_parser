@@ -4,6 +4,7 @@
 red="\e[0;91m"
 green="\e[0;92m"
 white="\e[0;97m"
+reset="\e[0;0m"
 
 #Tout s'est bien passé
 exit_value=0
@@ -25,7 +26,9 @@ function resultGeneration {
         rm $file_res
 	else
 		exit_value=1
-		echo -e "${red} ${bold} FAILED $file_name ${reset}"
+        echo -e "${red} ${bold} FAILED $file_name"
+        diff $res_file $sol_file
+        echo -e  "${reset}"
 	fi
 }
 
