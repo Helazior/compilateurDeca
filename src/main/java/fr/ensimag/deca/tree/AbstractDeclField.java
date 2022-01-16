@@ -29,5 +29,6 @@ public abstract class AbstractDeclField extends Tree {
     protected abstract void verifyFieldType(DecacCompiler compiler,
         EnvironmentExp localEnv, ClassDefinition currentClass)
         throws ContextualError;
+
 }
 

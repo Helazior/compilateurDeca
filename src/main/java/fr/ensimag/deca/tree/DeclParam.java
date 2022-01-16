@@ -25,7 +25,12 @@ public class DeclParam extends AbstractDeclParam {
     //TODO
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print("Param { ... A FAIRE ... }");
+        s.println("{");
+        s.indent();
+        name.decompile(s);
+        type.decompile(s);
+        s.unindent();
+        s.println("}");
     }
 
     @Override
@@ -42,12 +47,14 @@ public class DeclParam extends AbstractDeclParam {
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        throw new UnsupportedOperationException("Not yet supported");
+        name.prettyPrint(s, prefix, false);
+        type.prettyPrint(s, prefix, true);
     }
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        throw new UnsupportedOperationException("Not yet supported");
+        name.iter(f);
+        type.iter(f);    
     }
 
 }
