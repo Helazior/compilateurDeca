@@ -31,8 +31,14 @@ public class DeclMethod extends AbstractDeclMethod {
     //TODO
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print("class { ... A FAIRE ... }");
-    }
+        s.println("{");
+        s.indent();
+        type.decompile(s);
+        name.decompile(s);
+        parameters.decompile(s);
+        method.decompile(s);
+        s.unindent();
+        s.println("}");    }
 
 
     @Override
@@ -51,12 +57,18 @@ public class DeclMethod extends AbstractDeclMethod {
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        throw new UnsupportedOperationException("Not yet supported");
+        type.prettyPrint(s, prefix, false);
+        name.prettyPrint(s, prefix, false);
+        parameters.prettyPrint(s, prefix, false);
+        method.prettyPrint(s, prefix, true);
     }
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        throw new UnsupportedOperationException("Not yet supported");
+        type.iter(f);
+        name.iter(f);
+        parameters.iter(f);
+        method.iter(f);
     }
 
 }

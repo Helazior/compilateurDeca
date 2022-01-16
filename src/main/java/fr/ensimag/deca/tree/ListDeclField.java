@@ -21,6 +21,7 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
     public void decompile(IndentPrintStream s) {
         for (AbstractDeclField declField : getList()) {
             declField.decompile(s);
+            s.println();
         }
     }
 

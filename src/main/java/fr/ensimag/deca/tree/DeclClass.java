@@ -36,8 +36,16 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print("class { ... A FAIRE ... }");
+        s.println("{");
+        s.indent();
+        className.decompile(s);
+        superName.decompile(s);
+        listDeclField.decompile(s);
+        listDeclMethod.decompile(s);
+        s.unindent();
+        s.println("}");
     }
+
 
     @Override
     protected void verifyClass(DecacCompiler compiler) throws ContextualError {
@@ -60,12 +68,18 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        throw new UnsupportedOperationException("Not yet supported");
+        className.prettyPrint(s, prefix, false);
+        superName.prettyPrint(s, prefix, false);
+        listDeclField.prettyPrint(s, prefix, false);
+        listDeclMethod.prettyPrint(s, prefix, true);
     }
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        throw new UnsupportedOperationException("Not yet supported");
+        className.iter(f);
+        className.iter(f);
+        listDeclField.iter(f);
+        listDeclMethod.iter(f);
     }
 
 }
