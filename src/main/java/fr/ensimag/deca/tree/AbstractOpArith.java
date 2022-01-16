@@ -67,14 +67,16 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         }
         else if(leftType.isInt() && rightType.isFloat()){
             ConvFloat left = new ConvFloat(getLeftOperand());
-            left.updateType(compiler);
+            left.setType(compiler.getType("float"));
             setLeftOperand(left);
+
             setType(compiler.getType("float"));
         }
         else if(leftType.isFloat() && rightType.isInt()){
             ConvFloat right = new ConvFloat(getRightOperand());
-            right.updateType(compiler);
+            right.setType(compiler.getType("float"));
             setRightOperand(right);
+
             setType(compiler.getType("float"));
         }
         else if(leftType.isFloat() && rightType.isFloat()){

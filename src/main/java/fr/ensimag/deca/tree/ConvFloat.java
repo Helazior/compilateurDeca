@@ -35,10 +35,6 @@ public class ConvFloat extends AbstractUnaryExpr {
         return getType();
     }
 
-    public void updateType(DecacCompiler compiler) {
-        setType(compiler.getType("float"));
-    }
-
     @Override
     public void codeGenOp(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
         RegisterManager regMan = compiler.getRegMan();

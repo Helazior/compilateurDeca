@@ -27,9 +27,23 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
         Type leftType = getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
         Type rightType = getRightOperand().verifyExpr(compiler, localEnv, currentClass);
 
-        if((leftType.isInt() || leftType.isFloat()) &&
-        (rightType.isInt() || rightType.isFloat())){
+        if((leftType.isInt() || leftType.isFloat()) && rightType.sameType(leftType)){
             setType(compiler.getType("boolean"));
+
+        } else if(leftType.isInt() || rightType.isFloat()){
+            ConvFloat left = new ConvFloat(getLeftOperand());
+            left.setType(compiler.getType("float"));
+            setLeftOperand(left);
+
+            setType(compiler.getType("boolean"));
+
+        } else if(leftType.isFloat() || rightType.isInt()){
+            ConvFloat right = new ConvFloat(getRightOperand());
+            right.setType(compiler.getType("float"));
+            setLeftOperand(right);
+
+            setType(compiler.getType("boolean"));
+
         } else{
             throw new ContextualError("Error: Unsupported operands. Expected : int or float", getLocation());
         }
