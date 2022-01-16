@@ -1,0 +1,9 @@
+{
+// test multiple and
+// resultat :
+// ça marche bien
+
+	if (false || true && 2+3+1 == 2*3 && !(2 != 2 + 0.0) && !false || !true) {
+		print("ça marche bien");
+	}
+}
