@@ -1,0 +1,285 @@
+; start main program
+; Main program
+	ADDSP #3
+	LOAD #3, R1
+	PUSH R1
+	POP R2
+	STORE R2, 1(LB)
+	LOAD #0x1.b33334p1, R1
+	PUSH R1
+	POP R2
+	STORE R2, 2(LB)
+; Beginning of main instructions:
+	WSTR "Enter a number: "
+; Assign
+	RINT
+	BOV io_error
+	PUSH R1
+; Store assign
+	POP R2
+	STORE R2, 3(LB)
+	PUSH R2
+; End assign
+	POP R2
+while_0:
+	LOAD 3(LB), R2
+	PUSH R2
+	LOAD #4, R1
+	PUSH R1
+	POP R0
+	POP R1
+; >
+	SUB R0, R1
+	SGT R1
+	PUSH R1
+	POP R1
+	CMP #1, R1
+	BEQ true_or_0
+	LOAD 3(LB), R2
+	PUSH R2
+	LOAD #0, R1
+	PUSH R1
+	POP R0
+	POP R1
+; <
+	SUB R0, R1
+	SLT R1
+	PUSH R1
+	POP R1
+	CMP #1, R1
+	BEQ true_or_0
+	LOAD #0, R1
+	BRA end_or_0
+true_or_0:
+	LOAD #1, R1
+end_or_0:
+	PUSH R1
+	POP R1
+	CMP #1, R1
+	BNE end_while_0
+	WSTR "Please enter number between 0 and 4 included."
+	WNL
+; Assign
+	RINT
+	BOV io_error
+	PUSH R1
+; Store assign
+	POP R2
+	STORE R2, 3(LB)
+	PUSH R2
+; End assign
+	POP R2
+	BRA while_0
+end_while_0:
+	WSTR "x was of value "
+	LOAD 1(LB), R2
+	PUSH R2
+	POP R1
+	WINT
+	WNL
+	WSTR "y is of value "
+	LOAD 2(LB), R2
+	PUSH R2
+	POP R1
+	WFLOAT
+	WNL
+	WSTR "And z is of value "
+	LOAD 3(LB), R2
+	PUSH R2
+	POP R1
+	WINT
+	WNL
+; Start IF
+; cond IF
+	LOAD 3(LB), R2
+	PUSH R2
+	LOAD #2, R1
+	PUSH R1
+	POP R0
+	POP R1
+; >
+	SUB R0, R1
+	SGT R1
+	PUSH R1
+	POP R1
+	BEQ else_0
+; IF then_body
+	WSTR "Enter a float: "
+; Assign
+	LOAD 2(LB), R2
+	PUSH R2
+	RFLOAT
+	BOV io_error
+	PUSH R1
+	POP R0
+	POP R1
+	MUL R0, R1
+	PUSH R1
+; Store assign
+	POP R2
+	STORE R2, 2(LB)
+	PUSH R2
+; End assign
+	POP R2
+	WSTR "y's new value is "
+	LOAD 2(LB), R2
+	PUSH R2
+	POP R1
+	WFLOAT
+	WNL
+	BRA end_if_0
+else_0:
+; IF else_body
+	WSTR "z is quite small, let's increase y: "
+; Assign
+	LOAD 2(LB), R2
+	PUSH R2
+	LOAD #0x1.0p2, R1
+	PUSH R1
+	POP R0
+	POP R1
+	MUL R0, R1
+	PUSH R1
+; Store assign
+	POP R2
+	STORE R2, 2(LB)
+	PUSH R2
+; End assign
+	POP R2
+	LOAD 2(LB), R2
+	PUSH R2
+	POP R1
+	WFLOAT
+	WNL
+; FI
+end_if_0:
+; Assign
+	LOAD 3(LB), R2
+	PUSH R2
+	LOAD #1, R1
+	PUSH R1
+	POP R0
+	POP R1
+	ADD R0, R1
+	PUSH R1
+; Store assign
+	POP R2
+	STORE R2, 1(LB)
+	PUSH R2
+; End assign
+	POP R2
+	WSTR "Enter an int:"
+	WNL
+; Start IF
+; cond IF
+; AND:
+	LOAD #0, R1
+	PUSH R1
+; AND end left
+	POP R1
+	CMP #0, R1
+	BEQ false_and_0
+	RINT
+	BOV io_error
+	PUSH R1
+	LOAD #0, R1
+	PUSH R1
+	POP R0
+	POP R1
+; ==
+	CMP R0, R1
+	SEQ R1
+	PUSH R1
+; AND end right
+	POP R1
+	CMP #0, R1
+	BEQ false_and_0
+	LOAD #1, R1
+	BRA end_and_0
+false_and_0:
+	LOAD #0, R1
+end_and_0:
+	PUSH R1
+	POP R1
+	BEQ else_1
+; IF then_body
+	WSTR "Well, this is strange ! There's an error, I'm sure"
+	WNL
+	BRA end_if_1
+else_1:
+; IF else_body
+; Start IF
+; cond IF
+	LOAD #1, R1
+	PUSH R1
+	POP R1
+	CMP #1, R1
+	BEQ true_or_1
+; Assign
+	LOAD 3(LB), R2
+	PUSH R2
+; Store assign
+	POP R2
+	STORE R2, 1(LB)
+	PUSH R2
+; End assign
+	LOAD 3(LB), R2
+	PUSH R2
+	POP R0
+	POP R1
+; ==
+	CMP R0, R1
+	SEQ R1
+	PUSH R1
+	POP R1
+	CMP #1, R1
+	BEQ true_or_1
+	LOAD #0, R1
+	BRA end_or_1
+true_or_1:
+	LOAD #1, R1
+end_or_1:
+	PUSH R1
+	POP R1
+	BEQ else_2
+; IF then_body
+; Start IF
+; cond IF
+	LOAD 1(LB), R2
+	PUSH R2
+	LOAD 3(LB), R2
+	PUSH R2
+	POP R0
+	POP R1
+; ==
+	CMP R0, R1
+	SEQ R1
+	PUSH R1
+	POP R1
+	BEQ else_3
+; IF then_body
+	WSTR "Err... the OR is bugged"
+	WNL
+	BRA end_if_3
+else_3:
+; IF else_body
+	WSTR "Finally it's OK, and good news: if no int was requested from you, the AND and OR works well !"
+	WNL
+; FI
+end_if_3:
+	BRA end_if_2
+else_2:
+; IF else_body
+	WSTR "Err... That's stange"
+	WNL
+; FI
+end_if_2:
+; FI
+end_if_1:
+	HALT
+; Manage io error
+io_error:
+	WSTR "Error: Input/Output error"
+	WNL
+	ERROR
+; end main program
