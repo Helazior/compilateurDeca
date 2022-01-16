@@ -26,10 +26,8 @@ public abstract class AbstractOpBool extends AbstractBinaryExpr {
     @Override
     public void codeGenExpr(DecacCompiler compiler) {
         RegisterManager regMan = compiler.getRegMan();
-        GPRegister register0 = regMan.pop();
-        GPRegister register1 = regMan.pop();
+        GPRegister register1 = regMan.take();
         codeGenOp(compiler, register1);
-        regMan.give(register0);
         regMan.give(register1);
     }
 
