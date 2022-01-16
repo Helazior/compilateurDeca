@@ -1,0 +1,24 @@
+{
+// les assignements
+// résultat attendus :
+//5
+//4.00000e+00
+
+	int a = 1;
+	int b;
+	int c;
+	int d = a + 1;
+
+	float e = 1.0;
+	float f;
+	float g;
+	float h = e + 1.0;
+
+	b = 2;
+	c = a + b + d;
+	g = e + 1;
+	f = g + h;
+
+	println(c);
+	println(f);
+}
