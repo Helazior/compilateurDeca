@@ -191,11 +191,11 @@
 
                     <!-- Execs ajoutés -->
                     <execution>
-                        <id>tester-working</id>
+                        <id>tester</id>
                         <configuration>
                             <executable>./src/test/script/launchers/tester</executable>
                             <arguments>
-                                <argument>working</argument>
+                                <argument></argument>
                               </arguments>
                         </configuration>
                         <phase>test</phase>
