@@ -5,10 +5,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
-import fr.ensimag.ima.pseudocode.ImmediateFloat;
-import fr.ensimag.ima.pseudocode.ImmediateInteger;
-import fr.ensimag.ima.pseudocode.Label;
-import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.*;
 import fr.ensimag.ima.pseudocode.instructions.*;
 
 /**
@@ -37,7 +34,7 @@ public class Modulo extends AbstractOpArith {
     }
 
     @Override
-    public void codeGenOp(DecacCompiler compiler) {
+    public void codeGenOp(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
         compiler.setModuloExistTrue();
         Type type = getType();
         if (type.isInt()) {

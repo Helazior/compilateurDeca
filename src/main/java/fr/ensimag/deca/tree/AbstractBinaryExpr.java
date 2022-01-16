@@ -5,6 +5,7 @@ import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Line;
 import fr.ensimag.ima.pseudocode.Register;
@@ -50,12 +51,12 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     }
 
 
-    public void codeGenOp(DecacCompiler compiler) {
+    public void codeGenOp(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
-    public void codeGenOvError(DecacCompiler compiler) {
-        codeGenOp(compiler);
+    public void codeGenOvError(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
+        codeGenOp(compiler, register0, register1);
     }
 
 
@@ -69,12 +70,14 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         AbstractExpr right = getRightOperand();
         right.codeGenExpr(compiler);
 
-        regMan.pop(Register.R0);
-        regMan.pop(Register.R1);
+        GPRegister registre0 = regMan.pop();
+        GPRegister registre1 = regMan.pop();
         compiler.addComment(getOperatorName());
-        codeGenOvError(compiler);
+        codeGenOvError(compiler, registre0, registre1);
 
         regMan.push(Register.R1);
+        regMan.give(registre0);
+        regMan.give(registre1);
     }
 
 

@@ -5,6 +5,7 @@ import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
 import org.apache.commons.lang.Validate;
 
@@ -27,7 +28,7 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
         this.operand = operand;
     }
 
-    public void codeGenOp(DecacCompiler compiler) {
+    public void codeGenOp(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
@@ -39,8 +40,13 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
 
         regMan.pop(Register.R0);
         compiler.addComment(getOperatorName());
-        codeGenOp(compiler);
-        regMan.push(Register.R1);
+        GPRegister register0 = regMan.pop();
+        GPRegister register1 = regMan.pop();
+
+        codeGenOp(compiler, register0, register1);
+        regMan.push(register1);
+        regMan.give(register0);
+        regMan.give(register1);
     }
 
     protected abstract String getOperatorName();

@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateFloat;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
@@ -22,7 +23,7 @@ public class Divide extends AbstractOpArith {
     }
 
     @Override
-    public void codeGenOp(DecacCompiler compiler) {
+    public void codeGenOp(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
         // On indique qu'on veut placer le label d'erreur à la fin pour la division, car la division exist
         compiler.setDivideExistTrue();
         Type type = getType();

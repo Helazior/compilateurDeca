@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.RegisterManager;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
@@ -27,7 +28,7 @@ public class And extends AbstractOpBool {
      * @param compiler
      */
     @Override
-    public void codeGenOp(DecacCompiler compiler) {
+    public void codeGenOp(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
         // TODO :  avec l'extension, nommer les labels différemment
         RegisterManager regMan = compiler.getRegMan();
         compiler.addComment("Start And");

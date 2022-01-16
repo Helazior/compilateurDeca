@@ -6,6 +6,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateFloat;
 import fr.ensimag.ima.pseudocode.ImmediateString;
 import fr.ensimag.ima.pseudocode.Register;
@@ -38,7 +39,7 @@ public class Not extends AbstractUnaryExpr {
     }
 
     @Override
-    public void codeGenOp(DecacCompiler compiler) {
+    public void codeGenOp(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
         RegisterManager regMan = compiler.getRegMan();
         /*
         Type type = getType();
@@ -49,8 +50,8 @@ public class Not extends AbstractUnaryExpr {
             compiler.addInstruction(new LOAD(new ImmediateFloat(1.0f), Register.R1));
         }
          */
-        compiler.addInstruction(new LOAD(1, Register.R1));
-        compiler.addInstruction(new SUB(Register.R0, Register.R1));
+        compiler.addInstruction(new LOAD(1, register1));
+        compiler.addInstruction(new SUB(register0, register1));
     }
 
 
