@@ -1,11 +1,13 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
@@ -45,8 +47,10 @@ public class IntLiteral extends AbstractExpr {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler) {
-        compiler.addInstruction(new LOAD(new ImmediateInteger(value), Register.R1));
-        compiler.getRegMan().push(Register.R1);
+        RegisterManager regMan = compiler.getRegMan();
+        GPRegister register = regMan.take();
+        compiler.addInstruction(new LOAD(new ImmediateInteger(value), register));
+        compiler.getRegMan().giveAndPush(register);
     }
 
     @Override

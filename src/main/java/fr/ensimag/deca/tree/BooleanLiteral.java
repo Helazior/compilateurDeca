@@ -1,11 +1,13 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
@@ -41,12 +43,14 @@ public class BooleanLiteral extends AbstractExpr {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler) {
+        RegisterManager regMan = compiler.getRegMan();
+        GPRegister register = regMan.take();
         if (value) {
-            compiler.addInstruction(new LOAD(1, Register.R1));
+            compiler.addInstruction(new LOAD(1, register));
         } else {
-            compiler.addInstruction(new LOAD(0, Register.R1));
+            compiler.addInstruction(new LOAD(0, register));
         }
-        compiler.getRegMan().push(Register.R1);
+        compiler.getRegMan().giveAndPush(register);
     }
 
     @Override
