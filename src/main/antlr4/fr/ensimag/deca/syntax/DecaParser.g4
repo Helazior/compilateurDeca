@@ -568,9 +568,9 @@ class_decl returns [AbstractDeclClass tree]
     : CLASS name=ident superclass=class_extension OBRACE class_body CBRACE {
             assert($name.tree != null);
             assert($superclass.tree != null);
-            assert($class_body.fields.tree != null);
-            assert($class_body.methodes.tree != null);
-            $tree = new DeclClass($name.tree, $superclass.tree, $class_body.fields.tree, $class_body.methodes.tree);
+            assert($class_body.fields != null);
+            assert($class_body.methodes != null);
+            $tree = new DeclClass($name.tree, $superclass.tree, $class_body.fields, $class_body.methodes);
             setLocation($tree, $name.start);
         }
     ;
@@ -592,9 +592,9 @@ class_body returns[ListDeclMethod methodes, ListDeclField fields]
 }
     : (m=decl_method {
             assert($m.tree != null);
-            methodes.add($m.tree);
+            $methodes.add($m.tree);
         }
-      |n=decl_field_set[fields] {
+      |n=decl_field_set[$fields] {
         }
       )* {
 //Aurais-je oublie quelque chose?
@@ -647,11 +647,7 @@ decl_field [AbstractIdentifier t, Visibility v] returns[AbstractDeclField tree]
     ;
 
 decl_method returns[DeclMethod tree]
-@init {
-    
-    List<DeclParam> p = new ListDeclParam();
-}
-    : type ident OPARENT params=list_params[p] CPARENT (block {
+    : type ident OPARENT params=list_params CPARENT (block {
             assert($block.decls != null);
             assert($block.insts != null);
             MethodBody methodBody = new MethodBody($block.decls, $block.insts); 
@@ -663,19 +659,22 @@ decl_method returns[DeclMethod tree]
       ) {
             assert($type.tree != null);
             assert($ident.tree != null);
-            assert(p != null);
-            $tree = new DeclMethod($type.tree, $ident.tree, p, methodBody);
+            assert($params.tree != null);
+            $tree = new DeclMethod($type.tree, $ident.tree, $params.tree, methodBody);
             setLocation($tree, $type.start);
         }
     ;
 
-list_params [ListDeclParam p]
+list_params returns[ListDeclParam tree]
+@init {
+    $tree = new ListDeclParam();
+}
     : (p1=param {
         assert($p1.tree != null);
-        $p.add($p1.tree);
+        $tree.add($p1.tree);
         } (COMMA p2=param {
             assert($p2.tree != null);
-            $p.add($p2.tree);
+            $tree.add($p2.tree);
         }
       )*)?
     ;
