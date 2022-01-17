@@ -1,6 +1,14 @@
-{
-// test de convFloat
+// Description:
+//    test de convFloat
+//
+// Resultats:
+//      1
+//      1.0000
+//      1.0000
+//      2.0000
+//      2.0000
 
+{
 	int a = 1;
 	float b = 1;
 	float c = a;

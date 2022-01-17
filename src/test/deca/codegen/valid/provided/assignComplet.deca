@@ -1,9 +1,14 @@
-{
-// les assignements
+// Description:
+//      tests assignements
 // résultat attendus :
-//5
-//4.00000e+00
+//    tests d'expressions entieres et float
+//
+// Resultats:
+//      5
+//      4.00000e+00
 
+
+{
 	int a = 1;
 	int b;
 	int c;
