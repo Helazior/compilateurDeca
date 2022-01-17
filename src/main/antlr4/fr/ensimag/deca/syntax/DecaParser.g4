@@ -42,11 +42,11 @@ prog returns[AbstractProgram tree]
             //assert($list_classes.tree != null);
             assert($main.tree != null);
 
-            if(getDecacCompiler().getCompilerOptions().getLinked()){
-                $tree = new Program($list_imports.tree, $list_classes.tree, $main.tree);
-            } else {
+            //if(getDecacCompiler().getCompilerOptions().getLinked()){
+            //    $tree = new Program($list_imports.tree, $list_classes.tree, $main.tree);
+            //} else {
                 $tree = new Program($list_classes.tree, $main.tree);
-            }
+            //}
 
             setLocation($tree, $list_classes.start);
         }
@@ -693,9 +693,9 @@ multi_line_string returns[String text, Location location]
 
 param returns[DeclParam tree]
     : type ident { 
-        assert(type.tree != null);
-        assert( ident.tree != null);
-        $tree = new DeclParam(type, ident);
+        assert($type.tree != null);
+        assert($ident.tree != null);
+        $tree = new DeclParam($type.tree, $ident.tree);
         setLocation($tree, $type.start);
         }
     ;
@@ -703,9 +703,12 @@ param returns[DeclParam tree]
 /****     Imports related rules     ****/
 
 list_imports returns[ListDeclImport tree]
+@init{
+    $tree = new ListDeclImport();
+}
     : (IMPORT import_decl EOL)*{
-        assert(import_decl != null);
-        $tree = import_decl.tree;
+        assert($import_decl.tree != null);
+        $tree.add($import_decl.tree);
     }
     ;
 
