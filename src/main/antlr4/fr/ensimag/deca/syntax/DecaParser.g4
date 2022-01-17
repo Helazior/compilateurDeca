@@ -38,7 +38,7 @@ options {
 }
 
 prog returns[AbstractProgram tree]
-    :  list_classes main EOF {
+    :  list_imports list_classes main EOF {
             //assert($list_classes.tree != null);
             assert($main.tree != null);
 
