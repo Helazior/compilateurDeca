@@ -87,7 +87,7 @@ public class TestPlusAdvanced {
         // check the result
         assertTrue(t.verifyExpr(compiler, null, null).isFloat());
         // ConvFloat should have been inserted on the right side
-        assertTrue(t.getRightOperand() instanceof ConvFloat);
+        assertFalse(t.getRightOperand() instanceof ConvFloat);
         assertFalse(t.getLeftOperand() instanceof ConvFloat);
         // check that the mocks have been called properly.
         verify(floatexpr1).verifyExpr(compiler, null, null);
