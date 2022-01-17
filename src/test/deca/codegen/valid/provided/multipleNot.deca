@@ -1,7 +1,8 @@
+// Description:
+//      test not
+// Resultats:
+//      ça marche bien
 {
-// test not
-// res : 
-// ça marche bien
 
 	if (true) {
 		print("ça ");

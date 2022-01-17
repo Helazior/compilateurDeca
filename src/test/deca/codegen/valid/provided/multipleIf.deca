@@ -1,7 +1,8 @@
+// Description:
+//      test multiple if
+// Resultats:
+//      ça marche bien
 {
-// test multiple if
-// res =
-// ça marche bien
 	if (false) {
 	} else {
 		print("ça ");

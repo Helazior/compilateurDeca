@@ -1,0 +1,7 @@
+// Description:
+//      test erreur mod par 0
+// Resultats:
+//      res attendu : Error: Modulo by zero
+{
+	print(5%0);
+}
