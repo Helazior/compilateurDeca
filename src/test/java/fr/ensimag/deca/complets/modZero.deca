@@ -1,6 +1,0 @@
-{
-// test erreur mod par 0
-// res attendu : Error: Modulo by zero
-
-	print(5%0);
-}

@@ -1,6 +1,0 @@
-{
-// test erreur div zéro
-// résultat : Error: Division by zero
-
-	1.6/0.0;
-}

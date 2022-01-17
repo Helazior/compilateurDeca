@@ -38,8 +38,10 @@ public class Modulo extends AbstractOpArith {
         compiler.setModuloExistTrue();
         Type type = getType();
         if (type.isInt()) {
-            compiler.addInstruction(new CMP(new ImmediateInteger(0), register0));
-            compiler.addInstruction(new BEQ(new Label("mod_by_zero_error")));
+            if (!compiler.getCompilerOptions().getNoCheck()) {
+                compiler.addInstruction(new CMP(new ImmediateInteger(0), register0));
+                compiler.addInstruction(new BEQ(new Label("mod_by_zero_error")));
+            }
             compiler.addInstruction(new REM(register0, register1));
         } else {
             throw new UnsupportedOperationException("Error: modulo with float. Expected : int");
