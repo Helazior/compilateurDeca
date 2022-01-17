@@ -6,6 +6,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BOV;
@@ -24,7 +25,9 @@ public abstract class AbstractOpBool extends AbstractBinaryExpr {
 
     @Override
     public void codeGenExpr(DecacCompiler compiler) {
-        codeGenOp(compiler);
+        RegisterManager regMan = compiler.getRegMan();
+        GPRegister register1 = regMan.take();
+        codeGenOp(compiler, register1);
     }
 
     @Override

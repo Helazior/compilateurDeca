@@ -5,6 +5,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.*;
@@ -26,35 +27,14 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         super(leftOperand, rightOperand);
     }
 
-    /*
-    @Override
-    public void codeGenExpr(DecacCompiler compiler) {
-        RegisterManager regMan = compiler.getRegMan();
-        //super.codeGenExpr(compiler);
-        AbstractExpr left = getLeftOperand();
-        left.codeGenExpr(compiler);
-        AbstractExpr right = getRightOperand();
-        right.codeGenExpr(compiler);
 
-        regMan.pop(Register.R0);
-        regMan.pop(Register.R1);
-        compiler.addComment(getOperatorName());
-        codeGenOp(compiler);
-        if (getType().isFloat()) {
+    @Override
+    public void codeGenOvError(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
+        if (!compiler.getCompilerOptions().getNoCheck() && getType().isFloat()) {
             compiler.setOpOvExist();
             compiler.addInstruction(new BOV(new Label("overflow_error")));
         }
-        regMan.push(Register.R1);
-    }
-
-    */
-    @Override
-    public void codeGenOvError(DecacCompiler compiler) {
-        if (getType().isFloat()) {
-            compiler.setOpOvExist();
-            compiler.addInstruction(new BOV(new Label("overflow_error")));
-        }
-        codeGenOp(compiler);
+        codeGenOp(compiler, register0, register1);
     }
 
 
@@ -87,14 +67,16 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         }
         else if(leftType.isInt() && rightType.isFloat()){
             ConvFloat left = new ConvFloat(getLeftOperand());
-            left.updateType(compiler);
+            left.setType(compiler.getType("float"));
             setLeftOperand(left);
+
             setType(compiler.getType("float"));
         }
         else if(leftType.isFloat() && rightType.isInt()){
             ConvFloat right = new ConvFloat(getRightOperand());
-            right.updateType(compiler);
+            right.setType(compiler.getType("float"));
             setRightOperand(right);
+
             setType(compiler.getType("float"));
         }
         else if(leftType.isFloat() && rightType.isFloat()){

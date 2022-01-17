@@ -3,6 +3,9 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.IMAProgram;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Line;
 import fr.ensimag.ima.pseudocode.instructions.*;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -17,24 +20,12 @@ import fr.ensimag.deca.codegen.codeGenError;
  */
 public class Program extends AbstractProgram {
     private static final Logger LOG = Logger.getLogger(Program.class);
-
+    
     public Program(ListDeclClass classes, AbstractMain main) {
         Validate.notNull(classes);
         Validate.notNull(main);
         this.classes = classes;
         this.main = main;
-    }
-
-    public Program(ListDeclImport imports, ListDeclClass classes, AbstractMain main) {
-        Validate.notNull(imports);
-        Validate.notNull(classes);
-        Validate.notNull(main);
-        this.imports = imports;
-        this.classes = classes;
-        this.main = main;
-    }
-    public ListDeclImport getimports(){
-        return imports;
     }
     public ListDeclClass getClasses() {
         return classes;
@@ -42,7 +33,6 @@ public class Program extends AbstractProgram {
     public AbstractMain getMain() {
         return main;
     }
-    private ListDeclImport imports;
     private ListDeclClass classes;
     private AbstractMain main;
 
@@ -50,7 +40,7 @@ public class Program extends AbstractProgram {
     public void verifyProgram(DecacCompiler compiler) throws ContextualError {
         LOG.debug("verify program: start");
         //TODO: les 3 passes
-        classes.verifyListClass(compiler);
+        //classes.verifyListClass(compiler);
 
         //classes.verifyListClassMembers(compiler);
 
@@ -72,27 +62,33 @@ public class Program extends AbstractProgram {
         // Récupéré avec getOperand
 
 
-        compiler.addComment("Main program");
         // parcours de l'arbre. On écrit dans le main :
         main.codeGenMain(compiler);
 
         // termine le programme
         compiler.addInstruction(new HALT());
 
-        if (compiler.getDivideExist()) {
-            codeGenError.divByZeroError(compiler);
-        }
-        if (compiler.getModuloExist()) {
-            codeGenError.modByZeroError(compiler);
-        }
+
         if (compiler.getIoExist()) {
             codeGenError.ioError(compiler);
         }
-        if (compiler.getOpOvExist()) {
-            codeGenError.overflowError(compiler);
-        }
+        if (!compiler.getCompilerOptions().getNoCheck()) {
+            if (compiler.getDivideExist()) {
+                codeGenError.divByZeroError(compiler);
+            }
+            if (compiler.getModuloExist()) {
+                codeGenError.modByZeroError(compiler);
+            }
 
-        codeGenError.stackOverflowError(compiler);
+            if (compiler.getOpOvExist()) {
+                codeGenError.overflowError(compiler);
+            }
+
+            codeGenError.stackOverflowError(compiler);
+            compiler.addFirst(new BOV(new Label("stack_overflow_error")));
+            compiler.addFirst(new TSTO(compiler.getRegMan().getMaxSizeStack()));
+        }
+        compiler.addFirst(new Line( "Main program"));
 
         assert(compiler.getRegMan().isStackEmpty());
     }

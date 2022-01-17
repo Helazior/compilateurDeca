@@ -191,11 +191,11 @@
 
                     <!-- Execs ajoutés -->
                     <execution>
-                        <id>tester-working</id>
+                        <id>tester</id>
                         <configuration>
                             <executable>./src/test/script/launchers/tester</executable>
                             <arguments>
-                                <argument>working</argument>
+                                <argument></argument>
                               </arguments>
                         </configuration>
                         <phase>test</phase>
@@ -215,6 +215,16 @@
                                  <argument>...</argument>
                                  </arguments>
                             -->
+                        </configuration>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>test-options</id>
+                        <configuration>
+                            <executable>./src/test/script/test-options.sh</executable>
                         </configuration>
                         <phase>test</phase>
                         <goals>

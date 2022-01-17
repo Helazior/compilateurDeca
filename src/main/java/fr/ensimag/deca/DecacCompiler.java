@@ -5,10 +5,8 @@ import fr.ensimag.deca.syntax.DecaParser;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tree.AbstractProgram;
 import fr.ensimag.deca.tree.LocationException;
-import fr.ensimag.ima.pseudocode.AbstractLine;
-import fr.ensimag.ima.pseudocode.IMAProgram;
-import fr.ensimag.ima.pseudocode.Instruction;
-import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -22,14 +20,11 @@ import org.apache.log4j.Logger;
 import fr.ensimag.deca.tools.SymbolTable;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.Location;
-import java.lang.instrument.ClassDefinition;
-import java.rmi.registry.LocateRegistry;
 import java.util.LinkedList;
 import java.util.List;
 
 import fr.ensimag.deca.codegen.RegisterManager;
 
-import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.EnvironmentExp;
 
 import fr.ensimag.deca.context.*;
@@ -195,6 +190,18 @@ public class DecacCompiler {
     }
 
     /**
+     * To add TSTO at the beginning of the program
+     * @param instruction
+     */
+    public void addFirst(Instruction instruction) {
+        program.addFirst(instruction);
+    }
+
+    public void addFirst(Line line) {
+        program.addFirst(line);
+    }
+
+    /**
      * @see
      * fr.ensimag.ima.pseudocode.IMAProgram#addInstruction(fr.ensimag.ima.pseudocode.Instruction,
      * java.lang.String)
@@ -269,8 +276,7 @@ public class DecacCompiler {
 
     //Renvoie null si le type demandé n'est pas trouvé
     public TypeDefinition getType(Symbol type) {
-        TypeDefinition typeDef = typeEnv.get(type);
-        return ((typeDef == null)? null : typeDef);
+        return typeEnv.get(type);
     }
 
     public Type getType(String typeName) {
@@ -305,9 +311,21 @@ public class DecacCompiler {
         }
     }
 
+    //Renvoie null si l'expression demandé n'est pas trouvé
+    public ExpDefinition getExp(Symbol type) {
+        return expEnv.get(type);
+    }
+
+    public EnvironmentExp getExpEnv() {
+        return expEnv;
+    }
+
     public Symbol createSymbol(String expName) {
         return expTable.create(expName);
     }
+
+
+
 
 
 
@@ -437,4 +455,5 @@ public class DecacCompiler {
         parser.setDecacCompiler(this);
         return parser.parseProgramAndManageErrors(err);
     }
+
 }

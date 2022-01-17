@@ -1,0 +1,21 @@
+// Description:
+//      test not
+// Resultats:
+//      ça marche bien
+{
+
+	if (true) {
+		print("ça ");
+		if (!false) {
+			print("mar");
+			if (!true) {
+			} else {
+				print("che ");
+				if (!!!!(!false && !!true && !!!false)) {
+					print("bien");
+				}
+			}
+		}
+	}
+
+}

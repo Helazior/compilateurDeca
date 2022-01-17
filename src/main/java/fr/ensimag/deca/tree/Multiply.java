@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.MUL;
 
@@ -15,8 +16,8 @@ public class Multiply extends AbstractOpArith {
     }
 
     @Override
-    public void codeGenOp(DecacCompiler compiler) {
-        compiler.addInstruction(new MUL(Register.R0, Register.R1));
+    public void codeGenOp(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
+        compiler.addInstruction(new MUL(register0, register1));
     }
 
     /**
