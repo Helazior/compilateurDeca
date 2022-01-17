@@ -706,10 +706,11 @@ list_imports returns[ListDeclImport tree]
 @init{
     $tree = new ListDeclImport();
 }
-    : (IMPORT import_decl EOL)*{
-        assert($import_decl.tree != null);
-        $tree.add($import_decl.tree);
+    : (IMPORT import_decl EOL{
+       assert($import_decl.tree != null);
+       $tree.add($import_decl.tree);
     }
+    )*
     ;
 
 import_decl returns[AbstractProgram tree]
