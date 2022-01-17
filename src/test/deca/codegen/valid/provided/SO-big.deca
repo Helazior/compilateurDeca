@@ -4,7 +4,6 @@
 // Resultats:
 //    
 
-//#include "SO-big.import.decah"
 {
     int x = 3;
     float y = 3.4;
