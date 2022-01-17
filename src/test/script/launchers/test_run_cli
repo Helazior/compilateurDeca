@@ -1,0 +1,71 @@
+#!/bin/bash
+
+# Ansi color code variables
+red="\e[0;91m"
+green="\e[0;92m"
+white="\e[0;97m"
+reset="\e[0;0m"
+
+#Tout s'est bien passé
+exit_value=0
+
+function test_file {
+    path=$1
+    file_src=$2
+    file_name=$3
+    src_file=$path/$(head -n 1 $file_src)
+    args=$(head -n 2 $file_src | tail -n 1 | tr -d '\n')
+    deca_file=$path/generated/$file_name.deca
+    sol_file=$path/generated/$file_name.sol
+    asm_file=$path/generated/$file_name.ass
+    out_file=$path/generated/$file_name.out
+    err_file=$path/generated/$file_name.err
+
+    #recuperation de la solution attendue
+    tail -n +3 $file_src > $sol_file
+
+    #generation du resultat
+    cp $src_file $deca_file
+    decac $args $deca_file > $out_file 2> $err_file
+    echo "----" >> $out_file
+    cat $err_file >> $out_file
+    echo "----" >> $out_file
+    #cat $asm_file >> $out_file 2> /dev/null
+
+    #On compare les fichiers
+    if cmp -s $out_file $sol_file; then
+        echo -e "${green} ${bold} PASSED $file_name ${reset}"
+        rm $path/generated/$file_name.*
+    else
+        exit_value=1
+        echo -e "${red} ${bold} FAILED $file_name"
+        diff $out_file $sol_file
+        echo -e  "${reset}"
+    fi
+}
+
+# Récupération du dossier de travail
+if [[ $# -eq 0 ]]; then
+    folder_path=./src/test/deca/cli/valid
+else
+    folder_path=$1
+fi
+
+# Creation de la hierarchie de dossier
+mkdir -p $folder_path/generated
+
+# Récupération des fichiers à tester
+if [[ $# -le 1 ]]; then
+    files="$(echo $folder_path/*.test)"
+else
+    files=$@
+    files=${files#* } # On enlève le premier élément (qui est le dossier de travail)
+fi
+
+for file_src in $files; do
+    #nom du fichier
+    file_name=$(basename ${file_src%%".test"})
+    test_file $folder_path $file_src $file_name
+done
+
+exit $exit_value

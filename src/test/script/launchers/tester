@@ -34,10 +34,15 @@ DIRS = {
     "test_decompile": ["deca/syntax/valid"],
     "test_exec": ["deca/exec/invalid", "deca/exec/valid"],
     "test_run_decac": ["deca/codegen/valid"],
+    "test_run_cli": ["deca/cli/valid", "deca/cli/invalid"],
 }
 
 REGRESSION = len(sys.argv) > 1 and sys.argv[1] in ["reg", "regression"]
 WORKING = len(sys.argv) > 1 and sys.argv[1] in ["work", "working"]
+if REGRESSION or WORKING:
+    COMMANDS = sys.argv[2:]
+else:
+    COMMANDS = sys.argv[1:]
 
 if REGRESSION:
     print("Running regression tests.")
@@ -57,7 +62,7 @@ def file_content(file, file_dir):
 
 errors = []
 
-for cmd in DIRS:
+for cmd in (DIRS if COMMANDS == [] else COMMANDS):
     print()
     print(" ===============")
     print("===> Running: ", cmd)
