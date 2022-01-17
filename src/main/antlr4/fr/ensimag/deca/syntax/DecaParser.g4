@@ -42,7 +42,7 @@ prog returns[AbstractProgram tree]
             //assert($list_classes.tree != null);
             assert($main.tree != null);
 
-            if(getDecaCompiler().getLinked()){
+            if(getDecacCompiler().getCompilerOptions().getLinked()){
                 $tree = new Program($list_imports.tree, $list_classes.tree, $main.tree);
             } else {
                 $tree = new Program($list_classes.tree, $main.tree);
@@ -558,7 +558,7 @@ list_classes returns[ListDeclClass tree]
     }
     :
       (c1=class_decl {
-          assert(c1.tree != null);
+          assert($c1.tree != null);
           $tree.add($c1.tree);
         }
       )*
@@ -581,7 +581,7 @@ class_extension returns[AbstractIdentifier tree]
             $tree = $ident.tree;
         }
     | /* epsilon */ {
-            $tree = new Identifier(compiler.createSymbol("Object"));
+            $tree = new Identifier(getDecacCompiler().createSymbol("Object"));
         }
     ;
 
@@ -711,7 +711,7 @@ list_imports returns[ListDeclImport tree]
 
 import_decl returns[AbstractProgram tree]
     : FILENAME {
-        $tree = getDecaCompiler().compileImport($FILENAME.text);
+        $tree = getDecacCompiler().compileImport($FILENAME.text);
         assert($tree != null);
         setLocation($tree, $FILENAME);
     }
