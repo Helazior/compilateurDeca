@@ -38,10 +38,16 @@ options {
 }
 
 prog returns[AbstractProgram tree]
-    : list_classes main EOF {
+    : list_imports list_classes main EOF {
             //assert($list_classes.tree != null);
             assert($main.tree != null);
-            $tree = new Program($list_classes.tree, $main.tree);
+
+            if(getDecaCompiler().getLinked()){
+                $tree = new Program($list_imports.tree, $list_classes.tree, $main.tree);
+            } else {
+                $tree = new Program($list_classes.tree, $main.tree);
+            }
+
             setLocation($tree, $list_classes.start);
         }
     ;
@@ -599,7 +605,7 @@ decl_field_set [ListDeclField f]
     : v=visibility t=type list_decl_field[$f, $t.tree, $v.tree] SEMI
     ;
 
-visibility
+visibility returns[Visibility tree]
     : /* epsilon */ { 
         $tree = Visibility.PUBLIC;
         }
