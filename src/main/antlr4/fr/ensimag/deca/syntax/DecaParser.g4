@@ -591,6 +591,7 @@ class_body returns[ListDeclMethod methodes, ListDeclField fields]
       |n=decl_field_set[fields] {
         }
       )* {
+          assert(n != null);
 //Aurais-je oublie quelque chose?
         }
     ;
@@ -599,7 +600,7 @@ decl_field_set [ListDeclField f]
     : v=visibility t=type list_decl_field[$f, $t.tree, $v.tree] SEMI
     ;
 
-visibility
+visibility returns[Visibility tree]
     : /* epsilon */ { 
         $tree = Visibility.PUBLIC;
         }
@@ -698,15 +699,15 @@ param returns[DeclParam tree]
 
 list_imports returns[ListDeclImport tree]
     : (IMPORT import_decl EOL)*{
-        assert(import_decl != null);
-        $tree = import_decl.tree;
+        //assert(import_decl != null);
+        //$tree = import_decl.tree;
     }
     ;
 
 import_decl returns[AbstractProgram tree]
     : FILENAME {
-        $tree = getDecaCompiler().compileImport($FILENAME.text);
-        assert($tree != null);
-        setLocation($tree, $FILENAME);
+        //$tree = getDecaCompiler().compileImport($FILENAME.text);
+        //assert($tree != null);
+        //setLocation($tree, $FILENAME);
     }
     ;
