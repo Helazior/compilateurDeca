@@ -30,9 +30,10 @@ import subprocess
 
 BASEDIR = "./src/test"
 DIRS = {
-    "deca/syntax/valid": ["test_lexer", "test_decompile"],
-    "deca/exec/invalid": ["test_exec"],
-    "deca/exec/valid": ["test_exec"],
+    "test_lexer": ["deca/syntax/valid"],
+    "test_decompile": ["deca/syntax/valid"],
+    "test_exec": ["deca/exec/invalid", "deca/exec/valid"],
+    "test_run_decac": ["deca/codegen/valid"],
 }
 
 REGRESSION = len(sys.argv) > 1 and sys.argv[1] in ["reg", "regression"]
@@ -56,24 +57,25 @@ def file_content(file, file_dir):
 
 errors = []
 
-for work_dir in DIRS:
-    curr_dir = os.path.join(BASEDIR, work_dir)
+for cmd in DIRS:
     print()
     print(" ===============")
-    print("===> DIRECTORY: ", curr_dir)
+    print("===> Running: ", cmd)
     print(" ===============")
 
     args = []
-    if REGRESSION:
-        args = file_content(
-            os.path.join(curr_dir, "regression.txt"), curr_dir)
 
-    elif WORKING:
-        args += file_content(
-            os.path.join(curr_dir, "working.txt"), curr_dir)
+    for work_dir in DIRS[cmd]:
+        curr_dir = os.path.join(BASEDIR, work_dir)
 
-    for cmd in DIRS[work_dir]:
-        print(f"==> Running command '{cmd}' on dir '{curr_dir}'")
+        if REGRESSION:
+            args = file_content(
+                os.path.join(curr_dir, "regression.txt"), curr_dir)
+        elif WORKING:
+            args += file_content(
+                os.path.join(curr_dir, "working.txt"), curr_dir)
+
+        print(f"==> Current dir: '{curr_dir}' (command: '{cmd}')")
         results = subprocess.run([cmd, curr_dir] + args)
         if results.returncode != 0:
             errors.append((results, curr_dir))

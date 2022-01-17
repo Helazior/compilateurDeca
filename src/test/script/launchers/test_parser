@@ -62,3 +62,5 @@ for file_src in $generic_test/*.deca; do
 
     resultGeneration $folder_path $file_src $file_name
 done
+
+exit $exit_value
