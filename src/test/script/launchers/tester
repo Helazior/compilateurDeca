@@ -35,6 +35,7 @@ DIRS = {
     "test_exec": ["deca/exec/invalid", "deca/exec/valid"],
     "test_run_decac": ["deca/codegen/valid"],
     "test_run_cli": ["deca/cli/valid", "deca/cli/invalid"],
+    "test_context_auto": ["deca/context"]
 }
 
 REGRESSION = len(sys.argv) > 1 and sys.argv[1] in ["reg", "regression"]
