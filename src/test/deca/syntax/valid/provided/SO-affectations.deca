@@ -13,5 +13,5 @@
     string s = "Hello World";
     int i = 143110;
     float f = 143110.0510;
-    bool b = true; 
+    boolean b = true; 
 }
