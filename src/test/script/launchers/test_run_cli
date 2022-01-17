@@ -28,7 +28,7 @@ function test_file {
     cp $src_file $deca_file
     decac $args $deca_file > $out_file 2> $err_file
     echo "----" >> $out_file
-    cat $err_file | sed 's/\(\/[\_a-zA-Z0-9-]*\)*\///g' >> $out_file
+    cat $err_file | sed 's/\(\/[\.\_a-zA-Z0-9-]*\)*\///g' >> $out_file
     echo "----" >> $out_file
     #cat $asm_file >> $out_file 2> /dev/null
 
