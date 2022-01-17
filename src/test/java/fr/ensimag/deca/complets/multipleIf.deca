@@ -1,0 +1,18 @@
+{
+// test multiple if
+// res =
+// ça marche bien
+	if (false) {
+	} else {
+		print("ça ");
+		if (true) {
+			print("marche ");
+			if (1 == 2) {
+			} else {
+				print("bien");
+			}
+		} else {
+
+		}
+	}
+}

@@ -1,0 +1,13 @@
+{
+// test de convFloat
+
+	int a = 1;
+	float b = 1;
+	float c = a;
+	float d = a + 1;
+	println(a);
+	println(b);
+	println(c);
+	println(d);
+	println(1.0 + 1);
+}
