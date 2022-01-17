@@ -480,7 +480,7 @@ primary_expr returns[AbstractExpr tree]
     //TODO
     | NEW ident OPARENT CPARENT {
             assert($ident.tree != null);
-            $tree= New($ident.tree);
+            $tree= new New($ident.tree);
         }
     
     | cast=OPARENT type CPARENT OPARENT expr CPARENT {
@@ -533,7 +533,7 @@ literal returns[AbstractExpr tree]
         }
     //TODO
     | THIS {
-        $tree = new This();
+        $tree = new This(false);
         }
     //TODO
     | NULL {
@@ -650,16 +650,20 @@ decl_method returns[DeclMethod tree]
             assert($block.decls != null);
             assert($block.insts != null);
             MethodBody methodBody = new MethodBody($block.decls, $block.insts); 
+            $tree = new DeclMethod($type.tree, $ident.tree, $params.tree, methodBody);
+
         }
       | ASM OPARENT code=multi_line_string CPARENT SEMI {
-            assert(code.tree != null);
+            assert($code.text != null);
+            assert($code.location != null);
             MethodAsmBody methodBody = new MethodAsmBody($code.text, $code.location);
+            $tree = new DeclMethod($type.tree, $ident.tree, $params.tree, methodBody);
+
         }
       ) {
             assert($type.tree != null);
             assert($ident.tree != null);
             assert($params.tree != null);
-            $tree = new DeclMethod($type.tree, $ident.tree, $params.tree, methodBody);
             setLocation($tree, $type.start);
         }
     ;
@@ -691,9 +695,9 @@ multi_line_string returns[String text, Location location]
 
 param returns[DeclParam tree]
     : type ident { 
-        assert(type.tree != null);
-        assert( ident.tree != null);
-        $tree = new DeclParam(type, ident);
+        assert($type.tree != null);
+        assert($ident.tree != null);
+        $tree = new DeclParam($type.tree, $ident.tree);
         setLocation($tree, $type.start);
         }
     ;
@@ -713,7 +717,6 @@ list_imports returns[ListDeclImport tree]
 
 import_decl returns[AbstractProgram tree]
     : FILENAME {
-        $tree = new AbstractProgram();
         //$tree = getDecacCompiler().compileImport($FILENAME.text);
         //assert($tree != null);
         //setLocation($tree, $FILENAME);
