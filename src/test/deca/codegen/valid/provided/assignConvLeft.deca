@@ -1,0 +1,14 @@
+{
+	int a = 3;
+	float b = 2.1;
+
+	if(a == b + 0.9) {
+		if (3 + 2 == 2.5 + 1.5 + 1) {
+			println("Yes c'est bon!");
+		} else {
+			println("Ouch...");
+		}
+	} else {
+		println("Ouch...");
+	}
+}
