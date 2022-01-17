@@ -108,7 +108,7 @@ OR: '||';
 
 //INCLUDE
    fragment FILENAME: (LETTER | DIGIT | '.' | '-' | '_')+;
-   INCLUDE: '#include' (' ')* '"' FILENAME '"';
+   INCLUDE: '#include' (' ')* '"' FILENAME '"' {doInclude(getText()); skip(); };
 //
 
 //CLASS

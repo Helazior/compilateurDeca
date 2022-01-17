@@ -1,0 +1,5 @@
+provided/cmpTypeError.deca
+
+----
+cmpTypeError.deca:2:5: Error: Unsupported operands. Expected : int or float
+----

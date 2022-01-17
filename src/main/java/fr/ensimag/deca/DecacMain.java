@@ -30,12 +30,10 @@ public class DecacMain {
         } catch (CLIException e) {
             System.err.println("Error during option parsing:\n"
                     + e.getMessage());
-            options.displayUsage();
             System.exit(1);
         }
         if (options.getVerification() && options.getDecompile()) {
             System.err.println("Error: options -v and -p are incompatible.");
-            options.displayUsage();
             System.exit(1);
         }
         if (options.getHelp()) {

@@ -169,14 +169,14 @@ public abstract class AbstractDecaLexer extends Lexer {
         String full = dir + "/" + name;
         File f = new File(full);
         if (f.exists()) {
-            LOG.debug("Using local file " + full);
+            //LOG.debug("Using local file " + full);
             return CharStreams.fromFileName(full);
         }
 
         // ... and fall back to the standard library path if not found.
         final URL url = ClassLoader.getSystemResource("include/" + name);
         if (url != null) {
-            LOG.debug("Using library " + url);
+            //LOG.debug("Using library " + url);
             // Use fromReader(Reader, String) to catch the file name --- fromStream(InputStream) does not.
             return CharStreams.fromReader(new InputStreamReader(url.openStream()), url.getFile());
         }
@@ -259,7 +259,7 @@ public abstract class AbstractDecaLexer extends Lexer {
 
         if (token.getType() == Token.EOF && !includes.empty()) {
             // We've got EOF and have non empty stack.
-            LOG.debug("End of file, poping include stack");
+            //LOG.debug("End of file, poping include stack");
             IncludeSaveStruct ss = includes.pop();
             setInputStream(ss.input);
             setLine(ss.line);
