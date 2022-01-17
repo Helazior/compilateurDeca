@@ -437,7 +437,7 @@ public class DecacCompiler {
         return parser.parseProgramAndManageErrors(err);
     }
 
-    public AbstractProgram compileImport(string address) {
+    public AbstractProgram compileImport(String address) {
         String sourceFile = address;
         String destFile = null;
         // Done: calculer le nom du fichier .ass à partir du nom du
