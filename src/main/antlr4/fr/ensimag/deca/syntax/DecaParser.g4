@@ -451,7 +451,7 @@ select_expr returns[AbstractExpr tree]
         }
         | /* epsilon */ {
             //Attention, ici le setLocation n'a pas ete fait pas defaut de token de depart!
-            $tree = new  Selection($e1.tree, $i.tree);
+            $tree = new Selection($e1.tree, $i.tree);
         }
         )
     ;
