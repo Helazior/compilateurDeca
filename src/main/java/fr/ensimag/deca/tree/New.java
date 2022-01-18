@@ -53,12 +53,7 @@ public class New extends AbstractExpr {
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        // leaf node => nothing to do
-    }
-    
-    @Override
-    String prettyPrintNode() {
-        return "New (" + ")";
+        NomDeClasse.prettyPrint(s, prefix, true);
     }
 
 }

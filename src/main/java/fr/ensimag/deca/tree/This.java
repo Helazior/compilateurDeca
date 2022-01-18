@@ -58,7 +58,7 @@ public class This extends AbstractExpr {
     
     @Override
     String prettyPrintNode() {
-        return "This (" + ")";
+        return "This (" + ajouteChaine + ")";
     }
 
 }

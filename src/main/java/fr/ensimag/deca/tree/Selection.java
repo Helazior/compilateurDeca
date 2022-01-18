@@ -57,14 +57,9 @@ public class Selection extends AbstractExpr {
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        // leaf node => nothing to do
+        objet.prettyPrint(s, prefix, false);
+        nomDAttribut.prettyPrint(s, prefix, false);
     }
-    
-    @Override
-    String prettyPrintNode() {
-        return "This (" + ")";
-    }
-
 }
 
 
