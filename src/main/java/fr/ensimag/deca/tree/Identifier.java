@@ -208,6 +208,18 @@ public class Identifier extends AbstractIdentifier {
         regMan.giveAndPush(regMan.load(name));
     }
 
+    /**
+     * Pour utiliser l'attribut d'un objet. est appelé dans la class Selection
+     * @param compiler
+     */
+    protected void codeGenSelectIdent(DecacCompiler compiler) {
+        RegisterManager regMan = compiler.getRegMan();
+        Symbol name = getName(); // On charge l'attribut
+        GPRegister reg = regMan.pop(); // On charge l'objet
+        GPRegister regDest =  regMan.Field(reg, getType(), name);
+        regMan.giveAndPush(regDest);
+    }
+
     private Definition definition;
 
 
