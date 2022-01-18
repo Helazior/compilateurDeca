@@ -6,6 +6,10 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Line;
+import fr.ensimag.ima.pseudocode.instructions.RTS;
+
 import java.io.PrintStream;
 import java.util.jar.Attributes.Name;
 
@@ -29,6 +33,29 @@ public class DeclMethod extends AbstractDeclMethod {
     }
 
     //TODO
+
+    protected void codeGenDeclMethod(DecacCompiler compiler) {
+        // TODO: récupérer les arguments
+        // TODO: donc en gros avant l'appel de méthode, mettre les arguments dans les premiers registres
+
+        // corps du programme
+        method.codeGenMethod(compiler);
+
+        // On return
+        compiler.addInstruction(new RTS());
+
+
+        //________________________
+        // On revient placer ce qu'il manque avec les infos du prog
+        // Début de la méthode = label du nom de la méthode
+
+        // TODO: récup le nom :
+        compiler.addFirst(new Line(new Label("bodyMethod.class.method")));
+        // On empile tous les registres qu'on veut utiliser et on les restaure à la fin
+        regMan.restoreRegister();
+    }
+
+
     @Override
     public void decompile(IndentPrintStream s) {
         s.println("{");

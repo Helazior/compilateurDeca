@@ -13,6 +13,13 @@ import fr.ensimag.deca.context.EnvironmentExp;
  */
 public abstract class AbstractDeclMethod extends Tree {
 //TODO
+
+    /**
+     * Write all the code of a method
+     * @param compiler
+     */
+    protected abstract void codeGenMethod(DecacCompiler compiler);
+
     /**
      * Pass 2 of [SyntaxeContextuelle]. Verify that the
      * method is OK looking at method body and field initialization.

@@ -206,7 +206,7 @@ public class Identifier extends AbstractIdentifier {
     }
 
     @Override
-    protected void codeGenExpr(DecacCompiler compiler){
+    protected void codeGenExpr(DecacCompiler compiler) {
         RegisterManager regMan = compiler.getRegMan();
         Symbol name = getName();
         regMan.giveAndPush(regMan.load(name));
@@ -220,7 +220,8 @@ public class Identifier extends AbstractIdentifier {
         RegisterManager regMan = compiler.getRegMan();
         Symbol name = getName(); // On charge l'attribut
         GPRegister reg = regMan.pop(); // On charge l'objet
-        GPRegister regDest =  regMan.Field(reg, getType(), name);
+        // TODO : rajouter gestion erreur
+        GPRegister regDest =  regMan.getField(reg, getType(), name);
         regMan.giveAndPush(regDest);
     }
 

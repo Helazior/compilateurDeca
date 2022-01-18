@@ -33,6 +33,10 @@ public class DeclClass extends AbstractDeclClass {
         this.listDeclMethod = listDeclMethod;
     }
 
+    @Override
+    protected void codeGenClass(DecacCompiler compiler) {
+        listDeclMethod.codeGenListDeclMethod(compiler);
+    }
 
     @Override
     public void decompile(IndentPrintStream s) {
