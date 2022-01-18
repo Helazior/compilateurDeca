@@ -477,7 +477,6 @@ primary_expr returns[AbstractExpr tree]
     | READFLOAT OPARENT CPARENT {
             $tree = new ReadFloat();
         }
-    //TODO
     | NEW ident OPARENT CPARENT {
             assert($ident.tree != null);
             $tree= new New($ident.tree);

@@ -19,8 +19,6 @@ import org.apache.log4j.Logger;
  * @date 17/01/2022
  */
 public class New extends AbstractExpr {
-    private static final Logger LOG = Logger.getLogger(StringLiteral.class);
-
     private AbstractIdentifier NomDeClasse;
 
     public New(AbstractIdentifier i) {   
@@ -31,6 +29,7 @@ public class New extends AbstractExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
+                throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
@@ -40,7 +39,6 @@ public class New extends AbstractExpr {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print(value);
     }
 
     @Override
