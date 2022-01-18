@@ -13,13 +13,6 @@ class Test1 {
     protected String name;
 
     Test1 Test1() {
-        this.age = 10;
-        this.nom = "hello";
-    }
-
-    Test1 Test1(int a) {
-        Test1();
-        this.age = a;
     }
         
 }
@@ -27,7 +20,6 @@ class Test1 {
 class Test2 {
 
     void fct() {
-        Test1 a = new Test1();
-        Test1 b = new Test1(6);
+        Test1 a = new Test1(); 
     }
 }
