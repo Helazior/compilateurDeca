@@ -1,5 +1,5 @@
 // Description:
-//    On teste les new
+//    On teste les new dans les méthodes de classe.
 //
 //    
 //
@@ -12,7 +12,7 @@ class Test1 {
     int age;
     protected String name;
 
-    Test1 Test1() {
+    void Test1() {
     }
         
 }
