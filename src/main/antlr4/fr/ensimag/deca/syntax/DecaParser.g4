@@ -438,16 +438,14 @@ select_expr returns[AbstractExpr tree]
             setLocation($tree, $e.start);
         }
     | e1=select_expr DOT i=ident {
-            // TODO: Implémenter la classe Selection et implémenter ça
-            System.err.println("Attention: Selection n'est pas implémenté !!");
             assert($e1.tree != null);
             assert($i.tree != null);
             
         }
         (o=OPARENT args=list_expr CPARENT {
-            //TODO: Implémenter la classe MethodCall et implémenter ça
-            System.err.println("Attention: MethodCall n'est pas implémenté !!");
             assert($args.tree != null);
+            $tree = new MethodCall($e1.tree, $i.tree, $args.tree);
+            setLocation($tree, $e1.start);
             
         }
         | /* epsilon */ {
@@ -465,6 +463,9 @@ primary_expr returns[AbstractExpr tree]
     | m=ident OPARENT args=list_expr CPARENT {
             assert($args.tree != null);
             assert($m.tree != null);
+            this = new This(true);
+            $tree = new MethodCall(this, $m.tree, $args.tree);
+            setLocation($tree, $m.start);
         }
     | OPARENT expr CPARENT {
             assert($expr.tree != null);
