@@ -450,7 +450,8 @@ select_expr returns[AbstractExpr tree]
             
         }
         | /* epsilon */ {
-            
+            //Attention, ici le setLocation n'a pas ete fait pas defaut de token de depart!
+            $tree = new  Selection($e1.tree, $i.tree);
         }
         )
     ;
@@ -581,6 +582,7 @@ class_extension returns[AbstractIdentifier tree]
             $tree = $ident.tree;
         }
     | /* epsilon */ {
+        //Attention, ici le setLocation n'a pas ete fait pas defaut de token de depart!
             $tree = new Identifier(getDecacCompiler().createSymbol("Object"));
         }
     ;
