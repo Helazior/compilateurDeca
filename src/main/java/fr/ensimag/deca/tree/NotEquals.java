@@ -4,10 +4,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.instructions.CMP;
-import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.SEQ;
-import fr.ensimag.ima.pseudocode.instructions.SUB;
+import fr.ensimag.ima.pseudocode.instructions.*;
 
 /**
  *
@@ -21,12 +18,12 @@ public class NotEquals extends AbstractOpExactCmp {
     }
 
     public void codeGenOp(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
-        // EQUALS
         compiler.addInstruction(new CMP(Register.R0, Register.R1));
-        compiler.addInstruction(new SEQ(Register.R0));
-        // NOT
-        compiler.addInstruction(new LOAD(1, Register.R1));
-        compiler.addInstruction(new SUB(Register.R0, Register.R1));
+        if (!compiler.getIsInNotOp()) {
+            compiler.addInstruction(new SNE(Register.R0));
+        } else { // si NOT devant
+            compiler.addInstruction(new SEQ(Register.R0));
+        }
     }
 
     @Override
