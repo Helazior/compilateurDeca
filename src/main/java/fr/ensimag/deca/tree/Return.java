@@ -51,6 +51,7 @@ public class Return extends AbstractInst {
 
     @Override
     protected void iterChildren(TreeFunction f) {
+        resultat.iter(f);
     }
 
     @Override

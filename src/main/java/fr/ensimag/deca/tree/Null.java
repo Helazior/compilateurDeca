@@ -46,7 +46,7 @@ public class Null extends AbstractExpr {
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        // leaf node => nothing to do
+
     }
 
     @Override
@@ -56,7 +56,7 @@ public class Null extends AbstractExpr {
     
     @Override
     String prettyPrintNode() {
-        return "This (" + ")";
+        return "Null (" + ")";
     }
 
 }

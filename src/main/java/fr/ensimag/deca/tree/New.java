@@ -48,7 +48,7 @@ public class New extends AbstractExpr {
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        // leaf node => nothing to do
+        NomDeClasse.iter(f);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class New extends AbstractExpr {
     
     @Override
     String prettyPrintNode() {
-        return "This (" + ")";
+        return "New (" + ")";
     }
 
 }

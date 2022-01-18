@@ -51,7 +51,8 @@ public class Selection extends AbstractExpr {
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        // leaf node => nothing to do
+        objet.iter(f);
+        nomDAttribut.iter(f);
     }
 
     @Override
