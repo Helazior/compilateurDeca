@@ -172,7 +172,8 @@ inst returns[AbstractInst tree]
     //TODO
     | RETURN expr SEMI {
             assert($expr.tree != null);
-            $tree = $expr.tree;
+            $tree = new Return($expr.tree);
+            setLocation($expr.start)
         }
     ;
 
@@ -449,7 +450,7 @@ select_expr returns[AbstractExpr tree]
             
         }
         | /* epsilon */ {
-            // we matched "e.i"
+            
         }
         )
     ;
