@@ -40,8 +40,13 @@ public class Program extends AbstractProgram {
     public void verifyProgram(DecacCompiler compiler) throws ContextualError {
         LOG.debug("verify program: start");
         //TODO: les 3 passes
+        //classes.verifyListClass(compiler);
 
-        //TODO: check classes  
+        //classes.verifyListClassMembers(compiler);
+
+        //classes.verifyListClassBody(compiler);
+
+        //TODO: check classes
 
         main.verifyMain(compiler);
         LOG.debug("verify program: end");
@@ -63,22 +68,26 @@ public class Program extends AbstractProgram {
         // termine le programme
         compiler.addInstruction(new HALT());
 
-        if (compiler.getDivideExist()) {
-            codeGenError.divByZeroError(compiler);
-        }
-        if (compiler.getModuloExist()) {
-            codeGenError.modByZeroError(compiler);
-        }
+
         if (compiler.getIoExist()) {
             codeGenError.ioError(compiler);
         }
-        if (compiler.getOpOvExist()) {
-            codeGenError.overflowError(compiler);
-        }
+        if (!compiler.getCompilerOptions().getNoCheck()) {
+            if (compiler.getDivideExist()) {
+                codeGenError.divByZeroError(compiler);
+            }
+            if (compiler.getModuloExist()) {
+                codeGenError.modByZeroError(compiler);
+            }
 
-        codeGenError.stackOverflowError(compiler);
-        compiler.addFirst(new BOV(new Label("stack_overflow_error")));
-        compiler.addFirst(new TSTO(compiler.getRegMan().getMaxSizeStack()));
+            if (compiler.getOpOvExist()) {
+                codeGenError.overflowError(compiler);
+            }
+
+            codeGenError.stackOverflowError(compiler);
+            compiler.addFirst(new BOV(new Label("stack_overflow_error")));
+            compiler.addFirst(new TSTO(compiler.getRegMan().getMaxSizeStack()));
+        }
         compiler.addFirst(new Line( "Main program"));
 
         assert(compiler.getRegMan().isStackEmpty());

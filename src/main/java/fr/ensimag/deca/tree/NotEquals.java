@@ -18,11 +18,11 @@ public class NotEquals extends AbstractOpExactCmp {
     }
 
     public void codeGenOp(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
-        compiler.addInstruction(new CMP(Register.R0, Register.R1));
+        compiler.addInstruction(new CMP(register0, register1));
         if (!compiler.getIsInNotOp()) {
-            compiler.addInstruction(new SNE(Register.R0));
+            compiler.addInstruction(new SNE(register1));
         } else { // si NOT devant
-            compiler.addInstruction(new SEQ(Register.R0));
+            compiler.addInstruction(new SEQ(register1));
         }
     }
 

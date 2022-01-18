@@ -277,7 +277,7 @@ public class DecacCompiler {
         }
     }
 
-    private void createType(Symbol symbol, TypeDefinition typeDef) throws ContextualError{
+    public void createType(Symbol symbol, TypeDefinition typeDef) throws ContextualError{
         try {
             typeEnv.declare(symbol, typeDef);
         } catch (EnvironmentType.DoubleDefException e) {
@@ -286,18 +286,14 @@ public class DecacCompiler {
     }
 
 
-
-    public Type getType(Symbol type, Location location) throws ContextualError {
-        TypeDefinition typeDef = typeEnv.get(type);
-        if(typeDef == null){
-            throw new ContextualError(type.getName() + " is not recognise as a type", location);
-        }
-        return typeDef.getType();
+    //Renvoie null si le type demandé n'est pas trouvé
+    public TypeDefinition getType(Symbol type) {
+        return typeEnv.get(type);
     }
 
-    public Type getType(String typeName) throws ContextualError{
+    public Type getType(String typeName) {
         Symbol type = typeTable.create(typeName);
-        return getType(type, null);
+        return getType(type).getType();
     }
 
 
@@ -327,9 +323,21 @@ public class DecacCompiler {
         }
     }
 
+    //Renvoie null si l'expression demandé n'est pas trouvé
+    public ExpDefinition getExp(Symbol type) {
+        return expEnv.get(type);
+    }
+
+    public EnvironmentExp getExpEnv() {
+        return expEnv;
+    }
+
     public Symbol createSymbol(String expName) {
         return expTable.create(expName);
     }
+
+
+
 
 
 

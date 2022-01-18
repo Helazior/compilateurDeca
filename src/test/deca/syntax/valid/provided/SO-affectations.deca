@@ -1,11 +1,13 @@
-// Description:
-//    On test l'affectation sur les chaines de caractères, booléens, entiers et flottants.
-//
-// Resultats:
-//    Hello
-//
-// Historique:
-//    cree le 08/01/2022
+/*
+ * Description:
+ *    On test l'affectation sur les chaines de caractères, booléens, entiers et flottants.
+ *
+ * Resultats:
+ *    Hello
+ *
+ * Historique:
+ *    cree le 08/01/2022
+ */
 
 
 
@@ -13,5 +15,5 @@
     string s = "Hello World";
     int i = 143110;
     float f = 143110.0510;
-    bool b = true; 
+    boolean b = true; 
 }

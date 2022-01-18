@@ -1,0 +1,10 @@
+provided/SO-big.deca
+3
+2.0
+
+Enter a number: x was of value 3
+y is of value 3.40000e+00
+And z is of value 3
+Enter a float: y's new value is 6.80000e+00
+Enter an int:
+Finally it's OK, and good news: if no int was requested from you, the AND and OR works well !

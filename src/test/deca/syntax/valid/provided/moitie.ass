@@ -1,0 +1,47 @@
+; start main program
+; Main program
+	ADDSP #1
+; Beginning of main instructions:
+; Assign
+	RINT
+	BOV io_error
+	LOAD R1, R2
+; Store assign
+	STORE R2, 1(LB)
+; End assign
+	LOAD #0x1.0p-1, R1
+	LOAD R1, R2
+	LOAD 1(LB), R3
+	LOAD 1(LB), R4
+	LOAD R4, R0
+	LOAD R3, R1
+; *
+	MUL R0, R1
+	LOAD R1, R3
+	LOAD R3, R0
+; /* conv float */
+	FLOAT R0, R1
+	LOAD R1, R3
+	LOAD R3, R0
+	LOAD R2, R1
+; *
+	BOV overflow_error
+	MUL R0, R1
+	LOAD R1, R2
+	LOAD R2, R1
+	WFLOAT
+	WNL
+	HALT
+io_error:
+	WSTR "Error: Input/Output error"
+	WNL
+	ERROR
+overflow_error:
+	WSTR "Error: Overflow during arithmetic operation"
+	WNL
+	ERROR
+stack_overflow_error:
+	WSTR "Error: Stack Overflow"
+	WNL
+	ERROR
+; end main program

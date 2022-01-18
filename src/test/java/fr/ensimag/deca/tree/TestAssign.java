@@ -47,13 +47,9 @@ public class TestAssign {
         Identifier identifier1 = new Identifier(symTab.create("a"));
         Identifier identifier2 = new Identifier(symTab.create("b"));
         Identifier identifier3 = new Identifier(symTab.create("c"));
-        try {
-            identifier1.setType(compiler.getType("int"));
-            identifier2.setType(compiler.getType("int"));
-            identifier3.setType(compiler.getType("float"));
-        } catch (ContextualError e) {
-            System.out.println("les types entrés ne sont pas défini");
-        }
+        identifier1.setType(compiler.getType("int"));
+        identifier2.setType(compiler.getType("int"));
+        identifier3.setType(compiler.getType("float"));
         exprs1.add(identifier1);
         exprs2.add(identifier2);
         exprs3.add(identifier3);
