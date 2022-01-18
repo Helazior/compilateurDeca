@@ -428,6 +428,7 @@ unary_expr returns[AbstractExpr tree]
     | select_expr {
             assert($select_expr.tree != null);
             $tree = $select_expr.tree;
+            setLocation($tree, $select_expr.start);
         }
     ;
     
