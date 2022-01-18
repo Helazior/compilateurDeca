@@ -22,7 +22,7 @@ public class Selection extends AbstractExpr {
     private AbstractExpr objet;
     private AbstractIdentifier nomDAttribut;
 
-    public MethodCall(AbstractExpr e, AbstractIdentifier i) {   
+    public Selection(AbstractExpr e, AbstractIdentifier i) {   
         this.objet = e;
         this.nomDAttribut = i;
     }
