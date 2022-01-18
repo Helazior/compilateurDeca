@@ -21,7 +21,7 @@ import org.apache.log4j.Logger;
 public class MethodCall extends AbstractExpr {
     private AbstractExpr objet;
     private AbstractIdentifier nomDeMethode;
-    private ListExpr parametres 
+    private ListExpr parametres;
 
     public MethodCall(AbstractExpr e, AbstractIdentifier i, ListExpr p) {   
         this.objet = e;

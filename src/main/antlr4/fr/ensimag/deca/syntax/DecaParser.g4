@@ -173,7 +173,7 @@ inst returns[AbstractInst tree]
     | RETURN expr SEMI {
             assert($expr.tree != null);
             $tree = new Return($expr.tree);
-            setLocation($expr.start)
+            setLocation($tree, $expr.start);
         }
     ;
 
@@ -641,7 +641,7 @@ decl_field [AbstractIdentifier t, Visibility v] returns[AbstractDeclField tree]
           
         }
       )? {
-            $tree = new DeclField(t, field, initialization);
+            $tree = new DeclField(t, field, initialization, v);
             setLocation($tree, $i.start);
         }
     ;
