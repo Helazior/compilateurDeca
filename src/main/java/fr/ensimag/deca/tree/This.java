@@ -43,6 +43,7 @@ public class This extends AbstractExpr {
 
     @Override
     public void decompile(IndentPrintStream s) {
+        s.print(Boolean.toString(ajouteChaine));
     }
 
     @Override

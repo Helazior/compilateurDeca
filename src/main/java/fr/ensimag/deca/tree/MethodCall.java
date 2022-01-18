@@ -43,6 +43,13 @@ public class MethodCall extends AbstractExpr {
 
     @Override
     public void decompile(IndentPrintStream s) {
+        s.println("{");
+        s.indent();
+        objet.decompile(s);
+        nomDeMethode.decompile(s);
+        parametres.decompile(s);
+        s.unindent();
+        s.println("}");
     }
 
     @Override

@@ -41,6 +41,12 @@ public class Selection extends AbstractExpr {
 
     @Override
     public void decompile(IndentPrintStream s) {
+        s.println("{");
+        s.indent();
+        objet.decompile(s);
+        nomDAttribut.decompile(s);
+        s.unindent();
+        s.println("}");
     }
 
     @Override

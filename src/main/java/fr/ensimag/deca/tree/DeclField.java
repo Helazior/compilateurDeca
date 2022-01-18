@@ -52,6 +52,7 @@ public class DeclField extends AbstractDeclField {
     public void decompile(IndentPrintStream s) {
         type.decompile(s);
         s.println(" ");
+        type.decompile(s);
         field.decompile(s);
         initialization.decompile(s);
         s.println(";");

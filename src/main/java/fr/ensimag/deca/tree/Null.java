@@ -38,6 +38,10 @@ public class Null extends AbstractExpr {
 
     @Override
     public void decompile(IndentPrintStream s) {
+        s.println("{");
+        s.indent();
+        s.unindent();
+        s.println("}");
     }
 
     @Override
