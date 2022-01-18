@@ -46,9 +46,17 @@ public class BooleanLiteral extends AbstractExpr {
         RegisterManager regMan = compiler.getRegMan();
         GPRegister register = regMan.take();
         if (value) {
-            compiler.addInstruction(new LOAD(1, register));
+            if (!compiler.getIsInNotOp()) {
+                compiler.addInstruction(new LOAD(1, register));
+            } else {
+                compiler.addInstruction(new LOAD(0, register));
+            }
         } else {
-            compiler.addInstruction(new LOAD(0, register));
+            if (!compiler.getIsInNotOp()) {
+                compiler.addInstruction(new LOAD(0, register));
+            } else {
+                compiler.addInstruction(new LOAD(1, register));
+            }
         }
         compiler.getRegMan().giveAndPush(register);
     }

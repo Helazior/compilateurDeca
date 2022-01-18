@@ -1,0 +1,3 @@
+invalid/printTypeError.deca
+
+printTypeError.deca:2:9: Can't print a value of type boolean. Only integer, floats and strings are allowed.

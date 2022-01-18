@@ -65,6 +65,10 @@ public class DecacCompiler {
     private static boolean modExist = false;
     private static boolean ioExist = false;
     private static boolean opOvExist = false;
+    /**
+     * Optimize not operation
+     */
+    private static boolean isInNotOp = false;
 
     public DecacCompiler(CompilerOptions compilerOptions, File source) {
         super();
@@ -77,6 +81,14 @@ public class DecacCompiler {
         }catch(ContextualError e){
             System.out.println("a basic type is inizialise 2 times");
         }
+    }
+
+    public boolean getIsInNotOp() {
+        return isInNotOp;
+    }
+
+    public void inverseIsInNotOp() {
+        isInNotOp = !getIsInNotOp();
     }
 
     public boolean getDivideExist() {
