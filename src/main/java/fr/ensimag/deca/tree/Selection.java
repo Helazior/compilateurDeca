@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
  * @author gl60
  * @date 17/01/2022
  */
-public class Selection extends AbstractExpr {
+public class Selection extends AbstractLValue {
     private AbstractExpr objet;
     private AbstractIdentifier nomDAttribut;
 
@@ -28,6 +28,10 @@ public class Selection extends AbstractExpr {
     }
 
 //TODO
+    @Override
+    protected void codeGenStoreLValue(DecacCompiler compiler){
+    }
+
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {

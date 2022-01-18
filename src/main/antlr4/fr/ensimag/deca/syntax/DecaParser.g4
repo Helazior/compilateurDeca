@@ -267,7 +267,7 @@ expr returns[AbstractExpr tree]
 assign_expr returns[AbstractExpr tree]
     : e=or_expr (
         /* condition: expression e must be a "LVALUE" */ {
-            if (! ($e.tree instanceof AbstractLValue)) {
+            if (!($e.tree instanceof AbstractLValue)) {
                 throw new InvalidLValue(this, $ctx);
             }
 
