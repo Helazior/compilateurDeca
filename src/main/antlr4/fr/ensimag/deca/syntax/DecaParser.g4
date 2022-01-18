@@ -536,10 +536,12 @@ literal returns[AbstractExpr tree]
     //TODO
     | THIS {
         $tree = new This(false);
+        setLocation($tree, $THIS);
         }
     //TODO
     | NULL {
         $tree = new Null();
+        setLocation($tree, $NULL);
         }
     ;
 
@@ -652,7 +654,8 @@ decl_method returns[DeclMethod tree]
     : type ident OPARENT params=list_params CPARENT (block {
             assert($block.decls != null);
             assert($block.insts != null);
-            MethodBody methodBody = new MethodBody($block.decls, $block.insts); 
+            MethodBody methodBody = new MethodBody($block.decls, $block.insts);
+            setLocation(methodBody, $block.start);
             $tree = new DeclMethod($type.tree, $ident.tree, $params.tree, methodBody);
 
         }
@@ -660,6 +663,7 @@ decl_method returns[DeclMethod tree]
             assert($code.text != null);
             assert($code.location != null);
             MethodAsmBody methodBody = new MethodAsmBody($code.text, $code.location);
+            setLocation(methodBody, $multi_line_string.start);
             $tree = new DeclMethod($type.tree, $ident.tree, $params.tree, methodBody);
 
         }

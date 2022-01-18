@@ -1,0 +1,33 @@
+// Description:
+//    On teste les new
+//
+//    
+//
+// Historique:
+//    cree le 18/01/2022
+
+
+class Test1 {
+
+    int age;
+    protected String name;
+
+    Test1() {
+        this.age = 10;
+        this.nom = "hello";
+    }
+
+    Test1(int a) {
+        Test1();
+        this.age = a;
+    }
+        
+}
+
+class Test2 {
+
+    void fct() {
+        Test1 a = new Test1();
+        Test1 b = new Test1(6);
+    }
+}

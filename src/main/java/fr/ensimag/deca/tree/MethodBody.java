@@ -17,23 +17,6 @@ public class MethodBody extends AbstractMethodBody{
     }
     
     //TODO
-    @Override
-    protected void verifyMethodBody(DecacCompiler compiler) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
-    }
-
-    @Override
-    protected void codeGenMethod(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("not yet implemented");
-    }
-
-    /**
-    * Contains no real information => nothing to check.
-    */
-    @Override
-    protected void checkLocation() {
-        throw new UnsupportedOperationException("not yet implemented");    }
-
 
     @Override
     public void decompile(IndentPrintStream s) {

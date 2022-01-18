@@ -13,23 +13,6 @@ import java.io.PrintStream;
  */
 public class EmptyMethodBody extends AbstractMethodBody {
     //TODO
-    @Override
-    protected void verifyMethodBody(DecacCompiler compiler) throws ContextualError {
-        // Wow everything's good !
-    }
-
-    @Override
-    protected void codeGenMethod(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("not yet implemented");
-    }
-
-    /**
-     * Contains no real information => nothing to check.
-     */
-    @Override
-    protected void checkLocation() {
-        // nothing
-    }
 
     @Override
     public void decompile(IndentPrintStream s) {
