@@ -20,14 +20,17 @@ public class DeclField extends AbstractDeclField {
     final private AbstractIdentifier type;
     final private AbstractIdentifier field;
     final private AbstractInitialization initialization;
+    final private Visibility visibility;
 
-    public DeclField(AbstractIdentifier type, AbstractIdentifier field, AbstractInitialization initialization) {
+    public DeclField(AbstractIdentifier type, AbstractIdentifier field, AbstractInitialization initialization, Visibility visibility) {
         Validate.notNull(type);
         Validate.notNull(field);
         Validate.notNull(initialization);
+        Validate.notNull(visibility);
         this.type = type;
         this.field = field;
         this.initialization = initialization;
+        this.visibility = visibility;
     }
 
     //TODO toute la suite
@@ -47,6 +50,14 @@ public class DeclField extends AbstractDeclField {
 
     @Override
     public void decompile(IndentPrintStream s) {
+        switch(visibility){
+            case PUBLIC: s.print("PUBLIC");
+            break;
+            case PROTECTED: s.print("PROTECTED"); 
+            break;
+        }
+        
+        s.println(" ");
         type.decompile(s);
         s.println(" ");
         field.decompile(s);

@@ -388,6 +388,7 @@ public class DecacCompiler {
     private boolean doCompile(String sourceName, String destName,
             PrintStream out, PrintStream err)
             throws DecacFatalError, LocationException {
+
         AbstractProgram prog = doLexingAndParsing(sourceName, err);
 
         if (prog == null) {

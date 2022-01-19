@@ -1,0 +1,21 @@
+// Description:
+//    On teste l'appel des attributs de classe dans le programme principal.
+//
+//    
+//
+// Historique:
+//    cree le 18/01/2022
+
+
+class Test {
+
+    int attributTest;
+    
+    void fctTest(){
+    }
+        
+}
+{
+    Test var = new Test();
+    var.attributTest = 10;
+}
