@@ -50,6 +50,7 @@ public class DeclField extends AbstractDeclField {
 
     @Override
     public void decompile(IndentPrintStream s) {
+        s.println();
         switch(visibility){
             case PUBLIC: s.print("PUBLIC");
             break;
@@ -57,12 +58,13 @@ public class DeclField extends AbstractDeclField {
             break;
         }
         
-        s.println(" ");
+        s.print(" ");
         type.decompile(s);
-        s.println(" ");
+        s.print(" ");
         field.decompile(s);
+        s.print(" ");
         initialization.decompile(s);
-        s.println(";");
+        s.print(";");
     }
 
     @Override

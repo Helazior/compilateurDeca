@@ -15,26 +15,19 @@ public class MethodAsmBody extends AbstractMethodBody{
         this.corps = text;
         this.loc = location;
     }
-    
-    //TODO
-    
-    @Override
-    protected void checkLocation() {
-        throw new UnsupportedOperationException("not yet implemented");    }
 
 
     @Override
     public void decompile(IndentPrintStream s) {
-        
+        s.println(loc + " : (" + corps + " )");
+            
     }    
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        
     }
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        
     }
 }
