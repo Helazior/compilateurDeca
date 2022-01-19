@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
@@ -37,6 +38,7 @@ public class DeclMethod extends AbstractDeclMethod {
     protected void codeGenDeclMethod(DecacCompiler compiler) {
         // TODO: récupérer les arguments
         // TODO: donc en gros avant l'appel de méthode, mettre les arguments dans les premiers registres
+        RegisterManager regMan = compiler.getRegMan();
 
         // corps du programme
         method.codeGenMethod(compiler);
