@@ -15,12 +15,6 @@ public class MethodAsmBody extends AbstractMethodBody{
         this.corps = text;
         this.loc = location;
     }
-    
-    //TODO
-    
-    @Override
-    protected void checkLocation() {
-        throw new UnsupportedOperationException("not yet implemented");    }
 
 
     @Override
