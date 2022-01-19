@@ -1,6 +1,5 @@
 package fr.ensimag.deca.tree;
 
-import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
@@ -42,14 +41,14 @@ public class DeclMethod extends AbstractDeclMethod {
 
 
     @Override
-    protected void verifyMethodSignature(DecacCompiler compiler, ClassDefinition superClass) 
+    protected void verifyMethodSignature(DecacCompiler compiler, AbstractIdentifier superClass)
             throws ContextualError {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
     protected void verifyMethodBody(DecacCompiler compiler,
-            EnvironmentExp localEnv, ClassDefinition currentClass)
+            EnvironmentExp localEnv, AbstractIdentifier currentClass)
             throws ContextualError {
         throw new UnsupportedOperationException("not yet implemented");
     }

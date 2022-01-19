@@ -31,16 +31,22 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
     public void verifyListFieldVisibility(DecacCompiler compiler,
             ClassDefinition superClass, ClassDefinition currentClass)
             throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+
+        for (AbstractDeclField declField : getList()) {
+            declField.verifyFieldVisibility(compiler, superClass, currentClass);
+        }
     }
 
     /**
      * Pass 3 of [SyntaxeContextuelle]
      */
     public void verifyListFieldType(DecacCompiler compiler,
-            EnvironmentExp localEnv, ClassDefinition currentClass)
+            EnvironmentExp localEnv, AbstractIdentifier currentClass)
             throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+
+        for (AbstractDeclField declField : getList()) {
+            declField.verifyFieldType(compiler, localEnv, currentClass);
+        }
     }
 
 }
