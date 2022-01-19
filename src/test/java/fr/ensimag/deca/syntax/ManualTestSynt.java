@@ -6,6 +6,8 @@ import fr.ensimag.deca.tree.AbstractProgram;
 import java.io.File;
 import java.io.IOException;
 import org.antlr.v4.runtime.CommonTokenStream;
+import fr.ensimag.deca.syntax.antlr.DecaParser.java;
+import fr.ensimag.deca.syntax.antlr.DecaLexer.java;
 
 /**
  * Driver to test the Parser (and lexer).
