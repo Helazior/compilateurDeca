@@ -18,7 +18,7 @@ public abstract class AbstractDeclMethod extends Tree {
      * Write all the code of a method
      * @param compiler
      */
-    protected abstract void codeGenMethod(DecacCompiler compiler);
+    protected abstract void codeGenDeclMethod(DecacCompiler compiler);
 
     /**
      * Pass 2 of [SyntaxeContextuelle]. Verify that the

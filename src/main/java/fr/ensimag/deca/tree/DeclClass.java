@@ -105,20 +105,20 @@ public class DeclClass extends AbstractDeclClass {
     public int codeGenDeclMethod(DecacCompiler compiler, IMAProgram program)
             throws ContextualError {
         RegisterManager regman = compiler.getRegMan();
-        Symbol cnSymbol = className.getName();
-        ClassDefinition type = (ClassDefinition) compiler.getTypeEnv().get(cnSymbol);
+        Symbol className = currentClass.getName();
+        ClassDefinition type = (ClassDefinition) compiler.getTypeEnv().get(className);
         EnvironmentExp expEnv = type.getMembers();
         int size = type.getNumberOfMethods();
 
         // We define an asm function building the classtable
-        program.addLabel(new Label("classTableInit." + cnSymbol));
+        program.addLabel(new Label("classTableInit." + className));
         // We call the parent's classtable builder
         program.addInstruction(new BSR(
-            new LabelOperand(new Label("classTableInit." + superName.getName()))
+            new LabelOperand(new Label("classTableInit." + superClass.getName()))
         ));
         // We put a pointer to the parent class
         program.addInstruction(new LOAD(
-            new LabelOperand(new Label("classTableInit." + superName.getName())),
+            new LabelOperand(new Label("classTableInit." + superClass.getName())),
             Register.R1));
         program.addInstruction(new STORE(
             Register.R1,
@@ -127,11 +127,11 @@ public class DeclClass extends AbstractDeclClass {
         for (AbstractDeclMethod meth : listDeclMethod.getList()) {
             Symbol methName = meth.getName().getName();
             int index = expEnv.get(methName).asMethodDefinition(
-                "Internal Error: "+methName+" in class "+cnSymbol+" is not a method",
+                "Internal Error: "+methName+" in class "+className+" is not a method",
                 getLocation()
             ).getIndex();
             program.addInstruction(new LOAD(
-                new LabelOperand(new Label("methodBody."+cnSymbol+"."+methName)),
+                new LabelOperand(new Label("methodBody."+className+"."+methName)),
                 Register.R1));
             program.addInstruction(new STORE(
                 Register.R1,

@@ -21,26 +21,22 @@ public class ClassManager {
     }
 
     /** Loads the field's content into a register */
-    public void getField(GPRegister reg, Symbol fieldName, Symbol objType,
+    public void getField(GPRegister reg, Symbol fieldName, Type objType,
                          GPRegister dst, Location l) throws ContextualError {
-        TypeDefinition type = compiler.getTypeEnv().get(objType);
-        if (!type.isClass()) {
-            throw new IllegalArgumentException("Error: " + type.getType() + " is not a class type.");
-        }
-        ExpDefinition exp = ((ClassDefinition) type).getMembers().get(fieldName);
+        ClassDefinition typeDef = objType.asClassType(
+            "Error: " + objType.getName() + " is not a class type.", l).getDefinition();
+        ExpDefinition exp = ((ClassDefinition) typeDef).getMembers().get(fieldName);
         int index = exp.asFieldDefinition(
             "Identifier " + fieldName + " in class " + objType + " is not a field !",
             l).getIndex();
         compiler.addInstruction(new LOAD(new RegisterOffset(index, reg), dst));
     }
 
-    public void setField(GPRegister addr, Symbol fieldName, Symbol objType,
+    public void setField(GPRegister addr, Symbol fieldName, Type objType,
                          GPRegister src, Location l) throws ContextualError {
-        TypeDefinition type = compiler.getTypeEnv().get(objType);
-        if (!type.isClass()) {
-            throw new IllegalArgumentException("Error: " + type.getType() + " is not a class type.");
-        }
-        ExpDefinition exp = ((ClassDefinition) type).getMembers().get(fieldName);
+        ClassDefinition typeDef = objType.asClassType(
+            "Error: " + objType.getName() + " is not a class type.", l).getDefinition();
+        ExpDefinition exp = ((ClassDefinition) typeDef).getMembers().get(fieldName);
         int index = exp.asFieldDefinition(
             "Identifier " + fieldName + " in class " + objType + " is not a field !",
             l).getIndex();
@@ -48,13 +44,11 @@ public class ClassManager {
     }
 
     /** Loads the method's address into a register */
-    public void getMethod(GPRegister reg, Symbol methName, Symbol objType,
+    public void getMethod(GPRegister reg, Symbol methName, Type objType,
                          GPRegister dst, Location l) throws ContextualError {
-        TypeDefinition type = compiler.getTypeEnv().get(objType);
-        if (!type.isClass()) {
-            throw new IllegalArgumentException("Error: " + type.getType() + " is not a class type.");
-        }
-        ExpDefinition exp = ((ClassDefinition) type).getMembers().get(methName);
+        ClassDefinition typeDef = objType.asClassType(
+            "Error: " + objType.getName() + " is not a class type.", l).getDefinition();
+        ExpDefinition exp = ((ClassDefinition) typeDef).getMembers().get(methName);
         int index = exp.asMethodDefinition(
             "Identifier " + methName + " in class " + objType + " is not a field !",
             l).getIndex();

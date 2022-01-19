@@ -218,12 +218,12 @@ public class Identifier extends AbstractIdentifier {
      * Pour utiliser l'attribut d'un objet. est appelé dans la class Selection
      * @param compiler
      */
-    protected void codeGenSelectIdent(DecacCompiler compiler) {
+    protected void codeGenSelectIdent(DecacCompiler compiler) throws ContextualError {
         RegisterManager regMan = compiler.getRegMan();
         Symbol name = getName(); // On charge l'attribut
         GPRegister reg = regMan.pop(); // On charge l'objet
         // TODO : rajouter gestion erreur
-        GPRegister regDest =  regMan.getField(reg, getType(), name);
+        GPRegister regDest = regMan.getField(reg, name, getType(), getLocation());
         regMan.giveAndPush(regDest);
     }
 

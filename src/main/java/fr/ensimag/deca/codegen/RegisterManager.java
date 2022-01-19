@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
-import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.*;
 import fr.ensimag.deca.codegen.VariableTable;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
@@ -58,7 +58,7 @@ public class RegisterManager {
         this.stackOffset = 0;
     }
 
-    public void declareMethodVars(ListDeclVar vars) {
+    public void declareMethodVars(/*Signature sig, */ListDeclVar vars) {
         LOG.trace("REGMAN declareVars");
         if (namedVars != null) {
             throw new UnsupportedOperationException("Variables already delcared");
@@ -334,29 +334,29 @@ public class RegisterManager {
         LOG.trace("REGMAN giveAndStore end");
     }
 
-    public void getField(GPRegister addr, Symbol fieldName, Symbol objType,
+    public void getField(GPRegister addr, Symbol fieldName, Type objType,
                          GPRegister dst, Location l) throws ContextualError {
         classes.getField(addr, fieldName, objType, dst, l);
     }
 
-    public GPRegister getField(GPRegister addr, Symbol fieldName, Symbol objType,
+    public GPRegister getField(GPRegister addr, Symbol fieldName, Type objType,
                                 Location l) throws ContextualError {
         GPRegister dst = take();
         classes.getField(addr, fieldName, objType, dst, l);
         return dst;
     }
 
-    public void setField(GPRegister addr, Symbol fieldName, Symbol objType,
+    public void setField(GPRegister addr, Symbol fieldName, Type objType,
                          GPRegister src, Location l) throws ContextualError {
         classes.setField(addr, fieldName, objType, src, l);
     }
 
-    public void getMethod(GPRegister addr, Symbol methName, Symbol objType,
+    public void getMethod(GPRegister addr, Symbol methName, Type objType,
                          GPRegister dst, Location l) throws ContextualError {
         classes.getMethod(addr, methName, objType, dst, l);
     }
 
-    public GPRegister getMethod(GPRegister addr, Symbol methName, Symbol objType,
+    public GPRegister getMethod(GPRegister addr, Symbol methName, Type objType,
                                 Location l) throws ContextualError {
         GPRegister dst = take();
         classes.getMethod(addr, methName, objType, dst, l);

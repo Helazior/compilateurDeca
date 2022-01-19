@@ -69,7 +69,7 @@ public class DeclMethod extends AbstractDeclMethod {
         // TODO: récup le nom :
         compiler.addFirst(new Line(new Label("bodyMethod.class.method")));
         // On empile tous les registres qu'on veut utiliser et on les restaure à la fin
-        regMan.restoreRegister();
+        regMan.restoreRegisters();
 
         // goto erreur return en cas de non return
         // On return
@@ -151,7 +151,7 @@ public class DeclMethod extends AbstractDeclMethod {
 
     @Override
     public AbstractIdentifier getName() {
-        return this.name;
+        return this.method;
     }
 
 }
