@@ -12,7 +12,7 @@ class Test1 {
     int age;
     protected String name;
 
-    Test1() {
+    void Test1() {
         this.age = 10;
         this.nom = "hello";
     }
