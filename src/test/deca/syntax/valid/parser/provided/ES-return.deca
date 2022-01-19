@@ -1,0 +1,30 @@
+// Description:
+//    On teste les return
+//
+//    
+//
+// Historique:
+//    cree le 18/01/2022
+
+
+class Test1 {
+
+    int somme(int a, int b) {
+        return a;
+    }
+
+    boolean vrai() {
+        return true;
+    }
+
+    void a() {
+    }
+        
+}
+
+class Test2 {
+
+    Test1 fct() {
+        return null;
+    }
+}

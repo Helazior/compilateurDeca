@@ -5,8 +5,11 @@ import fr.ensimag.deca.context.ContextualError;
 
 public abstract class AbstractMethodBody extends Tree{
 
-    protected abstract void codeGenMethod(DecacCompiler compiler);
+    protected void verifyMethodBody(DecacCompiler compiler) throws ContextualError {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 
-    protected abstract void verifyMethodBody(DecacCompiler compiler) throws ContextualError;
-
+    protected void codeGenMethod(DecacCompiler compiler) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 }
