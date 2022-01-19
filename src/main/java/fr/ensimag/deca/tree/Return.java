@@ -1,23 +1,17 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.ima.pseudocode.instructions.WSTR;
-import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
-import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
 import java.io.PrintStream;
+import fr.ensimag.deca.codegen.RegisterManager;
 
 import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.instructions.BEQ;
-import fr.ensimag.ima.pseudocode.instructions.BNE;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
-import fr.ensimag.ima.pseudocode.instructions.CMP;
-import org.apache.commons.lang.Validate;
 
 /**
  * @author gl60
@@ -33,6 +27,8 @@ public class Return extends AbstractInst {
     //TODO
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
+        resultat.codeGenExpr(compiler);
+        compiler.getRegMan().pop(Register.R1);
         compiler.addInstruction(new BRA(new Label("return" + compiler.getNbReturn())));
     }
 

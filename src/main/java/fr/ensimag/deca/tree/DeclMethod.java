@@ -2,7 +2,6 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
-import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -18,8 +17,6 @@ import fr.ensimag.ima.pseudocode.instructions.RTS;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 import java.io.PrintStream;
-import java.util.List;
-import java.util.jar.Attributes.Name;
 
 import org.apache.commons.lang.Validate;
 
@@ -47,6 +44,7 @@ public class DeclMethod extends AbstractDeclMethod {
     protected void codeGenDeclMethod(DecacCompiler compiler) {
         RegisterManager regMan = compiler.getRegMan();
         // TODO: récupérer les arguments de la méthode dans la pile
+        // On place le label d'erreur à la fin du fichier
         if (!type.getType().isFloat()) {
             compiler.setNoVoidMethodExist();
         }
@@ -60,18 +58,13 @@ public class DeclMethod extends AbstractDeclMethod {
         }
         compiler.addLabel(new Label("return" + compiler.getNbReturn()));
 
-
         //________________________
         // On revient placer ce qu'il manque avec les infos du prog
         // Début de la méthode = label du nom de la méthode
-
-        // TODO: récup le nom de la classe :
         compiler.addFirst(new Line(new Label("bodyMethod." + getClass().getName() + "." + method.getName())));
-        // On empile tous les registres qu'on veut utiliser et on les restaure à la fin
+        // On empile tous les registres qu'on veut utiliser au début de la méthode et on les restaure à la fin
         regMan.restoreRegisters();
 
-        // goto erreur return en cas de non return
-        // On return
         compiler.addInstruction(new RTS());
     }
 
