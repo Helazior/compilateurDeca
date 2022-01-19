@@ -45,9 +45,8 @@ public class DeclMethod extends AbstractDeclMethod {
     //TODO
 
     protected void codeGenDeclMethod(DecacCompiler compiler) {
-        // TODO: récupérer les arguments
-        // TODO: donc en gros avant l'appel de méthode, mettre les arguments dans les premiers registres
         RegisterManager regMan = compiler.getRegMan();
+        // TODO: récupérer les arguments de la méthode dans la pile
         if (!type.getType().isFloat()) {
             compiler.setNoVoidMethodExist();
         }
@@ -55,7 +54,7 @@ public class DeclMethod extends AbstractDeclMethod {
         // ________________________corps du programme___________________________
         methodBody.codeGenMethod(compiler);
         // goto return
-        // Si c'est pas un void on va à une erreur
+        // Si c'est pas un void et qu'on n'a pas eu de return on va à une erreur
         if (!type.getType().isVoid()) {
             compiler.addInstruction(new BRA(new Label ("no_return_error")));
         }
@@ -66,10 +65,10 @@ public class DeclMethod extends AbstractDeclMethod {
         // On revient placer ce qu'il manque avec les infos du prog
         // Début de la méthode = label du nom de la méthode
 
-        // TODO: récup le nom :
-        compiler.addFirst(new Line(new Label("bodyMethod.class.method")));
+        // TODO: récup le nom de la classe :
+        compiler.addFirst(new Line(new Label("bodyMethod." + getClass().getName() + "." + method.getName())));
         // On empile tous les registres qu'on veut utiliser et on les restaure à la fin
-        regMan.restoreRegister();
+        regMan.restoreRegisters();
 
         // goto erreur return en cas de non return
         // On return
