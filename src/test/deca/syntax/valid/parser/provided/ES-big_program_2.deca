@@ -4,7 +4,7 @@
 //    
 //
 // Historique:
-//    cree le 18/01/2022
+//    cree le 19/01/2022
 
 
 class Animal {
@@ -34,6 +34,10 @@ class Chien extends Animal {
         println("Woof");
         this.aboie = true;
     }
+
+    void toString() {
+        println("Le chien s'appelle " + this.name);
+    }
 }
 
 class Chat extends Animal {
@@ -48,6 +52,10 @@ class Chat extends Animal {
         chat.nb_pattes = nb_pattes;
         chat.sauvage = sauvage;
         return chat;
+    }
+
+    void toString() {
+        println("Le chat s'appelle " + this.name);
     }
 
     void Miauler() {
@@ -77,13 +85,73 @@ class Maitre {
         this.x = this.x + a;
         this.y = this.y + b;
     }
+
+    void toString() {
+        if(this.gender == true) {
+            println("Le maitre a un chat et un chien");
+        }
+        else {
+            println("La maitresse a un chat et un chien");
+        }
+        this.chat.toString;
+        this.chien.toString;
+    }
+}
+
+class Voiture {
+    String couleur;
+    String marque;
+    String modele;
+    int annee;
+    float kilometrage;
+
+    void couleur_choice(String color) {
+        this.couleur = color;
+    }
+
+    void marque_choice(String marque) {
+        this.marque = marque;
+    }
+
+    void modele_choice(String modele) {
+        this.modele = modele;
+    }
+
+    void annee_choice(int annee) {
+        this.annee = annee;
+    }
+
+    void calcul_kilometrage(float distance) {
+        this.kilometrage = this.kilometrage + distance;
+    }
+
+    String getModele() {
+        return this.modele;
+    }
+}
+
+class Environnement {
+    Maitre personne;
+    Voiture car;
+
+    void toString() {
+        this.personne.toString();
+        println("La voiture est une " + this.voiture.getModele);
+    }
 }
 
 {
     Maitre maitre = new Maitre();
+    Environnement evnt = new Environnement();
+
     maitre = maitre.init(true);
 
     maitre.Translate(10, 10);
     println("position = ( " + maitre.x + " ; " + maitre.y + " )");
     maitre.chien.Aboyer;
+
+    evnt.personne = maitre;
+    evnt.car = new Voiture();
+    evnt.car.modele_choice("107");
+    evnt.toString;
 }
