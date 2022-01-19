@@ -1,0 +1,89 @@
+// Description:
+//    On teste l'appel des classes dans le programme principal
+//
+//    
+//
+// Historique:
+//    cree le 18/01/2022
+
+
+class Animal {
+
+    protected int age;
+    protected String name;
+    int nb_pattes;
+        
+}
+
+
+class Chien extends Animal {
+    
+    boolean collier;
+    boolean aboie;
+
+    Chien init(int age, String name, int nb_pattes, boolean collier) {
+        Chien medor = new Chien();
+        medor.age = age;
+        medor.name = name;
+        medor.nb_pattes = nb_pattes;
+        medor.collier = collier;
+        return medor;
+    }
+
+    void Aboyer() {
+        println("Woof");
+        this.aboie = true;
+    }
+}
+
+class Chat extends Animal {
+    
+    boolean sauvage;
+    boolean miaule;
+
+    Chat init(int age, String name, int nb_pattes, boolean sauvage) {
+        Chien chat = new Chat();
+        chat.age = age;
+        chat.name = name;
+        chat.nb_pattes = nb_pattes;
+        chat.sauvage = sauvage;
+        return chat;
+    }
+
+    void Miauler() {
+        println("Miaou");
+        this.miaule = true;
+    }
+}
+
+class Maitre {
+    boolean gender;
+    Chien chien;
+    Chat chat;
+    int x;
+    int y;
+
+    Maitre init(boolean gender) {
+        Maitre paul = new Maitre();
+        paul.gender = gender;
+        paul.chien = new Chien();
+        paul.chien = paul.chien.init(5, "Arthur", 4, true);
+        paul.chat = new Chat();
+        paul.chat = paul.chat.init(4, "miaouss", 3, false);
+        return paul;
+    }
+
+    void Translate(int a, int b) {
+        this.x = this.x + a;
+        this.y = this.y + b;
+    }
+}
+
+{
+    Maitre maitre = new Maitre();
+    maitre = maitre.init(true);
+
+    maitre.Translate(10, 10);
+    println("position = ( " + maitre.x + " ; " + maitre.y + " )");
+    maitre.chien.Aboyer;
+}
