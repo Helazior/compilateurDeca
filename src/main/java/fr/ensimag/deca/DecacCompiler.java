@@ -243,16 +243,12 @@ public class DecacCompiler {
 
 
     /**
-     * (demander à Gwennan en cas de PB)
+     * Gestionnaire des registres pour la génération de code
      */
     private RegisterManager regManager;
 
     /**
-     * Permet d'avoir des types dans la partie B
-     * (demander à Gwennan en cas de PB)
-     * 
-     * Cela correspond en fait à la definition de
-     * l'environnmeent des types de base du compilateur
+     * Environnement des types définis lors de l'étape B de la compilation
      */
 
     private final EnvironmentType typeEnv = new EnvironmentType(null);

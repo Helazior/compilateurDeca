@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
+import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.codegen.VariableTable;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.*;
-import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.*;
 import fr.ensimag.ima.pseudocode.instructions.*;
 import org.apache.log4j.Logger;
 
@@ -20,28 +20,92 @@ public class RegisterManager {
     // -1: externally used.
     //  0: Not used.
     // > 0: used for the stacked variable of this index
-    private final int[] registers;
+    private int[] registers;
+    private boolean[] usedRegisters;
     // List of state of the last registers used to pre-load a value
     // that normally is on the stack. 
-    private final List<Integer> lastRegisters;
+    private List<Integer> lastRegisters;
     // Number of registers accessible. Only R2 to R(nMax - 1) will be used
-    private final int nMax;
+    private int nMax;
+    private int stackOffset;
     // Number of variables on stack
-    private int nbVarsStack = 0;
+    private int nbVarsStack;
     // maximum size of the stack for the TSTO instruction
-    private int maxSizeStack = 0;
-    private int sizeStack = 0;
+    private int maxSizeStack;
+    private int sizeStack;
 
     //public final VariableTable varTable;
     private DecacCompiler compiler;
     private VariableTable namedVars;
+    private ClassManager classes;
 
     public RegisterManager(DecacCompiler compiler, int nb_registres){
         this.compiler = compiler;
         //varTable = new VariableTable(compiler, vars);
         nMax = nb_registres;
-        this.registers = new int[nb_registres]; // Initialisé à 0
-        this.lastRegisters = new ArrayList<Integer>(); // Initialisé à 0
+        this.classes = null;
+        init();
+    }
+
+    private void init() {
+        this.registers = new int[nMax]; // Initialisé à 0
+        this.usedRegisters = new boolean[nMax]; // Initialisé à false
+        this.lastRegisters = new ArrayList<Integer>();
+        this.nbVarsStack = 0;
+        this.maxSizeStack = 0;
+        this.sizeStack = 0;
+        this.namedVars = null;
+        this.stackOffset = 0;
+    }
+
+    public void declareMethodVars(ListDeclVar vars) {
+        LOG.trace("REGMAN declareVars");
+        if (namedVars != null) {
+            throw new UnsupportedOperationException("Variables already delcared");
+        }
+        namedVars = new VariableTable(compiler);
+        this.stackOffset = namedVars.init(vars);
+        LOG.trace("REGMAN declareVars end");
+    }
+
+    public void declareGlobalVars(ListDeclVar vars, int classtableSize) {
+        LOG.trace("REGMAN declareVars");
+        if (namedVars != null) {
+            throw new UnsupportedOperationException("Variables already delcared");
+        }
+        namedVars = new VariableTable(compiler);
+        this.stackOffset = namedVars.init(vars, classtableSize) + classtableSize;
+        LOG.trace("REGMAN declareVars end");
+    }
+
+    public void declareClasses(ListDeclClass classDefs) {
+        LOG.trace("REGMAN declareClasses");
+        if (classDefs != null) {
+            throw new UnsupportedOperationException("Classes already delcared");
+        }
+        classes = new ClassManager(compiler, classDefs);
+        LOG.trace("REGMAN declareClasses end");
+    }
+
+    public void restoreRegisters() {
+        int nbPush = 0;
+        for (int i = 0; i < nMax; i++) {
+            if (usedRegisters[i]) {
+                nbPush++;
+                compiler.addFirst(new Line(new PUSH(Register.getR(i))));
+                compiler.addInstruction(new PUSH(Register.getR(i)));
+            }
+        }
+        compiler.addFirst(new Line(new BOV(new Label("stack_overflow_error"))));
+        compiler.addFirst(new Line(new ADDSP(stackOffset)));
+        compiler.addFirst(new Line(new TSTO(nbPush + maxSizeStack + stackOffset)));
+        init(); // reinitalize the inner strucure
+    }
+
+    public void endMain() {
+        compiler.addFirst(new Line(new ADDSP(stackOffset)));
+        compiler.addFirst(new Line(new TSTO(maxSizeStack + stackOffset)));
+        init(); // reinitalize the inner strucure
     }
 
     public static class RegisterManagerException extends RuntimeException {
@@ -100,6 +164,7 @@ public class RegisterManager {
     public void giveAndPush(GPRegister reg) {
         LOG.trace("REGMAN giveAndPush");
         int i = reg.getNumber();
+        usedRegisters[i] = true;
         if (i < 2 || i >= nMax) {
             throw new InexistingRegister();
         }
@@ -162,6 +227,7 @@ public class RegisterManager {
 
     public void take(GPRegister register) {
         LOG.trace("REGMAN take(reg)");
+        usedRegisters[register.getNumber()] = true;
         if (register.getNumber() < 0 || register.getNumber() >= nMax) {
             throw new InexistingRegister();
         }
@@ -237,16 +303,6 @@ public class RegisterManager {
         return registers[register.getNumber()] != 0;
     }
 
-    public void declareVars(ListDeclVar vars) {
-        LOG.trace("REGMAN declareVars");
-        if (namedVars != null) {
-            throw new UnsupportedOperationException("Not able to declare new variables");
-        }
-        namedVars = new VariableTable(compiler);
-        namedVars.init(vars);
-        LOG.trace("REGMAN declareVars end");
-    }
-
     public void load(Symbol s, GPRegister dst) {
         LOG.trace("REGMAN load");
         assert(namedVars != null);
@@ -276,5 +332,34 @@ public class RegisterManager {
         store(s, register);
         give(register);
         LOG.trace("REGMAN giveAndStore end");
+    }
+
+    public void getField(GPRegister addr, Symbol fieldName, Symbol objType,
+                         GPRegister dst, Location l) throws ContextualError {
+        classes.getField(addr, fieldName, objType, dst, l);
+    }
+
+    public GPRegister getField(GPRegister addr, Symbol fieldName, Symbol objType,
+                                Location l) throws ContextualError {
+        GPRegister dst = take();
+        classes.getField(addr, fieldName, objType, dst, l);
+        return dst;
+    }
+
+    public void setField(GPRegister addr, Symbol fieldName, Symbol objType,
+                         GPRegister src, Location l) throws ContextualError {
+        classes.setField(addr, fieldName, objType, src, l);
+    }
+
+    public void getMethod(GPRegister addr, Symbol methName, Symbol objType,
+                         GPRegister dst, Location l) throws ContextualError {
+        classes.getMethod(addr, methName, objType, dst, l);
+    }
+
+    public GPRegister getMethod(GPRegister addr, Symbol methName, Symbol objType,
+                                Location l) throws ContextualError {
+        GPRegister dst = take();
+        classes.getMethod(addr, methName, objType, dst, l);
+        return dst;
     }
 }

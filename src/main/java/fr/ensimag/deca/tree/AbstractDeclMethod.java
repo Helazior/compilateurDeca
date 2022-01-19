@@ -28,5 +28,6 @@ public abstract class AbstractDeclMethod extends Tree {
         EnvironmentExp localEnv, ClassDefinition currentClass)
         throws ContextualError;
 
+    public abstract AbstractIdentifier getName();
 }
 

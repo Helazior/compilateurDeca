@@ -71,4 +71,9 @@ public class DeclMethod extends AbstractDeclMethod {
         method.iter(f);
     }
 
+    @Override
+    public AbstractIdentifier getName() {
+        return this.name;
+    }
+
 }
