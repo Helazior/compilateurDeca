@@ -14,11 +14,9 @@ import fr.ensimag.deca.context.EnvironmentExp;
 public abstract class AbstractDeclMethod extends Tree {
 //TODO
 
-    /**
-     * Write all the code of a method
-     * @param compiler
-     */
-    protected abstract void codeGenMethod(DecacCompiler compiler);
+
+
+    protected abstract void codeGenDeclMethod(DecacCompiler compiler);
 
     /**
      * Pass 2 of [SyntaxeContextuelle]. Verify that the
@@ -27,7 +25,7 @@ public abstract class AbstractDeclMethod extends Tree {
     protected abstract void verifyMethodSignature(DecacCompiler compiler, AbstractIdentifier superClass,
     AbstractIdentifier currentClass) throws ContextualError;
 
-        /**
+    /**
      * Pass 3 of [SyntaxeContextuelle]. Verify that instructions and expressions
      * contained in the method are OK.
      */
