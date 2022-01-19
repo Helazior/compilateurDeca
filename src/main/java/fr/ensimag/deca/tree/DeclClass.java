@@ -57,18 +57,17 @@ public class DeclClass extends AbstractDeclClass {
         ClassDefinition superDef = (ClassDefinition)compiler.getType(superName);
         ClassType classType = new ClassType(name, getLocation(), superDef);
         compiler.createType(currentClass.getName(), classType.getDefinition());
+
+        Validate.isTrue(compiler.getType(superName).isClass());
     }
 
     @Override
     protected void verifyClassMembers(DecacCompiler compiler)
             throws ContextualError {
-
-        ClassDefinition superDef = (ClassDefinition)compiler.getType(superName);
-
         listDeclField.verifyListFieldVisibility(compiler, superClass, currentClass);
-        listDeclMethod.verifyListMethodSignature(compiler, superClass);
+        listDeclMethod.verifyListMethodSignature(compiler, superClass, currentClass);
     }
-    
+
     @Override
     protected void verifyClassBody(DecacCompiler compiler) throws ContextualError {
         throw new UnsupportedOperationException("not yet implemented");

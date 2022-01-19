@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -38,17 +39,27 @@ public class DeclField extends AbstractDeclField {
 
     //TODO toute la suite
     @Override
-    protected FieldDefinition verifyFieldVisibility(DecacCompiler compiler,
+    protected void verifyFieldVisibility(DecacCompiler compiler,
             AbstractIdentifier superClass, AbstractIdentifier currentClass)
             throws ContextualError {
         Type t = type.verifyType(compiler);
-        if( t.isVoid()){
-            throw new ContextualError("Cannot have a 'void' type", getLocation());
+        Validate.isTrue(t.isVoid(), "Cannot have a 'void' type", getLocation());
+
+        ClassDefinition classDef = (ClassDefinition)compiler.getType(currentClass.getName());
+        int index = classDef.getSuperClass().getNumberOfFields() + classDef.getNumberOfFields();
+
+        field.setDefinition(new FieldDefinition(t, getLocation(), visibility, classDef, index));
+
+        try{
+            classDef.getMembers().declare(field.getName(), field.getFieldDefinition());
+        } catch (DoubleDefException e) {
+            throw new ContextualError(e + " This variable is already defined in this context", getLocation());
         }
 
-        ClassDefinition currDef = (ClassDefinition)compiler.getType(currentClass.getName());
-        field.setDefinition(new FieldDefinition(t, getLocation(), visibility, currDef, 0));
-        return field.getFieldDefinition();
+        EnvironmentExp superEnvExp = classDef.getSuperClass().getMembers();
+        Validate.isTrue(superEnvExp.get(field.getName()).isField(),
+                "This expression cannot be defined as a field because its parent already define it another way");
+
     }
 
     protected void verifyFieldType(DecacCompiler compiler,

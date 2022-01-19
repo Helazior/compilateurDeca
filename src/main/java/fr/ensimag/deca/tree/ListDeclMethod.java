@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
@@ -24,11 +25,11 @@ public class ListDeclMethod extends TreeList<AbstractDeclMethod> {
     /**
      * Pass 2 of [SyntaxeContextuelle]
      */
-    public void verifyListMethodSignature(DecacCompiler compiler,
-            AbstractIdentifier superClass) throws ContextualError {
+    public void verifyListMethodSignature(DecacCompiler compiler, AbstractIdentifier superClass,
+            AbstractIdentifier currentClass) throws ContextualError {
 
         for (AbstractDeclMethod declMethod : getList()) {
-            declMethod.verifyMethodSignature(compiler, superClass);
+            declMethod.verifyMethodSignature(compiler, superClass, currentClass);
         }
     }
 
