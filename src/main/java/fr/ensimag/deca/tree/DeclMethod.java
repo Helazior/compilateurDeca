@@ -21,11 +21,11 @@ public class DeclMethod extends AbstractDeclMethod {
     private ListDeclParam parameters;
     private AbstractMethodBody method;
 
-    public DeclMethod(AbstractIdentifier typeReturn, AbstractIdentifier name, ListDeclParam parameters, AbstractMethodBody methodBody){
-        this.type = typeReturn;
+    public DeclMethod(AbstractIdentifier type, AbstractIdentifier name, ListDeclParam parameters, AbstractMethodBody method){
+        this.type = type;
         this.name = name;
         this.parameters = parameters;
-        this.method = methodBody;
+        this.method = method;
     }
 
     //TODO

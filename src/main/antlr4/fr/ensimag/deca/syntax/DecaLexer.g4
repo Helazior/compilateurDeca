@@ -107,8 +107,8 @@ OR: '||';
 //
 
 //INCLUDE
-   FILENAME: '"' (LETTER | DIGIT | '.' | '-' | '_')+ '"';
-   IMPORT: 'import';
+   fragment FILENAME: '"' (LETTER | DIGIT | '.' | '-' | '_')+ '"';
+   IMPORT: '#import';
    INCLUDE: '#include' (' ')* FILENAME;
 //
 
