@@ -82,11 +82,15 @@ public class DeclMethod extends AbstractDeclMethod {
         s.println("{");
         s.indent();
         type.decompile(s);
+        s.print(" ");
         method.decompile(s);
+        s.print(" (");
         parameters.decompile(s);
+        s.print(") ");
         methodBody.decompile(s);
         s.unindent();
-        s.println("}");    }
+        s.println("}");    
+    }
 
 
     @Override

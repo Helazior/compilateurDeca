@@ -1,0 +1,25 @@
+// Description:
+//    On teste les new dans les méthodes de classe.
+//
+//    
+//
+// Historique:
+//    cree le 18/01/2022
+
+
+class Test1 {
+
+    int age;
+    protected String name;
+
+    void Test1() {
+    }
+        
+}
+
+class Test2 {
+
+    void fct() {
+        Test1 a = new Test1(); 
+    }
+}

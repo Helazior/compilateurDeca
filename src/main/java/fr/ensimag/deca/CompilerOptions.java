@@ -49,6 +49,9 @@ public class CompilerOptions {
         entry("-h", new OptionData("help", "Affiche cette aide", 0)),
         entry("-r", new OptionData("registers", "limite les registres " +
             "banalisés disponibles. Doit être compris entre 4 et 16 inclus."
+            , 1)),
+        entry("-l", new OptionData("link option", "permet et autorise " +
+            "l'imports de fichiers"
             , 1))
     );
 
@@ -83,6 +86,10 @@ public class CompilerOptions {
 
     public boolean getDecompile() {
         return options.get("-p").isInvoked();
+    }
+
+    public boolean getLinked(){
+        return options.get("-l").isInvoked();
     }
 
     public int getNbReg() {

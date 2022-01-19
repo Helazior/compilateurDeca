@@ -1,0 +1,31 @@
+; Main program
+	TSTO #0
+	BOV stack_overflow_error
+; start main program
+	ADDSP #0
+; Beginning of main instructions:
+; Start IF
+; cond IF
+	LOAD #1, R2
+	LOAD #0, R3
+; >=
+	SUB R3, R2
+	SGE R2
+	LOAD R2, R1
+	BEQ else_0
+; IF then_body
+	WSTR "ok"
+	WNL
+	BRA end_if_0
+else_0:
+; IF else_body
+	WSTR "erreur"
+	WNL
+; FI
+end_if_0:
+	HALT
+stack_overflow_error:
+	WSTR "Error: Stack Overflow"
+	WNL
+	ERROR
+; end main program
