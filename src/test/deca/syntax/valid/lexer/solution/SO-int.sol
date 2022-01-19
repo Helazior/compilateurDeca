@@ -1,5 +1,0 @@
-OBRACE: {
-IDENT: int
-IDENT: i
-SEMI: ;
-CBRACE: }

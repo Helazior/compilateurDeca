@@ -10,6 +10,7 @@
 
 # Ansi color code variables
 red="\e[0;91m"
+yellow="\e[0;93m"
 green="\e[0;92m"
 white="\e[0;97m"
 reset="\e[0;0m"
@@ -36,29 +37,35 @@ function resultGeneration {
     file_src=$2
     file_name=$3
 
-    #recuperation de la solution attendu
+    #recuperation de la solution attendue
     sol_file=$path/solution/$file_name.sol
 
-    #generation du resultat
-    test_lex $file_src > $path/generated/$file_name.lis
-    res_file=$path/generated/$file_name.lis
+    if [[ -f "$sol_file" ]]; then
+        #generation du resultat
+        test_lex $file_src > $path/generated/$file_name.lis
+        res_file=$path/generated/$file_name.lis
 
-    #simplification du resultat
-    > $path/generated/tmp_file.lis
-    tmp_file=$path/generated/tmp_file.lis
+        #simplification du resultat
+        > $path/generated/tmp_file.lis
+        tmp_file=$path/generated/tmp_file.lis
 
-    simplifyResult $res_file $tmp_file
+        simplifyResult $res_file $tmp_file
 
-    mv $tmp_file $res_file
+        mv $tmp_file $res_file
 
-	#On compare les fichiers
-    if cmp -s $res_file $sol_file; then
-		echo -e "${green} ${bold} PASSED $file_name ${reset}"
-        rm $res_file
-	else
-		exit_value=1
-		echo -e "${red} ${bold} FAILED $file_name ${reset}"
-	fi
+    	#On compare les fichiers
+        if cmp -s $res_file $sol_file; then
+    		echo -e "${green} ${bold} PASSED $file_name ${reset}"
+            rm $res_file
+    	else
+    		exit_value=1
+            echo -e "${red} ${bold} FAILED $file_name"
+            diff $res_file $sol_file
+            echo -e  "${reset}"
+    	fi
+    else # Il n'y a pas de fichier solution
+        echo -e "${yellow} ${bold} SKIPPED $file_name ${reset}"
+    fi
 }
 
 # Récupération du dossier de travail
@@ -76,7 +83,7 @@ mkdir -p $folder_path/lexer/solution
 
 # Récupération des fichiers à tester
 if [[ $# -le 1 ]]; then
-    files="$(echo $folder_path/provided/*.deca) $(echo $folder_path/lexer/provided/*.deca)"
+    files="$(echo $folder_path/lexer/provided/*.deca)" #$(echo $folder_path/provided/*.deca)
 else
     files=$@
     files=${files#* } # On enlève le premier élément (qui est le dossier de travail)

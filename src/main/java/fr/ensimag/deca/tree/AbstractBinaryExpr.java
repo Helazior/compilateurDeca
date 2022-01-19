@@ -1,7 +1,15 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
+
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Line;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
 import org.apache.commons.lang.Validate;
 
 /**
@@ -41,6 +49,40 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         this.leftOperand = leftOperand;
         this.rightOperand = rightOperand;
     }
+
+
+    public void codeGenOp(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
+        throw new UnsupportedOperationException("not yet implemented");
+    }
+
+    public void codeGenOp(DecacCompiler compiler, GPRegister register1) {
+        throw new UnsupportedOperationException("not yet implemented");
+    }
+
+    public void codeGenOvError(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
+        codeGenOp(compiler, register0, register1);
+    }
+
+
+    @Override
+    public void codeGenExpr(DecacCompiler compiler) {
+        RegisterManager regMan = compiler.getRegMan();
+        //super.codeGenExpr(compiler);
+        AbstractExpr left = getLeftOperand();
+        left.codeGenExpr(compiler);
+        //compiler.addComment("");
+        AbstractExpr right = getRightOperand();
+        right.codeGenExpr(compiler);
+
+        GPRegister registre0 = regMan.pop();
+        GPRegister registre1 = regMan.pop();
+        compiler.addComment(getOperatorName());
+        codeGenOvError(compiler, registre0, registre1);
+
+        regMan.giveAndPush(registre1);
+        regMan.give(registre0);
+    }
+
 
 
     @Override

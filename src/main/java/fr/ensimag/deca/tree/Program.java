@@ -3,10 +3,14 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.IMAProgram;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Line;
 import fr.ensimag.ima.pseudocode.instructions.*;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
+import fr.ensimag.deca.codegen.codeGenError;
 
 /**
  * Deca complete program (class definition plus main block)
@@ -36,19 +40,57 @@ public class Program extends AbstractProgram {
     public void verifyProgram(DecacCompiler compiler) throws ContextualError {
         LOG.debug("verify program: start");
         //TODO: les 3 passes
+        //classes.verifyListClass(compiler);
 
-        //TODO: check classes  
+        //classes.verifyListClassMembers(compiler);
+
+        //classes.verifyListClassBody(compiler);
+
+        //TODO: check classes
 
         main.verifyMain(compiler);
         LOG.debug("verify program: end");
     }
 
+
     @Override
     public void codeGenProgram(DecacCompiler compiler) {
-        // A FAIRE: compléter ce squelette très rudimentaire de code
-        compiler.addComment("Main program");
+        // liste des déclarations de variables
+        // Les adresses des variables globales sont de la forme
+        // 1(GB), 2(GB), 3(GB).... Associer une adresse à chaque variable consiste à modifier le champ `operand`
+        // de sa définition via la méthode Definition.setOperand() : voir les classes VariableDefinition et ExpDefinition
+        // Récupéré avec getOperand
+
+
+        // parcours de l'arbre. On écrit dans le main :
         main.codeGenMain(compiler);
+
+        // termine le programme
         compiler.addInstruction(new HALT());
+
+
+        if (compiler.getIoExist()) {
+            codeGenError.ioError(compiler);
+        }
+        if (!compiler.getCompilerOptions().getNoCheck()) {
+            if (compiler.getDivideExist()) {
+                codeGenError.divByZeroError(compiler);
+            }
+            if (compiler.getModuloExist()) {
+                codeGenError.modByZeroError(compiler);
+            }
+
+            if (compiler.getOpOvExist()) {
+                codeGenError.overflowError(compiler);
+            }
+
+            codeGenError.stackOverflowError(compiler);
+            compiler.addFirst(new BOV(new Label("stack_overflow_error")));
+            compiler.addFirst(new TSTO(compiler.getRegMan().getMaxSizeStack()));
+        }
+        compiler.addFirst(new Line( "Main program"));
+
+        assert(compiler.getRegMan().isStackEmpty());
     }
 
     @Override

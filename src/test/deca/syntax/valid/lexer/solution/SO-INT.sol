@@ -1,0 +1,4 @@
+INT: 42
+INT: 0
+INT: 0
+INT: 42

@@ -1,0 +1,10 @@
+// Description:
+//      test erreur div zéro
+//
+// Resultats:
+//      Error: Division by zero
+
+{
+
+	1.6/0.0;
+}

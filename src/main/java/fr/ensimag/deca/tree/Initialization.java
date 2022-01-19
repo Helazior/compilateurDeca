@@ -9,6 +9,13 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
+import fr.ensimag.ima.pseudocode.instructions.*;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.deca.codegen.RegisterManager;
+
 /**
  * @author gl60
  * @date 01/01/2022
@@ -35,16 +42,23 @@ public class Initialization extends AbstractInitialization {
     protected void verifyInitialization(DecacCompiler compiler, Type t,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        expression.verifyRValue(compiler, localEnv, currentClass, t);
+    }
+
+    @Override
+    public void codeGenInit(DecacCompiler compiler, int offset) {
+        RegisterManager regMan = compiler.getRegMan();
+        expression.codeGenExpr(compiler);
+        GPRegister reg = regMan.pop();
+        compiler.addInstruction(new STORE(reg, new RegisterOffset(offset, Register.LB)));
+        regMan.give(reg);
     }
 
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.indent();
-        s.println(" = ");
+        s.print(" = ");
         expression.decompile(s);
-        s.unindent();
     }
 
     @Override

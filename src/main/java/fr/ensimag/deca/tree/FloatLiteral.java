@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -7,6 +8,13 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
+
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.ImmediateFloat;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
+import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
 import org.apache.commons.lang.Validate;
 
 /**
@@ -34,9 +42,27 @@ public class FloatLiteral extends AbstractExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");        
+        setType(compiler.getType("float"));
+        return getType();
     }
 
+    @Override
+    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
+        compiler.addInstruction(new LOAD(new ImmediateFloat(value), Register.R1));
+        if (printHex) {
+            compiler.addInstruction(new WFLOATX());
+        } else {
+            compiler.addInstruction(new WFLOAT());
+        }
+    }
+
+    @Override
+    protected void codeGenExpr(DecacCompiler compiler) {
+        RegisterManager regMan = compiler.getRegMan();
+        GPRegister register = regMan.take();
+        compiler.addInstruction(new LOAD(new ImmediateFloat(value), register));
+        compiler.getRegMan().giveAndPush(register);
+    }
 
     @Override
     public void decompile(IndentPrintStream s) {

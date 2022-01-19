@@ -6,6 +6,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.CompilerOptions;
 
 /**
  *
@@ -23,13 +24,13 @@ public class ManualTestInitialGencode {
         ListExpr lexp1 = new ListExpr(), lexp2 = new ListExpr();
         linst.add(new Print(false,lexp1));
         linst.add(new Println(false,lexp2));
-        lexp1.add(new StringLiteral("Hello "));
-        lexp2.add(new StringLiteral("everybody !"));
+        lexp1.add(new StringLiteral("\"Hello \""));
+        lexp2.add(new StringLiteral("\"everybody !\""));
         return source;
     }
     
     public static String gencodeSource(AbstractProgram source) {
-        DecacCompiler compiler = new DecacCompiler(null,null);
+        DecacCompiler compiler = new DecacCompiler(new CompilerOptions(), null);
         source.codeGenProgram(compiler);
         return compiler.displayIMAProgram();
     }

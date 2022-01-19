@@ -1,10 +1,18 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.ImmediateFloat;
+import fr.ensimag.ima.pseudocode.ImmediateString;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.SUB;
+import fr.ensimag.ima.pseudocode.instructions.WSTR;
 
 /**
  *
@@ -20,7 +28,22 @@ public class Not extends AbstractUnaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        Type opType = getOperand().verifyExpr(compiler, localEnv, currentClass);
+
+        if(opType.isBoolean()){
+            setType(compiler.getType("boolean"));
+        }else {
+            throw new ContextualError("Error: Unsupported operands. Expected : boolean", getLocation());
+        }
+        return getType();
+    }
+
+    @Override
+    public void codeGenOp(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
+        RegisterManager regMan = compiler.getRegMan();
+
+        compiler.addInstruction(new LOAD(1, register1));
+        compiler.addInstruction(new SUB(register0, register1));
     }
 
 

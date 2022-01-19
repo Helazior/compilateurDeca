@@ -5,10 +5,8 @@ import fr.ensimag.deca.syntax.DecaParser;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tree.AbstractProgram;
 import fr.ensimag.deca.tree.LocationException;
-import fr.ensimag.ima.pseudocode.AbstractLine;
-import fr.ensimag.ima.pseudocode.IMAProgram;
-import fr.ensimag.ima.pseudocode.Instruction;
-import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -19,12 +17,17 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.apache.log4j.Logger;
 
-import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.SymbolTable;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
-import fr.ensimag.deca.context.StringType;
-import fr.ensimag.deca.context.VoidType;
+import fr.ensimag.deca.tree.Location;
+import java.util.LinkedList;
+import java.util.List;
 
+import fr.ensimag.deca.codegen.RegisterManager;
+
+import fr.ensimag.deca.context.EnvironmentExp;
+
+import fr.ensimag.deca.context.*;
 /**
  * Decac compiler instance.
  *
@@ -48,10 +51,96 @@ public class DecacCompiler {
      */
     private static final String nl = System.getProperty("line.separator", "\n");
 
+    /**
+     * To write the label name
+     */
+    private static int numIf = 0;
+    private static int numWhile = 0;
+    private static int numAnd = 0;
+    private static int numOr = 0;
+    /**
+     * To show the div_zero error or not
+     */
+    private static boolean divideExist = false;
+    private static boolean modExist = false;
+    private static boolean ioExist = false;
+    private static boolean opOvExist = false;
+
     public DecacCompiler(CompilerOptions compilerOptions, File source) {
         super();
         this.compilerOptions = compilerOptions;
         this.source = source;
+        this.regManager = new RegisterManager(this, compilerOptions.getNbReg());
+
+        try{
+            initTypes();
+        }catch(ContextualError e){
+            System.out.println("a basic type is inizialise 2 times");
+        }
+    }
+
+    public boolean getDivideExist() {
+        return divideExist;
+    }
+
+    public void setDivideExistTrue() {
+        divideExist = true;
+    }
+
+    public boolean getModuloExist() {
+        return modExist;
+    }
+
+    public void setModuloExistTrue() {
+        modExist = true;
+    }
+
+    public boolean getOpOvExist() {
+        return opOvExist;
+    }
+
+    public void setOpOvExist() {
+        opOvExist = true;
+    }
+
+    public boolean getIoExist() {
+        return ioExist;
+    }
+
+    public void setIoExistTrue() {
+        ioExist = true;
+    }
+
+    public int getNumIf() {
+        return numIf;
+    }
+
+    public void incrementNumIf() {
+        numIf++;
+    }
+
+    public int getNumWhile() {
+        return numWhile;
+    }
+
+    public void incrementNumWhile() {
+        numWhile++;
+    }
+
+    public int getNumAnd() {
+        return numAnd;
+    }
+
+    public void incrementNumAnd() {
+        numAnd++;
+    }
+
+    public int getNumOr() {
+        return numOr;
+    }
+
+    public void incrementNumOr() {
+        numOr++;
     }
 
     /**
@@ -101,6 +190,18 @@ public class DecacCompiler {
     }
 
     /**
+     * To add TSTO at the beginning of the program
+     * @param instruction
+     */
+    public void addFirst(Instruction instruction) {
+        program.addFirst(instruction);
+    }
+
+    public void addFirst(Line line) {
+        program.addFirst(line);
+    }
+
+    /**
      * @see
      * fr.ensimag.ima.pseudocode.IMAProgram#addInstruction(fr.ensimag.ima.pseudocode.Instruction,
      * java.lang.String)
@@ -116,6 +217,10 @@ public class DecacCompiler {
     public String displayIMAProgram() {
         return program.display();
     }
+
+    public RegisterManager getRegMan() {
+        return regManager;
+    }
     
     private final CompilerOptions compilerOptions;
     private final File source;
@@ -124,22 +229,107 @@ public class DecacCompiler {
      */
     private final IMAProgram program = new IMAProgram();
 
+
+    /**
+     * (demander à Gwennan en cas de PB)
+     */
+    private RegisterManager regManager;
+
     /**
      * Permet d'avoir des types dans la partie B
      * (demander à Gwennan en cas de PB)
+     * 
+     * Cela correspond en fait à la definition de
+     * l'environnmeent des types de base du compilateur
      */
-    private final SymbolTable symbolTable = new SymbolTable();
 
-    public Type stringType() {
-        return new StringType(symbolTable.create("string"));
-    }
-    public Type voidType() {
-        return new VoidType(symbolTable.create("void"));
+    private final EnvironmentType typeEnv = new EnvironmentType(null);
+    private final SymbolTable typeTable = new SymbolTable();
+
+    public EnvironmentType getTypeEnv(){
+        return typeEnv;
     }
 
-    public Symbol createSymbol(String name) {
-        return symbolTable.create(name);
+    public void initTypes() throws ContextualError{
+
+        List<TypeDefinition> typeDefList = new LinkedList<>();
+
+        typeDefList.add(new TypeDefinition(new IntType(typeTable.create("int")), null));
+        typeDefList.add(new TypeDefinition(new FloatType(typeTable.create("float")), null));
+        typeDefList.add(new TypeDefinition(new StringType(typeTable.create("string")), null));
+        typeDefList.add(new TypeDefinition(new BooleanType(typeTable.create("boolean")), null));
+        typeDefList.add(new TypeDefinition(new VoidType(typeTable.create("void")), null));
+
+        for(TypeDefinition typeDef : typeDefList){
+            createType(typeDef.getType().getName(), typeDef);
+        }
     }
+
+    public void createType(Symbol symbol, TypeDefinition typeDef) throws ContextualError{
+        try {
+            typeEnv.declare(symbol, typeDef);
+        } catch (EnvironmentType.DoubleDefException e) {
+            throw new ContextualError(e + " This type is already defined", null);
+        }
+    }
+
+
+    //Renvoie null si le type demandé n'est pas trouvé
+    public TypeDefinition getType(Symbol type) {
+        return typeEnv.get(type);
+    }
+
+    public Type getType(String typeName) {
+        Symbol type = typeTable.create(typeName);
+        return getType(type).getType();
+    }
+
+
+
+
+    /**
+    * correspond à un environement de symboles hors des class et méthodes
+    * ne sert que pour le parser en principe, car ensuite les symboles sont tous placé
+    * dans les environnements des classes qui leurs correpondent
+    **/
+
+    private final EnvironmentExp expEnv = new EnvironmentExp(null);
+    private final SymbolTable expTable = new SymbolTable();
+
+    /**
+     * Creer l'expression dans l'environnement, ou redéfini sa Définition si celle-ci est à null
+     * Sinon renvoie une ContextualError
+     * @param exp
+     * @param expDef
+     * @throws ContextualError
+     */
+    public void createExp(Symbol exp, ExpDefinition expDef, Location location) throws ContextualError{
+        try {
+            expEnv.declare(exp, expDef);
+        } catch (EnvironmentExp.DoubleDefException e) {
+            throw new ContextualError(exp.getName() + " is already defined", location);
+        }
+    }
+
+    //Renvoie null si l'expression demandé n'est pas trouvé
+    public ExpDefinition getExp(Symbol type) {
+        return expEnv.get(type);
+    }
+
+    public EnvironmentExp getExpEnv() {
+        return expEnv;
+    }
+
+    public Symbol createSymbol(String expName) {
+        return expTable.create(expName);
+    }
+
+
+
+
+
+
+
 
 
     /**
@@ -214,6 +404,9 @@ public class DecacCompiler {
         prog.verifyProgram(this);
         assert(prog.checkAllDecorations());
 
+        if(compilerOptions.getVerification()){
+            return false;
+        }
         addComment("start main program");
         prog.codeGenProgram(this);
         addComment("end main program");

@@ -5,6 +5,18 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.ImmediateFloat;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.POP;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
+import fr.ensimag.ima.pseudocode.instructions.SUB;
+
+import java.awt.image.RescaleOp;
+
+import fr.ensimag.deca.codegen.RegisterManager;
 
 /**
  * @author gl60
@@ -19,13 +31,32 @@ public class UnaryMinus extends AbstractUnaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
-    }
+        Type opType = getOperand().verifyExpr(compiler, localEnv, currentClass);
 
+        if(opType.isInt()){
+            setType(compiler.getType("int"));
+        }else if(opType.isFloat()){
+            setType(compiler.getType("float"));
+        } else {
+            throw new ContextualError("Error: Unsupported operands. Expected : int or float", getLocation());
+        }
+        return getType();
+}
+
+    @Override
+    public void codeGenOp(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
+        RegisterManager regMan = compiler.getRegMan();
+        Type type = getType();
+        if (type.isInt()) {
+            compiler.addInstruction(new LOAD(0, register1));
+        } else if (type.isFloat()) {
+            compiler.addInstruction(new LOAD(new ImmediateFloat(0.0f), register1));
+        }
+        compiler.addInstruction(new SUB(register0, register1));
+    }
 
     @Override
     protected String getOperatorName() {
         return "-";
     }
-
 }

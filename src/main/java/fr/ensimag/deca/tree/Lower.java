@@ -1,6 +1,11 @@
 package fr.ensimag.deca.tree;
 
 
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.SLT;
+
 /**
  *
  * @author gl60
@@ -12,6 +17,10 @@ public class Lower extends AbstractOpIneq {
         super(leftOperand, rightOperand);
     }
 
+    @Override
+    public void codeGenOpIneq(DecacCompiler compiler, GPRegister register) {
+        compiler.addInstruction(new SLT(register));
+    }
 
     @Override
     protected String getOperatorName() {

@@ -1,15 +1,13 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
-import fr.ensimag.deca.context.FloatType;
-import fr.ensimag.deca.context.IntType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.ima.pseudocode.Label;
 import java.io.PrintStream;
+
 import org.apache.commons.lang.Validate;
 
 import fr.ensimag.deca.context.ContextualPrintTypeError;
@@ -41,7 +39,7 @@ public abstract class AbstractPrint extends AbstractInst {
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass, Type returnType)
             throws ContextualError {
-        for (AbstractExpr expr : arguments.getList()) { // TODO: use insts.iterChildren ?
+        for (AbstractExpr expr : arguments.getList()) {
             Type exprType = expr.verifyExpr(compiler, localEnv, currentClass);
             if (!exprType.isInt() && !exprType.isFloat() && !exprType.isString()) {
                 throw new ContextualPrintTypeError(exprType, getLocation());
@@ -51,8 +49,18 @@ public abstract class AbstractPrint extends AbstractInst {
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
+        // inst
+        //  → 'print ' '( ' list_expr ') ' '; '
+
+        // list_expr
+        //      → ( expr
+        //        ( ',' expr) ∗ ) ?
+        // Les filles de AbstractExpr sont :
+        // (Done)IntLiteral, (~Done)FloatLiteral, Minus, Plus, Times, AbstractBinaryExpr, AbstractLvalue,
+        // AbstractReadExpr, AbstractUnaryExpr, (Done)AbstractStringLiteral
+        // + Les petites filles....
         for (AbstractExpr a : getArguments().getList()) {
-            a.codeGenPrint(compiler);
+            a.codeGenPrint(compiler, getPrintHex());
         }
     }
 
