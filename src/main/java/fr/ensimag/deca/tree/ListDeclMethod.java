@@ -25,18 +25,24 @@ public class ListDeclMethod extends TreeList<AbstractDeclMethod> {
     /**
      * Pass 2 of [SyntaxeContextuelle]
      */
-    public void verifyListMethodSignature(DecacCompiler compiler,
-            ClassDefinition superClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    public void verifyListMethodSignature(DecacCompiler compiler, AbstractIdentifier superClass,
+            AbstractIdentifier currentClass) throws ContextualError {
+
+        for (AbstractDeclMethod declMethod : getList()) {
+            declMethod.verifyMethodSignature(compiler, superClass, currentClass);
+        }
     }
 
     /**
      * Pass 3 of [SyntaxeContextuelle]
      */
     public void verifyListMethodBody(DecacCompiler compiler,
-            EnvironmentExp localEnv, ClassDefinition currentClass)
+            EnvironmentExp localEnv, AbstractIdentifier currentClass)
             throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+
+        for (AbstractDeclMethod declMethod : getList()) {
+            declMethod.verifyMethodBody(compiler, localEnv, currentClass);
+        }
     }
 
     public void codeGenListDeclMethod(DecacCompiler compiler) {

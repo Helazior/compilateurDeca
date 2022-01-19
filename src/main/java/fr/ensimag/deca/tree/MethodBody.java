@@ -15,10 +15,10 @@ public class MethodBody extends AbstractMethodBody{
     @Override
     protected void codeGenMethod(DecacCompiler compiler) {
 
-        compiler.getRegMan().declareVars(declVariables);
+        //compiler.getRegMan().declareVars(declVariables);
 
         compiler.addComment("Beginning of method instructions:");
-        insts.codeGenListInst(compiler);
+        //insts.codeGenListInst(compiler);
     }
 
     /**

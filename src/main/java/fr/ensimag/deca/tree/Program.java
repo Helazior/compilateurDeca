@@ -76,6 +76,11 @@ public class Program extends AbstractProgram {
         if (compiler.getIoExist()) {
             codeGenError.ioError(compiler);
         }
+
+        if (compiler.getNoVoidMethodExist()) {
+            codeGenError.noReturnError(compiler);
+        }
+
         if (!compiler.getCompilerOptions().getNoCheck()) {
             if (compiler.getDivideExist()) {
                 codeGenError.divByZeroError(compiler);

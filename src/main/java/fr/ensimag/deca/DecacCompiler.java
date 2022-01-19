@@ -58,6 +58,8 @@ public class DecacCompiler {
     private static int numWhile = 0;
     private static int numAnd = 0;
     private static int numOr = 0;
+    // to go at the end of the method when the program return and manage the stack
+    private static int nbReturn = 0;
     /**
      * To show the div_zero error or not
      */
@@ -69,6 +71,7 @@ public class DecacCompiler {
      * Optimize not operation
      */
     private static boolean isInNotOp = false;
+    private static boolean noVoidMethodExist = false;
 
     public DecacCompiler(CompilerOptions compilerOptions, File source) {
         super();
@@ -82,6 +85,14 @@ public class DecacCompiler {
             System.out.println("a basic type is inizialise 2 times");
         }
     }
+    public boolean getNoVoidMethodExist() {
+        return noVoidMethodExist;
+    }
+
+    public void setNoVoidMethodExist() {
+        divideExist = true;
+    }
+
 
     public boolean getIsInNotOp() {
         return isInNotOp;
@@ -121,6 +132,14 @@ public class DecacCompiler {
 
     public void setIoExistTrue() {
         ioExist = true;
+    }
+
+    public int getNbReturn() {
+        return nbReturn;
+    }
+
+    public void incrementNbReturn() {
+        nbReturn++;
     }
 
     public int getNumIf() {

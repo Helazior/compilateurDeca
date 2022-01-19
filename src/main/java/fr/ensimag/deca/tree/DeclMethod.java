@@ -6,14 +6,22 @@ import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.Signature;
+import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Line;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.RTS;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 import java.io.PrintStream;
+import java.util.List;
 import java.util.jar.Attributes.Name;
+
+import org.apache.commons.lang.Validate;
 
 /**
  * Declaration of a class (<code>class name extends superClass {members}<code>).
@@ -23,15 +31,15 @@ import java.util.jar.Attributes.Name;
  */
 public class DeclMethod extends AbstractDeclMethod {
     private AbstractIdentifier type;
-    private AbstractIdentifier name;
+    private AbstractIdentifier method;
     private ListDeclParam parameters;
-    private AbstractMethodBody method;
+    private AbstractMethodBody methodBody;
 
-    public DeclMethod(AbstractIdentifier typeReturn, AbstractIdentifier name, ListDeclParam parameters, AbstractMethodBody methodBody){
+    public DeclMethod(AbstractIdentifier typeReturn, AbstractIdentifier method, ListDeclParam parameters, AbstractMethodBody methodBody){
         this.type = typeReturn;
-        this.name = name;
+        this.method = method;
         this.parameters = parameters;
-        this.method = methodBody;
+        this.methodBody = methodBody;
     }
 
     //TODO
@@ -40,14 +48,18 @@ public class DeclMethod extends AbstractDeclMethod {
         // TODO: récupérer les arguments
         // TODO: donc en gros avant l'appel de méthode, mettre les arguments dans les premiers registres
         RegisterManager regMan = compiler.getRegMan();
-
-        // corps du programme
-        method.codeGenMethod(compiler);
-
-        // goto return
-        if (type.isImplicit()) {
-            compiler.addInstruction(new BRA(new Label ("error_no_return")));
+        if (!type.getType().isFloat()) {
+            compiler.setNoVoidMethodExist();
         }
+
+        // ________________________corps du programme___________________________
+        methodBody.codeGenMethod(compiler);
+        // goto return
+        // Si c'est pas un void on va à une erreur
+        if (!type.getType().isVoid()) {
+            compiler.addInstruction(new BRA(new Label ("no_return_error")));
+        }
+        compiler.addLabel(new Label("return" + compiler.getNbReturn()));
 
 
         //________________________
@@ -70,22 +82,48 @@ public class DeclMethod extends AbstractDeclMethod {
         s.println("{");
         s.indent();
         type.decompile(s);
-        name.decompile(s);
-        parameters.decompile(s);
         method.decompile(s);
+        parameters.decompile(s);
+        methodBody.decompile(s);
         s.unindent();
         s.println("}");    }
 
 
     @Override
-    protected void verifyMethodSignature(DecacCompiler compiler, ClassDefinition superClass) 
-            throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    protected void verifyMethodSignature(DecacCompiler compiler, AbstractIdentifier superClass,
+            AbstractIdentifier currentClass) throws ContextualError {
+        Type t = type.verifyType(compiler);
+        Symbol methodName = method.getName();
+        Signature sig = parameters.verifyListParamSignature(compiler);
+
+        ClassDefinition classDef = (ClassDefinition)compiler.getType(currentClass.getName());
+        EnvironmentExp superEnvExp = classDef.getSuperClass().getMembers();
+
+        if(superEnvExp.get(methodName) != null){
+            MethodDefinition superMethod = (MethodDefinition)superEnvExp.get(methodName);
+
+            int index = superMethod.getIndex();
+            method.setDefinition(new MethodDefinition(t, getLocation(), sig, index));
+
+            Validate.isTrue(sig == superMethod.getSignature(),
+                    "The method signature doesn't match its parent");
+            Validate.isTrue(t.isSubTypeOf(superMethod.getType()),
+                    "the returned type of this method should be a sub-type of the one of its parent ");
+        } else {
+            int index = classDef.getSuperClass().getNumberOfFields() + classDef.getNumberOfFields();
+            method.setDefinition(new MethodDefinition(t, getLocation(), sig, index));
+        }
+
+        try{
+            classDef.getMembers().declare(methodName, method.getMethodDefinition());
+        } catch (DoubleDefException e) {
+            throw new ContextualError(e + " This varibale is already defined in this context", getLocation());
+        }
     }
 
     @Override
     protected void verifyMethodBody(DecacCompiler compiler,
-            EnvironmentExp localEnv, ClassDefinition currentClass)
+            EnvironmentExp localEnv, AbstractIdentifier currentClass)
             throws ContextualError {
         throw new UnsupportedOperationException("not yet implemented");
     }
@@ -94,7 +132,7 @@ public class DeclMethod extends AbstractDeclMethod {
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         type.prettyPrint(s, prefix, false);
-        name.prettyPrint(s, prefix, false);
+        method.prettyPrint(s, prefix, false);
         parameters.prettyPrint(s, prefix, false);
         method.prettyPrint(s, prefix, true);
     }
@@ -102,7 +140,7 @@ public class DeclMethod extends AbstractDeclMethod {
     @Override
     protected void iterChildren(TreeFunction f) {
         type.iter(f);
-        name.iter(f);
+        method.iter(f);
         parameters.iter(f);
         method.iter(f);
     }
