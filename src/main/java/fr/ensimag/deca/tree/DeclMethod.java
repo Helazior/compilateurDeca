@@ -9,6 +9,7 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Line;
+import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.RTS;
 
 import java.io.PrintStream;
@@ -43,8 +44,10 @@ public class DeclMethod extends AbstractDeclMethod {
         // corps du programme
         method.codeGenMethod(compiler);
 
-        // On return
-        compiler.addInstruction(new RTS());
+        // goto return
+        if (type.isImplicit()) {
+            compiler.addInstruction(new BRA(new Label ("error_no_return")));
+        }
 
 
         //________________________
@@ -55,6 +58,10 @@ public class DeclMethod extends AbstractDeclMethod {
         compiler.addFirst(new Line(new Label("bodyMethod.class.method")));
         // On empile tous les registres qu'on veut utiliser et on les restaure à la fin
         regMan.restoreRegister();
+
+        // goto erreur return en cas de non return
+        // On return
+        compiler.addInstruction(new RTS());
     }
 
 
