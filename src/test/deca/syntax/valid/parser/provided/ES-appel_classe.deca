@@ -11,9 +11,12 @@ class Test {
 
     int attributTest;
     
-    void fctTest(){
+    void fctTest(int a, int b){
+        a = a + b;
+        b = b + a;
     }
         
+    void attributidiot;
 }
 {
     Test var = new Test();

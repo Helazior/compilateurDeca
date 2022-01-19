@@ -45,12 +45,9 @@ public class Selection extends AbstractLValue {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.println("{");
-        s.indent();
         objet.decompile(s);
+        s.print(".");
         nomDAttribut.decompile(s);
-        s.unindent();
-        s.println("}");
     }
 
     @Override

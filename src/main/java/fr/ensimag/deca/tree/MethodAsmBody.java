@@ -19,16 +19,15 @@ public class MethodAsmBody extends AbstractMethodBody{
 
     @Override
     public void decompile(IndentPrintStream s) {
-        
+        s.println(loc + " : (" + corps + " )");
+            
     }    
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        
     }
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        
     }
 }
