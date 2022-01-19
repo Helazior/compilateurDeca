@@ -42,11 +42,8 @@ public class Return extends AbstractInst {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.println("{");
-        s.indent();
+        s.print("return ");
         resultat.decompile(s);
-        s.unindent();
-        s.println("}");
     }
 
     @Override
