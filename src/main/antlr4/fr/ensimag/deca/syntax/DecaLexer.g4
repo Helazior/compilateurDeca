@@ -108,8 +108,8 @@ OR: '||';
 
 //INCLUDE
    fragment FILENAME: '"' (LETTER | DIGIT | '.' | '-' | '_')+ '"';
-   IMPORT: '#import';
-   INCLUDE: '#include' (' ')* FILENAME;
+   IMPORT: '#import' ;
+   INCLUDE: '#include' (' ')* FILENAME {doInclude(getText()); skip(); };
 //
 
 //CLASS
