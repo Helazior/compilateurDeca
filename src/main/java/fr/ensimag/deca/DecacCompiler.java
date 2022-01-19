@@ -260,7 +260,7 @@ public class DecacCompiler {
     /**
      * The main program. Every instruction generated will eventually end up here.
      */
-    private final IMAProgram program = new IMAProgram();
+    private IMAProgram program = new IMAProgram();
 
 
     /**
@@ -313,7 +313,20 @@ public class DecacCompiler {
         return getType(type).getType();
     }
 
+    public IMAProgram remplaceProgram(IMAProgram newProgram) {
+        IMAProgram oldProgram = program;
+        program = newProgram;
+        return oldProgram;
+    }
 
+    /**
+     * oldProgram se place au début du programme
+     * @param oldProgram
+     */
+    public void concatenateProgram(IMAProgram oldProgram) {
+        oldProgram.append(program);
+        program = oldProgram;
+    }
 
 
     /**
@@ -352,8 +365,6 @@ public class DecacCompiler {
     public Symbol createSymbol(String expName) {
         return expTable.create(expName);
     }
-
-
 
 
 

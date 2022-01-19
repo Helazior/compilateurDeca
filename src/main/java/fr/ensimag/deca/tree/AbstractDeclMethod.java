@@ -27,7 +27,7 @@ public abstract class AbstractDeclMethod extends Tree {
     protected abstract void verifyMethodSignature(DecacCompiler compiler, AbstractIdentifier superClass,
     AbstractIdentifier currentClass) throws ContextualError;
 
-        /**
+    /**
      * Pass 3 of [SyntaxeContextuelle]. Verify that instructions and expressions
      * contained in the method are OK.
      */
