@@ -1,0 +1,21 @@
+// Description:
+//    On teste la déclaration de méthode
+//
+//    
+//
+// Historique:
+//    cree le 18/01/2022
+
+
+class Test1 {
+
+    int somme(int a, int b) {
+    }
+
+    boolean verif(float a, boolean n, boolean m){
+    }
+
+    void rien() {
+    }
+        
+}

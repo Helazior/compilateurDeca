@@ -56,4 +56,12 @@ public class codeGenError {
         compiler.addInstruction(new WNL());
         compiler.addInstruction(new ERROR());
     }
+
+
+    static public void noReturnError(DecacCompiler compiler) {
+        compiler.addLabel(new Label("no_return_error"));
+        compiler.addInstruction(new WSTR("Error: Expected a return at the and of a no void method"));
+        compiler.addInstruction(new WNL());
+        compiler.addInstruction(new ERROR());
+    }
 }

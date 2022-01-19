@@ -6,6 +6,16 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 
 public class MethodBody extends AbstractMethodBody{
+
+    private ListDeclVar declVariables;
+    private ListInst insts;
+
+
+    public MethodBody(ListDeclVar declVariables, ListInst insts) {
+        this.declVariables = declVariables;
+        this.insts = insts;
+    }
+    
     //TODO
     @Override
     protected void verifyMethodBody(DecacCompiler compiler) throws ContextualError {
@@ -14,7 +24,11 @@ public class MethodBody extends AbstractMethodBody{
 
     @Override
     protected void codeGenMethod(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("not yet implemented");
+
+        //compiler.getRegMan().declareVars(declVariables);
+
+        compiler.addComment("Beginning of method instructions:");
+        //insts.codeGenListInst(compiler);
     }
 
     /**
@@ -26,13 +40,23 @@ public class MethodBody extends AbstractMethodBody{
 
     @Override
     public void decompile(IndentPrintStream s) {
-        throw new UnsupportedOperationException("not yet implemented");    }
+        s.println("{");
+        s.indent();
+        declVariables.decompile(s);
+        insts.decompile(s);
+        s.unindent();
+        s.println("}");    
+    }    
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        throw new UnsupportedOperationException("not yet implemented");    }
+        declVariables.iter(f);
+        insts.iter(f);
+    }
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        throw new UnsupportedOperationException("not yet implemented");    }
+        declVariables.prettyPrint(s, prefix, false);
+        insts.prettyPrint(s, prefix, true);
+    }
 }
