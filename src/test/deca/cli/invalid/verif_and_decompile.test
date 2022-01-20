@@ -1,4 +1,4 @@
-../../codegen/valid/provided/ecrit0.deca
+../../codegen/valid/tests/ecrit0.deca
 -v -p
 ----
 Error: options -v and -p are incompatible.
