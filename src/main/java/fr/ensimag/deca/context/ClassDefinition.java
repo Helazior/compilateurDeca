@@ -46,7 +46,7 @@ public class ClassDefinition extends TypeDefinition {
     public boolean isClass() {
         return true;
     }
-    
+
     @Override
     public ClassType getType() {
         // Cast succeeds by construction because the type has been correctly set
@@ -59,7 +59,7 @@ public class ClassDefinition extends TypeDefinition {
     }
 
     private final EnvironmentExp members;
-    private final ClassDefinition superClass; 
+    private final ClassDefinition superClass;
 
     public EnvironmentExp getMembers() {
         return members;
@@ -76,5 +76,5 @@ public class ClassDefinition extends TypeDefinition {
         members = new EnvironmentExp(parent);
         this.superClass = superClass;
     }
-    
+
 }
