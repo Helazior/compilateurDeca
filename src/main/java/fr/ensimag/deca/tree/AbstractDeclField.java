@@ -1,10 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.context.ClassDefinition;
-import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.context.EnvironmentExp;
-import fr.ensimag.deca.context.FieldDefinition;
+import fr.ensimag.deca.context.*;
+import fr.ensimag.deca.tools.SymbolTable;
 
 /**
  * Class declaration.
@@ -14,6 +12,10 @@ import fr.ensimag.deca.context.FieldDefinition;
  */
 public abstract class AbstractDeclField extends Tree {
     //TODO
+
+    protected abstract SymbolTable.Symbol getName();
+
+    protected abstract Type getType();
 
     /**
      * Pass 2 of [SyntaxeContextuelle]. Verify that the

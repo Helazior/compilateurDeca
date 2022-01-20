@@ -67,16 +67,13 @@ public class Program extends AbstractProgram {
 
 
     @Override
-    public void codeGenProgram(DecacCompiler compiler) {
+    public void codeGenProgram(DecacCompiler compiler) throws ContextualError {
         // liste des déclarations de variables
         // Les adresses des variables globales sont de la forme
         // 1(GB), 2(GB), 3(GB).... Associer une adresse à chaque variable consiste à modifier le champ `operand`
         // de sa définition via la méthode Definition.setOperand() : voir les classes VariableDefinition et ExpDefinition
         // Récupéré avec getOperand
 
-        // On écrit une méthode
-        // TODO: évidemment là c'est un brouillon
-        // TODO: appeler les méthodes
         classes.codeGenListClass(compiler);
 
         // parcours de l'arbre. On écrit dans le main :
@@ -85,7 +82,9 @@ public class Program extends AbstractProgram {
         // termine le programme
         compiler.addInstruction(new HALT());
 
-
+        compiler.addComment(" -------------------------------------------------");
+        compiler.addComment("|              Messages d'erreur");
+        compiler.addComment(" -------------------------------------------------");
         if (compiler.getIoExist()) {
             codeGenError.ioError(compiler);
         }
@@ -110,7 +109,7 @@ public class Program extends AbstractProgram {
             compiler.addFirst(new BOV(new Label("stack_overflow_error")));
             compiler.addFirst(new TSTO(compiler.getRegMan().getMaxSizeStack()));
         }
-        compiler.addFirst(new Line( "Main program"));
+        //compiler.addFirst(new Line( "Main program"));
 
         assert(compiler.getRegMan().isStackEmpty());
     }

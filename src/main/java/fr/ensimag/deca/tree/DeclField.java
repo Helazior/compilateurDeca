@@ -38,6 +38,16 @@ public class DeclField extends AbstractDeclField {
     }
 
     //TODO toute la suite
+
+    @Override
+    protected Symbol getName() {
+        return field.getName();
+    }
+    @Override
+    protected Type getType() {
+        return type.getType();
+    }
+
     @Override
     protected void verifyFieldVisibility(DecacCompiler compiler,
             AbstractIdentifier superClass, AbstractIdentifier currentClass)

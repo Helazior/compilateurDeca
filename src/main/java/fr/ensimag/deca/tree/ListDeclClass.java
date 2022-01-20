@@ -36,7 +36,7 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
         LOG.debug("verify listClass: end");
     }
 
-    protected void codeGenListClass(DecacCompiler compiler) {
+    protected void codeGenListClass(DecacCompiler compiler) throws ContextualError {
         for (AbstractDeclClass declClass : getList()) {
             declClass.codeGenClass(compiler);
         }
