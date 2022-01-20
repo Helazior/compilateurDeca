@@ -46,10 +46,12 @@ fi
 mkdir -p $folder_path/decompile
 mkdir -p $folder_path/decompile/provided
 mkdir -p $folder_path/decompile/generated
+mkdir -p $folder_path/decompile/tests
+
 
 # Récupération des fichiers à tester
 if [[ $# -le 1 ]]; then
-    files="$(echo $folder_path/provided/*.deca)"
+    files="$(echo $folder_path/provided/*.deca) $(echo $folder_path/tests/*.deca)"
 else
     files=$@
     files=${files#* } # On enlève le premier élément (qui est le dossier de travail)
