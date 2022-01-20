@@ -181,13 +181,15 @@ public class RegisterManager {
         if (nbVarsStack < 1) {
             System.err.println("WARNING: stack popped more often than pushed!!");
         }
-        int regIndex = lastRegisters.get(lastRegisters.size() - 1);
-        if(registers[regIndex] == nbVarsStack) { // Element is in a register
-            nbVarsStack -= 1;
-            registers[regIndex] = -1;
-            lastRegisters.remove(lastRegisters.size() - 1);
-            LOG.trace("REGMAN pop end");
-            return Register.getR(regIndex);
+        if (lastRegisters.size() > 0) {
+            int regIndex = lastRegisters.get(lastRegisters.size() - 1);
+            if(registers[regIndex] == nbVarsStack) { // Element is in a register
+                nbVarsStack -= 1;
+                registers[regIndex] = -1;
+                lastRegisters.remove(lastRegisters.size() - 1);
+                LOG.trace("REGMAN pop end");
+                return Register.getR(regIndex);
+            }
         }
         // Element is in stack
         GPRegister dst = take();
