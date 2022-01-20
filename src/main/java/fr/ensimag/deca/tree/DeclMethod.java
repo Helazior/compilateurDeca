@@ -50,7 +50,7 @@ public class DeclMethod extends AbstractDeclMethod {
         }
 
         // ________________________corps du programme___________________________
-        methodBody.codeGenMethod(compiler);
+        methodBody.codeGenMethod(compiler, parameters);
         // goto return
         // Si c'est pas un void et qu'on n'a pas eu de return on va à une erreur
         if (!type.getType().isVoid()) {

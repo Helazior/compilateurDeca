@@ -26,7 +26,7 @@ public class MethodBody extends AbstractMethodBody{
     }
 
     @Override
-    protected void codeGenMethod(DecacCompiler compiler, ArrayList<GPRegister> args) {
+    protected void codeGenMethod(DecacCompiler compiler, ListDeclParam args) {
         // TODO : arguments = registres ?
         // déclare les variables locales et les arguments de la méthode
         compiler.getRegMan().declareMethodVars(args, declVariables);

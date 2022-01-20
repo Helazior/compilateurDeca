@@ -58,7 +58,7 @@ public class RegisterManager {
         this.stackOffset = 0;
     }
 
-    public void declareMethodVars(/*Signature sig, */ListDeclVar vars) {
+    public void declareMethodVars(ListDeclParam args, ListDeclVar vars) {
         LOG.trace("REGMAN declareVars");
         if (namedVars != null) {
             throw new UnsupportedOperationException("Variables already delcared");
