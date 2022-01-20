@@ -30,36 +30,11 @@ public class Or extends AbstractOpBool {
     @Override
     public void codeGenOp(DecacCompiler compiler, GPRegister register1) {
         // TODO :  avec l'extension, nommer les labels différemment
-        RegisterManager regMan = compiler.getRegMan();
-        compiler.addComment("Start Or");
-        String trueLabel = "true_or_" + compiler.getNumOr();
-        String endLabel = "end_or_" + compiler.getNumOr();
-        compiler.incrementNumOr();
-        // On teste la condition leftOp
-        getLeftOperand().codeGenExpr(compiler);
-        // On récupère le résultat de la condition dans la pile
-        regMan.pop(register1);
-        // 1 : cond true -> goto trueLabel
-        compiler.addComment(getOperatorName());
-        compiler.addInstruction(new CMP(1, register1));
-        compiler.addInstruction(new BEQ(new Label(trueLabel)));
-        // cond false :
-        // On teste rightOp
-        getRightOperand().codeGenExpr(compiler);
-        regMan.pop(register1);
-        // 1 : cond true -> goto true_or_n
-        compiler.addInstruction(new CMP(1, register1));
-        compiler.addInstruction(new BEQ(new Label(trueLabel)));
-        // load 0 -> goto end_or_n
-        compiler.addInstruction(new LOAD(0, register1));
-        compiler.addInstruction(new BRA(new Label(endLabel)));
-        // lbl true_and_n:
-        compiler.addLabel(new Label(trueLabel));
-        // load 1
-        compiler.addInstruction(new LOAD(1, register1));
-        // lbl end_and_n
-        compiler.addLabel(new Label(endLabel));
-        regMan.giveAndPush(register1);
+        if (!compiler.getIsInNotOp()) { // OR
+            super.codeGenOr(compiler, register1);
+        } else { // NOT op -> AND
+            super.codeGenAnd(compiler, register1);
+        }
     }
 
 

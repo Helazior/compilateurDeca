@@ -27,12 +27,25 @@ public class Program extends AbstractProgram {
         this.classes = classes;
         this.main = main;
     }
+
+    public Program(ListDeclImport imports, ListDeclClass classes, AbstractMain main) {
+        Validate.notNull(imports);
+        Validate.notNull(classes);
+        Validate.notNull(main);
+        this.imports = imports;
+        this.classes = classes;
+        this.main = main;
+    }
+
+
     public ListDeclClass getClasses() {
         return classes;
     }
     public AbstractMain getMain() {
         return main;
     }
+
+    private ListDeclImport imports;
     private ListDeclClass classes;
     private AbstractMain main;
 
@@ -61,6 +74,10 @@ public class Program extends AbstractProgram {
         // de sa définition via la méthode Definition.setOperand() : voir les classes VariableDefinition et ExpDefinition
         // Récupéré avec getOperand
 
+        // On écrit une méthode
+        // TODO: évidemment là c'est un brouillon
+        // TODO: appeler les méthodes
+        classes.codeGenListClass(compiler);
 
         // parcours de l'arbre. On écrit dans le main :
         main.codeGenMain(compiler);
@@ -72,6 +89,11 @@ public class Program extends AbstractProgram {
         if (compiler.getIoExist()) {
             codeGenError.ioError(compiler);
         }
+
+        if (compiler.getNoVoidMethodExist()) {
+            codeGenError.noReturnError(compiler);
+        }
+
         if (!compiler.getCompilerOptions().getNoCheck()) {
             if (compiler.getDivideExist()) {
                 codeGenError.divByZeroError(compiler);

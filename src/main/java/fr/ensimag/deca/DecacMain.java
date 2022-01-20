@@ -1,6 +1,8 @@
 package fr.ensimag.deca;
 
 import java.io.File;
+
+import fr.ensimag.deca.context.ContextualError;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ import java.util.concurrent.Future;
 public class DecacMain {
     private static Logger LOG = Logger.getLogger(DecacMain.class);
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ContextualError {
         // example log4j message.
         LOG.info("Decac compiler started");
         boolean error = false;
@@ -30,12 +32,10 @@ public class DecacMain {
         } catch (CLIException e) {
             System.err.println("Error during option parsing:\n"
                     + e.getMessage());
-            options.displayUsage();
             System.exit(1);
         }
         if (options.getVerification() && options.getDecompile()) {
             System.err.println("Error: options -v and -p are incompatible.");
-            options.displayUsage();
             System.exit(1);
         }
         if (options.getHelp()) {

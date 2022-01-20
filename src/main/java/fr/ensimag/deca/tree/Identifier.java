@@ -208,10 +208,23 @@ public class Identifier extends AbstractIdentifier {
     }
 
     @Override
-    protected void codeGenExpr(DecacCompiler compiler){
+    protected void codeGenExpr(DecacCompiler compiler) {
         RegisterManager regMan = compiler.getRegMan();
         Symbol name = getName();
         regMan.giveAndPush(regMan.load(name));
+    }
+
+    /**
+     * Pour utiliser l'attribut d'un objet. est appelé dans la class Selection
+     * @param compiler
+     */
+    protected void codeGenSelectIdent(DecacCompiler compiler) throws ContextualError {
+        RegisterManager regMan = compiler.getRegMan();
+        Symbol name = getName(); // On charge l'attribut
+        GPRegister reg = regMan.pop(); // On charge l'objet
+        // TODO : rajouter gestion erreur
+        GPRegister regDest = regMan.getField(reg, name, getType(), getLocation());
+        regMan.giveAndPush(regDest);
     }
 
     private Definition definition;

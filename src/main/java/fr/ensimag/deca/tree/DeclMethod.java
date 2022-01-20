@@ -1,7 +1,7 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
-import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -10,11 +10,13 @@ import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Line;
+import fr.ensimag.ima.pseudocode.instructions.BRA;
+import fr.ensimag.ima.pseudocode.instructions.RTS;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 import java.io.PrintStream;
-import java.util.List;
-import java.util.jar.Attributes.Name;
 
 import org.apache.commons.lang.Validate;
 
@@ -38,16 +40,55 @@ public class DeclMethod extends AbstractDeclMethod {
     }
 
     //TODO
+
+    protected void codeGenDeclMethod(DecacCompiler compiler) {
+        RegisterManager regMan = compiler.getRegMan();
+        // TODO: récupérer les arguments de la méthode dans la pile
+        // On place le label d'erreur à la fin du fichier
+        if (!returnType.getType().isFloat()) {
+            compiler.setNoVoidMethodExist();
+        }
+
+        // ________________________corps du programme___________________________
+        methodBody.codeGenMethod(compiler, parameters);
+        // goto return
+        // Si c'est pas un void et qu'on n'a pas eu de return on va à une erreur
+        if (!returnType.getType().isVoid()) {
+            compiler.addInstruction(new BRA(new Label ("no_return_error")));
+        }
+        compiler.addLabel(new Label("return" + compiler.getNbReturn()));
+
+        //________________________
+        // On revient placer ce qu'il manque avec les infos du prog
+        // Début de la méthode = label du nom de la méthode
+        compiler.addFirst(new Line(new Label("bodyMethod." + getClass().getName() + "." + method.getName())));
+        // On empile tous les registres qu'on veut utiliser au début de la méthode et on les restaure à la fin
+        regMan.restoreRegisters();
+
+        // TODO: récup le nom :
+        compiler.addFirst(new Line(new Label("bodyMethod.class.method")));
+        // On empile tous les registres qu'on veut utiliser et on les restaure à la fin
+        regMan.restoreRegisters();
+
+        // goto erreur return en cas de non return
+        // On return
+        compiler.addInstruction(new RTS());
+    }
+
+
     @Override
     public void decompile(IndentPrintStream s) {
         s.println("{");
         s.indent();
         returnType.decompile(s);
         method.decompile(s);
+        s.print(" (");
         parameters.decompile(s);
+        s.print(") ");
         methodBody.decompile(s);
         s.unindent();
-        s.println("}");    }
+        s.println("}");    
+    }
 
 
     @Override
@@ -108,6 +149,11 @@ public class DeclMethod extends AbstractDeclMethod {
         method.iter(f);
         parameters.iter(f);
         method.iter(f);
+    }
+
+    @Override
+    public AbstractIdentifier getName() {
+        return this.method;
     }
 
 }

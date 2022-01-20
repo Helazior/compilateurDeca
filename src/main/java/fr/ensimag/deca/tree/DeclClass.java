@@ -1,16 +1,17 @@
 package fr.ensimag.deca.tree;
 
-import fr.ensimag.deca.context.ClassDefinition;
-import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
-
 import java.io.PrintStream;
+import fr.ensimag.deca.context.*;
 
 import org.apache.commons.lang.Validate;
+import fr.ensimag.ima.pseudocode.*;
+import fr.ensimag.ima.pseudocode.instructions.*;
 
 /**
  * Declaration of a class (<code>class name extends superClass {members}<code>).
@@ -26,7 +27,8 @@ public class DeclClass extends AbstractDeclClass {
     final private ListDeclField listDeclField;
     final private ListDeclMethod listDeclMethod;
 
-    public DeclClass(AbstractIdentifier currentClass, AbstractIdentifier superClass, ListDeclField listDeclField, ListDeclMethod listDeclMethod) {
+    public DeclClass(AbstractIdentifier currentClass, AbstractIdentifier superClass,
+                     ListDeclField listDeclField, ListDeclMethod listDeclMethod) {
         Validate.notNull(currentClass);
         Validate.notNull(superClass);
         this.currentClass = currentClass;
@@ -35,14 +37,23 @@ public class DeclClass extends AbstractDeclClass {
         this.listDeclMethod = listDeclMethod;
     }
 
+    @Override
+    protected void codeGenClass(DecacCompiler compiler) {
+        listDeclMethod.codeGenListDeclMethod(compiler);
+    }
 
     @Override
     public void decompile(IndentPrintStream s) {
         s.println("{");
         s.indent();
+        s.print("class");
         currentClass.decompile(s);
+        s.print(" extends ");
         superClass.decompile(s);
+        s.println();
         listDeclField.decompile(s);
+        s.println();
+        s.println();
         listDeclMethod.decompile(s);
         s.unindent();
         s.println("}");
@@ -108,4 +119,44 @@ public class DeclClass extends AbstractDeclClass {
         listDeclMethod.iter(f);
     }
 
+    @Override
+    public int codeGenDeclMethod(DecacCompiler compiler, IMAProgram program)
+            throws ContextualError {
+        RegisterManager regman = compiler.getRegMan();
+        Symbol className = currentClass.getName();
+        ClassDefinition type = (ClassDefinition) compiler.getTypeEnv().get(className);
+        EnvironmentExp expEnv = type.getMembers();
+        int size = type.getNumberOfMethods();
+
+        // We define an asm function building the classtable
+        program.addLabel(new Label("classTableInit." + className));
+        // We call the parent's classtable builder
+        program.addInstruction(new BSR(
+            new LabelOperand(new Label("classTableInit." + superClass.getName()))
+        ));
+        // We put a pointer to the parent class
+        program.addInstruction(new LOAD(
+            new LabelOperand(new Label("classTableInit." + superClass.getName())),
+            Register.R1));
+        program.addInstruction(new STORE(
+            Register.R1,
+            new RegisterOffset(0, Register.SP)));
+        // We (re)define the new methods
+        for (AbstractDeclMethod meth : listDeclMethod.getList()) {
+            Symbol methName = meth.getName().getName();
+            int index = expEnv.get(methName).asMethodDefinition(
+                "Internal Error: "+methName+" in class "+className+" is not a method",
+                getLocation()
+            ).getIndex();
+            program.addInstruction(new LOAD(
+                new LabelOperand(new Label("methodBody."+className+"."+methName)),
+                Register.R1));
+            program.addInstruction(new STORE(
+                Register.R1,
+                new RegisterOffset(index, Register.SP)));
+        }
+        // The asm function building the classtable is finished
+        program.addInstruction(new RTS());
+        return type.getNumberOfMethods();
+    }
 }

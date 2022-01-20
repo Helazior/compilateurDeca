@@ -40,7 +40,7 @@ public class Main extends AbstractMain {
 
     @Override
     protected void codeGenMain(DecacCompiler compiler) {
-        compiler.getRegMan().declareVars(declVariables);
+        compiler.getRegMan().declareGlobalVars(declVariables, 0); // TODO: set table size
 
         compiler.addComment("Beginning of main instructions:");
         insts.codeGenListInst(compiler);

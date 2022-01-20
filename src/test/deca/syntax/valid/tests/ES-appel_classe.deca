@@ -1,0 +1,23 @@
+// Description:
+//    On teste l'appel des classes dans le programme principal
+//
+//    
+//
+// Historique:
+//    cree le 18/01/2022
+
+
+class Test {
+
+    int attributTest;
+    
+    void fctTest(int a, int b){
+        a = a + b;
+        b = b + a;
+    }
+        
+    void attributidiot;
+}
+{
+    Test var = new Test();
+}

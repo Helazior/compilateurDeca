@@ -27,6 +27,7 @@ ses tests)
 import sys
 import os
 import subprocess
+import glob
 
 BASEDIR = "./src/test"
 DIRS = {
@@ -34,16 +35,21 @@ DIRS = {
     "test_decompile": ["deca/syntax/valid"],
     "test_exec": ["deca/exec/invalid", "deca/exec/valid"],
     "test_run_decac": ["deca/codegen/valid"],
+    "test_run_cli": ["deca/cli/valid", "deca/cli/invalid"],
     "test_context_auto": ["deca/context"]
 }
 
 REGRESSION = len(sys.argv) > 1 and sys.argv[1] in ["reg", "regression"]
-WORKING = len(sys.argv) > 1 and sys.argv[1] in ["work", "working"]
+ALL = len(sys.argv) > 1 and sys.argv[1] in ["all"]
+if REGRESSION or ALL:
+    COMMANDS = sys.argv[2:]
+else:
+    COMMANDS = sys.argv[1:]
 
 if REGRESSION:
     print("Running regression tests.")
-elif WORKING:
-    print("Running all tests supposed to work.")
+elif ALL:
+    print("Running all tests, even those not supposed to work.")
 else:
     print("Running all tests.")
 
@@ -58,26 +64,41 @@ def file_content(file, file_dir):
 
 errors = []
 
-for cmd in DIRS:
+for cmd in (DIRS if COMMANDS == [] else COMMANDS):
     print()
     print(" ===============")
     print("===> Running: ", cmd)
     print(" ===============")
 
     args = []
+    exclude = set()
 
     for work_dir in DIRS[cmd]:
         curr_dir = os.path.join(BASEDIR, work_dir)
-
-        if REGRESSION:
-            args = file_content(
-                os.path.join(curr_dir, "regression.txt"), curr_dir)
-        elif WORKING:
-            args += file_content(
-                os.path.join(curr_dir, "working.txt"), curr_dir)
-
         print(f"==> Current dir: '{curr_dir}' (command: '{cmd}')")
-        results = subprocess.run([cmd, curr_dir] + args)
+
+        if ALL:
+            results = subprocess.run([cmd, curr_dir])
+        else:
+            """exclude_file = os.path.join(curr_dir, "exclude.txt")
+            if os.path.isfile(exclude_file):
+                    exclude = set(x
+                        for x in file_content(exclude_file, curr_dir))"""
+            if REGRESSION:
+                reg_file = os.path.join(curr_dir, "regression.txt")
+                if os.path.isfile(reg_file):
+                    args = [
+                        file for file in file_content(reg_file, curr_dir)
+                        if file not in exclude]
+                else:
+                    print("No regression.txt, skipping")
+                    continue
+            """else:
+                args = [
+                    file for file in glob.glob(os.path.join(curr_dir, "*.txt"))
+                    if file not in exclude]"""
+            results = subprocess.run([cmd, curr_dir] + args)
+
         if results.returncode != 0:
             errors.append((results, curr_dir))
 
