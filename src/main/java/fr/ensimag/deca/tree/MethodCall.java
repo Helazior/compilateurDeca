@@ -41,13 +41,10 @@ public class MethodCall extends AbstractExpr {
     protected void codeGenExpr(DecacCompiler compiler){
         RegisterManager regMan = compiler.getRegMan();
         // on push tous les registres dans la pile pour qu'ils ne gênent pas pendant le calcul d'argument
-        RegisterManager.State regManState = regMan.saveState();
         for (AbstractExpr field : parametres.getList()) {
             field.codeGenExpr(compiler);
-            GPRegister regParameter = regMan.pop();
-            compiler.addInstruction(new PUSH(regParameter));
         }
-        regMan.restoreState(regManState);
+        regMan.popInStack(parametres.getList().size());
 
         // On saute au label de la méthode
         compiler.addInstruction(new BRA(new Label("bodyMethod." + getClass().getName() + "." + nomDeMethode)));
