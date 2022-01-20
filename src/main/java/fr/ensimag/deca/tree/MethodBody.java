@@ -54,13 +54,14 @@ public class MethodBody extends AbstractMethodBody{
 
     @Override
     public void decompile(IndentPrintStream s) {
+
         s.println("{");
         s.indent();
         declVariables.decompile(s);
         insts.decompile(s);
         s.unindent();
-        s.println("}");    
-    }    
+        s.println("}");
+    }
 
     @Override
     protected void iterChildren(TreeFunction f) {

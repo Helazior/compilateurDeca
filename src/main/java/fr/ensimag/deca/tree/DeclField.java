@@ -75,7 +75,7 @@ public class DeclField extends AbstractDeclField {
         switch(visibility){
             case PUBLIC: //s.print("public ");
             break;
-            case PROTECTED: s.print("protected "); 
+            case PROTECTED: s.print("protected ");
             break;
         }
         type.decompile(s);

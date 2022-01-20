@@ -21,12 +21,13 @@ public class ListDeclParam extends TreeList<AbstractDeclParam> {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        boolean first = true;
+        boolean firstLoop = true;
+
         for (AbstractDeclParam declParam : getList()) {
-            if (first) {
-                first = false;
-            } else {
-                s.print(", ");
+            if(firstLoop){
+                firstLoop=false;
+            }else{
+                s.print(",");
             }
             declParam.decompile(s);
         }
