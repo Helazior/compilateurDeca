@@ -10,7 +10,7 @@ reset="\e[0;0m"
 exit_value=0
 
 function resultGeneration {
-    path=$1/decompile
+    path=$1
     file_src=$2
     file_name=$3
 
@@ -43,11 +43,9 @@ else
 fi
 
 # Creation de la hierarchie de dossier
-mkdir -p $folder_path/decompile
-mkdir -p $folder_path/decompile/provided
-mkdir -p $folder_path/decompile/generated
-mkdir -p $folder_path/decompile/tests
-
+mkdir -p $folder_path/provided
+mkdir -p $folder_path/generated
+mkdir -p $folder_path/tests
 
 # Récupération des fichiers à tester
 if [[ $# -le 1 ]]; then

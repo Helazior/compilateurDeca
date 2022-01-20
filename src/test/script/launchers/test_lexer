@@ -76,14 +76,14 @@ else
 fi
 
 # Creation de la hierarchie de dossier
-mkdir -p $folder_path/tests
 mkdir -p $folder_path/provided
+mkdir -p $folder_path/tests
 mkdir -p $folder_path/generated
 mkdir -p $folder_path/solution
 
 # Récupération des fichiers à tester
 if [[ $# -le 1 ]]; then
-    files="$(echo $folder_path/provided/*.deca) $(echo $folder_path/tests/*.deca)"
+    files="$(echo $folder_path/tests/*.deca)"
 else
     files=$@
     files=${files#* } # On enlève le premier élément (qui est le dossier de travail)

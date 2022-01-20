@@ -12,9 +12,9 @@ Lance les tests spécifiés, avec trois possibilités :
  - Soit on lance les tests notés comme de non-regression
    (commande "tester regression" ou "tester reg")
 
-Ils lance tous les tests se trouvant dans les dossiers spécifiés en clés de
-DIRS, avec les commandes données en valeur de DIRS. Concrètement,
-pour une entrée `"dossier": ["cmd"]`, il lance `cmd dossier`.
+Ils lance tous les tests se trouvant dans les dossiers spécifiés en valeur de
+ALL_CMDS, avec les commandes données en clé de ALL_CMDS. Concrètement,
+pour une entrée `"cmd": ["dosser"]`, il lance `cmd dossier`.
 
 Pour connaître quels test sont marqués fonctionnant ou de non-regression,
 Tester lis respectivement les fichiers working.txt ou regression.txt, et
@@ -27,10 +27,10 @@ ses tests)
 import sys
 import os
 import subprocess
-import glob
+# import glob
 
 BASEDIR = "./src/test"
-DIRS = {
+ALL_CMDS = {
     "test_lexer": ["deca/lexer/valid"],
     "test_decompile": ["deca/syntax/valid"],
     "test_exec": ["deca/exec/invalid", "deca/exec/valid"],
@@ -64,7 +64,7 @@ def file_content(file, file_dir):
 
 errors = []
 
-for cmd in (DIRS if COMMANDS == [] else COMMANDS):
+for cmd in (ALL_CMDS if COMMANDS == [] else COMMANDS):
     print()
     print(" ===============")
     print("===> Running: ", cmd)
@@ -73,7 +73,7 @@ for cmd in (DIRS if COMMANDS == [] else COMMANDS):
     args = []
     exclude = set()
 
-    for work_dir in DIRS[cmd]:
+    for work_dir in ALL_CMDS[cmd]:
         curr_dir = os.path.join(BASEDIR, work_dir)
         print(f"==> Current dir: '{curr_dir}' (command: '{cmd}')")
 

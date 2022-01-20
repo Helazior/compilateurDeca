@@ -659,7 +659,7 @@ decl_method returns[DeclMethod tree]
             assert($type.tree != null);
             assert($ident.tree != null);
             assert($params.tree != null);
-            MethodNoBody emptyMethod = new MethodNoBody();
+            EmptyMethodBody emptyMethod = new EmptyMethodBody();
             $tree = new DeclMethod($type.tree, $ident.tree, $params.tree, emptyMethod);
             setLocation($tree, $type.start);
         }
