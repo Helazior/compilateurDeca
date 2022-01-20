@@ -1,15 +1,35 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 
+import org.apache.commons.lang.Validate;
+
 public class MethodBody extends AbstractMethodBody{
-    //TODO
+
+    private ListDeclVar declVariables;
+    private ListInst insts;
+
+    public MethodBody(ListDeclVar declVariables,
+            ListInst insts) {
+        Validate.notNull(declVariables);
+        Validate.notNull(insts);
+        this.declVariables = declVariables;
+        this.insts = insts;
+        }
+
     @Override
-    protected void verifyMethodBody(DecacCompiler compiler) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    protected void verifyMethodBody(DecacCompiler compiler, EnvironmentExp methodEnv,
+            AbstractIdentifier currentClass, Type returnType) throws ContextualError {
+        ClassDefinition classDef = (ClassDefinition)compiler.getType(currentClass.getName());
+
+        declVariables.verifyListDeclVariable(compiler, methodEnv, classDef);
+        insts.verifyListInst(compiler, methodEnv, classDef, returnType);
     }
 
     @Override

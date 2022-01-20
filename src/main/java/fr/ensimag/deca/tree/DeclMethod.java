@@ -25,13 +25,13 @@ import org.apache.commons.lang.Validate;
  * @date 14/01/2022
  */
 public class DeclMethod extends AbstractDeclMethod {
-    private AbstractIdentifier type;
+    private AbstractIdentifier returnType;
     private AbstractIdentifier method;
     private ListDeclParam parameters;
     private AbstractMethodBody methodBody;
 
-    public DeclMethod(AbstractIdentifier typeReturn, AbstractIdentifier method, ListDeclParam parameters, AbstractMethodBody methodBody){
-        this.type = typeReturn;
+    public DeclMethod(AbstractIdentifier returnType, AbstractIdentifier method, ListDeclParam parameters, AbstractMethodBody methodBody){
+        this.returnType = returnType;
         this.method = method;
         this.parameters = parameters;
         this.methodBody = methodBody;
@@ -42,7 +42,7 @@ public class DeclMethod extends AbstractDeclMethod {
     public void decompile(IndentPrintStream s) {
         s.println("{");
         s.indent();
-        type.decompile(s);
+        returnType.decompile(s);
         method.decompile(s);
         parameters.decompile(s);
         methodBody.decompile(s);
@@ -53,7 +53,7 @@ public class DeclMethod extends AbstractDeclMethod {
     @Override
     protected void verifyMethodSignature(DecacCompiler compiler, AbstractIdentifier superClass,
             AbstractIdentifier currentClass) throws ContextualError {
-        Type t = type.verifyType(compiler);
+        Type t = returnType.verifyType(compiler);
         Symbol methodName = method.getName();
         Signature sig = parameters.verifyListParamSignature(compiler);
 
@@ -84,15 +84,19 @@ public class DeclMethod extends AbstractDeclMethod {
 
     @Override
     protected void verifyMethodBody(DecacCompiler compiler,
-            EnvironmentExp localEnv, AbstractIdentifier currentClass)
-            throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+            AbstractIdentifier currentClass) throws ContextualError {
+        Type ret = returnType.verifyType(compiler);
+
+        ClassDefinition classDef = (ClassDefinition)compiler.getType(currentClass.getName());
+        EnvironmentExp methodEnv = new EnvironmentExp(classDef.getMembers());
+        parameters.verifyListParamType(compiler, methodEnv);
+        methodBody.verifyMethodBody(compiler, methodEnv, currentClass, ret);
     }
 
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        type.prettyPrint(s, prefix, false);
+        returnType.prettyPrint(s, prefix, false);
         method.prettyPrint(s, prefix, false);
         parameters.prettyPrint(s, prefix, false);
         method.prettyPrint(s, prefix, true);
@@ -100,7 +104,7 @@ public class DeclMethod extends AbstractDeclMethod {
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        type.iter(f);
+        returnType.iter(f);
         method.iter(f);
         parameters.iter(f);
         method.iter(f);

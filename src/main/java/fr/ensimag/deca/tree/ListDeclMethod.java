@@ -37,11 +37,10 @@ public class ListDeclMethod extends TreeList<AbstractDeclMethod> {
      * Pass 3 of [SyntaxeContextuelle]
      */
     public void verifyListMethodBody(DecacCompiler compiler,
-            EnvironmentExp localEnv, AbstractIdentifier currentClass)
-            throws ContextualError {
+        AbstractIdentifier currentClass) throws ContextualError {
 
         for (AbstractDeclMethod declMethod : getList()) {
-            declMethod.verifyMethodBody(compiler, localEnv, currentClass);
+            declMethod.verifyMethodBody(compiler, currentClass);
         }
     }
 

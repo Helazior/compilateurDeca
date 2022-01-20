@@ -3,7 +3,10 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 import java.util.jar.Attributes.Name;
@@ -40,13 +43,19 @@ public class DeclParam extends AbstractDeclParam {
     protected Type verifyParamSignature(DecacCompiler compiler)
             throws ContextualError {
         Type t = type.verifyType(compiler);
-        Validate.isTrue(!t.isVoid(), "Cannot pass a voidType object in argument");
+        if(t.isVoid()){
+            throw new ContextualError("Cannot pass a voidType object in argument", getLocation());
+        }
         return t;
     }
 
     @Override
-    protected void verifyParamType(DecacCompiler compiler) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    protected void verifyParamType(DecacCompiler compiler, EnvironmentExp methodEnv) throws ContextualError {
+        try{
+            methodEnv.declare(name.getName(), new ParamDefinition(type.getType(), getLocation()));
+        } catch(DoubleDefException e){
+            throw new ContextualError("A parameter with the same name already exist in this context", getLocation());
+        }
     }
 
 
