@@ -377,13 +377,15 @@ public class DecacCompiler {
      *
      * @return true on error
      */
-    public boolean compile() {
+    public boolean compile() throws ContextualError {
         String sourceFile = source.getAbsolutePath();
         String destFile = null;
         // Done: calculer le nom du fichier .ass à partir du nom du
         // Done: FAIRE: fichier .deca.
-        // TODO: est-ce qu'il faut vérifier le format du nom en entrée ?
 
+        if (!sourceFile.substring(sourceFile.length() - 5, sourceFile.length()).equals(".deca")) {
+            throw new ContextualError("Bad extension. Must be '.deca'", null);
+        }
         destFile = sourceFile.substring(0, sourceFile.length() - 5) + ".ass";
 
         PrintStream err = System.err;

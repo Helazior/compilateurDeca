@@ -1,0 +1,12 @@
+; Main program
+	TSTO #0
+	BOV stack_overflow_error
+; start main program
+; Beginning of main instructions:
+	WSTR "a suppr"
+	HALT
+stack_overflow_error:
+	WSTR "Error: Stack Overflow"
+	WNL
+	ERROR
+; end main program

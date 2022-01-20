@@ -1,0 +1,69 @@
+; Main program
+	TSTO #3
+	BOV stack_overflow_error
+; start main program
+; Beginning of main instructions:
+	LOAD #0, R2
+	LOAD #1, R3
+	LOAD #2, R4
+	LOAD #3, R5
+	LOAD #4, R6
+	LOAD #5, R7
+	LOAD #6, R8
+	LOAD #7, R9
+	LOAD #8, R10
+	LOAD #9, R11
+	LOAD #10, R12
+	LOAD #11, R13
+	LOAD #12, R14
+	LOAD #13, R15
+	PUSH R2
+	LOAD #14, R2
+	PUSH R3
+	LOAD #15, R3
+	PUSH R4
+	LOAD #16, R4
+; +
+	ADD R4, R3
+; +
+	ADD R3, R2
+; +
+	ADD R2, R15
+; +
+	ADD R15, R14
+; +
+	ADD R14, R13
+; +
+	ADD R13, R12
+; +
+	ADD R12, R11
+; +
+	ADD R11, R10
+; +
+	ADD R10, R9
+; +
+	ADD R9, R8
+; +
+	ADD R8, R7
+; +
+	ADD R7, R6
+; +
+	ADD R6, R5
+	POP R2
+; +
+	ADD R5, R2
+	POP R3
+; +
+	ADD R2, R3
+	POP R2
+; +
+	ADD R3, R2
+	LOAD R2, R1
+	WINT
+	WNL
+	HALT
+stack_overflow_error:
+	WSTR "Error: Stack Overflow"
+	WNL
+	ERROR
+; end main program
