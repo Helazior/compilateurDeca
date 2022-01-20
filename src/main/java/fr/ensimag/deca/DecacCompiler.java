@@ -2,6 +2,7 @@ package fr.ensimag.deca;
 
 import fr.ensimag.deca.syntax.DecaLexer;
 import fr.ensimag.deca.syntax.DecaParser;
+import fr.ensimag.deca.syntax.DecaImportParser;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tree.AbstractProgram;
 import fr.ensimag.deca.tree.LocationException;
@@ -498,4 +499,128 @@ public class DecacCompiler {
         return parser.parseProgramAndManageErrors(err);
     }
 
+
+
+
+
+
+
+    public AbstractProgram compileImport(String sourceImport) {
+        String sourceFile = sourceImport;
+        String destFile = null;
+        // Done: calculer le nom du fichier .ass à partir du nom du
+        // Done: FAIRE: fichier .deca.
+        // TODO: est-ce qu'il faut vérifier le format du nom en entrée ?
+
+        destFile = sourceFile.substring(0, sourceFile.length() - 5) + ".ass";
+
+        PrintStream err = System.err;
+        PrintStream out = System.out;
+        LOG.debug("Compiling file " + sourceFile + " to assembly file " + destFile);
+        try {
+            return doCompileImport(sourceFile, destFile, out, err);
+        } catch (LocationException e) {
+            e.display(err);
+            return null;
+        } catch (DecacFatalError e) {
+            err.println(e.getMessage());
+            return null;
+        } catch (StackOverflowError e) {
+            LOG.debug("stack overflow", e);
+            err.println("Stack overflow while compiling file " + sourceFile + ".");
+            return null;
+        } catch (Exception e) {
+            LOG.fatal("Exception raised while compiling file " + sourceFile
+                    + ":", e);
+            err.println("Internal compiler error while compiling file " + sourceFile + ", sorry.");
+            return null;
+        } catch (AssertionError e) {
+            LOG.fatal("Assertion failed while compiling file " + sourceFile
+                    + ":", e);
+            err.println("Internal compiler error while compiling file " + sourceFile + ", sorry.");
+            return null;
+        }
+    }
+
+    /**
+     * Internal function that does the job of compiling (i.e. calling lexer,
+     * verification and code generation).
+     *
+     * @param sourceName name of the source (deca) file
+     * @param destName name of the destination (assembly) file
+     * @param out stream to use for standard output (output of decac -p)
+     * @param err stream to use to display compilation errors
+     *
+     * @return true on error
+     */
+    private AbstractProgram doCompileImport(String sourceName, String destName,
+            PrintStream out, PrintStream err)
+            throws DecacFatalError, LocationException {
+
+        AbstractProgram prog = doLexingAndParsingImport(sourceName, err);
+
+        if (prog == null) {
+            LOG.info("Parsing failed");
+            return null;
+        }
+        assert(prog.checkAllLocations());
+
+        if(compilerOptions.getDecompile()){
+            prog.decompile(out);
+            return prog;
+        }
+
+        prog.verifyProgram(this);
+        assert(prog.checkAllDecorations());
+
+        if(compilerOptions.getVerification()){
+            return prog;
+        }
+        addComment("start main program");
+        prog.codeGenProgram(this);
+        addComment("end main program");
+        LOG.debug("Generated assembly code:" + nl + program.display());
+        LOG.info("Output file assembly file is: " + destName);
+
+        FileOutputStream fstream = null;
+        try {
+            fstream = new FileOutputStream(destName);
+        } catch (FileNotFoundException e) {
+            throw new DecacFatalError("Failed to open output file: " + e.getLocalizedMessage());
+        }
+
+        LOG.info("Writing assembler file ...");
+
+        program.display(new PrintStream(fstream));
+        LOG.info("Compilation of " + sourceName + " successful.");
+        return prog;
+    }
+
+    /**
+     * Build and call the lexer and parser to build the primitive abstract
+     * syntax tree.
+     *
+     * @param sourceName Name of the file to parse
+     * @param err Stream to send error messages to
+     * @return the abstract syntax tree
+     * @throws DecacFatalError When an error prevented opening the source file
+     * @throws DecacInternalError When an inconsistency was detected in the
+     * compiler.
+     * @throws LocationException When a compilation error (incorrect program)
+     * occurs.
+     */
+    protected AbstractProgram doLexingAndParsingImport(String sourceName, PrintStream err)
+            throws DecacFatalError, DecacInternalError {
+        DecaLexer lex;
+        try {
+            lex = new DecaLexer(CharStreams.fromFileName(sourceName));
+        } catch (IOException ex) {
+            throw new DecacFatalError("Failed to open input file: " + ex.getLocalizedMessage());
+        }
+        lex.setDecacCompiler(this);
+        CommonTokenStream tokens = new CommonTokenStream(lex);
+        DecaImportParser parser = new DecaImportParser(tokens);
+        parser.setDecacCompiler(this);
+        return parser.parseProgramAndManageErrors(err);
+    }
 }

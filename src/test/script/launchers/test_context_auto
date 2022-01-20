@@ -11,7 +11,7 @@ exit_value=0
 
 function simplifyResult {
     while read line; do
-        new_line=${line#*":"}
+        new_line=${line##*"/"}
         echo -e "$new_line" >> $2
     done < $1
 }

@@ -13,7 +13,7 @@ public class InvalidLValue extends DecaRecognitionException {
 
     private static final long serialVersionUID = 4670163376041273741L;
 
-    public InvalidLValue(DecaParser recognizer, ParserRuleContext ctx) {
+    public InvalidLValue(AbstractDecaParser recognizer, ParserRuleContext ctx) {
         super(recognizer, ctx);
     }
 
