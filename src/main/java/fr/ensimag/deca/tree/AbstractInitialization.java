@@ -13,7 +13,7 @@ import fr.ensimag.deca.context.EnvironmentExp;
  * @date 01/01/2022
  */
 public abstract class AbstractInitialization extends Tree {
-    
+
     /**
      * Implements non-terminal "initialization" of [SyntaxeContextuelle] in pass 3
      * @param compiler contains "env_types" attribute
@@ -26,5 +26,10 @@ public abstract class AbstractInitialization extends Tree {
             Type t, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError;
 
+
     public abstract void codeGenInit(DecacCompiler compiler, int offset);
+
+    public abstract void pushValue(DecacCompiler compiler);
+
+    public abstract boolean isInitialized();
 }

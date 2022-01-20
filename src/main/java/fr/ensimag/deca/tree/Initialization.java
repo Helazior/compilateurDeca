@@ -54,6 +54,14 @@ public class Initialization extends AbstractInitialization {
         regMan.give(reg);
     }
 
+    public boolean isInitialized() {
+        return true;
+    }
+
+    @Override
+    public void pushValue(DecacCompiler compiler) {
+        expression.codeGenExpr(compiler);
+    }
 
     @Override
     public void decompile(IndentPrintStream s) {

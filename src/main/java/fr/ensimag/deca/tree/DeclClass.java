@@ -39,16 +39,24 @@ public class DeclClass extends AbstractDeclClass {
 
 
     private void initAttributs(DecacCompiler compiler) throws ContextualError {
+        RegisterManager regMan = compiler.getRegMan();
         compiler.addComment("; ---------- Initialisation des champs de " + getClass().getName());
         compiler.addLabel(new Label("init." + getClass().getName()));
         for (AbstractDeclField declField : listDeclField.getList()) {
             // On déclare chaque attribut :
-            if (declField.getType().isInt()) {
-                compiler.addInstruction(new LOAD(0, Register.R0));
-            } else if (declField.getType().isFloat()) {
-                compiler.addInstruction(new LOAD(new ImmediateFloat(0), Register.R0));
+            if (declField.getInitialization().isInitialized()) {
+                // initialisé
+                declField.getInitialization().pushValue(compiler);
+                regMan.pop(Register.R0);
             } else {
-                compiler.addInstruction(new LOAD(null, Register.R0));
+                // valeur par défaut
+                if (declField.getType().isInt()) {
+                    compiler.addInstruction(new LOAD(0, Register.R0));
+                } else if (declField.getType().isFloat()) {
+                    compiler.addInstruction(new LOAD(new ImmediateFloat(0), Register.R0));
+                } else {
+                    compiler.addInstruction(new LOAD(null, Register.R0));
+                }
             }
 
             compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
