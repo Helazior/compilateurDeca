@@ -58,6 +58,10 @@ public class RegisterManager {
         this.stackOffset = 0;
     }
 
+    public void popInStack(int nbParameters) {
+        throw new UnsupportedOperationException("TODO");
+    }
+
     public void declareMethodVars(ListDeclParam args, ListDeclVar vars) {
         LOG.trace("REGMAN declareVars");
         if (namedVars != null) {

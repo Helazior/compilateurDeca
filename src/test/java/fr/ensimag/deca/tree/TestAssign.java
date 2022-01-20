@@ -12,7 +12,7 @@ import fr.ensimag.deca.tools.SymbolTable;
  */
 public class TestAssign {
 
-    public static String gencodeSource(AbstractProgram source, DecacCompiler compiler) {
+    public static String gencodeSource(AbstractProgram source, DecacCompiler compiler) throws ContextualError {
         source.codeGenProgram(compiler);
         return compiler.displayIMAProgram();
     }

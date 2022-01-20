@@ -7,6 +7,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.CompilerOptions;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.SymbolTable;
 
 /**
@@ -44,7 +45,7 @@ public class Gencode_else_equals {
         return compiler.displayIMAProgram();
     }
 
-    public static void test1() {
+    public static void test1() throws ContextualError {
         AbstractProgram source = initTest1();
         //System.out.println("---- From the following Abstract Syntax Tree ----");
         //source.prettyPrint(System.out);
@@ -56,7 +57,7 @@ public class Gencode_else_equals {
 
 
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws ContextualError {
         test1();
     }
 }

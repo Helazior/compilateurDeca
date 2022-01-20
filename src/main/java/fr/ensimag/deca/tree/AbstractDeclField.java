@@ -17,6 +17,8 @@ public abstract class AbstractDeclField extends Tree {
 
     protected abstract Type getType();
 
+    protected abstract AbstractInitialization getInitialization();
+
     /**
      * Pass 2 of [SyntaxeContextuelle]. Verify that the
      * method is OK looking at method body and field initialization.

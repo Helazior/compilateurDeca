@@ -43,9 +43,15 @@ public class DeclField extends AbstractDeclField {
     protected Symbol getName() {
         return field.getName();
     }
+
     @Override
     protected Type getType() {
         return type.getType();
+    }
+
+    @Override
+    protected AbstractInitialization getInitialization() {
+        return initialization;
     }
 
     @Override

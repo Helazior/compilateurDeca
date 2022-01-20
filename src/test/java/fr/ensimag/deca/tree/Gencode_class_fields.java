@@ -10,18 +10,36 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.SymbolTable;
 
-import java.util.List;
-
 /**
  *
  * @author Ensimag
  * @date 01/01/2022
  */
-public class Gencode_basic_class {
+public class Gencode_class_fields {
 
     public static AbstractProgram initTest1() {
         ListDeclMethod listDeclMeth = null;
-        ListDeclField listDeclFields = null;
+
+        Visibility visibility = Visibility.PUBLIC;
+
+        AbstractInitialization initialization1 = new Initialization(new IntLiteral(1));
+        AbstractInitialization initialization2 = new Initialization(new FloatLiteral(2));
+
+        SymbolTable symField = new SymbolTable();
+        AbstractIdentifier field1 = new Identifier(symField.create("field1"));
+        AbstractIdentifier field2 = new Identifier(symField.create("field2"));
+
+        SymbolTable symInt = new SymbolTable();
+        SymbolTable.Symbol typeIntName = symInt.create("int");
+        AbstractIdentifier intType = new Identifier(typeIntName);
+        SymbolTable symFloat = new SymbolTable();
+        SymbolTable.Symbol typeName = symInt.create("int");
+        AbstractIdentifier floatType = new Identifier(typeName);
+        DeclField declField1 = new DeclField(intType, field1, initialization1, visibility);
+        DeclField declField2 = new DeclField(floatType, field2, initialization2, visibility);
+        ListDeclField listDeclFields = new ListDeclField();
+        listDeclFields.add(declField1);
+        listDeclFields.add(declField2);
         AbstractIdentifier identiferSuperClass = null;
 
         SymbolTable symTab = new SymbolTable();
