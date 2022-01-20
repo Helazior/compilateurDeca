@@ -15,12 +15,10 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.indent();
         for (AbstractDeclClass declClass : getList()) {
             declClass.decompile(s);
             s.println();
         }
-        s.unindent();
     }
 
     /**

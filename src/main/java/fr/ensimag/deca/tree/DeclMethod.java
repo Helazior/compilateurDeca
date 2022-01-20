@@ -78,8 +78,6 @@ public class DeclMethod extends AbstractDeclMethod {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.println("{");
-        s.indent();
         type.decompile(s);
         s.print(" ");
         method.decompile(s);
@@ -87,8 +85,6 @@ public class DeclMethod extends AbstractDeclMethod {
         parameters.decompile(s);
         s.print(") ");
         methodBody.decompile(s);
-        s.unindent();
-        s.println("}");    
     }
 
 
