@@ -38,7 +38,7 @@ public class MethodCall extends AbstractExpr {
 
     @Override
     protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
-       
+        throw new UnsupportedOperationException("Method is not printable");
     }
 
     @Override

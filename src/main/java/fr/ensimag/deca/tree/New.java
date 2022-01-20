@@ -34,7 +34,7 @@ public class New extends AbstractExpr {
 
     @Override
     protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
-        throw new UnsupportedOperationException("not yet implemented");
+        throw new UnsupportedOperationException("New is not printable");
     }
 
     @Override
