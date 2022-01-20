@@ -1,4 +1,4 @@
-parser grammar DecaParser;
+parser grammar DecaImportParser;
 
 options {
     // Default language but name it anyway
@@ -57,10 +57,7 @@ main returns[AbstractMain tree]
             $tree = new EmptyMain();
         }
     | block {
-            assert($block.decls != null);
-            assert($block.insts != null);
-            $tree = new Main($block.decls, $block.insts);
-            setLocation($tree, $block.start);
+            $tree = new EmptyMain();
         }
     ;
 
@@ -238,6 +235,7 @@ if_then_else returns[IfThenElse tree]
         assert(treeNodes.isEmpty());
       }
     ;
+
 
 list_expr returns[ListExpr tree]
 @init {
@@ -508,26 +506,18 @@ type returns[AbstractIdentifier tree]
 // MODIFIED
 literal returns[AbstractExpr tree]
     : INT {
-        try {
-            assert($INT.text != null);
-            String value = $INT.text;
-            int valint = Integer.parseInt(value);
-            $tree = new IntLiteral(valint);
-            setLocation($tree, $INT);
-        } catch (NumberFormatException e) {
-            throw new InvalidInt(this, $ctx);
-        }
+        assert($INT.text != null);
+        String value = $INT.text;
+        int valint = Integer.parseInt(value);
+        $tree = new IntLiteral(valint);
+        setLocation($tree, $INT);
         }
     | FLOAT {
-        try {
-            assert($FLOAT.text != null);
-            String value = $FLOAT.text;
-            float valfloat = Float.parseFloat(value);
-            $tree = new FloatLiteral(valfloat);
-            setLocation($tree, $FLOAT);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFloat(this, $ctx);
-        }
+        assert($FLOAT.text != null);
+        String value = $FLOAT.text;
+        float valfloat = Float.parseFloat(value);
+        $tree = new FloatLiteral(valfloat);
+        setLocation($tree, $FLOAT);
         }
     | STRING {
         assert($STRING.text != null);
@@ -543,10 +533,12 @@ literal returns[AbstractExpr tree]
         $tree = new BooleanLiteral(false);
         setLocation($tree, $FALSE);
         }
+    //TODO
     | THIS {
         $tree = new This(false);
         setLocation($tree, $THIS);
         }
+    //TODO
     | NULL {
         $tree = new Null();
         setLocation($tree, $NULL);
@@ -609,6 +601,7 @@ class_body returns[ListDeclMethod methodes, ListDeclField fields]
       |n=decl_field_set[$fields] {
         }
       )* {
+//Aurais-je oublie quelque chose?
         }
     ;
 
@@ -659,25 +652,15 @@ decl_field [AbstractIdentifier t, Visibility v] returns[AbstractDeclField tree]
 
 decl_method returns[DeclMethod tree]
     : type ident OPARENT params=list_params CPARENT (block {
-            assert($block.decls != null);
-            assert($block.insts != null);
-            MethodBody methodBody = new MethodBody($block.decls, $block.insts);
-            setLocation(methodBody, $block.start);
-            $tree = new DeclMethod($type.tree, $ident.tree, $params.tree, methodBody);
-
         }
       | ASM OPARENT code=multi_line_string CPARENT SEMI {
-            assert($code.text != null);
-            assert($code.location != null);
-            MethodAsmBody methodBody = new MethodAsmBody($code.text, $code.location);
-            setLocation(methodBody, $multi_line_string.start);
-            $tree = new DeclMethod($type.tree, $ident.tree, $params.tree, methodBody);
-
         }
-      ) {
+      ){
             assert($type.tree != null);
             assert($ident.tree != null);
             assert($params.tree != null);
+            MethodNoBody emptyMethod = new MethodNoBody();
+            $tree = new DeclMethod($type.tree, $ident.tree, $params.tree, emptyMethod);
             setLocation($tree, $type.start);
         }
     ;
@@ -722,7 +705,7 @@ list_imports returns[ListDeclImport tree]
 @init{
     $tree = new ListDeclImport();
 }
-    : (IMPORT import_decl {
+    : (IMPORT import_decl EOL{
         assert($import_decl.tree != null);
         $tree.add($import_decl.tree);
     }

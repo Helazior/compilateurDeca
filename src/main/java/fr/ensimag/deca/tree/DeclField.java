@@ -37,7 +37,6 @@ public class DeclField extends AbstractDeclField {
         this.visibility = visibility;
     }
 
-    //TODO toute la suite
     @Override
     protected void verifyFieldVisibility(DecacCompiler compiler,
             AbstractIdentifier superClass, AbstractIdentifier currentClass)
@@ -63,9 +62,10 @@ public class DeclField extends AbstractDeclField {
     }
 
     protected void verifyFieldType(DecacCompiler compiler,
-            EnvironmentExp localEnv, AbstractIdentifier currentClass)
-            throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+            AbstractIdentifier currentClass) throws ContextualError {
+        Type t = type.verifyType(compiler);
+        ClassDefinition classDef = (ClassDefinition)compiler.getType(currentClass.getName());
+        initialization.verifyInitialization(compiler, t, classDef.getMembers(), classDef);
     }
 
 
