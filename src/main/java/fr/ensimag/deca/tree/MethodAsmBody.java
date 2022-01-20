@@ -33,9 +33,9 @@ public class MethodAsmBody extends AbstractMethodBody{
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.println(loc + " : (" + corps + " )");
-            
-    }    
+        s.println();
+        s.println("asm(" + corps + " );");
+    }
 
     @Override
     protected void iterChildren(TreeFunction f) {

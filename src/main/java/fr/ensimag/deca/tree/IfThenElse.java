@@ -91,11 +91,11 @@ public class IfThenElse extends AbstractInst {
     public void decompile(IndentPrintStream s) {
         s.print("if(");
         condition.decompile(s);
-        s.print("){");
+        s.println("){");
         s.indent();
         thenBranch.decompile(s);
         s.unindent();
-        s.print("} else {");
+        s.println("} else {");
         s.indent();
         elseBranch.decompile(s);
         s.unindent();

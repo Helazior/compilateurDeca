@@ -44,16 +44,14 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.println("{");
-        s.indent();
-        s.print("class");
+        s.print("class ");
         currentClass.decompile(s);
         s.print(" extends ");
         superClass.decompile(s);
-        s.println();
+        s.println("{");
+        s.indent();
         listDeclField.decompile(s);
-        s.println();
-        s.println();
+        s.println("\n");
         listDeclMethod.decompile(s);
         s.unindent();
         s.println("}");
