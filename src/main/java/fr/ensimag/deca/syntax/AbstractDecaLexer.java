@@ -94,6 +94,7 @@ public abstract class AbstractDecaLexer extends Lexer {
      */
     public AbstractDecaLexer(CharStream input) {
         super(input);
+        System.out.println("Lexer oke");
         removeErrorListeners();
         addErrorListener(new DecacErrorListner(input));
     }

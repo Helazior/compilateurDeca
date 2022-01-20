@@ -340,6 +340,7 @@ public class DecacCompiler {
      */
     public boolean compile() {
         String sourceFile = source.getAbsolutePath();
+        System.out.println(sourceFile);
         String destFile = null;
         // Done: calculer le nom du fichier .ass à partir du nom du
         // Done: FAIRE: fichier .deca.
@@ -446,15 +447,18 @@ public class DecacCompiler {
             throws DecacFatalError, DecacInternalError {
         DecaLexer lex;
         try {
+            System.out.println(sourceName);
             lex = new DecaLexer(CharStreams.fromFileName(sourceName));
+            
         } catch (IOException ex) {
-            throw new DecacFatalError("Failed to open input file: " + ex.getLocalizedMessage());
+           throw new DecacFatalError("Failed to open input file: " + ex.getLocalizedMessage());
         }
         lex.setDecacCompiler(this);
         CommonTokenStream tokens = new CommonTokenStream(lex);
         DecaParser parser = new DecaParser(tokens);
         parser.setDecacCompiler(this);
         return parser.parseProgramAndManageErrors(err);
+        
     }
 
 
@@ -464,10 +468,11 @@ public class DecacCompiler {
 
 
     public AbstractProgram compileImport(String sourceImport) {
-        String sourceFile = sourceImport;
+        File f = new File(sourceImport);
+        String sourceFile = f.getAbsolutePath();
         String destFile = null;
         // Done: calculer le nom du fichier .ass à partir du nom du
-        // Done: FAIRE: fichier .deca.
+        // Done: FAIRE: fichier .deca./user/6/elefthet/Projet_GL/src/test/deca/syntax/valid/provided/hello.deca
         // TODO: est-ce qu'il faut vérifier le format du nom en entrée ?
 
         destFile = sourceFile.substring(0, sourceFile.length() - 5) + ".ass";
@@ -501,7 +506,7 @@ public class DecacCompiler {
     }
 
     /**
-     * Internal function that does the job of compiling (i.e. calling lexer,
+     * Internal function that does the job of compiling (i.e. calling lexer,/user/6/elefthet/Projet_GL/src/test/deca/syntax/valid/provided/hello.deca
      * verification and code generation).
      *
      * @param sourceName name of the source (deca) file
@@ -570,15 +575,24 @@ public class DecacCompiler {
     protected AbstractProgram doLexingAndParsingImport(String sourceName, PrintStream err)
             throws DecacFatalError, DecacInternalError {
         DecaLexer lex;
+        //try {
+        //    System.out.print(CharStreams.fromFileName(sourceName));
+        //    lex = new DecaLexer(CharStreams.fromFileName(sourceName));
+        //    System.out.println("Là mon cerveau il é tout cassé");
+        //} catch (IOException ex) {
+        //    throw new DecacFatalError("Failed to open input file: " + ex.getLocalizedMessage());
+        //}
+        //lex.setDecacCompiler(this);
+        //CommonTokenStream tokens = new CommonTokenStream(lex);
+        //DecaImportParser parser = new DecaImportParser(tokens);
+        //parser.setDecacCompiler(this);
+        //return parser.parseProgramAndManageErrors(err);
+
         try {
-            lex = new DecaLexer(CharStreams.fromFileName(sourceName));
+            System.out.print(CharStreams.fromFileName(sourceName));
         } catch (IOException ex) {
             throw new DecacFatalError("Failed to open input file: " + ex.getLocalizedMessage());
         }
-        lex.setDecacCompiler(this);
-        CommonTokenStream tokens = new CommonTokenStream(lex);
-        DecaImportParser parser = new DecaImportParser(tokens);
-        parser.setDecacCompiler(this);
-        return parser.parseProgramAndManageErrors(err);
+        return null;
     }
 }
