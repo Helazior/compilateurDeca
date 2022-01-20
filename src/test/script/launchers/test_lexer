@@ -33,7 +33,7 @@ function simplifyResult {
 
 
 function resultGeneration {
-    path=$1/lexer
+    path=$1
     file_src=$2
     file_name=$3
 
@@ -70,20 +70,20 @@ function resultGeneration {
 
 # Récupération du dossier de travail
 if [[ $# -eq 0 ]]; then
-    folder_path=./src/test/deca/syntax/valid
+    folder_path=./src/test/deca/lexer/valid
 else
     folder_path=$1
 fi
 
 # Creation de la hierarchie de dossier
-mkdir -p $folder_path/lexer
-mkdir -p $folder_path/lexer/provided
-mkdir -p $folder_path/lexer/generated
-mkdir -p $folder_path/lexer/solution
+mkdir -p $folder_path/provided
+mkdir -p $folder_path/tests
+mkdir -p $folder_path/generated
+mkdir -p $folder_path/solution
 
 # Récupération des fichiers à tester
 if [[ $# -le 1 ]]; then
-    files="$(echo $folder_path/lexer/provided/*.deca)" #$(echo $folder_path/provided/*.deca)
+    files="$(echo $folder_path/tests/*.deca)"
 else
     files=$@
     files=${files#* } # On enlève le premier élément (qui est le dossier de travail)

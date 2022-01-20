@@ -71,20 +71,35 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.println("{");
-        s.indent();
-        s.print("class");
+        s.print("class ");
         currentClass.decompile(s);
         s.print(" extends ");
         superClass.decompile(s);
-        s.println();
+        s.println(" {");
+        s.indent();
         listDeclField.decompile(s);
-        s.println();
-        s.println();
+        s.println("\n");
         listDeclMethod.decompile(s);
         s.unindent();
         s.println("}");
     }
+
+
+    /**
+     * Astuce ou idée pour l'extension :
+     * On effectue un appel récursif sur le parent de la classe actuel de sorte que
+     * la première class verfié soit la racine de la chaine de classe et que la classe
+     * actuel soit appelé une fois que toutes ses classes parentes ont bien été défini.
+     * De cette manière on garanti l'ordre de parcours de l'arbre
+     *
+     * Condition d'arret : Si la class actuel n'a plus de parent, ou si elle a déja été traité
+     *
+     * Problème : On n'a aucune référence vers le noeud de l'arbre correspondant
+     * à la définition de la classe parent
+     *
+     * Intuition : on peut faire la construction de ces réfrence dans l'environnmenet du compilateur
+     * dans une première passe, ou éventuellement rajouter des arguments dans les définitions de classes
+     */
 
 
     @Override
@@ -108,7 +123,8 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     protected void verifyClassBody(DecacCompiler compiler) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        listDeclField.verifyListFieldType(compiler, currentClass);
+        listDeclMethod.verifyListMethodBody(compiler, currentClass);
     }
 
 
