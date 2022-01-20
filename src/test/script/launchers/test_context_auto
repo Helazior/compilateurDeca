@@ -57,29 +57,26 @@ function test_file {
 
 # Récupération du dossier de travail
 if [[ $# -eq 0 ]]; then
-    folder_path=./src/test/deca/context
+    folder_path=./src/test/deca/context/invalid
 else
     folder_path=$1
 fi
 
 # Creation de la hierarchie de dossier
-mkdir -p $folder_path/valid/generated
-mkdir -p $folder_path/valid/provided
-mkdir -p $folder_path/valid/solution
-
-mkdir -p $folder_path/invalid/generated
-mkdir -p $folder_path/invalid/provided
-mkdir -p $folder_path/invalid/solution
+mkdir -p $folder_path/generated
+mkdir -p $folder_path/provided
+mkdir -p $folder_path/solution
+mkdir -p $folder_path/tests
 
 # Récupération des fichiers à tester
 if [[ $# -le 1 ]]; then
-    files="$(echo $folder_path/valid/solution/*.test) $(echo $folder_path/invalid/solution/*.test)"
+    files="$(echo $folder_path)"
 else
     files=$@
     files=${files#* } # On enlève le premier élément (qui est le dossier de travail)
 fi
 
-for file_src in $files; do
+for file_src in $files/solution/*.test; do
     #nom du fichier
     file_name=$(basename ${file_src%%".test"})
     folder_path=${file_src%%"/solution/$file_name.test"}
