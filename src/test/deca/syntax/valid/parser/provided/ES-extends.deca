@@ -1,0 +1,14 @@
+// Description:
+//    On teste l'extension de classe
+//
+//    
+//
+// Historique:
+//    cree le 18/01/2022
+
+
+class Test1 {
+}
+
+class Test2 extends Test1 {
+}

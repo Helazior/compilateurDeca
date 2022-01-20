@@ -4,6 +4,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.FieldDefinition;
 
 /**
  * Class declaration.
@@ -19,7 +20,7 @@ public abstract class AbstractDeclField extends Tree {
      * method is OK looking at method body and field initialization.
      */
     protected abstract void verifyFieldVisibility(DecacCompiler compiler,
-        ClassDefinition superClass, ClassDefinition currentClass)
+        AbstractIdentifier superClass, AbstractIdentifier currentClass)
         throws ContextualError;
 
     /**
@@ -27,7 +28,7 @@ public abstract class AbstractDeclField extends Tree {
      * contained in the method are OK.
      */
     protected abstract void verifyFieldType(DecacCompiler compiler,
-        EnvironmentExp localEnv, ClassDefinition currentClass)
+        EnvironmentExp localEnv, AbstractIdentifier currentClass)
         throws ContextualError;
 
 }

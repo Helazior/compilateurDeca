@@ -23,5 +23,4 @@ public class Signature {
     public int size() {
         return args.size();
     }
-
 }

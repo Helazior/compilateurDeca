@@ -31,68 +31,9 @@ public class Or extends AbstractOpBool {
     public void codeGenOp(DecacCompiler compiler, GPRegister register1) {
         // TODO :  avec l'extension, nommer les labels différemment
         if (!compiler.getIsInNotOp()) { // OR
-            RegisterManager regMan = compiler.getRegMan();
-            compiler.addComment("Start Or");
-            String trueLabel = "true_or_" + compiler.getNumOr();
-            String endLabel = "end_or_" + compiler.getNumOr();
-            compiler.incrementNumOr();
-            // On teste la condition leftOp
-            getLeftOperand().codeGenExpr(compiler);
-            // On récupère le résultat de la condition dans la pile
-            regMan.pop(register1);
-            // 1 : cond true -> goto trueLabel
-            compiler.addComment(getOperatorName());
-            compiler.addInstruction(new CMP(1, register1));
-            compiler.addInstruction(new BEQ(new Label(trueLabel)));
-            // cond false :
-            // On teste rightOp
-            getRightOperand().codeGenExpr(compiler);
-            regMan.pop(register1);
-            // 1 : cond true -> goto true_or_n
-            compiler.addInstruction(new CMP(1, register1));
-            compiler.addInstruction(new BEQ(new Label(trueLabel)));
-            // load 0 -> goto end_or_n
-            compiler.addInstruction(new LOAD(0, register1));
-            compiler.addInstruction(new BRA(new Label(endLabel)));
-            // lbl true_and_n:
-            compiler.addLabel(new Label(trueLabel));
-            // load 1
-            compiler.addInstruction(new LOAD(1, register1));
-            // lbl end_and_n
-            compiler.addLabel(new Label(endLabel));
-            regMan.giveAndPush(register1);
-
+            super.codeGenOr(compiler, register1);
         } else { // NOT op -> AND
-            RegisterManager regMan = compiler.getRegMan();
-            compiler.addComment("Start And");
-            String falseLabel = "false_and_" + compiler.getNumAnd();
-            String endLabel = "end_and_" + compiler.getNumAnd();
-            compiler.incrementNumAnd();
-            // On teste la condition leftOp
-            getLeftOperand().codeGenExpr(compiler);
-            // On récupère le résultat de la condition dans la pile
-            regMan.pop(register1);
-            // 0 : cond false -> goto falseLabel
-            compiler.addComment(getOperatorName());
-            compiler.addInstruction(new CMP(0, register1));
-            compiler.addInstruction(new BEQ(new Label(falseLabel)));
-            // cond true :
-            // On teste rightOp
-            getRightOperand().codeGenExpr(compiler);
-            regMan.pop(register1);
-            // 0 : cond false -> goto false_and_n
-            compiler.addInstruction(new CMP(0, register1));
-            compiler.addInstruction(new BEQ(new Label(falseLabel)));
-            // load 1 -> goto end_and_n
-            compiler.addInstruction(new LOAD(1, register1));
-            compiler.addInstruction(new BRA(new Label(endLabel)));
-            // lbl false_and_n:
-            compiler.addLabel(new Label(falseLabel));
-            // load 0
-            compiler.addInstruction(new LOAD(0, register1));
-            // lbl end_and_n
-            compiler.addLabel(new Label(endLabel));
-            regMan.giveAndPush(register1);
+            super.codeGenAnd(compiler, register1);
         }
     }
 
