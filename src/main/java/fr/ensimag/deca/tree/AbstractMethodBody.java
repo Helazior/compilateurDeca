@@ -19,7 +19,6 @@ public abstract class AbstractMethodBody extends Tree {
      * Write all the code of a method
      * @param compiler
      */
-    protected void codeGenMethod(DecacCompiler compiler, ListDeclParam args) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
+    protected abstract void codeGenMethod(DecacCompiler compiler,
+        ListDeclParam args) throws UnsupportedOperationException;
 }
