@@ -27,12 +27,25 @@ public class Program extends AbstractProgram {
         this.classes = classes;
         this.main = main;
     }
+
+    public Program(ListDeclImport imports, ListDeclClass classes, AbstractMain main) {
+        Validate.notNull(imports);
+        Validate.notNull(classes);
+        Validate.notNull(main);
+        this.imports = imports;
+        this.classes = classes;
+        this.main = main;
+    }
+
+
     public ListDeclClass getClasses() {
         return classes;
     }
     public AbstractMain getMain() {
         return main;
     }
+
+    private ListDeclImport imports;
     private ListDeclClass classes;
     private AbstractMain main;
 
@@ -40,8 +53,13 @@ public class Program extends AbstractProgram {
     public void verifyProgram(DecacCompiler compiler) throws ContextualError {
         LOG.debug("verify program: start");
         //TODO: les 3 passes
+        //classes.verifyListClass(compiler);
 
-        //TODO: check classes  
+        //classes.verifyListClassMembers(compiler);
+
+        //classes.verifyListClassBody(compiler);
+
+        //TODO: check classes
 
         main.verifyMain(compiler);
         LOG.debug("verify program: end");
@@ -56,6 +74,10 @@ public class Program extends AbstractProgram {
         // de sa définition via la méthode Definition.setOperand() : voir les classes VariableDefinition et ExpDefinition
         // Récupéré avec getOperand
 
+        // On écrit une méthode
+        // TODO: évidemment là c'est un brouillon
+        // TODO: appeler les méthodes
+        classes.codeGenListClass(compiler);
 
         // parcours de l'arbre. On écrit dans le main :
         main.codeGenMain(compiler);
@@ -63,22 +85,31 @@ public class Program extends AbstractProgram {
         // termine le programme
         compiler.addInstruction(new HALT());
 
-        if (compiler.getDivideExist()) {
-            codeGenError.divByZeroError(compiler);
-        }
-        if (compiler.getModuloExist()) {
-            codeGenError.modByZeroError(compiler);
-        }
+
         if (compiler.getIoExist()) {
             codeGenError.ioError(compiler);
         }
-        if (compiler.getOpOvExist()) {
-            codeGenError.overflowError(compiler);
+
+        if (compiler.getNoVoidMethodExist()) {
+            codeGenError.noReturnError(compiler);
         }
 
-        codeGenError.stackOverflowError(compiler);
-        compiler.addFirst(new BOV(new Label("stack_overflow_error")));
-        compiler.addFirst(new TSTO(compiler.getRegMan().getMaxSizeStack()));
+        if (!compiler.getCompilerOptions().getNoCheck()) {
+            if (compiler.getDivideExist()) {
+                codeGenError.divByZeroError(compiler);
+            }
+            if (compiler.getModuloExist()) {
+                codeGenError.modByZeroError(compiler);
+            }
+
+            if (compiler.getOpOvExist()) {
+                codeGenError.overflowError(compiler);
+            }
+
+            codeGenError.stackOverflowError(compiler);
+            compiler.addFirst(new BOV(new Label("stack_overflow_error")));
+            compiler.addFirst(new TSTO(compiler.getRegMan().getMaxSizeStack()));
+        }
         compiler.addFirst(new Line( "Main program"));
 
         assert(compiler.getRegMan().isStackEmpty());

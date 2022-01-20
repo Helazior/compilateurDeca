@@ -1,0 +1,13 @@
+// Description:
+//    On teste le chemin par défaut de l'arbre allant jusqu'au littéraux.
+//
+// Resultats:
+
+//    
+// Historique:
+//    cree le 17/01/2022
+
+
+{
+    1;
+}

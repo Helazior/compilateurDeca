@@ -94,14 +94,18 @@ public abstract class AbstractExpr extends AbstractInst {
         Type actualType = this.verifyExpr(compiler, localEnv, currentClass);
         if(expectedType.sameType(actualType)){
             return this;
+
         } else if(expectedType.isFloat() && actualType.isInt()){
-            return this;
+            ConvFloat convFloat = new ConvFloat(this);
+            convFloat.setType(compiler.getType("float"));
+            return convFloat;
+
         } else if(expectedType.isClass() && actualType.isClass()
         && ((ClassType)expectedType).isSubClassOf((ClassType)actualType)) {
             return this;
         } else {
-            throw new ContextualError("an " + expectedType +
-            " can't be assigned to an " + actualType, getLocation());
+            throw new ContextualError("a " + actualType +
+            " can't be assigned to a " + expectedType, getLocation());
         }
     }
 

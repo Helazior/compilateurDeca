@@ -173,8 +173,12 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
+        ExpDefinition expDef = localEnv.get(getName());
+        if(expDef == null){
+            throw new ContextualError(getName() + " is undefined in this context", getLocation());
+        }
 
-        setType(localEnv.get(getName()).getType());
+        setType(expDef.getType());
         Definition def = new VariableDefinition(getType(), getLocation());
         setDefinition(def);
 
@@ -187,7 +191,9 @@ public class Identifier extends AbstractIdentifier {
      */
     @Override
     public Type verifyType(DecacCompiler compiler) throws ContextualError {
-        setType(compiler.getType(name.getName()));
+        Type t = compiler.getType(name.getName());
+        if(t == null) {throw new ContextualError("the type "+name.getName()+" is not regognised", getLocation());}
+        setType(t);
         setDefinition(new TypeDefinition(getType(), getLocation()));
         return getType();
     }
@@ -202,10 +208,23 @@ public class Identifier extends AbstractIdentifier {
     }
 
     @Override
-    protected void codeGenExpr(DecacCompiler compiler){
+    protected void codeGenExpr(DecacCompiler compiler) {
         RegisterManager regMan = compiler.getRegMan();
         Symbol name = getName();
         regMan.giveAndPush(regMan.load(name));
+    }
+
+    /**
+     * Pour utiliser l'attribut d'un objet. est appelé dans la class Selection
+     * @param compiler
+     */
+    protected void codeGenSelectIdent(DecacCompiler compiler) throws ContextualError {
+        RegisterManager regMan = compiler.getRegMan();
+        Symbol name = getName(); // On charge l'attribut
+        GPRegister reg = regMan.pop(); // On charge l'objet
+        // TODO : rajouter gestion erreur
+        GPRegister regDest = regMan.getField(reg, name, getType(), getLocation());
+        regMan.giveAndPush(regDest);
     }
 
     private Definition definition;

@@ -2,6 +2,9 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
+
+import org.apache.commons.lang.Validate;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -27,17 +30,9 @@ public class ConvFloat extends AbstractUnaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError{
-        assert(getOperand().verifyExpr(compiler, localEnv, currentClass).isInt());
+        Validate.isTrue(getOperand().verifyExpr(compiler, localEnv, currentClass).isInt());
         setType(compiler.getType("float"));
         return getType();
-    }
-
-    public void updateType(DecacCompiler compiler) {
-        try {
-            setType(compiler.getType("float"));
-        } catch (ContextualError e) {
-            throw new RuntimeException("ConvFloat can't access float type");
-        }
     }
 
     @Override

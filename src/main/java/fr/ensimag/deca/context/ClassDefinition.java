@@ -33,7 +33,7 @@ public class ClassDefinition extends TypeDefinition {
         Validate.isTrue(n >= 0);
         numberOfMethods = n;
     }
-    
+
     public int incNumberOfMethods() {
         numberOfMethods++;
         return numberOfMethods;
@@ -41,7 +41,7 @@ public class ClassDefinition extends TypeDefinition {
 
     private int numberOfFields = 0;
     private int numberOfMethods = 0;
-    
+
     @Override
     public boolean isClass() {
         return true;

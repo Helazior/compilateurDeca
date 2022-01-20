@@ -1,0 +1,19 @@
+// Description:
+//      test multiple cmp
+// Resultats:
+//      ça marche bien
+{
+	if ((3 > 4 && 4 <= 4) {
+	} else {
+		print("ça ");
+		if (3 < 4 && !(3 < 3) && 3 >= 6 / 2 && 2 * 2 - 1 <= 2 + 1 && 7 % 10 > 1) {
+			print("marche ");
+			if (1 == 2) {
+			} else {
+				print("bien");
+			}
+		} else {
+
+		}
+	}
+}

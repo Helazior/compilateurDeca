@@ -1,0 +1,15 @@
+// Description:
+//      test du printHexa
+// Resultats:
+//      0x1.5p+4
+//      0x1.99999ap-2
+//      -0x1.2p+3
+//      -0x1.ep+3
+//      0x1.68p+6
+{
+	printlnx(6.0 + 15.0);
+	printlnx(6.0 / 15.0);
+	printlnx(6.0 - 15.0);
+	printlnx(-15.0);
+	printx(6.0 * 15.0);
+}

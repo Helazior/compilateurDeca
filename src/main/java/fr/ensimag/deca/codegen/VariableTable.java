@@ -18,9 +18,9 @@ public class VariableTable {
     public VariableTable(DecacCompiler compiler) {
         this.compiler = compiler;
     }
-    public void init(ListDeclVar vars) {
+    public int init(ListDeclVar vars, int classtableSize) {
+        nextKey = classtableSize + 1;
         List<AbstractDeclVar> varsList = vars.getList();
-        compiler.addInstruction(new ADDSP(varsList.size()));
         for (int i = 0; i < varsList.size(); i++) {
             AbstractDeclVar variable = varsList.get(i);
             Symbol varname = variable.codeGenDecl(compiler, nextKey + i).getName();
@@ -29,6 +29,10 @@ public class VariableTable {
         nextKey += varsList.size();
         // add the number of variables in the TSTO stack's max size
         compiler.getRegMan().addSizeStack(varsList.size());
+        return varsList.size();
+    }
+    public int init(ListDeclVar vars) {
+        return init(vars, 1);
     }
     public void load(Symbol s, GPRegister dst) {
         int i = get(s);

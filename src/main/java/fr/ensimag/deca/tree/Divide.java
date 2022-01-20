@@ -28,14 +28,18 @@ public class Divide extends AbstractOpArith {
         compiler.setDivideExistTrue();
         Type type = getType();
         if (type.isInt()) {
-            compiler.addInstruction(new CMP(0, register0));
-            compiler.addInstruction(new BEQ(new Label("div_by_zero_error")));
+            if (!compiler.getCompilerOptions().getNoCheck()) {
+                compiler.addInstruction(new CMP(0, register0));
+                compiler.addInstruction(new BEQ(new Label("div_by_zero_error")));
+            }
             compiler.addInstruction(new QUO(register0, register1));
 
 
         } else if (type.isFloat()) {
-            compiler.addInstruction(new CMP(new ImmediateFloat(0f), register0));
-            compiler.addInstruction(new BEQ(new Label("div_by_zero_error")));
+            if (!compiler.getCompilerOptions().getNoCheck()) {
+                compiler.addInstruction(new CMP(new ImmediateFloat(0f), register0));
+                compiler.addInstruction(new BEQ(new Label("div_by_zero_error")));
+            }
             compiler.addInstruction(new DIV(register0, register1));
         }
     }
