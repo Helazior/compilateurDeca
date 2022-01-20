@@ -36,6 +36,12 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
         LOG.debug("verify listClass: end");
     }
 
+    protected void codeGenListClass(DecacCompiler compiler) {
+        for (AbstractDeclClass declClass : getList()) {
+            declClass.codeGenClass(compiler);
+        }
+
+    }
     /**
      * Pass 2 of [SyntaxeContextuelle]
      */

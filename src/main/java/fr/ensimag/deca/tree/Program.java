@@ -74,6 +74,10 @@ public class Program extends AbstractProgram {
         // de sa définition via la méthode Definition.setOperand() : voir les classes VariableDefinition et ExpDefinition
         // Récupéré avec getOperand
 
+        // On écrit une méthode
+        // TODO: évidemment là c'est un brouillon
+        // TODO: appeler les méthodes
+        classes.codeGenListClass(compiler);
 
         // parcours de l'arbre. On écrit dans le main :
         main.codeGenMain(compiler);
@@ -85,6 +89,11 @@ public class Program extends AbstractProgram {
         if (compiler.getIoExist()) {
             codeGenError.ioError(compiler);
         }
+
+        if (compiler.getNoVoidMethodExist()) {
+            codeGenError.noReturnError(compiler);
+        }
+
         if (!compiler.getCompilerOptions().getNoCheck()) {
             if (compiler.getDivideExist()) {
                 codeGenError.divByZeroError(compiler);

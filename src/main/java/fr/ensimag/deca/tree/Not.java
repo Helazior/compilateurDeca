@@ -40,14 +40,41 @@ public class Not extends AbstractUnaryExpr {
 
     @Override
     public void codeGenOp(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
-        RegisterManager regMan = compiler.getRegMan();
-
+        /*
         compiler.addInstruction(new LOAD(1, register1));
         compiler.addInstruction(new SUB(register0, register1));
+         */
+    }
+
+    /**
+     * Pour opti le Not
+     * @param compiler
+     */
+    @Override
+    public void codeGenExpr(DecacCompiler compiler) {
+        RegisterManager regMan = compiler.getRegMan();
+
+        AbstractExpr operand = getOperand();
+        // Si on n'est pas déjà dans un NOT, on met le NOT, sinon on annule
+        compiler.inverseIsInNotOp();
+        operand.codeGenExpr(compiler);
+        compiler.inverseIsInNotOp();
+
+        compiler.addComment(getOperatorName());
+        /*
+        GPRegister register0 = regMan.pop();
+        GPRegister register1 = regMan.take();
+
+        codeGenOp(compiler, register0, register1);
+        regMan.push(register1);
+        regMan.give(register0);
+        regMan.give(register1);
+
+         */
     }
 
 
-    @Override
+        @Override
     protected String getOperatorName() {
         return "!";
     }

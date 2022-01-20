@@ -109,7 +109,7 @@ OR: '||';
 //INCLUDE
    FILENAME: '"' (LETTER | DIGIT | '.' | '-' | '_')+ '"';
    IMPORT: 'import';
-   INCLUDE: '#include' (' ')* FILENAME;
+   INCLUDE: '#include' (' ')* FILENAME {doInclude(getText()); skip(); };
 //
 
 //CLASS

@@ -1,1 +1,1 @@
-IDENT: class
+CLASS: class
