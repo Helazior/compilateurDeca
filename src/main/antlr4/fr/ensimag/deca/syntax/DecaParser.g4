@@ -729,7 +729,11 @@ list_imports returns[ListDeclImport tree]
 
 import_decl returns[AbstractProgram tree]
     : STRING {
-        $tree = getDecacCompiler().compileImport($STRING.text);
+        try{
+            $tree = getDecacCompiler().compileImport($STRING.text);
+        } catch(java.lang.RuntimeException){
+            System.out.println("Erreur dans le nom du/des fichier(s) importé(s). Nous n'avons pas pu réalisé l'import");
+        }
         assert($tree != null);
         setLocation($tree, $STRING);
     }
