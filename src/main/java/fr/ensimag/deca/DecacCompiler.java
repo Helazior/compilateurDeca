@@ -23,6 +23,8 @@ import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.Location;
 import java.util.LinkedList;
 import java.util.List;
+import java.nio.file.Paths;
+import java.nio.file.Path;
 
 import fr.ensimag.deca.codegen.RegisterManager;
 
@@ -446,7 +448,7 @@ public class DecacCompiler {
             throws DecacFatalError, DecacInternalError {
         DecaLexer lex;
         try {
-            lex = new DecaLexer(CharStreams.fromFileName(sourceName));
+            lex = new DecaLexer(CharStreams.fromFileName("src/test/deca/syntax/valid/parser/provided/ESEX-import.deca"));
         } catch (IOException ex) {
             throw new DecacFatalError("Failed to open input file: " + ex.getLocalizedMessage());
         }
@@ -465,6 +467,8 @@ public class DecacCompiler {
 
     public AbstractProgram compileImport(String sourceImport) {
         String sourceFile = sourceImport;
+        // On enlève les guillemets
+        sourceFile = sourceFile.substring(1, sourceFile.length() - 1);
         String destFile = null;
         // Done: calculer le nom du fichier .ass à partir du nom du
         // Done: FAIRE: fichier .deca.
@@ -570,10 +574,20 @@ public class DecacCompiler {
     protected AbstractProgram doLexingAndParsingImport(String sourceName, PrintStream err)
             throws DecacFatalError, DecacInternalError {
         DecaLexer lex;
+        Path filePath = Paths.get(sourceName);
+        System.out.println("fPath: " + filePath);
+        if (!filePath.isAbsolute()) {
+            Path parentDir = Paths.get(source.getAbsolutePath()).getParent();
+            assert(parentDir != null);
+            System.out.println("Parent: " + parentDir);
+            filePath = Paths.get(parentDir.toString(), filePath.toString());
+            assert(filePath.isAbsolute());
+            System.out.println("New Path: " + filePath);
+        }
         try {
-            lex = new DecaLexer(CharStreams.fromFileName(sourceName));
+            lex = new DecaLexer(CharStreams.fromPath(filePath));
         } catch (IOException ex) {
-            throw new DecacFatalError("Failed to open input file: " + ex.getLocalizedMessage());
+            throw new RuntimeException("blblbl", ex);
         }
         lex.setDecacCompiler(this);
         CommonTokenStream tokens = new CommonTokenStream(lex);
