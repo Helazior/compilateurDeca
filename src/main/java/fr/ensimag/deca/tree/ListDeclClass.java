@@ -23,6 +23,20 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
     }
 
     /**
+     * Pass 0
+     * It's goal is to define a link between the classes and their
+     * affilied Node in the Tree
+     * We can then go through the classes in the parental order
+     * instead of the tree order
+     */
+    void loadListClassNodes(DecacCompiler compiler) throws ContextualError{
+        for (AbstractDeclClass declClass : getList()) {
+            declClass.loadClassNodes(compiler);
+        }
+    }
+
+
+    /**
      * Pass 1 of [SyntaxeContextuelle]
      */
     void verifyListClass(DecacCompiler compiler) throws ContextualError {
