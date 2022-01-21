@@ -30,7 +30,9 @@ public class DeclClass extends AbstractDeclClass {
     public DeclClass(AbstractIdentifier currentClass, AbstractIdentifier superClass,
                      ListDeclField listDeclField, ListDeclMethod listDeclMethod) {
         Validate.notNull(currentClass);
-        Validate.notNull(superClass);
+        // TODO : remettre :
+        // Validate.notNull(superClass);
+        // mettre object en super classe et créer object
         this.currentClass = currentClass;
         this.superClass = superClass;
         this.listDeclField = listDeclField;
@@ -39,6 +41,7 @@ public class DeclClass extends AbstractDeclClass {
 
 
     private void initAttributs(DecacCompiler compiler) throws ContextualError {
+        // TODO: itérer sur les parents si extend !
         RegisterManager regMan = compiler.getRegMan();
         compiler.addComment("; ---------- Initialisation des champs de " + getClass().getName());
         compiler.addLabel(new Label("init." + getClass().getName()));

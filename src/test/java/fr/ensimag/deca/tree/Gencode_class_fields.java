@@ -25,15 +25,14 @@ public class Gencode_class_fields {
         AbstractInitialization initialization1 = new Initialization(new IntLiteral(1));
         AbstractInitialization initialization2 = new Initialization(new FloatLiteral(2));
 
-        SymbolTable symField = new SymbolTable();
-        AbstractIdentifier field1 = new Identifier(symField.create("field1"));
-        AbstractIdentifier field2 = new Identifier(symField.create("field2"));
+        SymbolTable st = new SymbolTable();
+        AbstractIdentifier field1 = new Identifier(st.create("field1"));
+        AbstractIdentifier field2 = new Identifier(st.create("field2"));
 
-        SymbolTable symInt = new SymbolTable();
-        SymbolTable.Symbol typeIntName = symInt.create("int");
+        SymbolTable.Symbol typeIntName = st.create("int");
         AbstractIdentifier intType = new Identifier(typeIntName);
         SymbolTable symFloat = new SymbolTable();
-        SymbolTable.Symbol typeName = symInt.create("int");
+        SymbolTable.Symbol typeName = st.create("int");
         AbstractIdentifier floatType = new Identifier(typeName);
         DeclField declField1 = new DeclField(intType, field1, initialization1, visibility);
         DeclField declField2 = new DeclField(floatType, field2, initialization2, visibility);

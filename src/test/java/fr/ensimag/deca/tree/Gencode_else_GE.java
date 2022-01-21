@@ -39,7 +39,7 @@ public class Gencode_else_GE {
 
     }
 
-    public static String gencodeSource(AbstractProgram source) {
+    public static String gencodeSource(AbstractProgram source) throws ContextualError {
         DecacCompiler compiler = new DecacCompiler(new CompilerOptions(), null);
         source.codeGenProgram(compiler);
         return compiler.displayIMAProgram();

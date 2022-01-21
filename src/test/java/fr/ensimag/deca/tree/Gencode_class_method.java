@@ -22,7 +22,6 @@ public class Gencode_class_method {
     public static AbstractProgram initTest1() {
 
 
-        SymbolTable symType = new SymbolTable();
 
         // print(3 + 2 + 5);
         SymbolTable st = new SymbolTable();
@@ -38,16 +37,15 @@ public class Gencode_class_method {
 
         AbstractMethodBody methodBody1 = new MethodBody(null, linst);
         ListDeclParam parameters1 = new ListDeclParam();
-        AbstractIdentifier method1 = new Identifier(symType.create("firstMethod"));
-        AbstractIdentifier returnType1 = new Identifier(symType.create("void"));
+        AbstractIdentifier method1 = new Identifier(st.create("firstMethod"));
+        AbstractIdentifier returnType1 = new Identifier(st.create("void"));
         AbstractDeclMethod declMeth1 = new DeclMethod(returnType1, method1, parameters1, methodBody1);
         ListDeclMethod listDeclMeth = new ListDeclMethod();
         listDeclMeth.add(declMeth1);
         ListDeclField listDeclFields = null;
         AbstractIdentifier identiferSuperClass = null;
 
-        SymbolTable symTab = new SymbolTable();
-        SymbolTable.Symbol name = symTab.create("firstClass");
+        SymbolTable.Symbol name = st.create("firstClass");
         AbstractIdentifier curClass = new Identifier(name);
 
         AbstractDeclClass abstractDeclClass = new DeclClass(curClass, identiferSuperClass, listDeclFields, listDeclMeth);

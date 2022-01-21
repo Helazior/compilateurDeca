@@ -21,24 +21,23 @@ public class Gencode_class_complet {
 
     public static AbstractProgram initTest1() {
         // TODO: je sais pas comment on utilise les fiels dans les méthodes, à voir demain
-        SymbolTable symType = new SymbolTable();
 
         // print(3 + 2 + 5);
         SymbolTable st = new SymbolTable();
-        Type int_t = new IntType(st.create("int"));
+        Type type = new IntType(st.create("int"));
         ListInst linst = new ListInst();
         ListExpr exp1 = new ListExpr();
         linst.add(new Print(false,exp1));
         Plus p1 = new Plus(new IntLiteral(3), new IntLiteral(2));
         Plus p2 = new Plus(p1, new IntLiteral(4));
-        p1.setType(int_t);
-        p2.setType(int_t);
+        p1.setType(type);
+        p2.setType(type);
         exp1.add(p2);
 
         AbstractMethodBody methodBody1 = new MethodBody(null, linst);
         ListDeclParam parameters1 = new ListDeclParam();
-        AbstractIdentifier method1 = new Identifier(symType.create("firstMethod"));
-        AbstractIdentifier returnType1 = new Identifier(symType.create("void"));
+        AbstractIdentifier method1 = new Identifier(st.create("firstMethod"));
+        AbstractIdentifier returnType1 = new Identifier(st.create("void"));
         AbstractDeclMethod declMeth1 = new DeclMethod(returnType1, method1, parameters1, methodBody1);
         ListDeclMethod listDeclMeth = new ListDeclMethod();
         listDeclMeth.add(declMeth1);
@@ -48,9 +47,8 @@ public class Gencode_class_complet {
         AbstractInitialization initialization1 = new Initialization(new IntLiteral(1));
         AbstractInitialization initialization2 = new Initialization(new FloatLiteral(2));
 
-        SymbolTable symField = new SymbolTable();
-        AbstractIdentifier field1 = new Identifier(symField.create("field1"));
-        AbstractIdentifier field2 = new Identifier(symField.create("field2"));
+        AbstractIdentifier field1 = new Identifier(st.create("field1"));
+        AbstractIdentifier field2 = new Identifier(st.create("field2"));
 
         SymbolTable symInt = new SymbolTable();
         SymbolTable.Symbol typeIntName = symInt.create("int");
