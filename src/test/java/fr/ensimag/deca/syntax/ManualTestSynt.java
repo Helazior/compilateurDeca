@@ -6,6 +6,7 @@ import fr.ensimag.deca.tree.AbstractProgram;
 import java.io.File;
 import java.io.IOException;
 import org.antlr.v4.runtime.CommonTokenStream;
+import fr.ensimag.deca.CLIException;
 
 /**
  * Driver to test the Parser (and lexer).
@@ -25,7 +26,13 @@ public class ManualTestSynt {
         if (lex.getSourceName() != null) {
             file = new File(lex.getSourceName());
         }
-        final DecacCompiler decacCompiler = new DecacCompiler(new CompilerOptions(), file);
+        CompilerOptions options = new CompilerOptions();
+        try {
+            options.parseArgs(new String[] {"-l"});
+        } catch (CLIException e) {
+            throw new RuntimeException("Error when launching TestSynth", e);
+        }
+        final DecacCompiler decacCompiler = new DecacCompiler(options, file);
         parser.setDecacCompiler(decacCompiler);
         AbstractProgram prog = parser.parseProgramAndManageErrors(System.err);
         if (prog == null) {

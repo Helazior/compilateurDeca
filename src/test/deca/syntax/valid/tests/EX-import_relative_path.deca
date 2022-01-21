@@ -1,0 +1,13 @@
+// Description:
+//    On teste les imports.
+//
+//    
+//
+// Historique:
+//    cree le 19/01/2022
+
+import "ES-appel_field.deca"
+
+{
+    println("yess!!");
+}

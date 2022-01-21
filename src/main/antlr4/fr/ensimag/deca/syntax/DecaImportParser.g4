@@ -42,11 +42,8 @@ prog returns[AbstractProgram tree]
             //assert($list_classes.tree != null);
             assert($main.tree != null);
 
-            if(getDecacCompiler().getCompilerOptions().getLinked()){
-                $tree = new Program($list_imports.tree, $list_classes.tree, $main.tree);
-            } else {
-                $tree = new Program($list_classes.tree, $main.tree);
-            }
+            // On est dans import, donc on a forcément droit aux imports
+            $tree = new Program($list_imports.tree, $list_classes.tree, $main.tree);
 
             setLocation($tree, $list_classes.start);
         }
@@ -651,16 +648,21 @@ decl_field [AbstractIdentifier t, Visibility v] returns[AbstractDeclField tree]
     ;
 
 decl_method returns[DeclMethod tree]
-    : type ident OPARENT params=list_params CPARENT (block {
+@init   {
+            EmptyMethodBody emptyMethod = new EmptyMethodBody();
+        }
+    : type ident OPARENT params=list_params CPARENT (b=block {
+            setLocation(emptyMethod, $b.start);
         }
       | ASM OPARENT code=multi_line_string CPARENT SEMI {
+            setLocation(emptyMethod, $b.start);
         }
       ){
             assert($type.tree != null);
             assert($ident.tree != null);
             assert($params.tree != null);
-            EmptyMethodBody emptyMethod = new EmptyMethodBody();
             $tree = new DeclMethod($type.tree, $ident.tree, $params.tree, emptyMethod);
+            setLocation(emptyMethod, $type.start);
             setLocation($tree, $type.start);
         }
     ;

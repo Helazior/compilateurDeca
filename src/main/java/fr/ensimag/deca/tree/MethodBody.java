@@ -45,13 +45,6 @@ public class MethodBody extends AbstractMethodBody{
         insts.codeGenListInst(compiler);
     }
 
-    /**
-    * Contains no real information => nothing to check.
-    */
-    @Override
-    protected void checkLocation() {
-        throw new UnsupportedOperationException("not yet implemented");    }
-
     @Override
     public void decompile(IndentPrintStream s) {
 

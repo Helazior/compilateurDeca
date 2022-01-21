@@ -80,9 +80,10 @@ public class Program extends AbstractProgram {
         // TODO: appeler les méthodes
         RegisterManager regMan = compiler.getRegMan();
         regMan.declareClasses(classes);
-        classes.codeGenListClass(compiler);
-
         IMAProgram classtableGen = compiler.remplaceProgram(new IMAProgram());
+        
+        classes.codeGenListClass(compiler);
+        IMAProgram classesBodies = compiler.remplaceProgram(new IMAProgram());
 
         // parcours de l'arbre. On écrit dans le main :
         main.codeGenMain(compiler);
@@ -125,9 +126,11 @@ public class Program extends AbstractProgram {
 
         IMAProgram errorsFns = compiler.remplaceProgram(new IMAProgram());
 
-        compiler.concatenateBeginningProgram(classtableGen);
         compiler.concatenateBeginningProgram(mainProg);
-        compiler.concatenateBeginningProgram(errorsFns);
+        compiler.concatenateBeginningProgram(classtableGen);
+
+        compiler.concatenateEndProgram(classesBodies);
+        compiler.concatenateEndProgram(errorsFns);
     }
 
     @Override
@@ -143,6 +146,9 @@ public class Program extends AbstractProgram {
     }
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
+        if (imports != null) {
+            imports.prettyPrint(s, prefix, false);
+        }
         classes.prettyPrint(s, prefix, false);
         main.prettyPrint(s, prefix, true);
     }

@@ -133,7 +133,7 @@ public class DeclMethod extends AbstractDeclMethod {
         returnType.prettyPrint(s, prefix, false);
         method.prettyPrint(s, prefix, false);
         parameters.prettyPrint(s, prefix, false);
-        method.prettyPrint(s, prefix, true);
+        methodBody.prettyPrint(s, prefix, true);
     }
 
     @Override
@@ -141,7 +141,7 @@ public class DeclMethod extends AbstractDeclMethod {
         returnType.iter(f);
         method.iter(f);
         parameters.iter(f);
-        method.iter(f);
+        methodBody.iter(f);
     }
 
     @Override
