@@ -143,6 +143,9 @@ public class Program extends AbstractProgram {
     }
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
+        if (imports != null) {
+            imports.prettyPrint(s, prefix, false);
+        }
         classes.prettyPrint(s, prefix, false);
         main.prettyPrint(s, prefix, true);
     }

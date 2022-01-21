@@ -48,11 +48,11 @@ public class CompilerOptions {
             "pour avoir plus de traces.", 0)),
         entry("-h", new OptionData("help", "Affiche cette aide", 0)),
         entry("-r", new OptionData("registers", "limite les registres " +
-            "banalisés disponibles. Doit être compris entre 4 et 16 inclus."
+            "banalisés disponibles. Doit être comprise entre 4 et 16 inclus."
             , 1)),
         entry("-l", new OptionData("link option", "permet et autorise " +
             "l'imports de fichiers"
-            , 1))
+            , 0))
     );
 
     private int debug = 0;
