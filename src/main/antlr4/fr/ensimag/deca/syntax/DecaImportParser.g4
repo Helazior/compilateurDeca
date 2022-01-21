@@ -721,10 +721,12 @@ list_imports returns[ListDeclImport tree]
     )*
     ;
 
-import_decl returns[AbstractProgram tree]
+import_decl returns[AbstractDeclImport tree]
     : STRING {
         try{
-            $tree = getDecacCompiler().compileImport($STRING.text);
+            String address = $STRING.text;
+            AbstractProgram program = getDecacCompiler().compileImport(address);
+            $tree = new DeclImport(address, program);
             assert($tree != null);
             setLocation($tree, $STRING);
         }  catch (java.lang.AssertionError e){
