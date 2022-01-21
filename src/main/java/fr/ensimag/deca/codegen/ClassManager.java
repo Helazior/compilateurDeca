@@ -23,37 +23,39 @@ public class ClassManager {
         IMAProgram classTableInitsFns = new IMAProgram();
         IMAProgram classTableInitsMain = new IMAProgram();
 
+
+        // Compute table size and build function
         classTableInitsFns.addComment("---------------------------------------------------");
         classTableInitsFns.addComment("    Construction tables des methodes");
         classTableInitsFns.addComment("---------------------------------------------------");
         classTableInitsFns.addComment("-------------------- Object -----------------------");
         classTableInitsFns.addLabel(new Label("classTableInit.Object"));
-        classTableInitsFns.addInstruction(new LOAD(new NullOperand(), Register.R1));
-        classTableInitsFns.addInstruction(new STORE(
-            Register.R1,
-            new RegisterOffset(1, Register.SP)));
 
         classTableInitsFns.addInstruction(new LOAD(
-            new LabelOperand(new Label("methodBody.Object.equals")),
-            Register.R1));
+                new LabelOperand(new Label("methodBody.Object.equals")),
+                Register.R1));
         classTableInitsFns.addInstruction(new STORE(
-            Register.R1, new RegisterOffset(2, Register.SP)));
-
-        // Compute table size and build function
+                Register.R1, new RegisterOffset(2, Register.GB)));
+        classTableInitsFns.addInstruction(new RTS());
         tablesSize = 3;
         for (AbstractDeclClass classDef : classes.getList()) {
             int classTableSize = classDef.codeGenClassTableFn(compiler, classTableInitsFns, tablesSize);
             tablesSize += classTableSize;
         }
         // Call functions and build super reference
+        classTableInitsMain.addInstruction(new BSR(new Label("classTableInit.Object")));
+        classTableInitsMain.addInstruction(new LOAD(new NullOperand(), Register.R1));
+        classTableInitsMain.addInstruction(new STORE(Register.R1, new RegisterOffset(1, Register.GB)));
         for (AbstractDeclClass classDef : classes.getList()) {
             classDef.codeGenClassTableMain(compiler, classTableInitsMain);
         }
         Label end = new Label("classTableInit_end");
         classTableInitsMain.addInstruction(new BRA(end));
         classTableInitsMain.append(classTableInitsFns);
+        classTableInitsFns.addComment("-------------------- Fin tables -----------------------");
         classTableInitsMain.addLabel(end);
-        classTableInitsMain.addInstruction(new ADDSP(tablesSize));
+        classTableInitsMain.addFirst(new Line(new ADDSP(tablesSize)));
+        classTableInitsMain.addFirst(new Line(new BOV(new Label("stack_overflow_error"))));
         classTableInitsMain.addFirst(new Line(new TSTO(tablesSize)));
         compiler.concatenateEndProgram(classTableInitsMain);
     }

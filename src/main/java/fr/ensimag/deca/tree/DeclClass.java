@@ -42,8 +42,8 @@ public class DeclClass extends AbstractDeclClass {
     private void initAttributs(DecacCompiler compiler) throws ContextualError {
         // TODO: itérer sur les parents si extend !
         RegisterManager regMan = compiler.getRegMan();
-        compiler.addComment("; ---------- Initialisation des champs de " + getClass().getName());
-        compiler.addLabel(new Label("init." + getClass().getName()));
+        compiler.addComment("----------- Initialisation des champs de " + currentClass.getName());
+        compiler.addLabel(new Label("init." + currentClass.getName()));
         for (AbstractDeclField declField : listDeclField.getList()) {
             // On déclare chaque attribut :
             if (declField.getInitialization().isInitialized()) {
@@ -76,7 +76,7 @@ public class DeclClass extends AbstractDeclClass {
         compiler.addComment("--------------------------------------------------");
         // On initialise tous les attributs :
         initAttributs(compiler);
-        listDeclMethod.codeGenListDeclMethod(compiler);
+        listDeclMethod.codeGenListDeclMethod(compiler, currentClass);
     }
 
     @Override

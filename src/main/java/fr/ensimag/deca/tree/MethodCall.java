@@ -11,6 +11,7 @@ import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
+import fr.ensimag.ima.pseudocode.instructions.BSR;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.SUBSP;
 import sun.java2d.pipe.SpanClipRenderer;
@@ -53,7 +54,7 @@ public class MethodCall extends AbstractExpr {
         regMan.prepareMethodCall(parametres.size() + 1);
 
         // On saute au label de la méthode
-        compiler.addInstruction(new BRA(new Label("bodyMethod." + getClass().getName() + "." + nomDeMethode)));
+        compiler.addInstruction(new BSR(new Label("bodyMethod." + getClass().getName() + "." + nomDeMethode)));
 
         // On remet la stack comme avant l'appel de méthode
         compiler.addInstruction(new SUBSP(parametres.size() + 2)); // + this * 2: in the bottom and the top

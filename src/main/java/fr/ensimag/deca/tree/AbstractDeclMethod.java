@@ -3,7 +3,6 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.context.EnvironmentExp;
 
 /**
  * Class declaration.
@@ -17,8 +16,9 @@ public abstract class AbstractDeclMethod extends Tree {
     /**
      * Write all the code of a method
      * @param compiler
+     * @param currentClass
      */
-    protected abstract void codeGenDeclMethod(DecacCompiler compiler);
+    protected abstract void codeGenDeclMethod(DecacCompiler compiler, AbstractIdentifier currentClass);
 
     /**
      * Pass 2 of [SyntaxeContextuelle]. Verify that the

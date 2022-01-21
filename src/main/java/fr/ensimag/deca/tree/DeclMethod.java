@@ -43,7 +43,7 @@ public class DeclMethod extends AbstractDeclMethod {
 
     //TODO
 
-    protected void codeGenDeclMethod(DecacCompiler compiler) {
+    protected void codeGenDeclMethod(DecacCompiler compiler, AbstractIdentifier currentClass) {
         RegisterManager regMan = compiler.getRegMan();
         // On place le label d'erreur à la fin du fichier
         if (!returnType.getType().isFloat()) {
@@ -51,7 +51,7 @@ public class DeclMethod extends AbstractDeclMethod {
         }
 
         // ________________________corps du programme___________________________
-        compiler.addComment("; ---------- Code de la methode " + method.getName() + "dans la classe" + method.getClass().getName());
+        compiler.addComment("----------- Code de la methode " + method.getName() + " dans la classe " + currentClass.getName());
 
         methodBody.codeGenMethod(compiler, parameters);
         // goto return
@@ -64,7 +64,7 @@ public class DeclMethod extends AbstractDeclMethod {
         //________________________
         // On revient placer ce qu'il manque avec les infos du prog
         // Début de la méthode = label du nom de la méthode
-        compiler.addFirst(new Line(new Label("bodyMethod." + getClass().getName() + "." + method.getName())));
+        compiler.addFirst(new Line(new Label("bodyMethod." + currentClass.getName() + "." + method.getName())));
         // On empile tous les registres qu'on veut utiliser au début de la méthode et on les restaure à la fin
         regMan.restoreRegisters();
 

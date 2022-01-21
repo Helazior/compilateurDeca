@@ -75,9 +75,6 @@ public class Program extends AbstractProgram {
         // de sa définition via la méthode Definition.setOperand() : voir les classes VariableDefinition et ExpDefinition
         // Récupéré avec getOperand
 
-        // On écrit une méthode
-        // TODO: évidemment là c'est un brouillon
-        // TODO: appeler les méthodes
         RegisterManager regMan = compiler.getRegMan();
         regMan.declareClasses(classes);
         IMAProgram classtableGen = compiler.remplaceProgram(new IMAProgram());

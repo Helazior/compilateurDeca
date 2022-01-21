@@ -58,9 +58,6 @@ public class RegisterManager {
         this.stackOffset = 0;
     }
 
-    public void prepareMethodCall(int nbParameters) {
-        throw new UnsupportedOperationException("TODO");
-    }
 
     /**
      * Prepares a method call, by pushing all the elements required for a method call
