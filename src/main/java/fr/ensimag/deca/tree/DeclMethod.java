@@ -46,7 +46,7 @@ public class DeclMethod extends AbstractDeclMethod {
     protected void codeGenDeclMethod(DecacCompiler compiler, AbstractIdentifier currentClass) {
         RegisterManager regMan = compiler.getRegMan();
         // On place le label d'erreur à la fin du fichier
-        if (!returnType.getType().isFloat()) {
+        if (!returnType.getType().isVoid()) {
             compiler.setNoVoidMethodExist();
         }
 
@@ -60,13 +60,14 @@ public class DeclMethod extends AbstractDeclMethod {
             compiler.addInstruction(new BRA(new Label ("no_return_error")));
         }
         compiler.addLabel(new Label("return" + compiler.getNbReturn()));
+        compiler.incrementNbReturn();
 
         //________________________
         // On revient placer ce qu'il manque avec les infos du prog
-        // Début de la méthode = label du nom de la méthode
-        compiler.addFirst(new Line(new Label("bodyMethod." + currentClass.getName() + "." + method.getName())));
         // On empile tous les registres qu'on veut utiliser au début de la méthode et on les restaure à la fin
         regMan.restoreRegisters();
+        // Début de la méthode = label du nom de la méthode
+        compiler.addFirst(new Line(new Label("bodyMethod." + currentClass.getName() + "." + method.getName())));
 
         // goto erreur return en cas de non return
         // On return

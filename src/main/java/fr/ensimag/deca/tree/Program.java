@@ -66,6 +66,33 @@ public class Program extends AbstractProgram {
         LOG.debug("verify program: end");
     }
 
+    private void errorsMessages(DecacCompiler compiler) {
+        compiler.addComment("---------------------------------------------------");
+        compiler.addComment("               Messages d'erreur");
+        compiler.addComment("---------------------------------------------------");
+        if (compiler.getIoExist()) {
+            codeGenError.ioError(compiler);
+        }
+
+        if (compiler.getNoVoidMethodExist()) {
+            codeGenError.noReturnError(compiler);
+        }
+
+        if (!compiler.getCompilerOptions().getNoCheck()) {
+            if (compiler.getDivideExist()) {
+                codeGenError.divByZeroError(compiler);
+            }
+            if (compiler.getModuloExist()) {
+                codeGenError.modByZeroError(compiler);
+            }
+
+            if (compiler.getOpOvExist()) {
+                codeGenError.overflowError(compiler);
+            }
+
+            codeGenError.stackOverflowError(compiler);
+        }
+    }
 
     @Override
     public void codeGenProgram(DecacCompiler compiler) throws ContextualError {
@@ -93,33 +120,10 @@ public class Program extends AbstractProgram {
         // termine le programme
         compiler.addInstruction(new HALT());
 
-        compiler.addComment("---------------------------------------------------");
-        compiler.addComment("               Messages d'erreur");
-        compiler.addComment("---------------------------------------------------");
+
         IMAProgram mainProg = compiler.remplaceProgram(new IMAProgram());
 
-        if (compiler.getIoExist()) {
-            codeGenError.ioError(compiler);
-        }
-
-        if (compiler.getNoVoidMethodExist()) {
-            codeGenError.noReturnError(compiler);
-        }
-
-        if (!compiler.getCompilerOptions().getNoCheck()) {
-            if (compiler.getDivideExist()) {
-                codeGenError.divByZeroError(compiler);
-            }
-            if (compiler.getModuloExist()) {
-                codeGenError.modByZeroError(compiler);
-            }
-
-            if (compiler.getOpOvExist()) {
-                codeGenError.overflowError(compiler);
-            }
-
-            codeGenError.stackOverflowError(compiler);
-        }
+        errorsMessages(compiler);
 
         IMAProgram errorsFns = compiler.remplaceProgram(new IMAProgram());
 
