@@ -3,9 +3,8 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.SGT;
-import fr.ensimag.ima.pseudocode.instructions.SUB;
+import fr.ensimag.ima.pseudocode.instructions.SLE;
 
 /**
  *
@@ -20,7 +19,11 @@ public class Greater extends AbstractOpIneq {
 
     @Override
     public void codeGenOpIneq(DecacCompiler compiler, GPRegister register) {
-        compiler.addInstruction(new SGT(register));
+        if (!compiler.getIsInNotOp()) {
+            compiler.addInstruction(new SGT(register));
+        } else {
+            compiler.addInstruction(new SLE(register));
+        }
     }
 
     @Override

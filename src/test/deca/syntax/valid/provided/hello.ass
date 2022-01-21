@@ -1,8 +1,0 @@
-; Main program
-; start main program
-	ADDSP #0
-; Beginning of main instructions:
-	WSTR "Hello"
-	WNL
-	HALT
-; end main program

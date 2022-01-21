@@ -1,0 +1,10 @@
+// Description:
+//    On vérifie qu'une erreur est détectée lorsque le float dépasse les 32 bits
+//
+//
+// Historique:
+//    cree le 19/01/2022
+
+{
+    float i = 3.40282346638528860e+100;
+}

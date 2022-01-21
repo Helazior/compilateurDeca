@@ -511,18 +511,26 @@ type returns[AbstractIdentifier tree]
 // MODIFIED
 literal returns[AbstractExpr tree]
     : INT {
-        assert($INT.text != null);
-        String value = $INT.text;
-        int valint = Integer.parseInt(value);
-        $tree = new IntLiteral(valint);
-        setLocation($tree, $INT);
+        try {
+            assert($INT.text != null);
+            String value = $INT.text;
+            int valint = Integer.parseInt(value);
+            $tree = new IntLiteral(valint);
+            setLocation($tree, $INT);
+        } catch (NumberFormatException e) {
+            throw new InvalidInt(this, $ctx);
+        }
         }
     | FLOAT {
-        assert($FLOAT.text != null);
-        String value = $FLOAT.text;
-        float valfloat = Float.parseFloat(value);
-        $tree = new FloatLiteral(valfloat);
-        setLocation($tree, $FLOAT);
+        try {
+            assert($FLOAT.text != null);
+            String value = $FLOAT.text;
+            float valfloat = Float.parseFloat(value);
+            $tree = new FloatLiteral(valfloat);
+            setLocation($tree, $FLOAT);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidFloat(this, $ctx);
+        }
         }
     | STRING {
         assert($STRING.text != null);
@@ -538,12 +546,10 @@ literal returns[AbstractExpr tree]
         $tree = new BooleanLiteral(false);
         setLocation($tree, $FALSE);
         }
-    //TODO
     | THIS {
         $tree = new This(false);
         setLocation($tree, $THIS);
         }
-    //TODO
     | NULL {
         $tree = new Null();
         setLocation($tree, $NULL);
@@ -606,7 +612,6 @@ class_body returns[ListDeclMethod methodes, ListDeclField fields]
       |n=decl_field_set[$fields] {
         }
       )* {
-//Aurais-je oublie quelque chose?
         }
     ;
 

@@ -10,7 +10,7 @@ reset="\e[0;0m"
 exit_value=0
 
 function resultGeneration {
-    path=$1/decompile
+    path=$1
     file_src=$2
     file_name=$3
 
@@ -43,13 +43,13 @@ else
 fi
 
 # Creation de la hierarchie de dossier
-mkdir -p $folder_path/decompile
-mkdir -p $folder_path/decompile/provided
-mkdir -p $folder_path/decompile/generated
+mkdir -p $folder_path/provided
+mkdir -p $folder_path/generated
+mkdir -p $folder_path/tests
 
 # Récupération des fichiers à tester
 if [[ $# -le 1 ]]; then
-    files="$(echo $folder_path/provided/*.deca)"
+    files="$(echo $folder_path/provided/*.deca) $(echo $folder_path/tests/*.deca)"
 else
     files=$@
     files=${files#* } # On enlève le premier élément (qui est le dossier de travail)

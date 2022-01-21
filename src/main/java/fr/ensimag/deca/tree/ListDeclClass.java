@@ -15,12 +15,10 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.indent();
         for (AbstractDeclClass declClass : getList()) {
             declClass.decompile(s);
             s.println();
         }
-        s.unindent();
     }
 
     /**
@@ -36,6 +34,12 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
         LOG.debug("verify listClass: end");
     }
 
+    protected void codeGenListClass(DecacCompiler compiler) {
+        for (AbstractDeclClass declClass : getList()) {
+            declClass.codeGenClass(compiler);
+        }
+
+    }
     /**
      * Pass 2 of [SyntaxeContextuelle]
      */

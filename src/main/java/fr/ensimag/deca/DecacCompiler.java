@@ -61,6 +61,8 @@ public class DecacCompiler {
     private static int numWhile = 0;
     private static int numAnd = 0;
     private static int numOr = 0;
+    // to go at the end of the method when the program return and manage the stack
+    private static int nbReturn = 0;
     /**
      * To show the div_zero error or not
      */
@@ -68,6 +70,11 @@ public class DecacCompiler {
     private static boolean modExist = false;
     private static boolean ioExist = false;
     private static boolean opOvExist = false;
+    /**
+     * Optimize not operation
+     */
+    private static boolean isInNotOp = false;
+    private static boolean noVoidMethodExist = false;
 
     public DecacCompiler(CompilerOptions compilerOptions, File source) {
         super();
@@ -80,6 +87,22 @@ public class DecacCompiler {
         }catch(ContextualError e){
             System.out.println("a basic type is inizialise 2 times");
         }
+    }
+    public boolean getNoVoidMethodExist() {
+        return noVoidMethodExist;
+    }
+
+    public void setNoVoidMethodExist() {
+        divideExist = true;
+    }
+
+
+    public boolean getIsInNotOp() {
+        return isInNotOp;
+    }
+
+    public void inverseIsInNotOp() {
+        isInNotOp = !getIsInNotOp();
     }
 
     public boolean getDivideExist() {
@@ -112,6 +135,14 @@ public class DecacCompiler {
 
     public void setIoExistTrue() {
         ioExist = true;
+    }
+
+    public int getNbReturn() {
+        return nbReturn;
+    }
+
+    public void incrementNbReturn() {
+        nbReturn++;
     }
 
     public int getNumIf() {
@@ -204,6 +235,8 @@ public class DecacCompiler {
         program.addFirst(line);
     }
 
+
+
     /**
      * @see
      * fr.ensimag.ima.pseudocode.IMAProgram#addInstruction(fr.ensimag.ima.pseudocode.Instruction,
@@ -230,20 +263,16 @@ public class DecacCompiler {
     /**
      * The main program. Every instruction generated will eventually end up here.
      */
-    private final IMAProgram program = new IMAProgram();
+    private IMAProgram program = new IMAProgram();
 
 
     /**
-     * (demander à Gwennan en cas de PB)
+     * Gestionnaire des registres pour la génération de code
      */
     private RegisterManager regManager;
 
     /**
-     * Permet d'avoir des types dans la partie B
-     * (demander à Gwennan en cas de PB)
-     * 
-     * Cela correspond en fait à la definition de
-     * l'environnmeent des types de base du compilateur
+     * Environnement des types définis lors de l'étape B de la compilation
      */
 
     private final EnvironmentType typeEnv = new EnvironmentType(null);
@@ -287,7 +316,20 @@ public class DecacCompiler {
         return getType(type).getType();
     }
 
+    public IMAProgram remplaceProgram(IMAProgram newProgram) {
+        IMAProgram oldProgram = program;
+        program = newProgram;
+        return oldProgram;
+    }
 
+    /**
+     * oldProgram se place au début du programme
+     * @param oldProgram
+     */
+    public void concatenateProgram(IMAProgram oldProgram) {
+        oldProgram.append(program);
+        program = oldProgram;
+    }
 
 
     /**
@@ -333,20 +375,20 @@ public class DecacCompiler {
 
 
 
-
-
     /**
      * Run the compiler (parse source file, generate code)
      *
      * @return true on error
      */
-    public boolean compile() {
+    public boolean compile() throws ContextualError {
         String sourceFile = source.getAbsolutePath();
         String destFile = null;
         // Done: calculer le nom du fichier .ass à partir du nom du
         // Done: FAIRE: fichier .deca.
-        // TODO: est-ce qu'il faut vérifier le format du nom en entrée ?
 
+        if (!sourceFile.substring(sourceFile.length() - 5, sourceFile.length()).equals(".deca")) {
+            throw new ContextualError("Bad extension. Must be '.deca'", null);
+        }
         destFile = sourceFile.substring(0, sourceFile.length() - 5) + ".ass";
 
         PrintStream err = System.err;

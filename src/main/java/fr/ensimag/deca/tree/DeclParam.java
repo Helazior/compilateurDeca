@@ -3,9 +3,12 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 import java.util.jar.Attributes.Name;
+
+import org.apache.commons.lang.Validate;
 
 /**
  * Declaration of a class (<code>class name extends superClass {members}<code>).
@@ -17,9 +20,9 @@ public class DeclParam extends AbstractDeclParam {
     private AbstractIdentifier type;
     private AbstractIdentifier name;
     
-    public DeclParam(AbstractIdentifier typeParam, AbstractIdentifier nameParam){
-        this.name = nameParam;
-        this.type = typeParam;
+    public DeclParam(AbstractIdentifier type, AbstractIdentifier name){
+        this.name = name;
+        this.type = type;
     }
 
     //TODO
@@ -31,9 +34,11 @@ public class DeclParam extends AbstractDeclParam {
     }
 
     @Override
-    protected void verifyParamSignature(DecacCompiler compiler)
+    protected Type verifyParamSignature(DecacCompiler compiler)
             throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        Type t = type.verifyType(compiler);
+        Validate.isTrue(!t.isVoid(), "Cannot pass a voidType object in argument");
+        return t;
     }
 
     @Override
