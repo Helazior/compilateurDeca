@@ -498,7 +498,7 @@ public class DecacCompiler {
             throws DecacFatalError, DecacInternalError {
         DecaLexer lex;
         try {
-            lex = new DecaLexer(CharStreams.fromFileName("src/test/deca/syntax/valid/parser/provided/ESEX-import.deca"));
+            lex = new DecaLexer(CharStreams.fromFileName(sourceName));
         } catch (IOException ex) {
             throw new DecacFatalError("Failed to open input file: " + ex.getLocalizedMessage());
         }
