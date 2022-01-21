@@ -10,32 +10,32 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.SymbolTable;
 
+import java.util.List;
+
 /**
  *
  * @author Ensimag
  * @date 01/01/2022
  */
-public class Gencode_else_GE {
+public class Gencode_basic_class {
 
     public static AbstractProgram initTest1() {
-        SymbolTable st = new SymbolTable();
-        ListInst linst = new ListInst();
-        ListInst linsttrue = new ListInst();
-        ListInst linstfalse = new ListInst();
-        ListExpr exprtrue = new ListExpr();
-        ListExpr exprfalse = new ListExpr();
-        exprtrue.add(new StringLiteral("\"VRAI !\""));
-        exprfalse.add(new StringLiteral("\"FAUX !\""));
-        linsttrue.add(new Print(false, exprtrue));
-        linstfalse.add(new Print(false, exprfalse));
-        GreaterOrEqual p1 = new GreaterOrEqual(new IntLiteral(40), new IntLiteral(50));     // true
-        IfThenElse ite = new IfThenElse(p1, linsttrue, linstfalse);
-        linst.add(ite);
-        AbstractProgram source =
-                new Program(
-                        new ListDeclClass(),
-                        new Main(new ListDeclVar(),linst));
-        return source;
+        ListDeclMethod listDeclMeth = null;
+        ListDeclField listDeclFields = null;
+        AbstractIdentifier identiferSuperClass = null;
+
+        SymbolTable symTab = new SymbolTable();
+        SymbolTable.Symbol name = symTab.create("firstClass");
+        AbstractIdentifier curClass = new Identifier(name);
+
+        AbstractDeclClass abstractDeclClass = new DeclClass(curClass, identiferSuperClass, listDeclFields, listDeclMeth);
+
+        ListDeclClass listDeclClass = new ListDeclClass();
+        listDeclClass.add(abstractDeclClass);
+
+        return new Program(
+                listDeclClass,
+                new EmptyMain());
 
     }
 

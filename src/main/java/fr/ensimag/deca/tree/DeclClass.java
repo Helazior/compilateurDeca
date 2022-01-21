@@ -37,8 +37,44 @@ public class DeclClass extends AbstractDeclClass {
         this.listDeclMethod = listDeclMethod;
     }
 
+
+    private void initAttributs(DecacCompiler compiler) throws ContextualError {
+        // TODO: itérer sur les parents si extend !
+        RegisterManager regMan = compiler.getRegMan();
+        compiler.addComment("; ---------- Initialisation des champs de " + getClass().getName());
+        compiler.addLabel(new Label("init." + getClass().getName()));
+        for (AbstractDeclField declField : listDeclField.getList()) {
+            // On déclare chaque attribut :
+            if (declField.getInitialization().isInitialized()) {
+                // initialisé
+                declField.getInitialization().pushValue(compiler);
+                regMan.pop(Register.R0);
+            } else {
+                // valeur par défaut
+                if (declField.getType().isInt()) {
+                    compiler.addInstruction(new LOAD(0, Register.R0));
+                } else if (declField.getType().isFloat()) {
+                    compiler.addInstruction(new LOAD(new ImmediateFloat(0), Register.R0));
+                } else {
+                    compiler.addInstruction(new LOAD(null, Register.R0));
+                }
+            }
+
+            compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
+            compiler.getRegMan().setField(Register.R1, declField.getName(), declField.getType(), Register.R0, getLocation());
+        }
+
+        // On revient au New
+        compiler.addInstruction(new RTS());
+    }
+
     @Override
-    protected void codeGenClass(DecacCompiler compiler) {
+    protected void codeGenClass(DecacCompiler compiler) throws ContextualError {
+        compiler.addComment("--------------------------------------------------");
+        compiler.addComment("                  Classe " + currentClass.getName());
+        compiler.addComment("--------------------------------------------------");
+        // On initialise tous les attributs :
+        initAttributs(compiler);
         listDeclMethod.codeGenListDeclMethod(compiler);
     }
 
@@ -117,44 +153,67 @@ public class DeclClass extends AbstractDeclClass {
         listDeclMethod.iter(f);
     }
 
+    /** Adds at the end of program the code to populate the classtable.
+     * SP should be at the first free memorycell where the classtble can
+     * be written.
+     * Uses the super's classtable builder, and adds the newly defined classes
+     */
     @Override
-    public int codeGenDeclMethod(DecacCompiler compiler, IMAProgram program)
-            throws ContextualError {
+    public int codeGenClassTableFn(DecacCompiler compiler, IMAProgram program, int stackPos) {
         RegisterManager regman = compiler.getRegMan();
         Symbol className = currentClass.getName();
         ClassDefinition type = (ClassDefinition) compiler.getTypeEnv().get(className);
+        type.setTablePlace(stackPos);
         EnvironmentExp expEnv = type.getMembers();
-        int size = type.getNumberOfMethods();
+        int size = type.getNumberOfMethods() + 1;
 
+        program.addComment("----------------------------------------");
+        program.addComment(className.toString());
         // We define an asm function building the classtable
         program.addLabel(new Label("classTableInit." + className));
         // We call the parent's classtable builder
         program.addInstruction(new BSR(
             new LabelOperand(new Label("classTableInit." + superClass.getName()))
         ));
-        // We put a pointer to the parent class
-        program.addInstruction(new LOAD(
-            new LabelOperand(new Label("classTableInit." + superClass.getName())),
-            Register.R1));
-        program.addInstruction(new STORE(
-            Register.R1,
-            new RegisterOffset(0, Register.SP)));
-        // We (re)define the new methods
+
         for (AbstractDeclMethod meth : listDeclMethod.getList()) {
             Symbol methName = meth.getName().getName();
-            int index = expEnv.get(methName).asMethodDefinition(
-                "Internal Error: "+methName+" in class "+className+" is not a method",
-                getLocation()
-            ).getIndex();
+            int index;
+            try {
+                index = expEnv.get(methName).asMethodDefinition(
+                    "Internal Error: "+methName+" in class "+className+" is not a method",
+                    getLocation()
+                ).getIndex();
+            } catch (ContextualError e){
+                throw new RuntimeException(e.toString());
+            }
             program.addInstruction(new LOAD(
                 new LabelOperand(new Label("methodBody."+className+"."+methName)),
                 Register.R1));
             program.addInstruction(new STORE(
                 Register.R1,
-                new RegisterOffset(index, Register.SP)));
+                new RegisterOffset(index + stackPos, Register.GB)));
         }
         // The asm function building the classtable is finished
         program.addInstruction(new RTS());
-        return type.getNumberOfMethods();
+        return size;
+    }
+
+    /** Sets the pointer to the parent in the method table */
+    @Override
+    public void codeGenClassTableMain(DecacCompiler compiler, IMAProgram program) {
+        RegisterManager regman = compiler.getRegMan();
+        ClassDefinition type = (ClassDefinition) compiler.getTypeEnv().get(currentClass.getName());
+        ClassDefinition superType = (ClassDefinition) compiler.getTypeEnv().get(superClass.getName());
+        int offset = type.getTablePlace();
+        int superOffset = superType.getTablePlace();
+
+        program.addInstruction(new BSR(
+            new LabelOperand(new Label("classTableInit." + type.getType().getName()))
+        ));
+        program.addInstruction(new LOAD(
+            new RegisterOffset(superOffset, Register.GB), Register.R1));
+        program.addInstruction(new STORE(
+            Register.R1, new RegisterOffset(offset, Register.GB)));
     }
 }

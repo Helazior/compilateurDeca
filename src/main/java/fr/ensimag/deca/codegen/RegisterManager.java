@@ -58,6 +58,10 @@ public class RegisterManager {
         this.stackOffset = 0;
     }
 
+    public void popInStack(int nbParameters) {
+        throw new UnsupportedOperationException("TODO");
+    }
+
     public void declareMethodVars(ListDeclParam args, ListDeclVar vars) {
         LOG.trace("REGMAN declareVars");
         if (namedVars != null) {
@@ -78,13 +82,14 @@ public class RegisterManager {
         LOG.trace("REGMAN declareVars end");
     }
 
-    public void declareClasses(ListDeclClass classDefs) {
+    public int declareClasses(ListDeclClass classDefs) {
         LOG.trace("REGMAN declareClasses");
-        if (classDefs != null) {
+        if (classes != null) {
             throw new UnsupportedOperationException("Classes already delcared");
         }
         classes = new ClassManager(compiler, classDefs);
         LOG.trace("REGMAN declareClasses end");
+        return classes.getSize();
     }
 
     public void restoreRegisters() {
@@ -96,14 +101,15 @@ public class RegisterManager {
                 compiler.addInstruction(new PUSH(Register.getR(i)));
             }
         }
-        compiler.addFirst(new Line(new BOV(new Label("stack_overflow_error"))));
         compiler.addFirst(new Line(new ADDSP(stackOffset)));
+        compiler.addFirst(new Line(new BOV(new Label("stack_overflow_error"))));
         compiler.addFirst(new Line(new TSTO(nbPush + maxSizeStack + stackOffset)));
         init(); // reinitalize the inner strucure
     }
 
     public void endMain() {
         compiler.addFirst(new Line(new ADDSP(stackOffset)));
+        compiler.addFirst(new BOV(new Label("stack_overflow_error")));
         compiler.addFirst(new Line(new TSTO(maxSizeStack + stackOffset)));
         init(); // reinitalize the inner strucure
     }

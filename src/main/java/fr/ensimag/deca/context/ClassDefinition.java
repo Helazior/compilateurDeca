@@ -41,6 +41,7 @@ public class ClassDefinition extends TypeDefinition {
 
     private int numberOfFields = 0;
     private int numberOfMethods = 0;
+    private int methodTablePlace = 0;
 
     @Override
     public boolean isClass() {
@@ -63,6 +64,14 @@ public class ClassDefinition extends TypeDefinition {
 
     public EnvironmentExp getMembers() {
         return members;
+    }
+
+    public void setTablePlace(int p) {
+        assert(methodTablePlace == 0);
+        methodTablePlace = p;
+    }
+    public int getTablePlace() {
+        return methodTablePlace;
     }
 
     public ClassDefinition(ClassType type, Location location, ClassDefinition superClass) {
