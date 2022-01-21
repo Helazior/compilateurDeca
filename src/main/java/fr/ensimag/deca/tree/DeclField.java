@@ -1,11 +1,13 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
@@ -56,33 +58,33 @@ public class DeclField extends AbstractDeclField {
 
     @Override
     protected void verifyFieldVisibility(DecacCompiler compiler,
-            AbstractIdentifier superClass, AbstractIdentifier currentClass)
+            ClassDefinition superClass, ClassDefinition currentClass)
             throws ContextualError {
-        Type t = type.verifyType(compiler);
-        Validate.isTrue(t.isVoid(), "Cannot have a 'void' type", getLocation());
-
-        ClassDefinition classDef = (ClassDefinition)compiler.getType(currentClass.getName());
-        int index = classDef.getSuperClass().getNumberOfFields() + classDef.getNumberOfFields();
-
-        field.setDefinition(new FieldDefinition(t, getLocation(), visibility, classDef, index));
-
-        try{
-            classDef.getMembers().declare(field.getName(), field.getFieldDefinition());
-        } catch (DoubleDefException e) {
-            throw new ContextualError(e + " This variable is already defined in this context", getLocation());
+        Type t = compiler.getType(type.getName()).getType();
+        if(t.isVoid()){
+            throw new ContextualError("A field cannot be a 'void' type", getLocation());
         }
 
-        EnvironmentExp superEnvExp = classDef.getSuperClass().getMembers();
-        Validate.isTrue(superEnvExp.get(field.getName()).isField(),
-                "This expression cannot be defined as a field because its parent already define it another way");
+        ExpDefinition superExp = superClass.getMembers().get(field.getName());
+        if(superExp != null && !superExp.isField()){
+            throw new ContextualError("This expression cannot be defined as a field " +
+                "because its parent already define it another way", getLocation());
+        }
 
+        int index = currentClass.getNumberOfFields() + superClass.getNumberOfFields();
+        field.setDefinition(new FieldDefinition(t, getLocation(), visibility, currentClass, index));
+
+        try{
+            currentClass.getMembers().declare(field.getName(), field.getFieldDefinition());
+        } catch (DoubleDefException e) {
+            throw new ContextualError("This variable is already defined in this context", getLocation());
+        }
     }
 
     protected void verifyFieldType(DecacCompiler compiler,
-            AbstractIdentifier currentClass) throws ContextualError {
+            ClassDefinition currentClass) throws ContextualError {
         Type t = type.verifyType(compiler);
-        ClassDefinition classDef = (ClassDefinition)compiler.getType(currentClass.getName());
-        initialization.verifyInitialization(compiler, t, classDef.getMembers(), classDef);
+        initialization.verifyInitialization(compiler, t, currentClass.getMembers(), currentClass);
     }
 
 

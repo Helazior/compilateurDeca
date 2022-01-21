@@ -72,5 +72,10 @@ public class EnvironmentType {
             throw new DoubleDefException();
         }
     }
+
+    @Override
+    public String toString(){
+        return env.toString();
+    }
 }
 

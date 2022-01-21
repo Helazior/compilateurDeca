@@ -26,8 +26,8 @@ public class ListDeclMethod extends TreeList<AbstractDeclMethod> {
     /**
      * Pass 2 of [SyntaxeContextuelle]
      */
-    public void verifyListMethodSignature(DecacCompiler compiler, AbstractIdentifier superClass,
-            AbstractIdentifier currentClass) throws ContextualError {
+    public void verifyListMethodSignature(DecacCompiler compiler, ClassDefinition superClass,
+            ClassDefinition currentClass) throws ContextualError {
 
         for (AbstractDeclMethod declMethod : getList()) {
             declMethod.verifyMethodSignature(compiler, superClass, currentClass);
@@ -38,7 +38,7 @@ public class ListDeclMethod extends TreeList<AbstractDeclMethod> {
      * Pass 3 of [SyntaxeContextuelle]
      */
     public void verifyListMethodBody(DecacCompiler compiler,
-        AbstractIdentifier currentClass) throws ContextualError {
+        ClassDefinition currentClass) throws ContextualError {
 
         for (AbstractDeclMethod declMethod : getList()) {
             declMethod.verifyMethodBody(compiler, currentClass);

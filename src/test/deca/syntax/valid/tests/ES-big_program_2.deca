@@ -10,7 +10,7 @@
 class Animal {
 
     protected int age;
-    protected String name;
+    protected string name;
     int nb_pattes;
         
 }
@@ -21,7 +21,7 @@ class Chien extends Animal {
     boolean collier;
     boolean aboie;
 
-    Chien init(int age, String name, int nb_pattes, boolean collier) {
+    Chien init(int age, string name, int nb_pattes, boolean collier) {
         Chien medor = new Chien();
         medor.age = age;
         medor.name = name;
@@ -45,7 +45,7 @@ class Chat extends Animal {
     boolean sauvage;
     boolean miaule;
 
-    Chat init(int age, String name, int nb_pattes, boolean sauvage) {
+    Chat init(int age, string name, int nb_pattes, boolean sauvage) {
         Chien chat = new Chat();
         chat.age = age;
         chat.name = name;
@@ -99,21 +99,21 @@ class Maitre {
 }
 
 class Voiture {
-    String couleur;
-    String marque;
-    String modele;
+    string couleur;
+    string marque;
+    string modele;
     int annee;
     float kilometrage;
 
-    void couleur_choice(String color) {
+    void couleur_choice(string color) {
         this.couleur = color;
     }
 
-    void marque_choice(String marque) {
+    void marque_choice(string marque) {
         this.marque = marque;
     }
 
-    void modele_choice(String modele) {
+    void modele_choice(string modele) {
         this.modele = modele;
     }
 
@@ -125,7 +125,7 @@ class Voiture {
         this.kilometrage = this.kilometrage + distance;
     }
 
-    String getModele() {
+    string getModele() {
         return this.modele;
     }
 }

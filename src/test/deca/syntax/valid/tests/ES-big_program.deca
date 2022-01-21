@@ -10,7 +10,7 @@
 class Animal {
 
     protected int age;
-    protected String name;
+    protected string name;
     int nb_pattes;
         
 }
@@ -21,7 +21,7 @@ class Chien extends Animal {
     boolean collier;
     boolean aboie;
 
-    Chien init(int age, String name, int nb_pattes, boolean collier) {
+    Chien init(int age, string name, int nb_pattes, boolean collier) {
         Chien medor = new Chien();
         medor.age = age;
         medor.name = name;
@@ -41,7 +41,7 @@ class Chat extends Animal {
     boolean sauvage;
     boolean miaule;
 
-    Chat init(int age, String name, int nb_pattes, boolean sauvage) {
+    Chat init(int age, string name, int nb_pattes, boolean sauvage) {
         Chien chat = new Chat();
         chat.age = age;
         chat.name = name;

@@ -9,7 +9,7 @@
 class Test1 {
     protected int age;
     int nombre;
-    protected String nom;
+    protected string nom;
     protected float longueur;
     boolean etat; 
 }

@@ -179,8 +179,7 @@ public class Identifier extends AbstractIdentifier {
         }
 
         setType(expDef.getType());
-        Definition def = new VariableDefinition(getType(), getLocation());
-        setDefinition(def);
+        setDefinition(expDef);
 
         return getType();
     }

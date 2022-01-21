@@ -80,7 +80,7 @@ for file_src in $files/solution/*.test; do
     #nom du fichier
     file_name=$(basename ${file_src%%".test"})
     folder_path=${file_src%%"/solution/$file_name.test"}
-    echo $folder_path
+    #echo $folder_path
     test_file $folder_path $file_src $file_name
 done
 

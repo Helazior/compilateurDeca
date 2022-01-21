@@ -17,8 +17,6 @@ import org.apache.log4j.Logger;
  * @date 14/01/2022
  */
 public class ListDeclParam extends TreeList<AbstractDeclParam> {
-    //TODO
-
     @Override
     public void decompile(IndentPrintStream s) {
         boolean firstLoop = true;

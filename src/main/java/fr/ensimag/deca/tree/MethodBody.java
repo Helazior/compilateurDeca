@@ -28,11 +28,9 @@ public class MethodBody extends AbstractMethodBody{
 
     @Override
     protected void verifyMethodBody(DecacCompiler compiler, EnvironmentExp methodEnv,
-            AbstractIdentifier currentClass, Type returnType) throws ContextualError {
-        ClassDefinition classDef = (ClassDefinition)compiler.getType(currentClass.getName());
-
-        declVariables.verifyListDeclVariable(compiler, methodEnv, classDef);
-        insts.verifyListInst(compiler, methodEnv, classDef, returnType);
+            ClassDefinition currentClass, Type returnType) throws ContextualError {
+        declVariables.verifyListDeclVariable(compiler, methodEnv, currentClass);
+        insts.verifyListInst(compiler, methodEnv, currentClass, returnType);
     }
 
     @Override

@@ -1,0 +1,19 @@
+// Description:
+//    Affectation et typage
+//
+// Resultats:
+//    Ligne 12: override of a non methode expression
+// 
+// Historique:
+//    cree le 01/01/2022
+
+
+class Test {
+   int IntVar;
+}
+
+class sous_Test extends Test{
+   int IntVar(){
+      //nothing
+   }
+}

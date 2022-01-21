@@ -1,0 +1,30 @@
+// Description:
+//    Affectation et typage
+//
+// Resultats:
+//    Ligne 32: wrong return Type
+// 
+// Historique:
+//    cree le 01/01/2022
+
+
+class Type {
+
+}
+
+class sous_Type extends Type{
+
+}
+
+class Test {
+   Type method(){
+      //nothing
+   }
+}
+
+class sous_Test extends Test{
+   sous_Type method(){
+      //nothing
+   }
+}
+

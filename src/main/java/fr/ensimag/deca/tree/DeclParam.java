@@ -28,7 +28,6 @@ public class DeclParam extends AbstractDeclParam {
         this.type = type;
     }
 
-    //TODO
     @Override
     public void decompile(IndentPrintStream s) {
         type.decompile(s);
@@ -39,7 +38,7 @@ public class DeclParam extends AbstractDeclParam {
     @Override
     protected Type verifyParamSignature(DecacCompiler compiler)
             throws ContextualError {
-        Type t = type.verifyType(compiler);
+        Type t = compiler.getType(type.getName()).getType();
         if(t.isVoid()){
             throw new ContextualError("Cannot pass a voidType object in argument", getLocation());
         }

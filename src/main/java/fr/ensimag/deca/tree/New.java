@@ -30,11 +30,14 @@ public class New extends AbstractExpr {
         this.className = i;
     }
 
-//TODO
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-                throw new UnsupportedOperationException("not yet implemented");
+        Type t = compiler.getType(className.getName()).getType();
+        if(!t.isClass()){
+            throw new ContextualError("the 'New' symbol can only be use to defined Classes", getLocation());
+        }
+        return t;
     }
 
     @Override

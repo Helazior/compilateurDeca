@@ -1,0 +1,3 @@
+tests/FIELD-non-field-parent.deca
+
+FIELD-non-field-parent.deca:18:7: This expression cannot be defined as a field because its parent already define it another way

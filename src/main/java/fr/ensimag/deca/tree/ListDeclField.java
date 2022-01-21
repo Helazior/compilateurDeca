@@ -28,21 +28,19 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
      * Pass 2 of [SyntaxeContextuelle]
      */
     public void verifyListFieldVisibility(DecacCompiler compiler,
-            AbstractIdentifier superClass, AbstractIdentifier currentClass)
+            ClassDefinition superClass, ClassDefinition currentClass)
             throws ContextualError {
 
         for (AbstractDeclField declField : getList()) {
             declField.verifyFieldVisibility(compiler, superClass, currentClass);
-
-            ClassDefinition currClassDef = (ClassDefinition)compiler.getType(currentClass.getName());
-            currClassDef.incNumberOfFields();
+            currentClass.incNumberOfFields();
         }
     }
 
     /**
      * Pass 3 of [SyntaxeContextuelle]
      */
-    public void verifyListFieldType(DecacCompiler compiler, AbstractIdentifier currentClass)
+    public void verifyListFieldType(DecacCompiler compiler, ClassDefinition currentClass)
             throws ContextualError {
 
         for (AbstractDeclField declField : getList()) {
