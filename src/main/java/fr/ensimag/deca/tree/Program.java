@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Line;
@@ -77,14 +78,24 @@ public class Program extends AbstractProgram {
         // On écrit une méthode
         // TODO: évidemment là c'est un brouillon
         // TODO: appeler les méthodes
-        classes.codeGenListClass(compiler);
+        RegisterManager regMan = compiler.getRegMan();
+        regMan.declareClasses(classes);
+        //classes.codeGenListClass(compiler);
+
+        IMAProgram classtableGen = compiler.remplaceProgram(new IMAProgram());
 
         // parcours de l'arbre. On écrit dans le main :
         main.codeGenMain(compiler);
-
+        compiler.addFirst(new Line("Main program"));
+        if (!compiler.getCompilerOptions().getNoCheck()) {
+            compiler.addFirst(new BOV(new Label("stack_overflow_error")));
+            compiler.addFirst(new TSTO(compiler.getRegMan().getMaxSizeStack()));
+        }
+        assert(compiler.getRegMan().isStackEmpty());
         // termine le programme
         compiler.addInstruction(new HALT());
 
+        IMAProgram mainProg = compiler.remplaceProgram(new IMAProgram());
 
         if (compiler.getIoExist()) {
             codeGenError.ioError(compiler);
@@ -107,12 +118,12 @@ public class Program extends AbstractProgram {
             }
 
             codeGenError.stackOverflowError(compiler);
-            compiler.addFirst(new BOV(new Label("stack_overflow_error")));
-            compiler.addFirst(new TSTO(compiler.getRegMan().getMaxSizeStack()));
         }
-        compiler.addFirst(new Line( "Main program"));
+        IMAProgram errorsFns = compiler.remplaceProgram(new IMAProgram());
 
-        assert(compiler.getRegMan().isStackEmpty());
+        compiler.concatenateBeginningProgram(classtableGen);
+        compiler.concatenateBeginningProgram(mainProg);
+        compiler.concatenateBeginningProgram(errorsFns);
     }
 
     @Override

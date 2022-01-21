@@ -12,8 +12,13 @@ import fr.ensimag.ima.pseudocode.instructions.*;
 
 public class ClassManager {
     private DecacCompiler compiler;
+    private int tablesSize;
+    public int getSize() {
+        return tablesSize;
+    }
     public ClassManager(DecacCompiler compiler, ListDeclClass classes) {
         this.compiler = compiler;
+        tablesSize = 0;
         EnvironmentType types = compiler.getTypeEnv();
         IMAProgram classTableInitsFns = new IMAProgram();
         IMAProgram classTableInitsMain = new IMAProgram();
@@ -36,7 +41,7 @@ public class ClassManager {
             Register.R1, new RegisterOffset(2, Register.SP)));
 
         // Compute table size and build function
-        int tablesSize = 3;
+        tablesSize = 3;
         for (AbstractDeclClass classDef : classes.getList()) {
             int classTableSize = classDef.codeGenClassTableFn(compiler, classTableInitsFns, tablesSize);
             tablesSize += classTableSize;
@@ -45,6 +50,13 @@ public class ClassManager {
         for (AbstractDeclClass classDef : classes.getList()) {
             classDef.codeGenClassTableMain(compiler, classTableInitsMain);
         }
+        Label end = new Label("classTableInit_end");
+        classTableInitsMain.addInstruction(new BRA(end));
+        classTableInitsMain.append(classTableInitsFns);
+        classTableInitsMain.addLabel(end);
+        classTableInitsMain.addInstruction(new ADDSP(tablesSize));
+        classTableInitsMain.addFirst(new Line(new TSTO(tablesSize)));
+        compiler.concatenateEndProgram(classTableInitsMain);
     }
 
     /** Loads the field's content into a register */
