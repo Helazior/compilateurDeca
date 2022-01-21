@@ -13,7 +13,7 @@ public class objectEquals {
         RegisterManager regMan = compiler.getRegMan();
 
         // ________________________corps du programme___________________________
-        compiler.addComment("; ---------- Code de Equals dans la classe Object");
+        compiler.addComment("; ------ Code d'Equals dans la classe Object ------");
         // TODO : à revoir
         compiler.addInstruction(new CMP(Register.R0, Register.R1));
         //________________________

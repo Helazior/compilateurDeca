@@ -26,7 +26,7 @@ public class ClassManager {
         classTableInitsFns.addComment("---------------------------------------------------");
         classTableInitsFns.addComment("    Construction tables des methodes");
         classTableInitsFns.addComment("---------------------------------------------------");
-        classTableInitsFns.addComment("---------------------Object------------------------");
+        classTableInitsFns.addComment("-------------------- Object -----------------------");
         classTableInitsFns.addLabel(new Label("classTableInit.Object"));
         classTableInitsFns.addInstruction(new LOAD(new NullOperand(), Register.R1));
         classTableInitsFns.addInstruction(new STORE(
