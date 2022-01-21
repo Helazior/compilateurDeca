@@ -15,7 +15,7 @@ class Test {
 }
 
 class sous_Test extends Test{
-   int IntVar(float param1, String param2){
+   int IntVar(float param1, string param2){
       //nothing
    }
 }

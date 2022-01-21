@@ -10,7 +10,7 @@
 class Test1 {
 
     int age;
-    protected String name;
+    protected string name;
 
     void Test1() {
     }

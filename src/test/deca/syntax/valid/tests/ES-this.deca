@@ -10,11 +10,11 @@
 class Test1 {
 
     int age;
-    protected String name;
+    protected string name;
 
     int fct() {
         int nb = this.age;
-        String str = this.name + " " + ".";
+        string str = this.name + " " + ".";
         this.name = " ";
     }
 

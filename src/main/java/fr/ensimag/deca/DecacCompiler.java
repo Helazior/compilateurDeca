@@ -285,7 +285,7 @@ public class DecacCompiler {
 
         typeDefList.add(new TypeDefinition(new IntType(typeTable.create("int")), null));
         typeDefList.add(new TypeDefinition(new FloatType(typeTable.create("float")), null));
-        typeDefList.add(new TypeDefinition(new StringType(typeTable.create("String")), null));
+        typeDefList.add(new TypeDefinition(new StringType(typeTable.create("string")), null));
         typeDefList.add(new TypeDefinition(new BooleanType(typeTable.create("boolean")), null));
         typeDefList.add(new TypeDefinition(new VoidType(typeTable.create("void")), null));
 
