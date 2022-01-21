@@ -11,6 +11,9 @@ import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
+import fr.ensimag.ima.pseudocode.instructions.SUBSP;
+import sun.java2d.pipe.SpanClipRenderer;
+
 import java.io.PrintStream;
 
 /**
@@ -41,13 +44,15 @@ public class MethodCall extends AbstractExpr {
     protected void codeGenExpr(DecacCompiler compiler){
         RegisterManager regMan = compiler.getRegMan();
         // on push tous les registres dans la pile pour qu'ils ne gênent pas pendant le calcul d'argument
+        objet.codeGenExpr(compiler);
         for (AbstractExpr field : parametres.getList()) {
             field.codeGenExpr(compiler);
         }
-        regMan.popInStack(parametres.getList().size());
+        regMan.prepareMethodCall(parametres.size());
 
         // On saute au label de la méthode
         compiler.addInstruction(new BRA(new Label("bodyMethod." + getClass().getName() + "." + nomDeMethode)));
+        compiler.addInstruction(new SUBSP(parametres.size() + 2)); // + this * 2: in the bottom and the top
     }
 
     @Override
