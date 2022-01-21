@@ -6,5 +6,8 @@
 // Historique:
 //    cree le 19/01/2022
 
-#import "../../provided/hello.deca"
+import "ES-appel_field.deca"
 
+{
+    println("yess!!");
+}

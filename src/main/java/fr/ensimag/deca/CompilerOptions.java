@@ -52,7 +52,7 @@ public class CompilerOptions {
             , 1)),
         entry("-l", new OptionData("link option", "permet et autorise " +
             "l'imports de fichiers"
-            , 1))
+            , 0))
     );
 
     private int debug = 0;

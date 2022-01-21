@@ -45,6 +45,9 @@ prog returns[AbstractProgram tree]
             if(getDecacCompiler().getCompilerOptions().getLinked()){
                 $tree = new Program($list_imports.tree, $list_classes.tree, $main.tree);
             } else {
+                if(!$list_imports.tree.isEmpty()) {
+                    throw new InvalidImport(this, $ctx);
+                }
                 $tree = new Program($list_classes.tree, $main.tree);
             }
 

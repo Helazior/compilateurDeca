@@ -19,6 +19,7 @@ options {
    ELSE: 'else';
    FALSE: 'false';
    IF: 'if';
+   IMPORT: 'import' ;
    INSTANCEOF: 'instanceof';
    NEW: 'new';
    NULL: 'null';
@@ -108,7 +109,6 @@ OR: '||';
 
 //INCLUDE
    fragment FILENAME: '"' (LETTER | DIGIT | '.' | '-' | '_')+ '"';
-   IMPORT: '#import' ;
    INCLUDE: '#include' (' ')* FILENAME {doInclude(getText()); skip(); };
 //
 
