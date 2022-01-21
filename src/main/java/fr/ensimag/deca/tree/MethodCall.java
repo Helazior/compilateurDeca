@@ -1,17 +1,18 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.ima.pseudocode.ImmediateString;
-import fr.ensimag.ima.pseudocode.instructions.WSTR;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.instructions.BRA;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import java.io.PrintStream;
-import org.apache.commons.lang.Validate;
 
-import org.apache.log4j.Logger;
 /**
  * String literal
  *
@@ -37,8 +38,21 @@ public class MethodCall extends AbstractExpr {
     }
 
     @Override
+    protected void codeGenExpr(DecacCompiler compiler){
+        RegisterManager regMan = compiler.getRegMan();
+        // on push tous les registres dans la pile pour qu'ils ne gênent pas pendant le calcul d'argument
+        for (AbstractExpr field : parametres.getList()) {
+            field.codeGenExpr(compiler);
+        }
+        regMan.popInStack(parametres.getList().size());
+
+        // On saute au label de la méthode
+        compiler.addInstruction(new BRA(new Label("bodyMethod." + getClass().getName() + "." + nomDeMethode)));
+    }
+
+    @Override
     protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
-       
+        throw new UnsupportedOperationException("Method is not printable");
     }
 
     @Override

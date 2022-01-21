@@ -21,7 +21,7 @@ public abstract class AbstractDeclClass extends Tree {
     protected abstract void verifyClass(DecacCompiler compiler)
             throws ContextualError;
 
-    protected abstract void codeGenClass(DecacCompiler compiler);
+    protected abstract void codeGenClass(DecacCompiler compiler) throws ContextualError;
 
     /**
      * Pass 2 of [SyntaxeContextuelle]. Verify that the class members (fields and
@@ -37,6 +37,7 @@ public abstract class AbstractDeclClass extends Tree {
     protected abstract void verifyClassBody(DecacCompiler compiler)
             throws ContextualError;
 
-    public abstract int codeGenDeclMethod(DecacCompiler compiler, IMAProgram program)
-            throws ContextualError;
+    public abstract int codeGenClassTableFn(DecacCompiler compiler, IMAProgram program, int stackPos);
+
+    public abstract void codeGenClassTableMain(DecacCompiler compiler, IMAProgram program);
 }

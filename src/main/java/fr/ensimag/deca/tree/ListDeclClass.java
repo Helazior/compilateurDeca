@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.codegen.objectEquals;
 import org.apache.log4j.Logger;
 
 /**
@@ -30,11 +31,12 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
         }
     }
 
-    protected void codeGenListClass(DecacCompiler compiler) {
+    protected void codeGenListClass(DecacCompiler compiler) throws ContextualError {
         for (AbstractDeclClass declClass : getList()) {
             declClass.codeGenClass(compiler);
         }
-
+        // On met la méthode object
+        objectEquals.methodEquals(compiler);
     }
     /**
      * Pass 2 of [SyntaxeContextuelle]

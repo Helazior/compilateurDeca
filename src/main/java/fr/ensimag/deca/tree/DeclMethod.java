@@ -45,13 +45,14 @@ public class DeclMethod extends AbstractDeclMethod {
 
     protected void codeGenDeclMethod(DecacCompiler compiler) {
         RegisterManager regMan = compiler.getRegMan();
-        // TODO: récupérer les arguments de la méthode dans la pile
         // On place le label d'erreur à la fin du fichier
         if (!returnType.getType().isFloat()) {
             compiler.setNoVoidMethodExist();
         }
 
         // ________________________corps du programme___________________________
+        compiler.addComment("; ---------- Code de la methode " + method.getName() + "dans la classe" + method.getClass().getName());
+
         methodBody.codeGenMethod(compiler, parameters);
         // goto return
         // Si c'est pas un void et qu'on n'a pas eu de return on va à une erreur
@@ -65,11 +66,6 @@ public class DeclMethod extends AbstractDeclMethod {
         // Début de la méthode = label du nom de la méthode
         compiler.addFirst(new Line(new Label("bodyMethod." + getClass().getName() + "." + method.getName())));
         // On empile tous les registres qu'on veut utiliser au début de la méthode et on les restaure à la fin
-        regMan.restoreRegisters();
-
-        // TODO: récup le nom :
-        compiler.addFirst(new Line(new Label("bodyMethod.class.method")));
-        // On empile tous les registres qu'on veut utiliser et on les restaure à la fin
         regMan.restoreRegisters();
 
         // goto erreur return en cas de non return
@@ -144,7 +140,7 @@ public class DeclMethod extends AbstractDeclMethod {
         returnType.prettyPrint(s, prefix, false);
         method.prettyPrint(s, prefix, false);
         parameters.prettyPrint(s, prefix, false);
-        method.prettyPrint(s, prefix, true);
+        methodBody.prettyPrint(s, prefix, true);
     }
 
     @Override
@@ -152,7 +148,7 @@ public class DeclMethod extends AbstractDeclMethod {
         returnType.iter(f);
         method.iter(f);
         parameters.iter(f);
-        method.iter(f);
+        methodBody.iter(f);
     }
 
     @Override

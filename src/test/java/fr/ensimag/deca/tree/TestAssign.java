@@ -12,13 +12,13 @@ import fr.ensimag.deca.tools.SymbolTable;
  */
 public class TestAssign {
 
-    public static String gencodeSource(AbstractProgram source, DecacCompiler compiler) {
+    public static String gencodeSource(AbstractProgram source, DecacCompiler compiler) throws ContextualError {
         source.codeGenProgram(compiler);
         return compiler.displayIMAProgram();
     }
 
     @Test
-    public static void test1() {
+    public static void test1() throws ContextualError {
         DecacCompiler compiler = new DecacCompiler(new CompilerOptions(), null);
         SymbolTable symTab = new SymbolTable();
         ListDeclVar vars = new ListDeclVar();
@@ -63,7 +63,7 @@ public class TestAssign {
 
 
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws ContextualError {
         test1();
     }
 }

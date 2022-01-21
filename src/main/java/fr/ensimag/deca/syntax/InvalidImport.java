@@ -9,16 +9,16 @@ import org.antlr.v4.runtime.ParserRuleContext;
  * @author gl60
  * @date 01/01/2022
  */
-public class InvalidInt extends DecaRecognitionException {
+public class InvalidImport extends DecaRecognitionException {
 
     private static final long serialVersionUID = 4670163376041273741L;
 
-    public InvalidInt(DecaParser recognizer, ParserRuleContext ctx) {
+    public InvalidImport(AbstractDecaParser recognizer, ParserRuleContext ctx) {
         super(recognizer, ctx);
     }
 
     @Override
     public String getMessage() {
-        return "Utilisation d'un entier non supporté sur 32 bits.";
+        return "Imports are not allowed without the appropriate CLI option";
     }
 }

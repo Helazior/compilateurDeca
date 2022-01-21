@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -8,6 +9,7 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.*;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
@@ -27,6 +29,17 @@ public class NoInitialization extends AbstractInitialization {
             throws ContextualError {
     }
 
+    public boolean isInitialized() {
+        return false;
+    }
+    /**
+     * default value for initialization
+     * @return
+     */
+    @Override
+    public void pushValue(DecacCompiler compiler) {
+        // nothing to do
+    }
     /**
      * Node contains no real information, nothing to check.
      */

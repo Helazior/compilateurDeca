@@ -12,12 +12,50 @@ import fr.ensimag.ima.pseudocode.instructions.*;
 
 public class ClassManager {
     private DecacCompiler compiler;
+    private int tablesSize;
+    public int getSize() {
+        return tablesSize;
+    }
     public ClassManager(DecacCompiler compiler, ListDeclClass classes) {
         this.compiler = compiler;
+        tablesSize = 0;
         EnvironmentType types = compiler.getTypeEnv();
+        IMAProgram classTableInitsFns = new IMAProgram();
+        IMAProgram classTableInitsMain = new IMAProgram();
+
+        classTableInitsFns.addComment("---------------------------------------------------");
+        classTableInitsFns.addComment("    Construction tables des methodes");
+        classTableInitsFns.addComment("---------------------------------------------------");
+        classTableInitsFns.addComment("---------------------Object------------------------");
+        classTableInitsFns.addLabel(new Label("classTableInit.Object"));
+        classTableInitsFns.addInstruction(new LOAD(new NullOperand(), Register.R1));
+        classTableInitsFns.addInstruction(new STORE(
+            Register.R1,
+            new RegisterOffset(1, Register.SP)));
+
+        classTableInitsFns.addInstruction(new LOAD(
+            new LabelOperand(new Label("methodBody.Object.equals")),
+            Register.R1));
+        classTableInitsFns.addInstruction(new STORE(
+            Register.R1, new RegisterOffset(2, Register.SP)));
+
+        // Compute table size and build function
+        tablesSize = 3;
         for (AbstractDeclClass classDef : classes.getList()) {
-            // TODO
+            int classTableSize = classDef.codeGenClassTableFn(compiler, classTableInitsFns, tablesSize);
+            tablesSize += classTableSize;
         }
+        // Call functions and build super reference
+        for (AbstractDeclClass classDef : classes.getList()) {
+            classDef.codeGenClassTableMain(compiler, classTableInitsMain);
+        }
+        Label end = new Label("classTableInit_end");
+        classTableInitsMain.addInstruction(new BRA(end));
+        classTableInitsMain.append(classTableInitsFns);
+        classTableInitsMain.addLabel(end);
+        classTableInitsMain.addInstruction(new ADDSP(tablesSize));
+        classTableInitsMain.addFirst(new Line(new TSTO(tablesSize)));
+        compiler.concatenateEndProgram(classTableInitsMain);
     }
 
     /** Loads the field's content into a register */

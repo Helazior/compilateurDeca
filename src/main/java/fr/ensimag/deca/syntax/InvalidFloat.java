@@ -19,6 +19,6 @@ public class InvalidFloat extends DecaRecognitionException {
 
     @Override
     public String getMessage() {
-        return "float codé sur plus de 32 bits";
+        return "Utilisation d'un flottant non supporté sur 32 bits.";
     }
 }

@@ -7,6 +7,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.CompilerOptions;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.SymbolTable;
 
 /**
@@ -41,13 +42,13 @@ public class Gencode_AND_true {
 
     }
 
-    public static String gencodeSource(AbstractProgram source) {
+    public static String gencodeSource(AbstractProgram source) throws ContextualError {
         DecacCompiler compiler = new DecacCompiler(new CompilerOptions(), null);
         source.codeGenProgram(compiler);
         return compiler.displayIMAProgram();
     }
 
-    public static void test1() {
+    public static void test1() throws ContextualError {
         AbstractProgram source = initTest1();
         //System.out.println("---- From the following Abstract Syntax Tree ----");
         //source.prettyPrint(System.out);
@@ -59,7 +60,7 @@ public class Gencode_AND_true {
 
 
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws ContextualError {
         test1();
     }
 }
