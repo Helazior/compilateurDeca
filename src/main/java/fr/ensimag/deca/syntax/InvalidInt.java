@@ -19,6 +19,6 @@ public class InvalidInt extends DecaRecognitionException {
 
     @Override
     public String getMessage() {
-        return "entier codé sur plus de 32 bits";
+        return "Utilisation d'un entier non supporté sur 32 bits.";
     }
 }
