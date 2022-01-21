@@ -39,19 +39,19 @@ options {
 
 prog returns[AbstractProgram tree]
     :  list_imports list_classes main EOF {
-            //assert($list_classes.tree != null);
+            assert($list_classes.tree != null);
             assert($main.tree != null);
 
             if(getDecacCompiler().getCompilerOptions().getLinked()){
                 $tree = new Program($list_imports.tree, $list_classes.tree, $main.tree);
+                setLocation($tree, $list_imports.start);
             } else {
                 if(!$list_imports.tree.isEmpty()) {
                     throw new InvalidImport(this, $ctx);
                 }
                 $tree = new Program($list_classes.tree, $main.tree);
+                setLocation($tree, $list_classes.start);
             }
-
-            setLocation($tree, $list_classes.start);
         }
     ;
 
