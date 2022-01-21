@@ -90,7 +90,7 @@ public class DecacCompiler {
     }
 
     public void setNoVoidMethodExist() {
-        divideExist = true;
+        noVoidMethodExist = true;
     }
 
 
