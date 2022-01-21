@@ -474,16 +474,11 @@ public class DecacCompiler {
         // Done: FAIRE: fichier .deca.
         // TODO: est-ce qu'il faut vérifier le format du nom en entrée ?
 
-        destFile = sourceFile.substring(0, sourceFile.length() - 5) + ".ass";
-
         PrintStream err = System.err;
         PrintStream out = System.out;
-        LOG.debug("Compiling file " + sourceFile + " to assembly file " + destFile);
+        LOG.debug("Importing file " + sourceFile);
         try {
-            return doCompileImport(sourceFile, destFile, out, err);
-        } catch (LocationException e) {
-            e.display(err);
-            return null;
+            return doCompileImport(sourceFile, out, err);
         } catch (DecacFatalError e) {
             err.println(e.getMessage());
             return null;
@@ -515,9 +510,8 @@ public class DecacCompiler {
      *
      * @return true on error
      */
-    private AbstractProgram doCompileImport(String sourceName, String destName,
-            PrintStream out, PrintStream err)
-            throws DecacFatalError, LocationException {
+    private AbstractProgram doCompileImport(String sourceName, PrintStream out, PrintStream err)
+            throws DecacFatalError, DecacInternalError {
 
         AbstractProgram prog = doLexingAndParsingImport(sourceName, err);
 
@@ -531,30 +525,6 @@ public class DecacCompiler {
             prog.decompile(out);
             return prog;
         }
-
-        prog.verifyProgram(this);
-        assert(prog.checkAllDecorations());
-
-        if(compilerOptions.getVerification()){
-            return prog;
-        }
-        addComment("start main program");
-        prog.codeGenProgram(this);
-        addComment("end main program");
-        LOG.debug("Generated assembly code:" + nl + program.display());
-        LOG.info("Output file assembly file is: " + destName);
-
-        FileOutputStream fstream = null;
-        try {
-            fstream = new FileOutputStream(destName);
-        } catch (FileNotFoundException e) {
-            throw new DecacFatalError("Failed to open output file: " + e.getLocalizedMessage());
-        }
-
-        LOG.info("Writing assembler file ...");
-
-        program.display(new PrintStream(fstream));
-        LOG.info("Compilation of " + sourceName + " successful.");
         return prog;
     }
 
@@ -575,19 +545,19 @@ public class DecacCompiler {
             throws DecacFatalError, DecacInternalError {
         DecaLexer lex;
         Path filePath = Paths.get(sourceName);
-        System.out.println("fPath: " + filePath);
+        LOG.debug("fPath: " + filePath);
         if (!filePath.isAbsolute()) {
             Path parentDir = Paths.get(source.getAbsolutePath()).getParent();
             assert(parentDir != null);
-            System.out.println("Parent: " + parentDir);
+            LOG.debug("Parent: " + parentDir);
             filePath = Paths.get(parentDir.toString(), filePath.toString());
             assert(filePath.isAbsolute());
-            System.out.println("New Path: " + filePath);
+            LOG.debug("New Path: " + filePath);
         }
         try {
             lex = new DecaLexer(CharStreams.fromPath(filePath));
         } catch (IOException ex) {
-            throw new RuntimeException("blblbl", ex);
+            throw new RuntimeException("Can't open", ex);
         }
         lex.setDecacCompiler(this);
         CommonTokenStream tokens = new CommonTokenStream(lex);
