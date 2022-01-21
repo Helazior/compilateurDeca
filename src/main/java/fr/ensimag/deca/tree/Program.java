@@ -95,14 +95,11 @@ public class Program extends AbstractProgram {
         // termine le programme
         compiler.addInstruction(new HALT());
 
-<<<<<<< HEAD
         compiler.addComment(" -------------------------------------------------");
         compiler.addComment("|              Messages d'erreur");
         compiler.addComment(" -------------------------------------------------");
-=======
         IMAProgram mainProg = compiler.remplaceProgram(new IMAProgram());
 
->>>>>>> etape_c-2
         if (compiler.getIoExist()) {
             codeGenError.ioError(compiler);
         }
@@ -125,11 +122,8 @@ public class Program extends AbstractProgram {
 
             codeGenError.stackOverflowError(compiler);
         }
-<<<<<<< HEAD
-        //compiler.addFirst(new Line( "Main program"));
-=======
+
         IMAProgram errorsFns = compiler.remplaceProgram(new IMAProgram());
->>>>>>> etape_c-2
 
         compiler.concatenateBeginningProgram(classtableGen);
         compiler.concatenateBeginningProgram(mainProg);
