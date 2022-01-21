@@ -2,20 +2,29 @@
 //    Affectation et typage
 //
 // Resultats:
-//    Ligne 18: Wrong signature
+//    Ligne 32: wrong return Type
 // 
 // Historique:
 //    cree le 01/01/2022
 
 
+class Type {
+
+}
+
+class sous_Type extends Type{
+
+}
+
 class Test {
-   int IntVar(float param1, int param2){
+   Type method(){
       //nothing
    }
 }
 
 class sous_Test extends Test{
-   int IntVar(float param1, String param2){
+   sous_Type method(){
       //nothing
    }
 }
+

@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 import java.util.ArrayList;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
@@ -12,7 +13,7 @@ public abstract class AbstractMethodBody extends Tree {
 
 
     protected abstract void verifyMethodBody(DecacCompiler compiler, EnvironmentExp methodEnv,
-        AbstractIdentifier currentClass, Type returnType) throws ContextualError;
+        ClassDefinition currentClass, Type returnType) throws ContextualError;
 
 
     /**

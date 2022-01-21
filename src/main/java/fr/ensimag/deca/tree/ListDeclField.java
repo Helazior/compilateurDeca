@@ -40,7 +40,7 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
     /**
      * Pass 3 of [SyntaxeContextuelle]
      */
-    public void verifyListFieldType(DecacCompiler compiler, AbstractIdentifier currentClass)
+    public void verifyListFieldType(DecacCompiler compiler, ClassDefinition currentClass)
             throws ContextualError {
 
         for (AbstractDeclField declField : getList()) {

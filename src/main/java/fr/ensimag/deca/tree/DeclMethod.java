@@ -130,11 +130,10 @@ public class DeclMethod extends AbstractDeclMethod {
 
     @Override
     protected void verifyMethodBody(DecacCompiler compiler,
-            AbstractIdentifier currentClass) throws ContextualError {
+            ClassDefinition currentClass) throws ContextualError {
         Type ret = returnType.verifyType(compiler);
 
-        ClassDefinition classDef = (ClassDefinition)compiler.getType(currentClass.getName());
-        EnvironmentExp methodEnv = new EnvironmentExp(classDef.getMembers());
+        EnvironmentExp methodEnv = new EnvironmentExp(currentClass.getMembers());
         parameters.verifyListParamType(compiler, methodEnv);
         methodBody.verifyMethodBody(compiler, methodEnv, currentClass, ret);
     }

@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -42,7 +43,7 @@ public class DeclField extends AbstractDeclField {
     protected void verifyFieldVisibility(DecacCompiler compiler,
             ClassDefinition superClass, ClassDefinition currentClass)
             throws ContextualError {
-        Type t = type.verifyType(compiler);
+        Type t = compiler.getType(type.getName()).getType();
         if(t.isVoid()){
             throw new ContextualError("A field cannot be a 'void' type", getLocation());
         }
@@ -64,10 +65,9 @@ public class DeclField extends AbstractDeclField {
     }
 
     protected void verifyFieldType(DecacCompiler compiler,
-            AbstractIdentifier currentClass) throws ContextualError {
+            ClassDefinition currentClass) throws ContextualError {
         Type t = type.verifyType(compiler);
-        ClassDefinition classDef = (ClassDefinition)compiler.getType(currentClass.getName());
-        initialization.verifyInitialization(compiler, t, classDef.getMembers(), classDef);
+        initialization.verifyInitialization(compiler, t, currentClass.getMembers(), currentClass);
     }
 
 
