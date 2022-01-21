@@ -54,7 +54,7 @@ public class ListDeclMethod extends TreeList<AbstractDeclMethod> {
             declMethod.codeGenDeclMethod(compiler);
             // On rajoute notre nouveau programme à la fin de l'ancien.
             // Le nouveau programme contiendra tous les programmes
-            compiler.concatenateProgram(oldProgram);
+            compiler.concatenateBeginningProgram(oldProgram);
         }
     }
 }

@@ -324,9 +324,17 @@ public class DecacCompiler {
      * oldProgram se place au début du programme
      * @param oldProgram
      */
-    public void concatenateProgram(IMAProgram oldProgram) {
+    public void concatenateBeginningProgram(IMAProgram oldProgram) {
         oldProgram.append(program);
         program = oldProgram;
+    }
+
+    /**
+     * oldProgram se place au début du programme
+     * @param oldProgram
+     */
+    public void concatenateEndProgram(IMAProgram oldProgram) {
+        program.append(oldProgram);
     }
 
 

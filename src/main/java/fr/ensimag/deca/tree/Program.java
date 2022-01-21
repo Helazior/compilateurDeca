@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Line;
@@ -74,17 +75,34 @@ public class Program extends AbstractProgram {
         // de sa définition via la méthode Definition.setOperand() : voir les classes VariableDefinition et ExpDefinition
         // Récupéré avec getOperand
 
-        classes.codeGenListClass(compiler);
+        // On écrit une méthode
+        // TODO: évidemment là c'est un brouillon
+        // TODO: appeler les méthodes
+        RegisterManager regMan = compiler.getRegMan();
+        regMan.declareClasses(classes);
+        //classes.codeGenListClass(compiler);
+
+        IMAProgram classtableGen = compiler.remplaceProgram(new IMAProgram());
 
         // parcours de l'arbre. On écrit dans le main :
         main.codeGenMain(compiler);
-
+        compiler.addFirst(new Line("Main program"));
+        if (!compiler.getCompilerOptions().getNoCheck()) {
+            compiler.addFirst(new BOV(new Label("stack_overflow_error")));
+            compiler.addFirst(new TSTO(compiler.getRegMan().getMaxSizeStack()));
+        }
+        assert(compiler.getRegMan().isStackEmpty());
         // termine le programme
         compiler.addInstruction(new HALT());
 
+<<<<<<< HEAD
         compiler.addComment(" -------------------------------------------------");
         compiler.addComment("|              Messages d'erreur");
         compiler.addComment(" -------------------------------------------------");
+=======
+        IMAProgram mainProg = compiler.remplaceProgram(new IMAProgram());
+
+>>>>>>> etape_c-2
         if (compiler.getIoExist()) {
             codeGenError.ioError(compiler);
         }
@@ -106,12 +124,16 @@ public class Program extends AbstractProgram {
             }
 
             codeGenError.stackOverflowError(compiler);
-            compiler.addFirst(new BOV(new Label("stack_overflow_error")));
-            compiler.addFirst(new TSTO(compiler.getRegMan().getMaxSizeStack()));
         }
+<<<<<<< HEAD
         //compiler.addFirst(new Line( "Main program"));
+=======
+        IMAProgram errorsFns = compiler.remplaceProgram(new IMAProgram());
+>>>>>>> etape_c-2
 
-        assert(compiler.getRegMan().isStackEmpty());
+        compiler.concatenateBeginningProgram(classtableGen);
+        compiler.concatenateBeginningProgram(mainProg);
+        compiler.concatenateBeginningProgram(errorsFns);
     }
 
     @Override
