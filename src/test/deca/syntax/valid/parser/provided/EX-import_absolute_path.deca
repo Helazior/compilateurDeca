@@ -6,7 +6,7 @@
 // Historique:
 //    cree le 19/01/2022
 
-import "/user/6/elefthet/Projet_GL/src/test/deca/syntax/valid/parser/provided/ES-appel_field.deca"
+import "/user/6/elefthet/Projet_GL/src/test/deca/syntax/valid/parser/provided/EX-fichier_test.deca"
 
 {
     println("Miracle!");
