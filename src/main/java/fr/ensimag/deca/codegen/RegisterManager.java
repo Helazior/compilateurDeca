@@ -84,7 +84,7 @@ public class RegisterManager {
 
     public int declareClasses(ListDeclClass classDefs) {
         LOG.trace("REGMAN declareClasses");
-        if (classDefs != null) {
+        if (classes != null) {
             throw new UnsupportedOperationException("Classes already delcared");
         }
         classes = new ClassManager(compiler, classDefs);

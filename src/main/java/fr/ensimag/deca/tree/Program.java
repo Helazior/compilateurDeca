@@ -95,9 +95,9 @@ public class Program extends AbstractProgram {
         // termine le programme
         compiler.addInstruction(new HALT());
 
-        compiler.addComment(" -------------------------------------------------");
-        compiler.addComment("|              Messages d'erreur");
-        compiler.addComment(" -------------------------------------------------");
+        compiler.addComment("---------------------------------------------------");
+        compiler.addComment("               Messages d'erreur");
+        compiler.addComment("---------------------------------------------------");
         IMAProgram mainProg = compiler.remplaceProgram(new IMAProgram());
 
         if (compiler.getIoExist()) {

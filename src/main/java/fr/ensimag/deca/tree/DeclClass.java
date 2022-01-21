@@ -30,9 +30,7 @@ public class DeclClass extends AbstractDeclClass {
     public DeclClass(AbstractIdentifier currentClass, AbstractIdentifier superClass,
                      ListDeclField listDeclField, ListDeclMethod listDeclMethod) {
         Validate.notNull(currentClass);
-        // TODO : remettre :
-        // Validate.notNull(superClass);
-        // mettre object en super classe et créer object
+        Validate.notNull(superClass);
         this.currentClass = currentClass;
         this.superClass = superClass;
         this.listDeclField = listDeclField;

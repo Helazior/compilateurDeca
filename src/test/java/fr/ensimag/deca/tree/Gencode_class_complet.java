@@ -75,7 +75,6 @@ public class Gencode_class_complet {
         return new Program(
                 listDeclClass,
                 new EmptyMain());
-
     }
 
     public static String gencodeSource(AbstractProgram source) throws ContextualError {
