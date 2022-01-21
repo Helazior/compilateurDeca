@@ -43,7 +43,6 @@ public class DeclMethod extends AbstractDeclMethod {
 
     protected void codeGenDeclMethod(DecacCompiler compiler) {
         RegisterManager regMan = compiler.getRegMan();
-        // TODO: récupérer les arguments de la méthode dans la pile
         // On place le label d'erreur à la fin du fichier
         if (!returnType.getType().isFloat()) {
             compiler.setNoVoidMethodExist();

@@ -80,7 +80,7 @@ public class Program extends AbstractProgram {
         // TODO: appeler les méthodes
         RegisterManager regMan = compiler.getRegMan();
         regMan.declareClasses(classes);
-        //classes.codeGenListClass(compiler);
+        classes.codeGenListClass(compiler);
 
         IMAProgram classtableGen = compiler.remplaceProgram(new IMAProgram());
 
