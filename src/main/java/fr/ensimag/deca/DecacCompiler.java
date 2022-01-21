@@ -85,6 +85,8 @@ public class DecacCompiler {
             System.out.println("a basic type is inizialise 2 times");
         }
     }
+
+
     public boolean getNoVoidMethodExist() {
         return noVoidMethodExist;
     }
@@ -555,7 +557,6 @@ public class DecacCompiler {
      * verification and code generation).
      *
      * @param sourceName name of the source (deca) file
-     * @param destName name of the destination (assembly) file
      * @param out stream to use for standard output (output of decac -p)
      * @param err stream to use to display compilation errors
      *

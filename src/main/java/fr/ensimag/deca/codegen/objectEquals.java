@@ -15,8 +15,13 @@ public class objectEquals {
         // ________________________corps du programme___________________________
         compiler.addComment("------ Code d'Equals dans la classe Object ------");
         // TODO : à revoir
-        compiler.addInstruction(new CMP(Register.R0, Register.R1));
+//        public boolean equals (Object other) {
+//            return this == other;
+//        }
 
+        // faut récupérer les arguments this et object puis faire ça et un return
+//        compiler.addInstruction(new CMP(register0, register1));
+//        compiler.addInstruction(new SEQ(register1));
         //________________________
         // On revient placer ce qu'il manque avec les infos du prog
         // Début de la méthode = label du nom de la méthode

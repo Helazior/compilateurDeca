@@ -45,7 +45,6 @@ public class MethodCall extends AbstractExpr {
     @Override
     protected void codeGenExpr(DecacCompiler compiler){
         RegisterManager regMan = compiler.getRegMan();
-        // on push tous les registres dans la pile pour qu'ils ne gênent pas pendant le calcul d'argument
         objet.codeGenExpr(compiler);
         for (AbstractExpr field : parametres.getList()) {
             field.codeGenExpr(compiler);
@@ -54,7 +53,8 @@ public class MethodCall extends AbstractExpr {
         regMan.prepareMethodCall(parametres.size() + 1);
 
         // On saute au label de la méthode
-        compiler.addInstruction(new BSR(new Label("methodBody." + getClass().getName() + "." + nomDeMethode)));
+
+        compiler.addInstruction(new BSR(new Label("methodBody." + objet.getType().getName() + "." + nomDeMethode)));
 
         // On remet la stack comme avant l'appel de méthode
         compiler.addInstruction(new SUBSP(parametres.size() + 2)); // + this * 2: in the bottom and the top

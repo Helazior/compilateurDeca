@@ -6,6 +6,8 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.Line;
+
 import java.io.PrintStream;
 
 public class MethodAsmBody extends AbstractMethodBody{
@@ -29,7 +31,7 @@ public class MethodAsmBody extends AbstractMethodBody{
 
     protected void codeGenMethod(DecacCompiler compiler,
             ListDeclParam args) throws UnsupportedOperationException{
-        throw new UnsupportedOperationException();
+        compiler.add(new Line(corps));
     }
 
     @Override
