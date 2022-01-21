@@ -734,8 +734,12 @@ list_imports returns[ListDeclImport tree]
 
 import_decl returns[AbstractProgram tree]
     : STRING {
-        $tree = getDecacCompiler().compileImport($STRING.text);
-        assert($tree != null);
-        setLocation($tree, $STRING);
+        try{
+            $tree = getDecacCompiler().compileImport($STRING.text);
+            assert($tree != null);
+            setLocation($tree, $STRING);
+        }  catch (RuntimeException e){
+            throw new InvalidFile(this, $ctx);
+        }
     }
     ;
