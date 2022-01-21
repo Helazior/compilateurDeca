@@ -649,7 +649,7 @@ decl_field [AbstractIdentifier t, Visibility v] returns[AbstractDeclField tree]
 
 decl_method returns[DeclMethod tree]
 @init   {
-            MethodNoBody emptyMethod = new MethodNoBody();
+            EmptyMethodBody emptyMethod = new EmptyMethodBody();
         }
     : type ident OPARENT params=list_params CPARENT (b=block {
             setLocation(emptyMethod, $b.start);

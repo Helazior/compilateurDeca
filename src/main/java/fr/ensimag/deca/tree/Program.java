@@ -53,11 +53,11 @@ public class Program extends AbstractProgram {
     public void verifyProgram(DecacCompiler compiler) throws ContextualError {
         LOG.debug("verify program: start");
         //TODO: les 3 passes
-        //classes.verifyListClass(compiler);
+        classes.verifyListClass(compiler);
 
-        //classes.verifyListClassMembers(compiler);
+        classes.verifyListClassMembers(compiler);
 
-        //classes.verifyListClassBody(compiler);
+        classes.verifyListClassBody(compiler);
 
         //TODO: check classes
 

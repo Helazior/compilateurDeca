@@ -1,4 +1,4 @@
-provided/printHex.deca
+tests/printHex.deca
 
 0x1.5p+4
 0x1.99999ap-2

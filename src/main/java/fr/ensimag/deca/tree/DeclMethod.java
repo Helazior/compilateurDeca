@@ -27,16 +27,16 @@ import org.apache.commons.lang.Validate;
  * @date 14/01/2022
  */
 public class DeclMethod extends AbstractDeclMethod {
-    private AbstractIdentifier type;
-    private AbstractIdentifier name;
+    private AbstractIdentifier returnType;
+    private AbstractIdentifier method;
     private ListDeclParam parameters;
-    private AbstractMethodBody method;
+    private AbstractMethodBody methodBody;
 
-    public DeclMethod(AbstractIdentifier type, AbstractIdentifier name, ListDeclParam parameters, AbstractMethodBody method){
-        this.type = type;
-        this.name = name;
-        this.parameters = parameters;
+    public DeclMethod(AbstractIdentifier returnType, AbstractIdentifier method, ListDeclParam parameters, AbstractMethodBody methodBody){
+        this.returnType = returnType;
         this.method = method;
+        this.parameters = parameters;
+        this.methodBody = methodBody;
     }
 
     //TODO
@@ -45,7 +45,7 @@ public class DeclMethod extends AbstractDeclMethod {
         RegisterManager regMan = compiler.getRegMan();
         // TODO: récupérer les arguments de la méthode dans la pile
         // On place le label d'erreur à la fin du fichier
-        if (!type.getType().isFloat()) {
+        if (!returnType.getType().isFloat()) {
             compiler.setNoVoidMethodExist();
         }
 
@@ -53,7 +53,7 @@ public class DeclMethod extends AbstractDeclMethod {
         method.codeGenMethod(compiler, parameters);
         // goto return
         // Si c'est pas un void et qu'on n'a pas eu de return on va à une erreur
-        if (!type.getType().isVoid()) {
+        if (!returnType.getType().isVoid()) {
             compiler.addInstruction(new BRA(new Label ("no_return_error")));
         }
         compiler.addLabel(new Label("return" + compiler.getNbReturn()));
@@ -61,7 +61,7 @@ public class DeclMethod extends AbstractDeclMethod {
         //________________________
         // On revient placer ce qu'il manque avec les infos du prog
         // Début de la méthode = label du nom de la méthode
-        compiler.addFirst(new Line(new Label("bodyMethod." + getClass().getName() + "." + name.getName())));
+        compiler.addFirst(new Line(new Label("bodyMethod." + getClass().getName() + "." + method.getName())));
         // On empile tous les registres qu'on veut utiliser au début de la méthode et on les restaure à la fin
         regMan.restoreRegisters();
 
@@ -78,21 +78,21 @@ public class DeclMethod extends AbstractDeclMethod {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        type.decompile(s);
+        returnType.decompile(s);
         s.print(" ");
-        name.decompile(s);
+        method.decompile(s);
         s.print(" (");
         parameters.decompile(s);
         s.print(") ");
-        method.decompile(s);
+        methodBody.decompile(s);
     }
 
 
     @Override
     protected void verifyMethodSignature(DecacCompiler compiler, AbstractIdentifier superClass,
             AbstractIdentifier currentClass) throws ContextualError {
-        Type t = type.verifyType(compiler);
-        Symbol methodName = name.getName();
+        Type t = returnType.verifyType(compiler);
+        Symbol methodName = method.getName();
         Signature sig = parameters.verifyListParamSignature(compiler);
 
         ClassDefinition classDef = (ClassDefinition)compiler.getType(currentClass.getName());
@@ -102,7 +102,7 @@ public class DeclMethod extends AbstractDeclMethod {
             MethodDefinition superMethod = (MethodDefinition)superEnvExp.get(methodName);
 
             int index = superMethod.getIndex();
-            name.setDefinition(new MethodDefinition(t, getLocation(), sig, index));
+            method.setDefinition(new MethodDefinition(t, getLocation(), sig, index));
 
             Validate.isTrue(sig == superMethod.getSignature(),
                     "The method signature doesn't match its parent");
@@ -110,11 +110,11 @@ public class DeclMethod extends AbstractDeclMethod {
                     "the returned type of this method should be a sub-type of the one of its parent ");
         } else {
             int index = classDef.getSuperClass().getNumberOfFields() + classDef.getNumberOfFields();
-            name.setDefinition(new MethodDefinition(t, getLocation(), sig, index));
+            method.setDefinition(new MethodDefinition(t, getLocation(), sig, index));
         }
 
         try{
-            classDef.getMembers().declare(methodName, name.getMethodDefinition());
+            classDef.getMembers().declare(methodName, method.getMethodDefinition());
         } catch (DoubleDefException e) {
             throw new ContextualError(e + " This varibale is already defined in this context", getLocation());
         }
@@ -122,31 +122,35 @@ public class DeclMethod extends AbstractDeclMethod {
 
     @Override
     protected void verifyMethodBody(DecacCompiler compiler,
-            EnvironmentExp localEnv, AbstractIdentifier currentClass)
-            throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+            AbstractIdentifier currentClass) throws ContextualError {
+        Type ret = returnType.verifyType(compiler);
+
+        ClassDefinition classDef = (ClassDefinition)compiler.getType(currentClass.getName());
+        EnvironmentExp methodEnv = new EnvironmentExp(classDef.getMembers());
+        parameters.verifyListParamType(compiler, methodEnv);
+        methodBody.verifyMethodBody(compiler, methodEnv, currentClass, ret);
     }
 
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        type.prettyPrint(s, prefix, false);
-        name.prettyPrint(s, prefix, false);
+        returnType.prettyPrint(s, prefix, false);
+        method.prettyPrint(s, prefix, false);
         parameters.prettyPrint(s, prefix, false);
-        method.prettyPrint(s, prefix, true);
+        methodBody.prettyPrint(s, prefix, true);
     }
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        type.iter(f);
-        name.iter(f);
-        parameters.iter(f);
+        returnType.iter(f);
         method.iter(f);
+        parameters.iter(f);
+        methodBody.iter(f);
     }
 
     @Override
     public AbstractIdentifier getName() {
-        return this.name;
+        return this.method;
     }
 
 }

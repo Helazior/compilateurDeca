@@ -18,6 +18,7 @@ public class Main extends AbstractMain {
     
     private ListDeclVar declVariables;
     private ListInst insts;
+
     public Main(ListDeclVar declVariables,
             ListInst insts) {
         Validate.notNull(declVariables);
@@ -51,6 +52,7 @@ public class Main extends AbstractMain {
         s.println("{");
         s.indent();
         declVariables.decompile(s);
+        s.println();
         insts.decompile(s);
         s.unindent();
         s.println("}");
