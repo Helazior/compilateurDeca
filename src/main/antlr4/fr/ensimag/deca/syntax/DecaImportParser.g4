@@ -727,7 +727,7 @@ import_decl returns[AbstractProgram tree]
             $tree = getDecacCompiler().compileImport($STRING.text);
             assert($tree != null);
             setLocation($tree, $STRING);
-        }  catch (RuntimeException e){
+        }  catch (java.lang.AssertionError e){
             throw new InvalidFile(this, $ctx);
         }
     }
