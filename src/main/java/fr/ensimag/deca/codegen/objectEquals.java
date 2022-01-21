@@ -20,7 +20,7 @@ public class objectEquals {
         //________________________
         // On revient placer ce qu'il manque avec les infos du prog
         // Début de la méthode = label du nom de la méthode
-        compiler.addFirst(new Line(new Label("methodbody.object.equals")));
+        compiler.addFirst(new Line(new Label("methodBody.object.equals")));
         // On empile tous les registres qu'on veut utiliser au début de la méthode et on les restaure à la fin
         regMan.restoreRegisters();
 

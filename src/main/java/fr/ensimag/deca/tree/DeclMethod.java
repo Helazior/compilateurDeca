@@ -67,7 +67,7 @@ public class DeclMethod extends AbstractDeclMethod {
         // On empile tous les registres qu'on veut utiliser au début de la méthode et on les restaure à la fin
         regMan.restoreRegisters();
         // Début de la méthode = label du nom de la méthode
-        compiler.addFirst(new Line(new Label("bodyMethod." + currentClass.getName() + "." + method.getName())));
+        compiler.addFirst(new Line(new Label("methodBody." + currentClass.getName() + "." + method.getName())));
 
         // goto erreur return en cas de non return
         // On return
