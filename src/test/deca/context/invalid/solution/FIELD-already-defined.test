@@ -1,0 +1,3 @@
+tests/FIELD-already-defined.deca
+
+FIELD-already-defined.deca:14:10: This variable is already defined in this context

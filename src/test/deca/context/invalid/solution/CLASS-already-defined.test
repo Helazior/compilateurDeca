@@ -1,0 +1,3 @@
+tests/CLASS-already-defined.deca
+
+CLASS-already-defined.deca:15:6: This class is already defined in this context

@@ -19,17 +19,20 @@ import org.apache.log4j.Logger;
  * @date 17/01/2022
  */
 public class New extends AbstractExpr {
-    private AbstractIdentifier NomDeClasse;
+    private AbstractIdentifier className;
 
     public New(AbstractIdentifier i) {   
-        this.NomDeClasse = i;
+        this.className = i;
     }
 
-//TODO
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-                throw new UnsupportedOperationException("not yet implemented");
+        Type t = compiler.getType(className.getName()).getType();
+        if(!t.isClass()){
+            throw new ContextualError("the 'New' symbol can only be use to defined Classes", getLocation());
+        }
+        return t;
     }
 
     @Override
@@ -40,19 +43,19 @@ public class New extends AbstractExpr {
     @Override
     public void decompile(IndentPrintStream s) {
         s.print("new ");
-        NomDeClasse.decompile(s);
+        className.decompile(s);
         s.print("()");
         
     }
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        NomDeClasse.iter(f);
+        className.iter(f);
     }
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        NomDeClasse.prettyPrint(s, prefix, true);
+        className.prettyPrint(s, prefix, true);
     }
 
 }

@@ -24,7 +24,7 @@ public abstract class Type {
     public abstract boolean sameType(Type otherType);
 
     public boolean isSubTypeOf(Type otherType){
-        if(otherType instanceof ClassType){
+        if(otherType instanceof ClassType && this instanceof ClassType){
             Validate.isTrue(this instanceof ClassType);
             return ((ClassType)this).isSubClassOf((ClassType)otherType);
         } else {
@@ -90,4 +90,5 @@ public abstract class Type {
             throws ContextualError {
         throw new ContextualError(errorMessage, l);
     }
+    
 }

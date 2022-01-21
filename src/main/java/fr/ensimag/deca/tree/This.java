@@ -20,7 +20,11 @@ import org.apache.log4j.Logger;
  */
 public class This extends AbstractExpr {
     private static final Logger LOG = Logger.getLogger(StringLiteral.class);
-    //l’attribut est vrai si et seulement si le nœud a été ajouté pendant l’analyse syntaxique sans que le programme source ne contienne le mot clé this (par exemple, m(); pour dire this.m();).
+    /**
+     * l’attribut est vrai si et seulement si le nœud a été ajouté pendant l’analyse syntaxique 
+     * sans que le programme source ne contienne le mot clé this (par exemple, m(); pour dire this.m();).
+    */
+
     private boolean ajouteChaine;
 
     public This(boolean b) {
@@ -32,8 +36,12 @@ public class This extends AbstractExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-                throw new UnsupportedOperationException("not yet implemented");
-        
+        if(currentClass == null){
+            throw new ContextualError("Cannot use the symbol 'this' outside a class", getLocation());
+        }
+
+        setType(currentClass.getType());
+        return getType();
     }
 
     @Override

@@ -4,6 +4,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import java.io.PrintStream;
@@ -76,22 +77,33 @@ public class DeclClass extends AbstractDeclClass {
 
 
     @Override
-    protected void verifyClass(DecacCompiler compiler) throws ContextualError {
+    protected void verifyClass(DecacCompiler compiler) throws ContextualError{
         Symbol name = currentClass.getName();
         Symbol superName = superClass.getName();
 
-        ClassDefinition superDef = (ClassDefinition)compiler.getType(superName);
-        ClassType classType = new ClassType(name, getLocation(), superDef);
-        compiler.createType(currentClass.getName(), classType.getDefinition());
+        TypeDefinition def = compiler.getType(superName);
 
-        Validate.isTrue(compiler.getType(superName).isClass());
+        if(def != null && !def.isClass()){
+            throw new ContextualError("the parent of this class should be a class", getLocation());
+        }
+        ClassType classType = new ClassType(name, getLocation(), (ClassDefinition)def);
+
+        currentClass.setDefinition(classType.getDefinition());
+        try {
+            compiler.createType(currentClass.getName(), classType.getDefinition());
+        } catch (ContextualError e) {
+            throw new ContextualError("This class is already defined in this context", getLocation());
+        }
     }
 
     @Override
     protected void verifyClassMembers(DecacCompiler compiler)
             throws ContextualError {
-        listDeclField.verifyListFieldVisibility(compiler, superClass, currentClass);
-        listDeclMethod.verifyListMethodSignature(compiler, superClass, currentClass);
+        ClassDefinition classDef = (ClassDefinition)compiler.getType(currentClass.getName());
+        ClassDefinition superClassDef = (ClassDefinition)compiler.getType(superClass.getName());
+
+        listDeclField.verifyListFieldVisibility(compiler, superClassDef, classDef);
+        listDeclMethod.verifyListMethodSignature(compiler, superClassDef, classDef);
     }
 
     @Override

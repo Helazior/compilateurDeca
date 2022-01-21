@@ -5,6 +5,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.context.Type;
@@ -14,6 +15,7 @@ import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Line;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.RTS;
+import net.bytebuddy.description.type.TypeDefinition.SuperClassIterator;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 import java.io.PrintStream;
@@ -89,34 +91,40 @@ public class DeclMethod extends AbstractDeclMethod {
 
 
     @Override
-    protected void verifyMethodSignature(DecacCompiler compiler, AbstractIdentifier superClass,
-            AbstractIdentifier currentClass) throws ContextualError {
+    protected void verifyMethodSignature(DecacCompiler compiler, ClassDefinition superClass,
+            ClassDefinition currentClass) throws ContextualError {
         Type t = returnType.verifyType(compiler);
         Symbol methodName = method.getName();
         Signature sig = parameters.verifyListParamSignature(compiler);
 
-        ClassDefinition classDef = (ClassDefinition)compiler.getType(currentClass.getName());
-        EnvironmentExp superEnvExp = classDef.getSuperClass().getMembers();
+        int index = superClass.getNumberOfMethods() + currentClass.getNumberOfMethods();
 
-        if(superEnvExp.get(methodName) != null){
-            MethodDefinition superMethod = (MethodDefinition)superEnvExp.get(methodName);
+        ExpDefinition superExp = superClass.getMembers().get(methodName);
+        if(superExp != null){
+            if(!superExp.isMethod()){
+                throw new ContextualError("This expression cannot be defined as a method " +
+                "because its parent already define it another way", getLocation());
+            }
 
-            int index = superMethod.getIndex();
-            method.setDefinition(new MethodDefinition(t, getLocation(), sig, index));
+            MethodDefinition superMethod = (MethodDefinition)superExp;
+            index = superMethod.getIndex();
 
-            Validate.isTrue(sig == superMethod.getSignature(),
-                    "The method signature doesn't match its parent");
-            Validate.isTrue(t.isSubTypeOf(superMethod.getType()),
-                    "the returned type of this method should be a sub-type of the one of its parent ");
-        } else {
-            int index = classDef.getSuperClass().getNumberOfFields() + classDef.getNumberOfFields();
-            method.setDefinition(new MethodDefinition(t, getLocation(), sig, index));
+            if(!t.isSubTypeOf(superMethod.getType())){
+                throw new ContextualError("the returned type of this method should be " +
+                "a sub-type of the one of its parent ", getLocation());
+            }
+            if(!sig.equals(superMethod.getSignature())){
+                throw new ContextualError("The method signature doesn't match its parent", getLocation());
+            }
+
         }
 
+        method.setDefinition(new MethodDefinition(t, getLocation(), sig, index));
+
         try{
-            classDef.getMembers().declare(methodName, method.getMethodDefinition());
+            currentClass.getMembers().declare(methodName, method.getMethodDefinition());
         } catch (DoubleDefException e) {
-            throw new ContextualError(e + " This varibale is already defined in this context", getLocation());
+            throw new ContextualError("This varibale is already defined in this context", getLocation());
         }
     }
 

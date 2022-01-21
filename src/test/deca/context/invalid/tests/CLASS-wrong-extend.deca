@@ -1,0 +1,15 @@
+// Description:
+//    Affectation et typage
+//
+// Resultats:
+//    Ligne 11: Extend a non-class objet
+// 
+// Historique:
+//    cree le 01/01/2022
+
+
+class Test extends int{
+   int attributTest;
+}
+
+

@@ -25,9 +25,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import fr.ensimag.deca.codegen.RegisterManager;
-
-import fr.ensimag.deca.context.EnvironmentExp;
-
 import fr.ensimag.deca.context.*;
 /**
  * Decac compiler instance.
@@ -290,6 +287,10 @@ public class DecacCompiler {
         typeDefList.add(new TypeDefinition(new BooleanType(typeTable.create("boolean")), null));
         typeDefList.add(new TypeDefinition(new VoidType(typeTable.create("void")), null));
 
+        ClassType objectType = new ClassType(typeTable.create("Object"), null, null);
+        objectType.getDefinition().incNumberOfMethods();
+        typeDefList.add(objectType.getDefinition());
+
         for(TypeDefinition typeDef : typeDefList){
             createType(typeDef.getType().getName(), typeDef);
         }
@@ -297,6 +298,8 @@ public class DecacCompiler {
 
     public void createType(Symbol symbol, TypeDefinition typeDef) throws ContextualError{
         try {
+            //System.out.println("----------------------------------------------------\n");
+            //System.out.println(typeEnv.toString() + "\n");
             typeEnv.declare(symbol, typeDef);
         } catch (EnvironmentType.DoubleDefException e) {
             throw new ContextualError(e + " This type is already defined", null);

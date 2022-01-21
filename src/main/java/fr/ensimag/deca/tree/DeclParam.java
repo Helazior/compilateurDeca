@@ -28,7 +28,6 @@ public class DeclParam extends AbstractDeclParam {
         this.type = type;
     }
 
-    //TODO
     @Override
     public void decompile(IndentPrintStream s) {
         type.decompile(s);

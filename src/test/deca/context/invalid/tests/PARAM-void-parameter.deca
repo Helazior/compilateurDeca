@@ -1,0 +1,16 @@
+// Description:
+//    Affectation et typage
+//
+// Resultats:
+//    Ligne 18: Wrong signature
+// 
+// Historique:
+//    cree le 01/01/2022
+
+
+class Test {
+   int IntVar(void param1, int param2){
+      //nothing
+   }
+}
+
