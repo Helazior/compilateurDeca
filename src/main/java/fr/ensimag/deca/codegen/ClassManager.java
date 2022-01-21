@@ -15,8 +15,35 @@ public class ClassManager {
     public ClassManager(DecacCompiler compiler, ListDeclClass classes) {
         this.compiler = compiler;
         EnvironmentType types = compiler.getTypeEnv();
+        IMAProgram classTableInitsFns = new IMAProgram();
+        IMAProgram classTableInitsMain = new IMAProgram();
+
+        classTableInitsFns.addComment("----------------------------------------");
+        classTableInitsFns.addComment("    Construction tables des methodes");
+        classTableInitsFns.addComment("----------------------------------------");
+        classTableInitsFns.addComment("----------------------------------------");
+        classTableInitsFns.addComment("Object");
+        classTableInitsFns.addLabel(new Label("classTableInit.Object"));
+        classTableInitsFns.addInstruction(new LOAD(new NullOperand(), Register.R1));
+        classTableInitsFns.addInstruction(new STORE(
+            Register.R1,
+            new RegisterOffset(1, Register.SP)));
+
+        classTableInitsFns.addInstruction(new LOAD(
+            new LabelOperand(new Label("methodBody.Object.equals")),
+            Register.R1));
+        classTableInitsFns.addInstruction(new STORE(
+            Register.R1, new RegisterOffset(2, Register.SP)));
+
+        // Compute table size and build function
+        int tablesSize = 3;
         for (AbstractDeclClass classDef : classes.getList()) {
-            // TODO
+            int classTableSize = classDef.codeGenClassTableFn(compiler, classTableInitsFns, tablesSize);
+            tablesSize += classTableSize;
+        }
+        // Call functions and build super reference
+        for (AbstractDeclClass classDef : classes.getList()) {
+            classDef.codeGenClassTableMain(compiler, classTableInitsMain);
         }
     }
 
