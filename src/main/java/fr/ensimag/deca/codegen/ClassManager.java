@@ -23,11 +23,10 @@ public class ClassManager {
         IMAProgram classTableInitsFns = new IMAProgram();
         IMAProgram classTableInitsMain = new IMAProgram();
 
-        classTableInitsFns.addComment("----------------------------------------");
+        classTableInitsFns.addComment("---------------------------------------------------");
         classTableInitsFns.addComment("    Construction tables des methodes");
-        classTableInitsFns.addComment("----------------------------------------");
-        classTableInitsFns.addComment("----------------------------------------");
-        classTableInitsFns.addComment("Object");
+        classTableInitsFns.addComment("---------------------------------------------------");
+        classTableInitsFns.addComment("---------------------Object------------------------");
         classTableInitsFns.addLabel(new Label("classTableInit.Object"));
         classTableInitsFns.addInstruction(new LOAD(new NullOperand(), Register.R1));
         classTableInitsFns.addInstruction(new STORE(
