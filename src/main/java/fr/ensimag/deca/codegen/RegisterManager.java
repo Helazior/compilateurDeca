@@ -58,7 +58,7 @@ public class RegisterManager {
         this.stackOffset = 0;
     }
 
-    public void popInStack(int nbParameters) {
+    public void prepareMethodCall(int nbParameters) {
         throw new UnsupportedOperationException("TODO");
     }
 

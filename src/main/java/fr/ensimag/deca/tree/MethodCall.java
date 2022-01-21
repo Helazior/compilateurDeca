@@ -9,6 +9,7 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.SUBSP;
@@ -48,11 +49,15 @@ public class MethodCall extends AbstractExpr {
         for (AbstractExpr field : parametres.getList()) {
             field.codeGenExpr(compiler);
         }
-        regMan.prepareMethodCall(parametres.size());
+        // Il y a this en plus
+        regMan.prepareMethodCall(parametres.size() + 1);
 
         // On saute au label de la méthode
         compiler.addInstruction(new BRA(new Label("bodyMethod." + getClass().getName() + "." + nomDeMethode)));
+
+        // On remet la stack comme avant l'appel de méthode
         compiler.addInstruction(new SUBSP(parametres.size() + 2)); // + this * 2: in the bottom and the top
+
     }
 
     @Override
