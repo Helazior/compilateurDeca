@@ -41,7 +41,7 @@ public class ClassDefinition extends TypeDefinition {
 
     private int numberOfFields = 0;
     private int numberOfMethods = 0;
-    private int methodTablePlace = 0;
+    private int methodTablePlace = 1;
 
     @Override
     public boolean isClass() {
@@ -67,7 +67,7 @@ public class ClassDefinition extends TypeDefinition {
     }
 
     public void setTablePlace(int p) {
-        assert(methodTablePlace == 0);
+        assert(methodTablePlace == 1);
         methodTablePlace = p;
     }
     public int getTablePlace() {
