@@ -43,7 +43,7 @@ public class MethodCall extends AbstractExpr {
     }
 
     @Override
-    public void codeGenExpr(DecacCompiler compiler){
+    public void codeGenExpr(DecacCompiler compiler) {
         RegisterManager regMan = compiler.getRegMan();
         objet.codeGenExpr(compiler);
         for (AbstractExpr field : parametres.getList()) {

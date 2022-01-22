@@ -40,13 +40,13 @@ public class Selection extends AbstractLValue {
 //TODO
 
     @Override
-    public void codeGenExpr(DecacCompiler compiler) throws ContextualError {
+    public void codeGenExpr(DecacCompiler compiler) {
         objet.codeGenExpr(compiler);
         this.nomDAttribut.codeGenSelectIdent(compiler);
     }
 
     @Override
-    protected void codeGenStoreLValue(DecacCompiler compiler) throws ContextualError {
+    protected void codeGenStoreLValue(DecacCompiler compiler) {
         RegisterManager regMan = compiler.getRegMan();
         GPRegister regResultat = regMan.pop();
         objet.codeGenExpr(compiler);
@@ -55,7 +55,7 @@ public class Selection extends AbstractLValue {
         regMan.give(regResultat);
     }
 
-    protected void codeGenGetLValue(DecacCompiler compiler) throws ContextualError {
+    protected void codeGenGetLValue(DecacCompiler compiler) {
         objet.codeGenExpr(compiler);
     }
 

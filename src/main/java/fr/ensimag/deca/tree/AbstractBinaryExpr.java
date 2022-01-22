@@ -64,7 +64,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         codeGenOp(compiler, register0, register1);
     }
 
-    public void codeGenAnd(DecacCompiler compiler, GPRegister register1) {
+    public void codeGenAnd(DecacCompiler compiler, GPRegister register1) throws ContextualError {
         RegisterManager regMan = compiler.getRegMan();
         compiler.addComment("Start And");
         String falseLabel = "false_and_" + compiler.getNumAnd();
@@ -98,7 +98,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     }
 
 
-        public void codeGenOr(DecacCompiler compiler, GPRegister register1) { // OR si on utilise le not
+        public void codeGenOr(DecacCompiler compiler, GPRegister register1) throws ContextualError { // OR si on utilise le not
             RegisterManager regMan = compiler.getRegMan();
             compiler.addComment("Start Or");
             String trueLabel = "true_or_" + compiler.getNumOr();
@@ -133,7 +133,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
 
 
     @Override
-    public void codeGenExpr(DecacCompiler compiler) throws ContextualError {
+    public void codeGenExpr(DecacCompiler compiler) {
         RegisterManager regMan = compiler.getRegMan();
         //super.codeGenExpr(compiler);
         AbstractExpr left = getLeftOperand();
