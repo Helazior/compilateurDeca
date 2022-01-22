@@ -10,11 +10,15 @@ import org.apache.log4j.Logger;
  * @author gl60
  * @date 12/01/2022
  */
-public class ListDeclImport extends TreeList<AbstractProgram> {
+public class ListDeclImport extends TreeList<AbstractDeclImport> {
 
     //TODO
     @Override
     public void decompile(IndentPrintStream s) {
+        for (AbstractDeclImport declImport : getList()) {
+            declImport.decompile(s);
+            s.println();
+        }
     }
 
 }

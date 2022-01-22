@@ -27,6 +27,7 @@ options {
     import fr.ensimag.deca.tree.*;
     import java.io.PrintStream;
     import fr.ensimag.deca.DecacCompiler;
+    import fr.ensimag.deca.syntax.*;
     import fr.ensimag.deca.tools.SymbolTable.Symbol;
 }
 
@@ -503,18 +504,26 @@ type returns[AbstractIdentifier tree]
 // MODIFIED
 literal returns[AbstractExpr tree]
     : INT {
-        assert($INT.text != null);
-        String value = $INT.text;
-        int valint = Integer.parseInt(value);
-        $tree = new IntLiteral(valint);
-        setLocation($tree, $INT);
+        try {
+            assert($INT.text != null);
+            String value = $INT.text;
+            int valint = Integer.parseInt(value);
+            $tree = new IntLiteral(valint);
+            setLocation($tree, $INT);
+        } catch (NumberFormatException e) {
+            throw new InvalidInt(this, $ctx);
+        }
         }
     | FLOAT {
-        assert($FLOAT.text != null);
-        String value = $FLOAT.text;
-        float valfloat = Float.parseFloat(value);
-        $tree = new FloatLiteral(valfloat);
-        setLocation($tree, $FLOAT);
+        try {
+            assert($FLOAT.text != null);
+            String value = $FLOAT.text;
+            float valfloat = Float.parseFloat(value);
+            $tree = new FloatLiteral(valfloat);
+            setLocation($tree, $FLOAT);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidFloat(this, $ctx);
+        }
         }
     | STRING {
         assert($STRING.text != null);
@@ -530,12 +539,10 @@ literal returns[AbstractExpr tree]
         $tree = new BooleanLiteral(false);
         setLocation($tree, $FALSE);
         }
-    //TODO
     | THIS {
         $tree = new This(false);
         setLocation($tree, $THIS);
         }
-    //TODO
     | NULL {
         $tree = new Null();
         setLocation($tree, $NULL);
@@ -714,10 +721,16 @@ list_imports returns[ListDeclImport tree]
     )*
     ;
 
-import_decl returns[AbstractProgram tree]
+import_decl returns[AbstractDeclImport tree]
     : STRING {
-        $tree = getDecacCompiler().compileImport($STRING.text);
-        assert($tree != null);
-        setLocation($tree, $STRING);
+        try{
+            String address = $STRING.text;
+            AbstractProgram program = getDecacCompiler().compileImport(address);
+            $tree = new DeclImport(address, program);
+            assert($tree != null);
+            setLocation($tree, $STRING);
+        }  catch (java.lang.AssertionError e){
+            throw new InvalidFile(this, $ctx);
+        }
     }
     ;

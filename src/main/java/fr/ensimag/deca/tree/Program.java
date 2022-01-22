@@ -38,7 +38,9 @@ public class Program extends AbstractProgram {
         this.main = main;
     }
 
-
+    public ListDeclImport getImports() {
+        return imports;
+    }
     public ListDeclClass getClasses() {
         return classes;
     }
@@ -135,6 +137,9 @@ public class Program extends AbstractProgram {
 
     @Override
     public void decompile(IndentPrintStream s) {
+        if (imports != null){
+            getImports().decompile(s);
+        }
         getClasses().decompile(s);
         getMain().decompile(s);
     }

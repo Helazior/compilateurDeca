@@ -604,10 +604,6 @@ public class DecacCompiler {
         }
         assert(prog.checkAllLocations());
 
-        if(compilerOptions.getDecompile()){
-            prog.decompile(out);
-            return prog;
-        }
         return prog;
     }
 
