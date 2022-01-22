@@ -186,8 +186,11 @@ public class DeclClass extends AbstractDeclClass {
     private void initAttributs(DecacCompiler compiler) throws DecacFatalError {
         // TODO: itérer sur les parents si extend !
         RegisterManager regMan = compiler.getRegMan();
-        compiler.addComment("----------- Initialisation des champs de " + currentClass.getName());
-        compiler.addLabel(new Label("init." + currentClass.getName()));
+        compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
+        compiler.addInstruction(new LOAD(new RegisterOffset(
+                ((ClassDefinition) currentClass.getDefinition()).getTablePlace(), Register.GB
+            ), Register.R0));
+        compiler.addInstruction(new STORE( Register.R0, new RegisterOffset(0, Register.R1)));
         for (AbstractDeclField declField : listDeclField.getList()) {
             // On déclare chaque attribut :
             if (declField.getInitialization().isInitialized()) {
@@ -204,12 +207,14 @@ public class DeclClass extends AbstractDeclClass {
                     compiler.addInstruction(new LOAD(null, Register.R0));
                 }
             }
-
-            compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
             compiler.getRegMan().setField(Register.R1, declField.getName(), currentClass.getDefinition(), Register.R0, getLocation());
         }
 
         // On revient au New
+        regMan.restoreRegisters();
+        compiler.addFirst(new Line("----------- Initialisation des champs de "
+            + currentClass.getName()));
+        compiler.addLabel(new Label("init." + currentClass.getName()));
         compiler.addInstruction(new RTS());
     }
 
@@ -219,7 +224,9 @@ public class DeclClass extends AbstractDeclClass {
         compiler.addComment("                  Classe " + currentClass.getName());
         compiler.addComment("--------------------------------------------------");
         // On initialise tous les attributs :
+        IMAProgram oldProgram = compiler.remplaceProgram(new IMAProgram());
         initAttributs(compiler);
+        compiler.concatenateBeginningProgram(oldProgram);
         listDeclMethod.codeGenListDeclMethod(compiler, currentClass);
     }
 
