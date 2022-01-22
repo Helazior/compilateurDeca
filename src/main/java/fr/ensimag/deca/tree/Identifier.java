@@ -4,6 +4,7 @@ import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
@@ -155,6 +156,7 @@ public class Identifier extends AbstractIdentifier {
 
     @Override
     public void setDefinition(Definition definition) {
+        assert(definition != null);
         this.definition = definition;
     }
 
@@ -191,10 +193,24 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyType(DecacCompiler compiler) throws ContextualError {
         Type t = compiler.getType(name.getName());
-        if(t == null) {throw new ContextualError("the type "+name.getName()+" is not regognised", getLocation());}
+        if(t == null) {
+            throw new ContextualError("the type "+name.getName()+" is not recognised", getLocation());
+        }
         setType(t);
         setDefinition(new TypeDefinition(getType(), getLocation()));
         return getType();
+    }
+
+    @Override
+    public ExpDefinition verifyIdent(DecacCompiler compiler, EnvironmentExp envExp)
+            throws ContextualError {
+        ExpDefinition expDef = envExp.get(name);
+        if(expDef == null) {
+            throw new ContextualError("the expression "+name+" is not regognised",
+                getLocation());
+        }
+        setDefinition(expDef);
+        return expDef;
     }
 
     @Override
@@ -217,12 +233,12 @@ public class Identifier extends AbstractIdentifier {
      * Pour utiliser l'attribut d'un objet. est appelé dans la class Selection
      * @param compiler
      */
-    protected void codeGenSelectIdent(DecacCompiler compiler) throws ContextualError {
+    protected void codeGenSelectIdent(DecacCompiler compiler) throws DecacFatalError {
         RegisterManager regMan = compiler.getRegMan();
         Symbol name = getName(); // On charge l'attribut
         GPRegister reg = regMan.pop(); // On charge l'objet
         // TODO : rajouter gestion erreur
-        GPRegister regDest = regMan.getField(reg, name, getType(), getLocation());
+        GPRegister regDest = regMan.getField(reg, name, getDefinition(), getLocation());
         regMan.giveAndPush(regDest);
     }
 
