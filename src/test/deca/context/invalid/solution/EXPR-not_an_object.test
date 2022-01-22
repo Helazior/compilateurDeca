@@ -1,3 +1,3 @@
-tests/EXPR-not_a_class.deca
+tests/EXPR-not_an_object.deca
 
-EXPR-not_a_class.deca:17:4: Type int is not a class type, and has thus no field.
+EXPR-not_an_object.deca:17:4: Type int is not a class type, and has thus no field.
