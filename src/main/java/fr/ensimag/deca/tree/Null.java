@@ -33,7 +33,7 @@ public class Null extends AbstractExpr {
 
     @Override
     protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
-       
+        throw new UnsupportedOperationException("Null is not printable");
     }
 
     @Override

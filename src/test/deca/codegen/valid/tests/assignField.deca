@@ -13,8 +13,8 @@
 
 class ClassName {
     int x = 3;
+    int y;
     float z = 4.4;
-    int equals;
     int s() {
 
     }
@@ -23,20 +23,14 @@ class ClassName {
     }
 }
 
-class C extends ClassName {
-    int t() {
-        
-    }
-}
-
 {
     ClassName a = new ClassName();
     println(a.x);
-    a.equals(a);
+    a.x = 4;
     println(a.x);
     println(a.x = 5);
     println(a.x + 3); // 8
 
-    //a.y = a.x + 4;
-    //println(a.y);
+    a.y = a.x + 4;
+    println(a.y);
 }
