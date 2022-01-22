@@ -19,5 +19,5 @@ class ClassName {
     a.y = a.x + 4; // 7
     int z = 1;
 
-    println(methodAddition(a.x, a.y, z, 20));
+    println(a.methodAddition(a.x, a.y, z, 20));
 }
