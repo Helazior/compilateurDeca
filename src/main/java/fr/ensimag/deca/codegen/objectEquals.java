@@ -12,7 +12,6 @@ public class objectEquals {
 
         // ________________________corps du programme___________________________
         compiler.addComment("------ Code d'Equals dans la classe Object ------");
-        // TODO : à tester
         //    public boolean equals (Object other) {
         //        return this == other;
         //    }

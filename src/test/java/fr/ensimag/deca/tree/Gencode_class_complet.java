@@ -21,7 +21,6 @@ import fr.ensimag.deca.tools.SymbolTable;
 public class Gencode_class_complet {
 
     public static AbstractProgram initTest1() {
-        // TODO: je sais pas comment on utilise les fiels dans les méthodes, à voir demain
 
         // print(3 + 2 + 5);
         SymbolTable st = new SymbolTable();

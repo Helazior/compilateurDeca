@@ -30,8 +30,6 @@ public class And extends AbstractOpBool {
      */
     @Override
     public void codeGenOp(DecacCompiler compiler, GPRegister register1) throws DecacFatalError {
-        // TODO:  avec l'extension, nommer les labels différemment
-        // TODO: FACTORISER LE CODE ! 2 fois le même
         if (!compiler.getIsInNotOp()) { // AND
             super.codeGenAnd(compiler, register1);
         } else { // OR si on utilise le not

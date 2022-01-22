@@ -562,7 +562,6 @@ public class DecacCompiler {
         String destFile = null;
         // Done: calculer le nom du fichier .ass à partir du nom du
         // Done: FAIRE: fichier .deca.
-        // TODO: est-ce qu'il faut vérifier le format du nom en entrée ?
 
         PrintStream err = System.err;
         PrintStream out = System.out;
