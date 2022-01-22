@@ -2,10 +2,10 @@
 //    Affectation et typage
 //
 // Resultats:
-//    Ligne 12: initialisation d'un attribut à une valeur de type incompatible.
+//    Ligne 16: utilisation de this hors d'une déclaration de classe.
 // 
 // Historique:
-//    cree le 01/01/2022
+//    cree le 22/01/2022
 
 
 class Test {
