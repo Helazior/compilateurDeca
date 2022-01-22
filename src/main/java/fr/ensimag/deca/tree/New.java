@@ -48,6 +48,7 @@ public class New extends AbstractExpr {
     public void codeGenExpr(DecacCompiler compiler){
         RegisterManager regMan = compiler.getRegMan();
 
+        compiler.addComment(new String("New"));
         //GPRegister registreDest = regMan.take();
         int nbOfFiled = ((ClassType) className.getType()).getDefinition().getNumberOfFields();
         GPRegister regObject = regMan.take();
