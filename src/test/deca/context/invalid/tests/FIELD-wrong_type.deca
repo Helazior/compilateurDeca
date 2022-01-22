@@ -1,0 +1,8 @@
+class Test {
+    int method = 0;
+}
+
+{
+    Test t = new Test();
+    Test a = t.method;
+}

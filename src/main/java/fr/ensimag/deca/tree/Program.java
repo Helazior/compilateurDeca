@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.codegen.RegisterManager;
@@ -68,7 +69,7 @@ public class Program extends AbstractProgram {
 
 
     @Override
-    public void codeGenProgram(DecacCompiler compiler) throws ContextualError {
+    public void codeGenProgram(DecacCompiler compiler) throws DecacFatalError {
         // liste des déclarations de variables
         // Les adresses des variables globales sont de la forme
         // 1(GB), 2(GB), 3(GB).... Associer une adresse à chaque variable consiste à modifier le champ `operand`

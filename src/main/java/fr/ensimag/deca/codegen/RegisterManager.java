@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.*;
 import fr.ensimag.deca.codegen.VariableTable;
 import fr.ensimag.deca.DecacCompiler;
@@ -342,32 +343,32 @@ public class RegisterManager {
         LOG.trace("REGMAN giveAndStore end");
     }
 
-    public void getField(GPRegister addr, Symbol fieldName, Type objType,
-                         GPRegister dst, Location l) throws ContextualError {
-        classes.getField(addr, fieldName, objType, dst, l);
+    public void getField(GPRegister addr, Symbol fieldName, Definition objDef,
+                         GPRegister dst, Location l) throws DecacFatalError {
+        classes.getField(addr, fieldName, objDef, dst, l);
     }
 
-    public GPRegister getField(GPRegister addr, Symbol fieldName, Type objType,
-                                Location l) throws ContextualError {
+    public GPRegister getField(GPRegister addr, Symbol fieldName, Definition objDef,
+                                Location l) throws DecacFatalError {
         GPRegister dst = take();
-        classes.getField(addr, fieldName, objType, dst, l);
+        classes.getField(addr, fieldName, objDef, dst, l);
         return dst;
     }
 
-    public void setField(GPRegister addr, Symbol fieldName, Type objType,
-                         GPRegister src, Location l) throws ContextualError {
-        classes.setField(addr, fieldName, objType, src, l);
+    public void setField(GPRegister addr, Symbol fieldName, Definition objDef,
+                         GPRegister src, Location l) throws DecacFatalError {
+        classes.setField(addr, fieldName, objDef, src, l);
     }
 
-    public void getMethod(GPRegister addr, Symbol methName, Type objType,
-                         GPRegister dst, Location l) throws ContextualError {
-        classes.getMethod(addr, methName, objType, dst, l);
+    public void getMethod(GPRegister addr, Symbol methName, Definition objDef,
+                         GPRegister dst, Location l) throws DecacFatalError {
+        classes.getMethod(addr, methName, objDef, dst, l);
     }
 
-    public GPRegister getMethod(GPRegister addr, Symbol methName, Type objType,
-                                Location l) throws ContextualError {
+    public GPRegister getMethod(GPRegister addr, Symbol methName, Definition objDef,
+                                Location l) throws DecacFatalError {
         GPRegister dst = take();
-        classes.getMethod(addr, methName, objType, dst, l);
+        classes.getMethod(addr, methName, objDef, dst, l);
         return dst;
     }
 }
