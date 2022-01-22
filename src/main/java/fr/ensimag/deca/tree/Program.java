@@ -130,7 +130,10 @@ public class Program extends AbstractProgram {
             compiler.addFirst(new BOV(new Label("stack_overflow_error")));
             compiler.addFirst(new TSTO(compiler.getRegMan().getMaxSizeStack()));
         }
-        assert(compiler.getRegMan().isStackEmpty());
+        if (!compiler.getRegMan().isStackEmpty()) {
+            System.err.println("Error: Pushed in RegMan more often than pop.\n"
+                + "The compilation still finishes so the assembly could be inspected.");
+        }
         // termine le programme
         compiler.addInstruction(new HALT());
 

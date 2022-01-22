@@ -190,6 +190,10 @@ public class RegisterManager {
         return nbVarsStack == 0;
     }
 
+    public int getSizeVirtualStack() {
+        return nbVarsStack;
+    }
+
     public void push(GPRegister src) {
         LOG.trace("REGMAN push");
         GPRegister r = take();
