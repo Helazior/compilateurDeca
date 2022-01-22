@@ -55,11 +55,10 @@ public class Selection extends AbstractLValue {
     protected void codeGenStoreLValue(DecacCompiler compiler) throws DecacFatalError {
         RegisterManager regMan = compiler.getRegMan();
         GPRegister regResultat = regMan.pop();
-        objet.codeGenExpr(compiler);
         regMan.pop(Register.R1);
         regMan.setField(Register.R1, nomDAttribut.getName(),
             ((ClassType) objet.getType()).getDefinition(), regResultat, getLocation());
-        regMan.give(regResultat);
+        regMan.giveAndPush(regResultat);
     }
 
     protected void codeGenGetLValue(DecacCompiler compiler) throws DecacFatalError {
