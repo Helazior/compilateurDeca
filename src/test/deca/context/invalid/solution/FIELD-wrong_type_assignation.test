@@ -1,0 +1,3 @@
+tests/FIELD-wrong_type_assignation.deca
+
+FIELD-wrong_type_assignation.deca:12:16: a boolean can't be assigned to a int

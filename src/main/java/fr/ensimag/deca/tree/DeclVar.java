@@ -53,7 +53,7 @@ public class DeclVar extends AbstractDeclVar {
         try{
             localEnv.declare(name, varName.getVariableDefinition());
         } catch (DoubleDefException e) {
-            throw new ContextualError(e + " This varibale is already defined in this context", getLocation());
+            throw new ContextualError(" This varibale is already defined in this context", getLocation());
         }
     }
 

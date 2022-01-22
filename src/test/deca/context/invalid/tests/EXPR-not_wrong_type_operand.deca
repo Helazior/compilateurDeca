@@ -2,10 +2,10 @@
 //    Affectation et typage
 //
 // Resultats:
-//    Ligne 12: initialisation d'un attribut à une valeur de type incompatible.
+//    Ligne 12: expresion avec opérandes de type incompatible.
 // 
 // Historique:
-//    cree le 01/01/2022
+//    cree le 22/01/2022
 
 
 class Test {

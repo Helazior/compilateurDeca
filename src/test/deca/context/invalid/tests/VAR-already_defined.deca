@@ -1,0 +1,16 @@
+// Description:
+//    Affectation et typage
+//
+// Resultats:
+//    Ligne 12: Double définition
+// 
+// Historique:
+//    cree le 01/01/2022
+
+
+class Test {
+    int method(){
+        int param;
+        float param;
+    }
+}
