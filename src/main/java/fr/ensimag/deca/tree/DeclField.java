@@ -60,7 +60,8 @@ public class DeclField extends AbstractDeclField {
     protected void verifyFieldVisibility(DecacCompiler compiler,
             ClassDefinition superClass, ClassDefinition currentClass)
             throws ContextualError {
-        Type t = compiler.getType(type.getName()).getType();
+        Type t = type.verifyType(compiler); 
+        //Type t = compiler.getType(type.).getType();
         if(t.isVoid()){
             throw new ContextualError("A field cannot be a 'void' type", getLocation());
         }
