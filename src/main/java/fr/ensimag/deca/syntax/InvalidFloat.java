@@ -13,7 +13,7 @@ public class InvalidFloat extends DecaRecognitionException {
 
     private static final long serialVersionUID = 4670163376041273741L;
 
-    public InvalidFloat(DecaParser recognizer, ParserRuleContext ctx) {
+    public InvalidFloat(AbstractDecaParser recognizer, ParserRuleContext ctx) {
         super(recognizer, ctx);
     }
 

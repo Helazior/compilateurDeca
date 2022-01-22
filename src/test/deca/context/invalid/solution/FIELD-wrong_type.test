@@ -1,0 +1,3 @@
+tests/FIELD-wrong_type.deca
+
+FIELD-wrong_type.deca:7:13: a int can't be assigned to a Test

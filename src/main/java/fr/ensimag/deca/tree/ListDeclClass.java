@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.codegen.objectEquals;
@@ -24,6 +25,19 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
     }
 
     /**
+     * Pass 0
+     * It's goal is to define a link between the classes and their
+     * affilied Node in the Tree
+     * We can then go through the classes in the parental order
+     * instead of the tree order
+     */
+    void loadListClassNodes(DecacCompiler compiler) throws ContextualError{
+        for (AbstractDeclClass declClass : getList()) {
+            declClass.loadClassNodes(compiler);
+        }
+    }
+
+    /**
      * Pass 1 of [SyntaxeContextuelle]
      */
     void verifyListClass(DecacCompiler compiler) throws ContextualError {
@@ -32,20 +46,6 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
         }
     }
 
-    protected void codeGenListClass(DecacCompiler compiler) throws ContextualError {
-        // On met la méthode object
-        objectEquals.methodEquals(compiler);
-        IMAProgram newProgram = new IMAProgram();
-        // On écrit la méthode dans un nouveau programme. Plus facile pour les addFirst
-        IMAProgram oldProgram = compiler.remplaceProgram(newProgram);
-        // On met les classes
-        for (AbstractDeclClass declClass : getList()) {
-            declClass.codeGenClass(compiler);
-        }
-        // On rajoute notre nouveau programme à la fin de l'ancien.
-        // Le nouveau programme contiendra tous les programmes
-        compiler.concatenateBeginningProgram(oldProgram);
-    }
     /**
      * Pass 2 of [SyntaxeContextuelle]
      */
@@ -64,4 +64,18 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
         }
     }
 
+    protected void codeGenListClass(DecacCompiler compiler) throws DecacFatalError {
+        // On met la méthode object
+        objectEquals.methodEquals(compiler);
+        IMAProgram newProgram = new IMAProgram();
+        // On écrit la méthode dans un nouveau programme. Plus facile pour les addFirst
+        IMAProgram oldProgram = compiler.remplaceProgram(newProgram);
+        // On met les classes
+        for (AbstractDeclClass declClass : getList()) {
+            declClass.codeGenClass(compiler);
+        }
+        // On rajoute notre nouveau programme à la fin de l'ancien.
+        // Le nouveau programme contiendra tous les programmes
+        compiler.concatenateBeginningProgram(oldProgram);
+    }
 }
