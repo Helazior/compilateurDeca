@@ -21,9 +21,8 @@ class ClassName {
     a.x = 4;
     println(a.x);
     println(a.x = 5);
-    (a.x = 6) = 7;
-    println(a.x + 1); // 8
+    println(a.x + 3); // 8
 
-    a.y = a.x + 2;
+    a.y = a.x + 4;
     println(a.y);
 }
