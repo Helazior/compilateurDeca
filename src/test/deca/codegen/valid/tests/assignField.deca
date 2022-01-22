@@ -13,29 +13,30 @@
 
 class ClassName {
     int x = 3;
-    int y;
     float z = 4.4;
-    float t;
+    int equals;
+    int s() {
+
+    }
+    int t() {
+        
+    }
+}
+
+class C extends ClassName {
+    int t() {
+        
+    }
 }
 
 {
     ClassName a = new ClassName();
     println(a.x);
-    a.x = 4;
+    a.equals(a);
     println(a.x);
     println(a.x = 5);
     println(a.x + 3); // 8
 
-    a.y = a.x + 4;
-    println(a.y);
-
-    if (a.x < 6 && a.y <= 10 && a.z >= 4.4 && (t = 5.2) > 5.1 || false) {
-        println("ok");
-        // test du not au passage, ça fait pas de mal
-        if (!(a.x < 6 && a.y <= 10 && a.z >= 4.4 && (t = 5.2) > 5.1) || !(true || true) {
-            println("pas bon");
-        } else {
-            println("ok2")
-        }
-    }
+    //a.y = a.x + 4;
+    //println(a.y);
 }

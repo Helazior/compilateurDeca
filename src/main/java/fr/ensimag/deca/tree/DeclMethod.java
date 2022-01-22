@@ -114,7 +114,8 @@ public class DeclMethod extends AbstractDeclMethod {
             if(!sig.equals(superMethod.getSignature())){
                 throw new ContextualError("The method signature doesn't match its parent", getLocation());
             }
-
+        } else {
+            currentClass.incNumberOfMethods();
         }
 
         method.setDefinition(new MethodDefinition(t, getLocation(), sig, index));

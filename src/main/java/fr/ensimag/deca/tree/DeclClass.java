@@ -260,7 +260,7 @@ public class DeclClass extends AbstractDeclClass {
             Symbol methName = meth.getName().getName();
             int index;
             try {
-                index = expEnv.get(methName).asMethodDefinition(
+                index = 1 + expEnv.get(methName).asMethodDefinition(
                     "Internal Error: "+methName+" in class "+className+" is not a method",
                     getLocation()
                 ).getIndex();
@@ -272,7 +272,7 @@ public class DeclClass extends AbstractDeclClass {
                 Register.R1));
             program.addInstruction(new STORE(
                 Register.R1,
-                new RegisterOffset(index + stackPos, Register.GB)));
+                new RegisterOffset(index, Register.SP)));
         }
         // The asm function building the classtable is finished
         program.addInstruction(new RTS());
@@ -288,6 +288,7 @@ public class DeclClass extends AbstractDeclClass {
         int offset = type.getTablePlace();
         int superOffset = superType.getTablePlace();
 
+        program.addInstruction(new ADDSP(type.getNumberOfMethods() + 1));
         program.addInstruction(new BSR(
             new LabelOperand(new Label("classTableInit." + type.getType().getName()))
         ));
