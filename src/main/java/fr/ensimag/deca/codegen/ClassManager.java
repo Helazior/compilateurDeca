@@ -3,6 +3,7 @@ package fr.ensimag.deca.codegen;
 import java.util.Map;
 import java.util.HashMap;
 
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.context.*;
@@ -61,37 +62,37 @@ public class ClassManager {
     }
 
     /** Loads the field's content into a register */
-    public void getField(GPRegister reg, Symbol fieldName, Type objType,
-                         GPRegister dst, Location l) throws ContextualError {
-        ClassDefinition typeDef = objType.asClassType(
-            "Error: " + objType.getName() + " is not a class type.", l).getDefinition();
-        ExpDefinition exp = ((ClassDefinition) typeDef).getMembers().get(fieldName);
-        int index = exp.asFieldDefinition(
-            "Identifier " + fieldName + " in class " + objType + " is not a field !",
-            l).getIndex();
+    public void getField(GPRegister reg, Symbol fieldName, Definition objDef,
+                         GPRegister dst, Location l) throws DecacFatalError {
+        if (!objDef.isClass()) {
+            throw new DecacFatalError(objDef.getType().getName() + " should be a class");
+        }
+        ClassDefinition typeDef = (ClassDefinition) objDef;
+        ExpDefinition exp = typeDef.getMembers().get(fieldName);
+        int index = ((FieldDefinition) exp).getIndex();
         compiler.addInstruction(new LOAD(new RegisterOffset(index, reg), dst));
     }
 
-    public void setField(GPRegister addr, Symbol fieldName, Type objType,
-                         GPRegister src, Location l) throws ContextualError {
-        ClassDefinition typeDef = objType.asClassType(
-            "Error: " + objType.getName() + " is not a class type.", l).getDefinition();
-        ExpDefinition exp = ((ClassDefinition) typeDef).getMembers().get(fieldName);
-        int index = exp.asFieldDefinition(
-            "Identifier " + fieldName + " in class " + objType + " is not a field !",
-            l).getIndex();
+    public void setField(GPRegister addr, Symbol fieldName, Definition objDef,
+                         GPRegister src, Location l) throws DecacFatalError {
+        if (!objDef.isClass()) {
+            throw new DecacFatalError(objDef.getType().getName() + " should be a class");
+        }
+        ClassDefinition typeDef = (ClassDefinition) objDef;
+        ExpDefinition exp = typeDef.getMembers().get(fieldName);
+        int index = ((FieldDefinition) exp).getIndex();
         compiler.addInstruction(new STORE(src, new RegisterOffset(index, addr)));
     }
 
     /** Loads the method's address into a register */
-    public void getMethod(GPRegister reg, Symbol methName, Type objType,
-                         GPRegister dst, Location l) throws ContextualError {
-        ClassDefinition typeDef = objType.asClassType(
-            "Error: " + objType.getName() + " is not a class type.", l).getDefinition();
-        ExpDefinition exp = ((ClassDefinition) typeDef).getMembers().get(methName);
-        int index = exp.asMethodDefinition(
-            "Identifier " + methName + " in class " + objType + " is not a field !",
-            l).getIndex();
+    public void getMethod(GPRegister reg, Symbol methName, Definition objDef,
+                         GPRegister dst, Location l) throws DecacFatalError {
+        if (!objDef.isClass()) {
+            throw new DecacFatalError(objDef.getType().getName() + " should be a class");
+        }
+        ClassDefinition typeDef = (ClassDefinition) objDef;
+        ExpDefinition exp = typeDef.getMembers().get(methName);
+        int index = ((MethodDefinition) exp).getIndex();
         compiler.addInstruction(new LOAD(new RegisterOffset(index, reg), dst));
     }
 }

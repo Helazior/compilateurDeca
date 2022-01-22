@@ -19,6 +19,6 @@ public class InvalidImport extends DecaRecognitionException {
 
     @Override
     public String getMessage() {
-        return "Imports are not allowed without the appropriate CLI option";
+        return "Imports are not allowed without the appropriate CLI option.";
     }
 }

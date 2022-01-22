@@ -47,11 +47,13 @@ public class DeclParam extends AbstractDeclParam {
 
     @Override
     protected void verifyParamType(DecacCompiler compiler, EnvironmentExp methodEnv) throws ContextualError {
+        ParamDefinition def = new ParamDefinition(type.verifyType(compiler), getLocation());
         try{
-            methodEnv.declare(name.getName(), new ParamDefinition(type.getType(), getLocation()));
+            methodEnv.declare(name.getName(), def);
         } catch(DoubleDefException e){
             throw new ContextualError("A parameter with the same name already exist in this context", getLocation());
         }
+        name.setDefinition(def);
     }
 
 

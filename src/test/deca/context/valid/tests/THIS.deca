@@ -1,0 +1,12 @@
+class Test {
+    protected int bar = 0;
+    void foo() {
+        Test b = new Test();
+        this.bar;
+    }
+}
+
+{
+    Test t = new Test();
+    t.foo();
+}

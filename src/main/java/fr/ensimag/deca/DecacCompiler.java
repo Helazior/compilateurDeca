@@ -4,7 +4,10 @@ import fr.ensimag.deca.syntax.DecaLexer;
 import fr.ensimag.deca.syntax.DecaParser;
 import fr.ensimag.deca.syntax.DecaImportParser;
 import fr.ensimag.deca.tools.DecacInternalError;
+import fr.ensimag.deca.tree.AbstractDeclClass;
 import fr.ensimag.deca.tree.AbstractProgram;
+import fr.ensimag.deca.tree.DeclClass;
+import fr.ensimag.deca.tree.ListDeclClass;
 import fr.ensimag.deca.tree.LocationException;
 import fr.ensimag.ima.pseudocode.*;
 
@@ -21,13 +24,17 @@ import org.apache.log4j.Logger;
 import fr.ensimag.deca.tools.SymbolTable;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.Location;
+
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.*;
+import fr.ensimag.deca.context.EnvironmentType.DoubleDefException;
 /**
  * Decac compiler instance.
  *
@@ -270,6 +277,59 @@ public class DecacCompiler {
      */
     private RegisterManager regManager;
 
+
+    public IMAProgram remplaceProgram(IMAProgram newProgram) {
+        IMAProgram oldProgram = program;
+        program = newProgram;
+        return oldProgram;
+    }
+
+    /**
+     * oldProgram se place au début du programme
+     * @param oldProgram
+     */
+    public void concatenateBeginningProgram(IMAProgram oldProgram) {
+        oldProgram.append(program);
+        program = oldProgram;
+    }
+
+    /**
+     * oldProgram se place au début du programme
+     * @param oldProgram
+     */
+    public void concatenateEndProgram(IMAProgram oldProgram) {
+        program.append(oldProgram);
+    }
+
+//region TREE NODE MAP
+    /**
+     * Sert à redéfinir l'ordre de parcours des classes de sorte que les classes
+     * parents soient toujours parcouru et défini avant leurs enfants
+     */
+    private final Map<Symbol,DeclClass> classNodes = new HashMap<>();
+    private ListDeclClass listClassNodes = new ListDeclClass();
+
+    public void addClassNode(Symbol symbol, DeclClass classNode) throws DoubleDefException{
+        if(classNodes.containsKey(symbol)){
+            throw new DoubleDefException();
+        }
+        listClassNodes.add(classNode);
+        classNodes.put(symbol, classNode);
+    }
+
+    public DeclClass getClassNode(Symbol symbol){
+        return classNodes.get(symbol);
+    }
+
+    public ListDeclClass getListClassNodes(){
+        return listClassNodes;
+    }
+//endregion
+
+
+
+//region TYPE ENVIRONMENT
+
     /**
      * Environnement des types définis lors de l'étape B de la compilation
      */
@@ -320,31 +380,9 @@ public class DecacCompiler {
         Symbol type = typeTable.create(typeName);
         return getType(type).getType();
     }
+//endregion
 
-    public IMAProgram remplaceProgram(IMAProgram newProgram) {
-        IMAProgram oldProgram = program;
-        program = newProgram;
-        return oldProgram;
-    }
-
-    /**
-     * oldProgram se place au début du programme
-     * @param oldProgram
-     */
-    public void concatenateBeginningProgram(IMAProgram oldProgram) {
-        oldProgram.append(program);
-        program = oldProgram;
-    }
-
-    /**
-     * oldProgram se place au début du programme
-     * @param oldProgram
-     */
-    public void concatenateEndProgram(IMAProgram oldProgram) {
-        program.append(oldProgram);
-    }
-
-
+//region EXP ENVIRONMENT
     /**
     * correspond à un environement de symboles hors des class et méthodes
     * ne sert que pour le parser en principe, car ensuite les symboles sont tous placé
@@ -382,8 +420,7 @@ public class DecacCompiler {
         return expTable.create(expName);
     }
 
-
-
+//endregion
 
 
 
@@ -573,10 +610,6 @@ public class DecacCompiler {
         }
         assert(prog.checkAllLocations());
 
-        if(compilerOptions.getDecompile()){
-            prog.decompile(out);
-            return prog;
-        }
         return prog;
     }
 

@@ -652,7 +652,7 @@ decl_field [AbstractIdentifier t, Visibility v] returns[AbstractDeclField tree]
       (EQUALS e=expr {
             assert($e.tree != null);
             initialization = new Initialization($e.tree);
-          
+            setLocation(initialization, $e.start);
         }
       )? {
             $tree = new DeclField($t, field, initialization, $v);
@@ -732,10 +732,16 @@ list_imports returns[ListDeclImport tree]
     )*
     ;
 
-import_decl returns[AbstractProgram tree]
+import_decl returns[AbstractDeclImport tree]
     : STRING {
-        $tree = getDecacCompiler().compileImport($STRING.text);
-        assert($tree != null);
-        setLocation($tree, $STRING);
+        try{
+            String address = $STRING.text;
+            AbstractProgram program = getDecacCompiler().compileImport(address);
+            $tree = new DeclImport(address, program);
+            assert($tree != null);
+            setLocation($tree, $STRING);
+        }  catch (java.lang.AssertionError e){
+            throw new InvalidFile(this, $ctx);
+        }
     }
     ;

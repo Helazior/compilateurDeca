@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -33,10 +34,12 @@ public class New extends AbstractExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        Type t = compiler.getType(className.getName()).getType();
+        //Type t = compiler.getType(className.getName()).getType();
+        Type t = className.verifyType(compiler);
         if(!t.isClass()){
             throw new ContextualError("the 'New' symbol can only be use to defined Classes", getLocation());
         }
+        setType(t);
         return t;
     }
 
@@ -45,7 +48,7 @@ public class New extends AbstractExpr {
         RegisterManager regMan = compiler.getRegMan();
 
         //GPRegister registreDest = regMan.take();
-        int nbOfFiled = className.getClassDefinition().getNumberOfFields();
+        int nbOfFiled = ((ClassType) className.getType()).getDefinition().getNumberOfFields();
         GPRegister regObject = regMan.take();
         // On alloue le nb d'attribut + 1 place en mémoire :
         compiler.addInstruction(new NEW(nbOfFiled + 1, regObject));
