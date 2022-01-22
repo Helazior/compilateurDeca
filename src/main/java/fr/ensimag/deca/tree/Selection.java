@@ -53,7 +53,10 @@ public class Selection extends AbstractLValue {
         regMan.pop(Register.R1);
         regMan.setField(Register.R1, nomDAttribut.getName(), objet.getType(), regResultat, getLocation());
         regMan.give(regResultat);
+    }
 
+    protected void codeGenGetLValue(DecacCompiler compiler) throws ContextualError {
+        objet.codeGenExpr(compiler);
     }
 
     @Override

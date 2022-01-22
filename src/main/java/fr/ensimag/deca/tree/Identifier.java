@@ -206,6 +206,10 @@ public class Identifier extends AbstractIdentifier {
         regMan.giveAndPush(reg);
     }
 
+    protected void codeGenGetLValue(DecacCompiler compiler) {
+        // nothing to do
+    }
+
     @Override
     public void codeGenExpr(DecacCompiler compiler) {
         RegisterManager regMan = compiler.getRegMan();
