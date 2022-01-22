@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
@@ -93,4 +94,14 @@ public abstract class AbstractIdentifier extends AbstractLValue {
      *         (corresponds to the "type" attribute)
      */
     public abstract Type verifyType(DecacCompiler compiler) throws ContextualError;
+
+
+    /**
+     * Implements non-terminal "identifier" of [SyntaxeContextuelle] in the 3 passes
+     * @param compiler contains "env_types" attribute
+     * @param envExp the expression environment
+     * @return the type corresponding expression definition
+     */
+    public abstract ExpDefinition verifyIdent(DecacCompiler compiler, EnvironmentExp envExp)
+        throws ContextualError;
 }

@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.ContextualError;
 
 import fr.ensimag.ima.pseudocode.*;
@@ -21,8 +22,6 @@ public abstract class AbstractDeclClass extends Tree {
     protected abstract void verifyClass(DecacCompiler compiler)
             throws ContextualError;
 
-    protected abstract void codeGenClass(DecacCompiler compiler) throws ContextualError;
-
     /**
      * Pass 2 of [SyntaxeContextuelle]. Verify that the class members (fields and
      * methods) are OK, without looking at method body and field initialization.
@@ -36,6 +35,8 @@ public abstract class AbstractDeclClass extends Tree {
      */
     protected abstract void verifyClassBody(DecacCompiler compiler)
             throws ContextualError;
+
+    protected abstract void codeGenClass(DecacCompiler compiler) throws DecacFatalError;
 
     public abstract int codeGenClassTableFn(DecacCompiler compiler, IMAProgram program, int stackPos);
 
