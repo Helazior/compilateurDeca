@@ -190,9 +190,9 @@ public class Identifier extends AbstractIdentifier {
      */
     @Override
     public Type verifyType(DecacCompiler compiler) throws ContextualError {
-        Type t = compiler.getType(name.getName());
-        if(t == null) {throw new ContextualError("the type "+name.getName()+" is not regognised", getLocation());}
-        setType(t);
+        TypeDefinition tDef = compiler.getType(name);
+        if(tDef == null) {throw new ContextualError("the type "+name.getName()+" is not regognised", getLocation());}
+        setType(tDef.getType());
         setDefinition(new TypeDefinition(getType(), getLocation()));
         return getType();
     }
