@@ -24,7 +24,7 @@ public class MethodAsmBody extends AbstractMethodBody{
 
     protected void verifyMethodBody(DecacCompiler compiler, EnvironmentExp methodEnv,
             ClassDefinition currentClass, Type returnType) throws ContextualError{
-        throw new ContextualError("not yet implemented", getLocation());
+        //nothing
     }
 
 
