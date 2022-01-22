@@ -1,8 +1,9 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.ClassType;
-import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -104,4 +105,7 @@ public abstract class AbstractIdentifier extends AbstractLValue {
      */
     public abstract ExpDefinition verifyIdent(DecacCompiler compiler, EnvironmentExp envExp)
         throws ContextualError;
+
+    protected abstract void codeGenSelectIdent(DecacCompiler compiler, Definition classDef)
+        throws DecacFatalError;
 }

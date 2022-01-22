@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -141,7 +142,7 @@ public abstract class AbstractExpr extends AbstractInst {
      * @param compiler
      * @param printHex
      */
-    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
+    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) throws DecacFatalError {
         RegisterManager regMan = compiler.getRegMan();
         codeGenExpr(compiler);
         regMan.pop(R1);
@@ -159,12 +160,12 @@ public abstract class AbstractExpr extends AbstractInst {
         }
     }
 
-    protected void codeGenExpr(DecacCompiler compiler){
+    public void codeGenExpr(DecacCompiler compiler) throws DecacFatalError {
         throw new UnsupportedOperationException("Expr not yet implemented");
     }
 
     @Override
-    protected void codeGenInst(DecacCompiler compiler) {
+    protected void codeGenInst(DecacCompiler compiler) throws DecacFatalError {
         // assign_expr
         //      → or_expr (
         //      { condition : expression must be a "lvalue" }

@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
@@ -84,7 +85,7 @@ public class DeclVar extends AbstractDeclVar {
     }
 
     @Override
-    public AbstractIdentifier codeGenDecl(DecacCompiler compiler, int offset) {
+    public AbstractIdentifier codeGenDecl(DecacCompiler compiler, int offset) throws DecacFatalError {
         initialization.codeGenInit(compiler, offset);
         return varName;
     }

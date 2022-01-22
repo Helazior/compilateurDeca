@@ -1,7 +1,8 @@
 package fr.ensimag.deca.codegen;
 
 import java.util.List;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -29,7 +30,7 @@ public class RegisterManager {
     // Number of registers accessible. Only R2 to R(nMax - 1) will be used
     private int nMax;
     private int stackOffset;
-    // Number of variables on stack
+    // Number of variables on the virtual stack
     private int nbVarsStack;
     // maximum size of the stack for the TSTO instruction
     private int maxSizeStack;
@@ -42,7 +43,6 @@ public class RegisterManager {
 
     public RegisterManager(DecacCompiler compiler, int nb_registres){
         this.compiler = compiler;
-        //varTable = new VariableTable(compiler, vars);
         nMax = nb_registres;
         this.classes = null;
         init();
@@ -51,7 +51,7 @@ public class RegisterManager {
     private void init() {
         this.registers = new int[nMax]; // Initialisé à 0
         this.usedRegisters = new boolean[nMax]; // Initialisé à false
-        this.lastRegisters = new ArrayList<Integer>();
+        this.lastRegisters = new LinkedList<Integer>();
         this.nbVarsStack = 0;
         this.maxSizeStack = 0;
         this.sizeStack = 0;
@@ -59,21 +59,52 @@ public class RegisterManager {
         this.stackOffset = 0;
     }
 
-    public void popInStack(int nbParameters) {
-        throw new UnsupportedOperationException("TODO");
+
+    /**
+     * Prepares a method call, by pushing all the elements required for a method call
+     * onto the stack, and putting the first element at the top (since it is the "this")
+     * This regman instance should not be used before a BSR, and a SUBSP(nbParams) should
+     * be executed before re-using this regman
+     */
+    public void prepareMethodCall(int nbParams) {
+        int nbPrevElems = lastRegisters.size() - nbParams;
+        int nbElemsPush = nbParams;
+        if (nbPrevElems < 0) {
+            nbElemsPush -= nbPrevElems;
+            nbPrevElems = 0;
+        }
+        ListIterator<Integer> regsIterator = lastRegisters.listIterator(nbPrevElems);
+        for (int i = 0; i < nbElemsPush; i++) {
+            assert(regsIterator.hasNext());
+            int regIndex = regsIterator.next();
+            regsIterator.remove();
+            registers[regIndex] = 0;
+            compiler.addInstruction(new PUSH(Register.getR(regIndex)));
+            nbVarsStack--;
+        }
+        assert(!regsIterator.hasNext());
+        compiler.addInstruction(new LOAD(new RegisterOffset(-nbParams + 1, Register.SP), Register.R0));
+        compiler.addInstruction(new PUSH(Register.R0));
     }
 
-    public void declareMethodVars(ListDeclParam args, ListDeclVar vars) {
+    public void declareMethodVars(ListDeclParam args, ListDeclVar vars) throws DecacFatalError {
+        if (vars == null) {
+            throw new DecacFatalError("vars is null");
+        }
         LOG.trace("REGMAN declareVars");
         if (namedVars != null) {
             throw new UnsupportedOperationException("Variables already delcared");
         }
         namedVars = new VariableTable(compiler);
         this.stackOffset = namedVars.init(vars);
+        namedVars.addParams(args);
         LOG.trace("REGMAN declareVars end");
     }
 
-    public void declareGlobalVars(ListDeclVar vars, int classtableSize) {
+    public void declareGlobalVars(ListDeclVar vars, int classtableSize) throws DecacFatalError {
+        if (vars == null) {
+            throw new DecacFatalError("vars is null");
+        }
         LOG.trace("REGMAN declareVars");
         if (namedVars != null) {
             throw new UnsupportedOperationException("Variables already delcared");
@@ -83,7 +114,7 @@ public class RegisterManager {
         LOG.trace("REGMAN declareVars end");
     }
 
-    public int declareClasses(ListDeclClass classDefs) {
+    public int declareClasses(ListDeclClass classDefs, ListDeclImport imports) {
         LOG.trace("REGMAN declareClasses");
         if (classes != null) {
             throw new UnsupportedOperationException("Classes already delcared");
@@ -99,7 +130,7 @@ public class RegisterManager {
             if (usedRegisters[i]) {
                 nbPush++;
                 compiler.addFirst(new Line(new PUSH(Register.getR(i))));
-                compiler.addInstruction(new PUSH(Register.getR(i)));
+                compiler.addInstruction(new POP(Register.getR(i)));
             }
         }
         compiler.addFirst(new Line(new ADDSP(stackOffset)));
@@ -157,6 +188,10 @@ public class RegisterManager {
 
     public boolean isStackEmpty() {
         return nbVarsStack == 0;
+    }
+
+    public int getSizeVirtualStack() {
+        return nbVarsStack;
     }
 
     public void push(GPRegister src) {

@@ -1,0 +1,36 @@
+// Description:
+//   test d'assignation de champs d'objets
+//
+// Resultats:
+//      3
+//      4
+//      5
+//      8
+//      9
+//      ok
+//      ok2
+
+
+class ClassName {
+    int x = 3;
+    int y;
+    float z = 4.4;
+    int s() {
+
+    }
+    int t() {
+        
+    }
+}
+
+{
+    ClassName a = new ClassName();
+    println(a.x);
+    a.x = 4;
+    println(a.x);
+    println(a.x = 5);
+    println(a.x + 3); // 8
+
+    a.y = a.x + 4;
+    println(a.y);
+}

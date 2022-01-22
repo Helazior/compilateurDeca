@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -39,7 +40,7 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
 
 
     @Override
-    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
+    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) throws DecacFatalError {
         codeGenExpr(compiler);
         compiler.getRegMan().pop(R1);
         Type type = getType();

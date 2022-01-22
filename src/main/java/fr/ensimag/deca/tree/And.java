@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
@@ -28,9 +29,7 @@ public class And extends AbstractOpBool {
      * @param compiler
      */
     @Override
-    public void codeGenOp(DecacCompiler compiler, GPRegister register1) {
-        // TODO:  avec l'extension, nommer les labels différemment
-        // TODO: FACTORISER LE CODE ! 2 fois le même
+    public void codeGenOp(DecacCompiler compiler, GPRegister register1) throws DecacFatalError {
         if (!compiler.getIsInNotOp()) { // AND
             super.codeGenAnd(compiler, register1);
         } else { // OR si on utilise le not

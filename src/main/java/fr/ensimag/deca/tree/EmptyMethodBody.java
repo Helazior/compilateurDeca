@@ -25,7 +25,7 @@ public class EmptyMethodBody extends AbstractMethodBody {
     @Override
     protected void codeGenMethod(DecacCompiler compiler,
             ListDeclParam args) throws UnsupportedOperationException {
-        throw new UnsupportedOperationException("not yet implemented");
+        // Nothing to do
     }
 
     /**

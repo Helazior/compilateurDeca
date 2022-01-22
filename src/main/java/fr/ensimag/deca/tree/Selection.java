@@ -1,6 +1,9 @@
 package fr.ensimag.deca.tree;
 
+import com.sun.org.apache.bcel.internal.generic.ArrayElementValueGen;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.TypeDefinition;
@@ -10,12 +13,20 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateString;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.WSTR;
 import java.io.PrintStream;
+
+import jdk.jfr.consumer.RecordedThreadGroup;
 import org.apache.commons.lang.Validate;
 
 import org.apache.log4j.Logger;
+import sun.tools.jconsole.inspector.XObject;
+
 /**
  * String literal
  *
@@ -32,8 +43,26 @@ public class Selection extends AbstractLValue {
     }
 
 //TODO
+
     @Override
-    protected void codeGenStoreLValue(DecacCompiler compiler){
+    public void codeGenExpr(DecacCompiler compiler) throws DecacFatalError {
+        objet.codeGenExpr(compiler);
+        this.nomDAttribut.codeGenSelectIdent(compiler,
+            ((ClassType) objet.getType()).getDefinition());
+    }
+
+    @Override
+    protected void codeGenStoreLValue(DecacCompiler compiler) throws DecacFatalError {
+        RegisterManager regMan = compiler.getRegMan();
+        GPRegister regResultat = regMan.pop();
+        regMan.pop(Register.R1);
+        regMan.setField(Register.R1, nomDAttribut.getName(),
+            ((ClassType) objet.getType()).getDefinition(), regResultat, getLocation());
+        regMan.giveAndPush(regResultat);
+    }
+
+    protected void codeGenGetLValue(DecacCompiler compiler) throws DecacFatalError {
+        objet.codeGenExpr(compiler);
     }
 
     @Override
@@ -74,8 +103,8 @@ public class Selection extends AbstractLValue {
     }
 
     @Override
-    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
-       
+    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) throws DecacFatalError {
+        super.codeGenPrint(compiler, printHex);
     }
 
     @Override

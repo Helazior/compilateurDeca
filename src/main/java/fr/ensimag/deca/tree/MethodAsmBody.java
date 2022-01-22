@@ -6,6 +6,8 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.Line;
+
 import java.io.PrintStream;
 
 public class MethodAsmBody extends AbstractMethodBody{
@@ -22,14 +24,14 @@ public class MethodAsmBody extends AbstractMethodBody{
 
     protected void verifyMethodBody(DecacCompiler compiler, EnvironmentExp methodEnv,
             ClassDefinition currentClass, Type returnType) throws ContextualError{
-        throw new ContextualError("not yet implemented", getLocation());
+        //nothing
     }
 
 
 
     protected void codeGenMethod(DecacCompiler compiler,
             ListDeclParam args) throws UnsupportedOperationException{
-        throw new UnsupportedOperationException();
+        compiler.add(new Line(corps));
     }
 
     @Override

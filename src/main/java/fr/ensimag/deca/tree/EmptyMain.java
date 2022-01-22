@@ -18,8 +18,8 @@ public class EmptyMain extends AbstractMain {
     }
 
     @Override
-    protected void codeGenMain(DecacCompiler compiler) {
-        // TODO: check
+    protected void codeGenMain(DecacCompiler compiler, int tablesSize) {
+        compiler.addComment("----- Main is empty -----");
     }
 
     /**

@@ -4,8 +4,10 @@ import fr.ensimag.deca.syntax.DecaLexer;
 import fr.ensimag.deca.syntax.DecaParser;
 import fr.ensimag.deca.syntax.DecaImportParser;
 import fr.ensimag.deca.tools.DecacInternalError;
+import fr.ensimag.deca.tree.AbstractDeclClass;
 import fr.ensimag.deca.tree.AbstractProgram;
 import fr.ensimag.deca.tree.DeclClass;
+import fr.ensimag.deca.tree.ListDeclClass;
 import fr.ensimag.deca.tree.LocationException;
 import fr.ensimag.ima.pseudocode.*;
 
@@ -32,6 +34,7 @@ import java.nio.file.Path;
 
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.*;
+import fr.ensimag.deca.context.EnvironmentType.DoubleDefException;
 /**
  * Decac compiler instance.
  *
@@ -89,12 +92,14 @@ public class DecacCompiler {
             System.out.println("a basic type is inizialise 2 times");
         }
     }
+
+
     public boolean getNoVoidMethodExist() {
         return noVoidMethodExist;
     }
 
     public void setNoVoidMethodExist() {
-        divideExist = true;
+        noVoidMethodExist = true;
     }
 
 
@@ -297,9 +302,31 @@ public class DecacCompiler {
     }
 
 //region TREE NODE MAP
+    /**
+     * Sert à redéfinir l'ordre de parcours des classes de sorte que les classes
+     * parents soient toujours parcouru et défini avant leurs enfants
+     */
     private final Map<Symbol,DeclClass> classNodes = new HashMap<>();
+    private ListDeclClass listClassNodes = new ListDeclClass();
 
+    public void addClassNode(Symbol symbol, DeclClass classNode) throws DoubleDefException{
+        if(classNodes.containsKey(symbol)){
+            throw new DoubleDefException();
+        }
+        listClassNodes.add(classNode);
+        classNodes.put(symbol, classNode);
+    }
+
+    public DeclClass getClassNode(Symbol symbol){
+        return classNodes.get(symbol);
+    }
+
+    public ListDeclClass getListClassNodes(){
+        return listClassNodes;
+    }
 //endregion
+
+
 
 //region TYPE ENVIRONMENT
 
@@ -314,7 +341,7 @@ public class DecacCompiler {
         return typeEnv;
     }
 
-    public void initTypes() throws ContextualError{
+    private void initTypes() throws ContextualError{
 
         List<TypeDefinition> typeDefList = new LinkedList<>();
 
@@ -323,15 +350,33 @@ public class DecacCompiler {
         typeDefList.add(new TypeDefinition(new StringType(typeTable.create("string")), null));
         typeDefList.add(new TypeDefinition(new BooleanType(typeTable.create("boolean")), null));
         typeDefList.add(new TypeDefinition(new VoidType(typeTable.create("void")), null));
-
-        ClassType objectType = new ClassType(typeTable.create("Object"), null, null);
-        objectType.getDefinition().incNumberOfMethods();
-        typeDefList.add(objectType.getDefinition());
+        typeDefList.add(new TypeDefinition(new NullType(typeTable.create("Null")), null));
 
         for(TypeDefinition typeDef : typeDefList){
             createType(typeDef.getType().getName(), typeDef);
         }
+
+        objectInitialisation();
     }
+
+    private void objectInitialisation() throws ContextualError {
+
+        ClassType objectType = new ClassType(typeTable.create("Object"), null, null);
+        createType(objectType.getName(), objectType.getDefinition());
+
+        Signature sig = new Signature();
+        sig.add(objectType);
+        MethodDefinition equalsDef = new MethodDefinition(getType("boolean"), null, sig, 1);
+        try{
+            objectType.getDefinition().getMembers().declare(expTable.create("equals"), equalsDef);
+            objectType.getDefinition().incNumberOfMethods();
+        } catch (EnvironmentExp.DoubleDefException dde){
+            throw new ContextualError("Double def of equals in Object Initialisation", null);
+        }
+
+
+    }
+
 
     public void createType(Symbol symbol, TypeDefinition typeDef) throws ContextualError{
         try {
@@ -476,9 +521,7 @@ public class DecacCompiler {
         if(compilerOptions.getVerification()){
             return false;
         }
-        addComment("start main program");
         prog.codeGenProgram(this);
-        addComment("end main program");
         LOG.debug("Generated assembly code:" + nl + program.display());
         LOG.info("Output file assembly file is: " + destName);
 
@@ -537,7 +580,6 @@ public class DecacCompiler {
         String destFile = null;
         // Done: calculer le nom du fichier .ass à partir du nom du
         // Done: FAIRE: fichier .deca.
-        // TODO: est-ce qu'il faut vérifier le format du nom en entrée ?
 
         PrintStream err = System.err;
         PrintStream out = System.out;
@@ -569,7 +611,6 @@ public class DecacCompiler {
      * verification and code generation).
      *
      * @param sourceName name of the source (deca) file
-     * @param destName name of the destination (assembly) file
      * @param out stream to use for standard output (output of decac -p)
      * @param err stream to use to display compilation errors
      *
@@ -586,10 +627,6 @@ public class DecacCompiler {
         }
         assert(prog.checkAllLocations());
 
-        if(compilerOptions.getDecompile()){
-            prog.decompile(out);
-            return prog;
-        }
         return prog;
     }
 

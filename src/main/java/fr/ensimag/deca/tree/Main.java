@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
@@ -40,8 +41,8 @@ public class Main extends AbstractMain {
     }
 
     @Override
-    protected void codeGenMain(DecacCompiler compiler) {
-        compiler.getRegMan().declareGlobalVars(declVariables, 0); // TODO: set table size
+    protected void codeGenMain(DecacCompiler compiler, int tablesSize) throws DecacFatalError {
+        compiler.getRegMan().declareGlobalVars(declVariables, tablesSize);
 
         compiler.addComment("---------------------------------------------------");
         compiler.addComment("          Beginning of main instructions:");

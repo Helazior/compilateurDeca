@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
@@ -43,7 +44,7 @@ public class While extends AbstractInst {
 
 
     @Override
-    protected void codeGenInst(DecacCompiler compiler) {
+    protected void codeGenInst(DecacCompiler compiler) throws DecacFatalError {
         // TODO :  avec l'extension, nommer les labels différemment
         RegisterManager regMan = compiler.getRegMan();
 

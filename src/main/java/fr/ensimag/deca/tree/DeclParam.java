@@ -10,6 +10,7 @@ import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 import java.util.jar.Attributes.Name;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 import org.apache.commons.lang.Validate;
 
@@ -69,4 +70,8 @@ public class DeclParam extends AbstractDeclParam {
         type.iter(f);    
     }
 
+    @Override
+    public Symbol getName() {
+        return name.getName();
+    }
 }

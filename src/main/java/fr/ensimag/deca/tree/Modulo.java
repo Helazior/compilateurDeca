@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -49,11 +50,10 @@ public class Modulo extends AbstractOpArith {
     }
 
 
-    /*
     @Override
-    protected void codeGenPrint(DecacCompiler compiler) {
-        super.codeGenPrint(compiler);
-    }*/
+    protected void codeGenPrint(DecacCompiler compiler, Boolean hexa) throws DecacFatalError {
+        super.codeGenPrint(compiler, hexa);
+    }
 
     @Override
     protected String getOperatorName() {

@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -27,9 +28,9 @@ public abstract class AbstractInitialization extends Tree {
             throws ContextualError;
 
 
-    public abstract void codeGenInit(DecacCompiler compiler, int offset);
+    public abstract void codeGenInit(DecacCompiler compiler, int offset) throws DecacFatalError;
 
-    public abstract void pushValue(DecacCompiler compiler);
+    public abstract void pushValue(DecacCompiler compiler) throws DecacFatalError;
 
     public abstract boolean isInitialized();
 }

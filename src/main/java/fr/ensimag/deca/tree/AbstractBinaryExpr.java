@@ -1,7 +1,9 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.codegen.RegisterManager;
+import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 
@@ -55,7 +57,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
-    public void codeGenOp(DecacCompiler compiler, GPRegister register1) {
+    public void codeGenOp(DecacCompiler compiler, GPRegister register1) throws DecacFatalError {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
@@ -63,7 +65,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         codeGenOp(compiler, register0, register1);
     }
 
-    public void codeGenAnd(DecacCompiler compiler, GPRegister register1) {
+    public void codeGenAnd(DecacCompiler compiler, GPRegister register1) throws DecacFatalError {
         RegisterManager regMan = compiler.getRegMan();
         compiler.addComment("Start And");
         String falseLabel = "false_and_" + compiler.getNumAnd();
@@ -97,7 +99,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     }
 
 
-        public void codeGenOr(DecacCompiler compiler, GPRegister register1) { // OR si on utilise le not
+        public void codeGenOr(DecacCompiler compiler, GPRegister register1) throws DecacFatalError { // OR si on utilise le not
             RegisterManager regMan = compiler.getRegMan();
             compiler.addComment("Start Or");
             String trueLabel = "true_or_" + compiler.getNumOr();
@@ -132,7 +134,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
 
 
     @Override
-    public void codeGenExpr(DecacCompiler compiler) {
+    public void codeGenExpr(DecacCompiler compiler) throws DecacFatalError {
         RegisterManager regMan = compiler.getRegMan();
         //super.codeGenExpr(compiler);
         AbstractExpr left = getLeftOperand();

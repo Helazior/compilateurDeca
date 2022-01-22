@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -26,7 +27,7 @@ public class Return extends AbstractInst {
 
     //TODO
     @Override
-    protected void codeGenInst(DecacCompiler compiler) {
+    protected void codeGenInst(DecacCompiler compiler) throws DecacFatalError {
         resultat.codeGenExpr(compiler);
         compiler.getRegMan().pop(Register.R1);
         compiler.addInstruction(new BRA(new Label("return" + compiler.getNbReturn())));
@@ -34,6 +35,7 @@ public class Return extends AbstractInst {
 
     @Override
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass, Type returnType) throws ContextualError {
+        resultat.verifyRValue(compiler, localEnv, currentClass, returnType);
     }
 
 

@@ -11,6 +11,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.BSR;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.NEW;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
@@ -44,9 +45,10 @@ public class New extends AbstractExpr {
     }
 
     @Override
-    protected void codeGenExpr(DecacCompiler compiler){
+    public void codeGenExpr(DecacCompiler compiler){
         RegisterManager regMan = compiler.getRegMan();
 
+        compiler.addComment(new String("New"));
         //GPRegister registreDest = regMan.take();
         int nbOfFiled = ((ClassType) className.getType()).getDefinition().getNumberOfFields();
         GPRegister regObject = regMan.take();
@@ -55,7 +57,7 @@ public class New extends AbstractExpr {
         compiler.addInstruction(new PUSH(regObject));
 
         // On initialise tous les champs à 0;
-        compiler.addInstruction(new BRA(new Label("init." + className.getName())));
+        compiler.addInstruction(new BSR(new Label("init." + className.getName())));
         compiler.addInstruction(new SUBSP(1));
         regMan.giveAndPush(regObject);
     }

@@ -1,12 +1,18 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacFatalError;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateString;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.WSTR;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -45,8 +51,16 @@ public class This extends AbstractExpr {
     }
 
     @Override
-    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
-        
+    public void codeGenExpr(DecacCompiler compiler){
+        RegisterManager regMan = compiler.getRegMan();
+        GPRegister reg = regMan.take();
+        compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), reg));
+        regMan.giveAndPush(reg);
+    }
+
+    @Override
+    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) throws DecacFatalError {
+       super.codeGenPrint(compiler, printHex);
     }
 
     @Override

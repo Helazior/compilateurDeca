@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -32,7 +33,7 @@ public class ListInst extends TreeList<AbstractInst> {
         }
     }
 
-    public void codeGenListInst(DecacCompiler compiler) {
+    public void codeGenListInst(DecacCompiler compiler) throws DecacFatalError {
         //list_inst
         //    → ( inst) ∗
         for (AbstractInst i : getList()) {

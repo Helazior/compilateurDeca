@@ -1,0 +1,3 @@
+invalid/no_return.deca
+
+Error: Expected a return at the and of a no void method

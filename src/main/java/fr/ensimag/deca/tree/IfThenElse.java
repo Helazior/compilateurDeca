@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
@@ -51,7 +52,7 @@ public class IfThenElse extends AbstractInst {
 
 
     @Override
-    protected void codeGenInst(DecacCompiler compiler) {
+    protected void codeGenInst(DecacCompiler compiler) throws DecacFatalError {
         compiler.addComment("Start IF");
         // TODO :  avec l'extension, nommer les labels différemment
         String elseLabel = "else_" + compiler.getNumIf();

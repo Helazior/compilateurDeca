@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.*;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
@@ -10,8 +11,13 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
+import fr.ensimag.ima.pseudocode.instructions.BSR;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
+import fr.ensimag.ima.pseudocode.instructions.SUBSP;
+import sun.java2d.pipe.SpanClipRenderer;
+
 import java.io.PrintStream;
 
 /**
@@ -58,21 +64,27 @@ public class MethodCall extends AbstractExpr {
     }
 
     @Override
-    protected void codeGenExpr(DecacCompiler compiler){
+    public void codeGenExpr(DecacCompiler compiler) throws DecacFatalError {
         RegisterManager regMan = compiler.getRegMan();
-        // on push tous les registres dans la pile pour qu'ils ne gênent pas pendant le calcul d'argument
+        objet.codeGenExpr(compiler);
         for (AbstractExpr field : parametres.getList()) {
             field.codeGenExpr(compiler);
         }
-        regMan.popInStack(parametres.getList().size());
+        // Il y a this en plus
+        regMan.prepareMethodCall(parametres.size() + 1);
 
         // On saute au label de la méthode
-        compiler.addInstruction(new BRA(new Label("bodyMethod." + getClass().getName() + "." + nomDeMethode)));
-    }
 
-    @Override
-    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
-        throw new UnsupportedOperationException("Method is not printable");
+        try {
+            compiler.addInstruction(new BSR(new Label("methodBody." + objet.getType()
+                .asClassType("", null).getName() + "." + nomDeMethode.getName())));
+        } catch (ContextualError e) {
+            e.printStackTrace();
+        }
+
+        // On remet la stack comme avant l'appel de méthode
+        compiler.addInstruction(new SUBSP(parametres.size() + 2)); // + this * 2: in the bottom and the top
+        regMan.push(Register.R1);
     }
 
     @Override

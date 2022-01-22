@@ -4,6 +4,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 public abstract class AbstractDeclParam extends Tree{
 
@@ -20,4 +21,5 @@ public abstract class AbstractDeclParam extends Tree{
      */
     protected abstract void verifyParamType(DecacCompiler compiler, EnvironmentExp methodEnv) throws ContextualError;
 
+    public abstract Symbol getName();
 }

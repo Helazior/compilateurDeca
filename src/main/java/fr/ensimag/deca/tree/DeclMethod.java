@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.DecacCompiler;
@@ -43,15 +44,15 @@ public class DeclMethod extends AbstractDeclMethod {
 
     //TODO
 
-    protected void codeGenDeclMethod(DecacCompiler compiler) {
+    protected void codeGenDeclMethod(DecacCompiler compiler, AbstractIdentifier currentClass) throws DecacFatalError {
         RegisterManager regMan = compiler.getRegMan();
         // On place le label d'erreur à la fin du fichier
-        if (!returnType.getType().isFloat()) {
+        if (!returnType.getType().isVoid()) {
             compiler.setNoVoidMethodExist();
         }
 
         // ________________________corps du programme___________________________
-        compiler.addComment("; ---------- Code de la methode " + method.getName() + "dans la classe" + method.getClass().getName());
+        compiler.addComment("----------- Code de la methode " + method.getName() + " dans la classe " + currentClass.getName());
 
         methodBody.codeGenMethod(compiler, parameters);
         // goto return
@@ -60,13 +61,14 @@ public class DeclMethod extends AbstractDeclMethod {
             compiler.addInstruction(new BRA(new Label ("no_return_error")));
         }
         compiler.addLabel(new Label("return" + compiler.getNbReturn()));
+        compiler.incrementNbReturn();
 
         //________________________
         // On revient placer ce qu'il manque avec les infos du prog
-        // Début de la méthode = label du nom de la méthode
-        compiler.addFirst(new Line(new Label("bodyMethod." + getClass().getName() + "." + method.getName())));
         // On empile tous les registres qu'on veut utiliser au début de la méthode et on les restaure à la fin
         regMan.restoreRegisters();
+        // Début de la méthode = label du nom de la méthode
+        compiler.addFirst(new Line(new Label("methodBody." + currentClass.getName() + "." + method.getName())));
 
         // goto erreur return en cas de non return
         // On return
@@ -112,7 +114,8 @@ public class DeclMethod extends AbstractDeclMethod {
             if(!sig.equals(superMethod.getSignature())){
                 throw new ContextualError("The method signature doesn't match its parent", getLocation());
             }
-
+        } else {
+            currentClass.incNumberOfMethods();
         }
 
         method.setDefinition(new MethodDefinition(t, getLocation(), sig, index));

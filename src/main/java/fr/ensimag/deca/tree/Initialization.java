@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -46,7 +47,7 @@ public class Initialization extends AbstractInitialization {
     }
 
     @Override
-    public void codeGenInit(DecacCompiler compiler, int offset) {
+    public void codeGenInit(DecacCompiler compiler, int offset) throws DecacFatalError {
         RegisterManager regMan = compiler.getRegMan();
         expression.codeGenExpr(compiler);
         GPRegister reg = regMan.pop();
@@ -59,7 +60,7 @@ public class Initialization extends AbstractInitialization {
     }
 
     @Override
-    public void pushValue(DecacCompiler compiler) {
+    public void pushValue(DecacCompiler compiler) throws DecacFatalError {
         expression.codeGenExpr(compiler);
     }
 
