@@ -9,6 +9,5 @@
 
 
 class Test {
-    int field = 5 + true;
-
+    int field = 5 % true;
 }

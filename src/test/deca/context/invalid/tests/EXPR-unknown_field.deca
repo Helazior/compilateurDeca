@@ -9,6 +9,8 @@
 
 
 class Test {
-    int field = 5 + true;
+    int f;
+
+    f = 5;
 
 }
