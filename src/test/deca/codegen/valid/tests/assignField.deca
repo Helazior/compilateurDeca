@@ -29,13 +29,13 @@ class ClassName {
     a.y = a.x + 4;
     println(a.y);
 
-    if (a.x < 6 && a.y <= 10 && a.z >= 4.4 && (t = 5.2) > 5.1 || false) {
+    if (a.x < 6 && a.y <= 10 && a.z >= 4.4 && (a.t = 5.2) > 5.1 || false) {
         println("ok");
         // test du not au passage, ça fait pas de mal
-        if (!(a.x < 6 && a.y <= 10 && a.z >= 4.4 && (t = 5.2) > 5.1) || !(true || true) {
+        if (!(a.x < 6 && a.y <= 10 && a.z >= 4.4 && (a.t = 5.2) > 5.1) || !(true || true)) {
             println("pas bon");
         } else {
-            println("ok2")
+            println("ok2");
         }
     }
 }
