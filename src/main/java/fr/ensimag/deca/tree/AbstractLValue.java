@@ -12,6 +12,6 @@ import fr.ensimag.deca.context.ContextualError;
  */
 public abstract class AbstractLValue extends AbstractExpr {
     protected abstract void codeGenStoreLValue(DecacCompiler compiler) throws DecacFatalError;
-    protected abstract void codeGenGetLValue(DecacCompiler compiler);
+    protected abstract void codeGenGetLValue(DecacCompiler compiler) throws DecacFatalError;
 }
 

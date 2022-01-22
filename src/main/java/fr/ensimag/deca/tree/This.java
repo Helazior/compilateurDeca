@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
@@ -58,7 +59,7 @@ public class This extends AbstractExpr {
     }
 
     @Override
-    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
+    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) throws DecacFatalError {
        super.codeGenPrint(compiler, printHex);
     }
 

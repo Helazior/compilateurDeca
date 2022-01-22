@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.DecacCompiler;
@@ -43,7 +44,7 @@ public class DeclMethod extends AbstractDeclMethod {
 
     //TODO
 
-    protected void codeGenDeclMethod(DecacCompiler compiler, AbstractIdentifier currentClass) {
+    protected void codeGenDeclMethod(DecacCompiler compiler, AbstractIdentifier currentClass) throws DecacFatalError {
         RegisterManager regMan = compiler.getRegMan();
         // On place le label d'erreur à la fin du fichier
         if (!returnType.getType().isVoid()) {

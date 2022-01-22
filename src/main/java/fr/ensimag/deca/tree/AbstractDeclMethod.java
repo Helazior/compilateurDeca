@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 
@@ -18,7 +19,7 @@ public abstract class AbstractDeclMethod extends Tree {
      * @param compiler
      * @param currentClass
      */
-    protected abstract void codeGenDeclMethod(DecacCompiler compiler, AbstractIdentifier currentClass);
+    protected abstract void codeGenDeclMethod(DecacCompiler compiler, AbstractIdentifier currentClass) throws DecacFatalError;
 
     /**
      * Pass 2 of [SyntaxeContextuelle]. Verify that the

@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 import java.util.ArrayList;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -21,5 +22,5 @@ public abstract class AbstractMethodBody extends Tree {
      * @param compiler
      */
     protected abstract void codeGenMethod(DecacCompiler compiler,
-        ListDeclParam args) throws UnsupportedOperationException;
+        ListDeclParam args) throws UnsupportedOperationException, DecacFatalError;
 }

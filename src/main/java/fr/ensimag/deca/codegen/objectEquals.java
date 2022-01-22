@@ -1,13 +1,14 @@
 package fr.ensimag.deca.codegen;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.tools.SymbolTable;
 import fr.ensimag.deca.tree.*;
 import fr.ensimag.ima.pseudocode.*;
 import fr.ensimag.ima.pseudocode.instructions.*;
 
 public class objectEquals {
-    public static void methodEquals(DecacCompiler compiler) {
+    public static void methodEquals(DecacCompiler compiler) throws DecacFatalError {
 
         RegisterManager regMan = compiler.getRegMan();
 

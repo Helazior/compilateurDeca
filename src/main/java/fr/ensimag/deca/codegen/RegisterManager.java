@@ -87,7 +87,7 @@ public class RegisterManager {
         compiler.addInstruction(new PUSH(Register.R0));
     }
 
-    public void declareMethodVars(ListDeclParam args, ListDeclVar vars) {
+    public void declareMethodVars(ListDeclParam args, ListDeclVar vars) throws DecacFatalError {
         LOG.trace("REGMAN declareVars");
         if (namedVars != null) {
             throw new UnsupportedOperationException("Variables already delcared");
@@ -97,7 +97,7 @@ public class RegisterManager {
         LOG.trace("REGMAN declareVars end");
     }
 
-    public void declareGlobalVars(ListDeclVar vars, int classtableSize) {
+    public void declareGlobalVars(ListDeclVar vars, int classtableSize) throws DecacFatalError {
         LOG.trace("REGMAN declareVars");
         if (namedVars != null) {
             throw new UnsupportedOperationException("Variables already delcared");

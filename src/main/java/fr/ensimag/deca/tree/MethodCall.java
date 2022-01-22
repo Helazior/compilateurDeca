@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.*;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
@@ -63,7 +64,7 @@ public class MethodCall extends AbstractExpr {
     }
 
     @Override
-    public void codeGenExpr(DecacCompiler compiler) {
+    public void codeGenExpr(DecacCompiler compiler) throws DecacFatalError {
         RegisterManager regMan = compiler.getRegMan();
         objet.codeGenExpr(compiler);
         for (AbstractExpr field : parametres.getList()) {

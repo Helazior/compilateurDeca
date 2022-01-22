@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -36,7 +37,7 @@ public class Assign extends AbstractBinaryExpr {
     }
 
     @Override
-    public void codeGenExpr(DecacCompiler compiler) {
+    public void codeGenExpr(DecacCompiler compiler) throws DecacFatalError {
         compiler.addComment("Assign");
         getLeftOperand().codeGenGetLValue(compiler);
         getRightOperand().codeGenExpr(compiler);

@@ -45,7 +45,7 @@ public class Selection extends AbstractLValue {
 //TODO
 
     @Override
-    public void codeGenExpr(DecacCompiler compiler) {
+    public void codeGenExpr(DecacCompiler compiler) throws DecacFatalError {
         objet.codeGenExpr(compiler);
         this.nomDAttribut.codeGenSelectIdent(compiler,
             ((ClassType) objet.getType()).getDefinition());
@@ -62,7 +62,7 @@ public class Selection extends AbstractLValue {
         regMan.give(regResultat);
     }
 
-    protected void codeGenGetLValue(DecacCompiler compiler) {
+    protected void codeGenGetLValue(DecacCompiler compiler) throws DecacFatalError {
         objet.codeGenExpr(compiler);
     }
 
@@ -104,7 +104,7 @@ public class Selection extends AbstractLValue {
     }
 
     @Override
-    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
+    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) throws DecacFatalError {
         super.codeGenPrint(compiler, printHex);
     }
 

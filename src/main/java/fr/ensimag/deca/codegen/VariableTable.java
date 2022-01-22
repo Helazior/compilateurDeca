@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.AbstractDeclVar;
 import fr.ensimag.deca.tree.ListDeclVar;
@@ -18,7 +19,7 @@ public class VariableTable {
     public VariableTable(DecacCompiler compiler) {
         this.compiler = compiler;
     }
-    public int init(ListDeclVar vars, int classtableSize) {
+    public int init(ListDeclVar vars, int classtableSize) throws DecacFatalError {
         nextKey = classtableSize + 1;
         List<AbstractDeclVar> varsList = vars.getList();
         for (int i = 0; i < varsList.size(); i++) {
@@ -31,7 +32,7 @@ public class VariableTable {
         compiler.getRegMan().addSizeStack(varsList.size());
         return varsList.size();
     }
-    public int init(ListDeclVar vars) {
+    public int init(ListDeclVar vars) throws DecacFatalError {
         return init(vars, 1);
     }
     public void load(Symbol s, GPRegister dst) {
