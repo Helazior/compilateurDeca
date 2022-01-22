@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import com.sun.org.apache.bcel.internal.generic.ArrayElementValueGen;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.TypeDefinition;
@@ -46,16 +47,18 @@ public class Selection extends AbstractLValue {
     @Override
     public void codeGenExpr(DecacCompiler compiler) {
         objet.codeGenExpr(compiler);
-        this.nomDAttribut.codeGenSelectIdent(compiler);
+        this.nomDAttribut.codeGenSelectIdent(compiler,
+            ((ClassType) objet.getType()).getDefinition());
     }
 
     @Override
-    protected void codeGenStoreLValue(DecacCompiler compiler) {
+    protected void codeGenStoreLValue(DecacCompiler compiler) throws DecacFatalError {
         RegisterManager regMan = compiler.getRegMan();
         GPRegister regResultat = regMan.pop();
         objet.codeGenExpr(compiler);
         regMan.pop(Register.R1);
-        regMan.setField(Register.R1, nomDAttribut.getName(), objet.getType(), regResultat, getLocation());
+        regMan.setField(Register.R1, nomDAttribut.getName(),
+            ((ClassType) objet.getType()).getDefinition(), regResultat, getLocation());
         regMan.give(regResultat);
     }
 

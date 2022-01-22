@@ -37,21 +37,6 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
         }
     }
 
-    protected void codeGenListClass(DecacCompiler compiler) throws DecacFatalError {
-        // On met la méthode object
-        objectEquals.methodEquals(compiler);
-        IMAProgram newProgram = new IMAProgram();
-        // On écrit la méthode dans un nouveau programme. Plus facile pour les addFirst
-        IMAProgram oldProgram = compiler.remplaceProgram(newProgram);
-        // On met les classes
-        for (AbstractDeclClass declClass : getList()) {
-            declClass.codeGenClass(compiler);
-        }
-        // On rajoute notre nouveau programme à la fin de l'ancien.
-        // Le nouveau programme contiendra tous les programmes
-        compiler.concatenateBeginningProgram(oldProgram);
-    }
-
     /**
      * Pass 1 of [SyntaxeContextuelle]
      */
@@ -80,10 +65,17 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
     }
 
     protected void codeGenListClass(DecacCompiler compiler) throws DecacFatalError {
+        // On met la méthode object
+        objectEquals.methodEquals(compiler);
+        IMAProgram newProgram = new IMAProgram();
+        // On écrit la méthode dans un nouveau programme. Plus facile pour les addFirst
+        IMAProgram oldProgram = compiler.remplaceProgram(newProgram);
+        // On met les classes
         for (AbstractDeclClass declClass : getList()) {
             declClass.codeGenClass(compiler);
         }
-        // On met la méthode object
-        objectEquals.methodEquals(compiler);
+        // On rajoute notre nouveau programme à la fin de l'ancien.
+        // Le nouveau programme contiendra tous les programmes
+        compiler.concatenateBeginningProgram(oldProgram);
     }
 }

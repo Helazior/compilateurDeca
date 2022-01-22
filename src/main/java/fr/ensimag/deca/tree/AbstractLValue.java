@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.ContextualError;
 
 /**
@@ -10,7 +11,7 @@ import fr.ensimag.deca.context.ContextualError;
  * @date 01/01/2022
  */
 public abstract class AbstractLValue extends AbstractExpr {
-    protected abstract void codeGenStoreLValue(DecacCompiler compiler);
+    protected abstract void codeGenStoreLValue(DecacCompiler compiler) throws DecacFatalError;
     protected abstract void codeGenGetLValue(DecacCompiler compiler);
 }
 

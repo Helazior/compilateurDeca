@@ -40,47 +40,6 @@ public class DeclClass extends AbstractDeclClass {
         this.listDeclMethod = listDeclMethod;
     }
 
-
-    private void initAttributs(DecacCompiler compiler) throws DecacFatalError {
-        // TODO: itérer sur les parents si extend !
-        RegisterManager regMan = compiler.getRegMan();
-        compiler.addComment("----------- Initialisation des champs de " + currentClass.getName());
-        compiler.addLabel(new Label("init." + currentClass.getName()));
-        for (AbstractDeclField declField : listDeclField.getList()) {
-            // On déclare chaque attribut :
-            if (declField.getInitialization().isInitialized()) {
-                // initialisé
-                declField.getInitialization().pushValue(compiler);
-                regMan.pop(Register.R0);
-            } else {
-                // valeur par défaut
-                if (declField.getType().isInt()) {
-                    compiler.addInstruction(new LOAD(0, Register.R0));
-                } else if (declField.getType().isFloat()) {
-                    compiler.addInstruction(new LOAD(new ImmediateFloat(0), Register.R0));
-                } else {
-                    compiler.addInstruction(new LOAD(null, Register.R0));
-                }
-            }
-
-            compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
-            compiler.getRegMan().setField(Register.R1, declField.getName(), declField.getType(), Register.R0, getLocation());
-        }
-
-        // On revient au New
-        compiler.addInstruction(new RTS());
-    }
-
-    @Override
-    protected void codeGenClass(DecacCompiler compiler) throws ContextualError {
-        compiler.addComment("--------------------------------------------------");
-        compiler.addComment("                  Classe " + currentClass.getName());
-        compiler.addComment("--------------------------------------------------");
-        // On initialise tous les attributs :
-        initAttributs(compiler);
-        listDeclMethod.codeGenListDeclMethod(compiler, currentClass);
-    }
-
     @Override
     public void decompile(IndentPrintStream s) {
         s.print("class ");
@@ -227,8 +186,8 @@ public class DeclClass extends AbstractDeclClass {
     private void initAttributs(DecacCompiler compiler) throws DecacFatalError {
         // TODO: itérer sur les parents si extend !
         RegisterManager regMan = compiler.getRegMan();
-        compiler.addComment("; ---------- Initialisation des champs de " + getClass().getName());
-        compiler.addLabel(new Label("init." + getClass().getName()));
+        compiler.addComment("----------- Initialisation des champs de " + currentClass.getName());
+        compiler.addLabel(new Label("init." + currentClass.getName()));
         for (AbstractDeclField declField : listDeclField.getList()) {
             // On déclare chaque attribut :
             if (declField.getInitialization().isInitialized()) {
@@ -247,8 +206,7 @@ public class DeclClass extends AbstractDeclClass {
             }
 
             compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
-            compiler.getRegMan().setField(Register.R1, declField.getName(),
-                currentClass.getDefinition(), Register.R0, getLocation());
+            compiler.getRegMan().setField(Register.R1, declField.getName(), currentClass.getDefinition(), Register.R0, getLocation());
         }
 
         // On revient au New
@@ -262,7 +220,7 @@ public class DeclClass extends AbstractDeclClass {
         compiler.addComment("--------------------------------------------------");
         // On initialise tous les attributs :
         initAttributs(compiler);
-        listDeclMethod.codeGenListDeclMethod(compiler);
+        listDeclMethod.codeGenListDeclMethod(compiler, currentClass);
     }
 
     /** Adds at the end of program the code to populate the classtable.
