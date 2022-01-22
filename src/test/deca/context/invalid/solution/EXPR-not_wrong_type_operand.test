@@ -1,3 +1,3 @@
-tests/EXPR-oparith_wrong_type_operand.deca
+tests/EXPR-not_wrong_type_operand.deca
 
-EXPR-not_wrong_type_operand.deca:12:16: Error: Unsupported operands. Expected : boolean
+EXPR-not_wrong_type_operand.deca:12:20: Error: Unsupported operands. Expected : boolean

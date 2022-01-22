@@ -2,7 +2,7 @@
 //    Affectation et typage
 //
 // Resultats:
-//    Ligne 12: initialisation d'un attribut à une valeur de type incompatible.
+//    Ligne 17: appel d'un attribut inexistant
 // 
 // Historique:
 //    cree le 01/01/2022
