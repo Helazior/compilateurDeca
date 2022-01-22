@@ -184,7 +184,12 @@ public class DeclClass extends AbstractDeclClass {
 
 
     private void initAttributs(DecacCompiler compiler) throws DecacFatalError {
-        // TODO: itérer sur les parents si extend !
+        new RegisterOffset(-2, Register.LB);
+        compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R0));
+        compiler.addInstruction(new PUSH(Register.R0));
+        compiler.addInstruction(new BSR(new Label("init." + superClass.getName().toString())));
+        compiler.addInstruction(new SUBSP(1));
+
         RegisterManager regMan = compiler.getRegMan();
         compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
         compiler.addInstruction(new LOAD(new RegisterOffset(

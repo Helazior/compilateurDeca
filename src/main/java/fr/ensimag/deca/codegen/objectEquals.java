@@ -2,8 +2,6 @@ package fr.ensimag.deca.codegen;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.DecacFatalError;
-import fr.ensimag.deca.tools.SymbolTable;
-import fr.ensimag.deca.tree.*;
 import fr.ensimag.ima.pseudocode.*;
 import fr.ensimag.ima.pseudocode.instructions.*;
 
@@ -33,5 +31,9 @@ public class objectEquals {
         // goto erreur return en cas de non return
         // On return
         compiler.addInstruction(new RTS());
+
+
+        compiler.addFirst(new Line(new RTS()));
+        compiler.addFirst(new Line(new Label("init.object")));
     }
 }
