@@ -16,6 +16,13 @@ import fr.ensimag.ima.pseudocode.instructions.*;
 public abstract class AbstractDeclClass extends Tree {
 
     /**
+     * Pass 0
+     * Link the className to its Node in the Tree
+     */
+    protected abstract void loadClassNodes(DecacCompiler compiler)
+                throws ContextualError;
+
+    /**
      * Pass 1 of [SyntaxeContextuelle]. Verify that the class declaration is OK
      * without looking at its content.
      */

@@ -22,7 +22,7 @@ import fr.ensimag.deca.codegen.codeGenError;
  */
 public class Program extends AbstractProgram {
     private static final Logger LOG = Logger.getLogger(Program.class);
-    
+
     public Program(ListDeclClass classes, AbstractMain main) {
         Validate.notNull(classes);
         Validate.notNull(main);
@@ -39,7 +39,9 @@ public class Program extends AbstractProgram {
         this.main = main;
     }
 
-
+    public ListDeclImport getImports() {
+        return imports;
+    }
     public ListDeclClass getClasses() {
         return classes;
     }
@@ -54,17 +56,27 @@ public class Program extends AbstractProgram {
     @Override
     public void verifyProgram(DecacCompiler compiler) throws ContextualError {
         LOG.debug("verify program: start");
-        //TODO: les 3 passes
-        classes.verifyListClass(compiler);
 
-        classes.verifyListClassMembers(compiler);
+        loadNodes(compiler);
+
+        ListDeclClass allClasses = compiler.getListClassNodes();
+        allClasses.verifyListClass(compiler);
+        allClasses.verifyListClassMembers(compiler);
+        //classes.verifyListClass(compiler);
+        //classes.verifyListClassMembers(compiler);
 
         classes.verifyListClassBody(compiler);
 
-        //TODO: check classes
-
         main.verifyMain(compiler);
         LOG.debug("verify program: end");
+    }
+
+    @Override
+    public void loadNodes(DecacCompiler compiler) throws ContextualError {
+        if(imports != null){
+            imports.loadListImportNodes(compiler);
+        }
+        classes.loadListClassNodes(compiler);
     }
 
 
@@ -136,6 +148,9 @@ public class Program extends AbstractProgram {
 
     @Override
     public void decompile(IndentPrintStream s) {
+        if (imports != null){
+            getImports().decompile(s);
+        }
         getClasses().decompile(s);
         getMain().decompile(s);
     }

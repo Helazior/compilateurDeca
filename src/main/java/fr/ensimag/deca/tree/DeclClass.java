@@ -4,6 +4,7 @@ import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable;
 import fr.ensimag.deca.codegen.RegisterManager;
@@ -54,7 +55,7 @@ public class DeclClass extends AbstractDeclClass {
         s.println("}");
     }
 
-
+    public int lastPassNumber; //PABO
     /**
      * Astuce ou idée pour l'extension :
      * On effectue un appel récursif sur le parent de la classe actuel de sorte que
@@ -67,9 +68,18 @@ public class DeclClass extends AbstractDeclClass {
      * Problème : On n'a aucune référence vers le noeud de l'arbre correspondant
      * à la définition de la classe parent
      *
-     * Intuition : on peut faire la construction de ces réfrence dans l'environnmenet du compilateur
+     * Intuition : on peut faire la construction de ces réfrences dans l'environnmenet du compilateur
      * dans une première passe, ou éventuellement rajouter des arguments dans les définitions de classes
      */
+    @Override
+    protected void loadClassNodes(DecacCompiler compiler) throws ContextualError{
+        lastPassNumber = 0;
+        try {
+            compiler.addClassNode(currentClass.getName(), this);
+        } catch (EnvironmentType.DoubleDefException e) {
+            throw new ContextualError("This class is already defined in this context", getLocation());
+        }
+    }
 
 
     @Override
@@ -77,11 +87,35 @@ public class DeclClass extends AbstractDeclClass {
         Symbol name = currentClass.getName();
         Symbol superName = superClass.getName();
 
+        //region Recusion Part
+
+        /** Condition d'arret :
+         * > si la classe est déja défini on s'arrete, car cela signifie
+         * > que toutes les classes supérieur on aussi été défini
+         */
+        if(compiler.getType(name) != null){
+            return;
+        }
+
+        if(lastPassNumber == 1){
+            // Ici, on rencontre une classe qui n'est pas défini mais qui a déja été appelé par cette fonction avant
+            throw new ContextualError("It seams that there is a fishy loop in the class hierarchy", getLocation());
+        }
+        lastPassNumber = 1;
+
+        //récursion
+        if(superName.getName() != "Object"){
+            DeclClass superClassNode = compiler.getClassNode(superName);
+            if(superClassNode == null){
+                throw new ContextualError("the parent of this class should be a class", getLocation());
+            }
+            superClassNode.verifyClass(compiler);
+        }
+
+        //endregion
+
         TypeDefinition def = compiler.getType(superName);
 
-        if(def != null && !def.isClass()){
-            throw new ContextualError("the parent of this class should be a class", getLocation());
-        }
         ClassType classType = new ClassType(name, getLocation(), (ClassDefinition)def);
 
         currentClass.setDefinition(classType.getDefinition());
@@ -95,8 +129,29 @@ public class DeclClass extends AbstractDeclClass {
     @Override
     protected void verifyClassMembers(DecacCompiler compiler)
             throws ContextualError {
-        ClassDefinition classDef = (ClassDefinition)compiler.getType(currentClass.getName());
-        ClassDefinition superClassDef = (ClassDefinition)compiler.getType(superClass.getName());
+        Symbol name = currentClass.getName();
+        Symbol superName = superClass.getName();
+
+        ClassDefinition classDef = (ClassDefinition)compiler.getType(name);
+        ClassDefinition superClassDef = (ClassDefinition)compiler.getType(superName);
+
+        //region Recusion Part
+
+        /** Condition d'arret :
+         * > si la classe à déja été parcouru par cette fonction on s'arrete
+         * > On parcours ainsi tout le monde car on a garanti à la passe précedente qu'il n'y avait pas de boucle
+         */
+        if(lastPassNumber == 2 || name.getName().equals("Object")){
+            return;
+        }
+        lastPassNumber = 2;
+
+        //récursion
+        if(superName.getName() != "Object"){
+            compiler.getClassNode(superName).verifyClassMembers(compiler);
+        }
+
+        //endregion
 
         listDeclField.verifyListFieldVisibility(compiler, superClassDef, classDef);
         listDeclMethod.verifyListMethodSignature(compiler, superClassDef, classDef);

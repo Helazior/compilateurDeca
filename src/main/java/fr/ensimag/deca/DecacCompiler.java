@@ -4,8 +4,10 @@ import fr.ensimag.deca.syntax.DecaLexer;
 import fr.ensimag.deca.syntax.DecaParser;
 import fr.ensimag.deca.syntax.DecaImportParser;
 import fr.ensimag.deca.tools.DecacInternalError;
+import fr.ensimag.deca.tree.AbstractDeclClass;
 import fr.ensimag.deca.tree.AbstractProgram;
 import fr.ensimag.deca.tree.DeclClass;
+import fr.ensimag.deca.tree.ListDeclClass;
 import fr.ensimag.deca.tree.LocationException;
 import fr.ensimag.ima.pseudocode.*;
 
@@ -32,6 +34,7 @@ import java.nio.file.Path;
 
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.*;
+import fr.ensimag.deca.context.EnvironmentType.DoubleDefException;
 /**
  * Decac compiler instance.
  *
@@ -297,9 +300,31 @@ public class DecacCompiler {
     }
 
 //region TREE NODE MAP
+    /**
+     * Sert à redéfinir l'ordre de parcours des classes de sorte que les classes
+     * parents soient toujours parcouru et défini avant leurs enfants
+     */
     private final Map<Symbol,DeclClass> classNodes = new HashMap<>();
+    private ListDeclClass listClassNodes = new ListDeclClass();
 
+    public void addClassNode(Symbol symbol, DeclClass classNode) throws DoubleDefException{
+        if(classNodes.containsKey(symbol)){
+            throw new DoubleDefException();
+        }
+        listClassNodes.add(classNode);
+        classNodes.put(symbol, classNode);
+    }
+
+    public DeclClass getClassNode(Symbol symbol){
+        return classNodes.get(symbol);
+    }
+
+    public ListDeclClass getListClassNodes(){
+        return listClassNodes;
+    }
 //endregion
+
+
 
 //region TYPE ENVIRONMENT
 
@@ -586,10 +611,6 @@ public class DecacCompiler {
         }
         assert(prog.checkAllLocations());
 
-        if(compilerOptions.getDecompile()){
-            prog.decompile(out);
-            return prog;
-        }
         return prog;
     }
 
