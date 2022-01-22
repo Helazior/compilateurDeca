@@ -12,7 +12,7 @@ import fr.ensimag.deca.context.ContextualError;
  */
 public abstract class AbstractMain extends Tree {
 
-    protected abstract void codeGenMain(DecacCompiler compiler) throws DecacFatalError;
+    protected abstract void codeGenMain(DecacCompiler compiler, int tablesSize) throws DecacFatalError;
 
 
     /**

@@ -192,12 +192,15 @@ public class DeclClass extends AbstractDeclClass {
             ), Register.R0));
         compiler.addInstruction(new STORE( Register.R0, new RegisterOffset(0, Register.R1)));
         for (AbstractDeclField declField : listDeclField.getList()) {
+            compiler.addComment("field " + declField.getName());
             // On déclare chaque attribut :
             if (declField.getInitialization().isInitialized()) {
+                compiler.addComment("  -> init by exr");
                 // initialisé
                 declField.getInitialization().pushValue(compiler);
                 regMan.pop(Register.R0);
             } else {
+                compiler.addComment("  -> init by default");
                 // valeur par défaut
                 if (declField.getType().isInt()) {
                     compiler.addInstruction(new LOAD(0, Register.R0));
@@ -214,7 +217,7 @@ public class DeclClass extends AbstractDeclClass {
         regMan.restoreRegisters();
         compiler.addFirst(new Line("----------- Initialisation des champs de "
             + currentClass.getName()));
-        compiler.addLabel(new Label("init." + currentClass.getName()));
+        compiler.addFirst(new Line(new Label("init." + currentClass.getName())));
         compiler.addInstruction(new RTS());
     }
 

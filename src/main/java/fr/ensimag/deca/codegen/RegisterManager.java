@@ -97,6 +97,7 @@ public class RegisterManager {
         }
         namedVars = new VariableTable(compiler);
         this.stackOffset = namedVars.init(vars);
+        namedVars.addParams(args);
         LOG.trace("REGMAN declareVars end");
     }
 

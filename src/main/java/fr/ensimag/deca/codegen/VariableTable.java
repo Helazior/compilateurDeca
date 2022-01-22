@@ -6,7 +6,9 @@ import java.util.HashMap;
 
 import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.deca.tree.AbstractDeclParam;
 import fr.ensimag.deca.tree.AbstractDeclVar;
+import fr.ensimag.deca.tree.ListDeclParam;
 import fr.ensimag.deca.tree.ListDeclVar;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.instructions.*;
@@ -31,6 +33,13 @@ public class VariableTable {
         // add the number of variables in the TSTO stack's max size
         compiler.getRegMan().addSizeStack(varsList.size());
         return varsList.size();
+    }
+    public void addParams(ListDeclParam params) throws DecacFatalError {
+        List<AbstractDeclParam> paramsList = params.getList();
+        for (int i = 0; i < paramsList.size(); i++) {
+            AbstractDeclParam param = paramsList.get(i);
+            table.put(param.getName(), -3 - i);
+        }
     }
     public int init(ListDeclVar vars) throws DecacFatalError {
         return init(vars, 1);

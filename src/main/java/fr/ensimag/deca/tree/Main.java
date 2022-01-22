@@ -41,8 +41,8 @@ public class Main extends AbstractMain {
     }
 
     @Override
-    protected void codeGenMain(DecacCompiler compiler) throws DecacFatalError {
-        compiler.getRegMan().declareGlobalVars(declVariables, 0); // TODO: set table size
+    protected void codeGenMain(DecacCompiler compiler, int tablesSize) throws DecacFatalError {
+        compiler.getRegMan().declareGlobalVars(declVariables, tablesSize);
 
         compiler.addComment("---------------------------------------------------");
         compiler.addComment("          Beginning of main instructions:");

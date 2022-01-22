@@ -70,7 +70,7 @@ public class ClassManager {
         ClassDefinition typeDef = (ClassDefinition) objDef;
         ExpDefinition exp = typeDef.getMembers().get(fieldName);
         int index = ((FieldDefinition) exp).getIndex();
-        compiler.addInstruction(new LOAD(new RegisterOffset(index, reg), dst));
+        compiler.addInstruction(new LOAD(new RegisterOffset(index + 1, reg), dst));
     }
 
     public void setField(GPRegister addr, Symbol fieldName, Definition objDef,
@@ -81,7 +81,7 @@ public class ClassManager {
         ClassDefinition typeDef = (ClassDefinition) objDef;
         ExpDefinition exp = typeDef.getMembers().get(fieldName);
         int index = ((FieldDefinition) exp).getIndex();
-        compiler.addInstruction(new STORE(src, new RegisterOffset(index, addr)));
+        compiler.addInstruction(new STORE(src, new RegisterOffset(index + 1, addr)));
     }
 
     /** Loads the method's address into a register */

@@ -117,14 +117,14 @@ public class Program extends AbstractProgram {
         // Récupéré avec getOperand
 
         RegisterManager regMan = compiler.getRegMan();
-        regMan.declareClasses(classes);
+        int tablesize = regMan.declareClasses(classes);
         IMAProgram classtableGen = compiler.remplaceProgram(new IMAProgram());
         
         classes.codeGenListClass(compiler);
         IMAProgram classesBodies = compiler.remplaceProgram(new IMAProgram());
 
         // parcours de l'arbre. On écrit dans le main :
-        main.codeGenMain(compiler);
+        main.codeGenMain(compiler, tablesize);
         compiler.addFirst(new Line("Main program"));
         if (!compiler.getCompilerOptions().getNoCheck()) {
             compiler.addFirst(new BOV(new Label("stack_overflow_error")));
