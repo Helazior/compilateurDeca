@@ -7,6 +7,7 @@ import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tree.AbstractDeclClass;
 import fr.ensimag.deca.tree.AbstractProgram;
 import fr.ensimag.deca.tree.DeclClass;
+import fr.ensimag.deca.tree.ListDeclClass;
 import fr.ensimag.deca.tree.LocationException;
 import fr.ensimag.ima.pseudocode.*;
 
@@ -304,16 +305,22 @@ public class DecacCompiler {
      * parents soient toujours parcouru et défini avant leurs enfants
      */
     private final Map<Symbol,DeclClass> classNodes = new HashMap<>();
+    private ListDeclClass listClassNodes = new ListDeclClass();
 
     public void addClassNode(Symbol symbol, DeclClass classNode) throws DoubleDefException{
         if(classNodes.containsKey(symbol)){
             throw new DoubleDefException();
         }
+        listClassNodes.add(classNode);
         classNodes.put(symbol, classNode);
     }
 
     public DeclClass getClassNode(Symbol symbol){
         return classNodes.get(symbol);
+    }
+
+    public ListDeclClass getListClassNodes(){
+        return listClassNodes;
     }
 //endregion
 

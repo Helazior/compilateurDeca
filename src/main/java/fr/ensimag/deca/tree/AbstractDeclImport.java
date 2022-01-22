@@ -12,4 +12,11 @@ import fr.ensimag.deca.tools.SymbolTable;
  */
 public abstract class AbstractDeclImport extends Tree {
 
+    /**
+     * Pass 0
+     * Link the className to its Node in the Tree
+     */
+    protected abstract void loadImportNodes(DecacCompiler compiler)
+            throws ContextualError;
+
 }

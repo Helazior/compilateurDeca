@@ -21,15 +21,20 @@ import org.apache.log4j.Logger;
 public class DeclImport extends AbstractDeclImport {
     private String address;
     private AbstractProgram program;
-    
+
     public DeclImport (String address, AbstractProgram program){
         this.address = address;
         this.program = program;
     }
 
     public void decompile(IndentPrintStream s) {
-        s.print("import");
-        s.println("\"" + address + "\"");
+        s.print("import ");
+        s.println(address );
+    }
+
+    @Override
+    protected void loadImportNodes(DecacCompiler compiler) throws ContextualError{
+        program.loadNodes(compiler);
     }
 
     @Override
