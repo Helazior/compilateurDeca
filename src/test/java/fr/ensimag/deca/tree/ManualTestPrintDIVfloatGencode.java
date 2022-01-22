@@ -7,6 +7,7 @@ package fr.ensimag.deca.tree;
 
 import com.sun.org.apache.xpath.internal.operations.Div;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.FloatType;
 import fr.ensimag.deca.context.Type;
@@ -40,13 +41,13 @@ public class ManualTestPrintDIVfloatGencode {
         return source;
     }
 
-    public static String gencodeSource(AbstractProgram source) throws ContextualError {
+    public static String gencodeSource(AbstractProgram source) throws ContextualError, DecacFatalError {
         DecacCompiler compiler = new DecacCompiler(new CompilerOptions(), null);
         source.codeGenProgram(compiler);
         return compiler.displayIMAProgram();
     }
 
-    public static void test1() throws ContextualError {
+    public static void test1() throws ContextualError, DecacFatalError {
         AbstractProgram source = initTest1();
         //System.out.println("---- From the following Abstract Syntax Tree ----");
         // source.prettyPrint(System.out);
@@ -58,7 +59,7 @@ public class ManualTestPrintDIVfloatGencode {
 
 
 
-    public static void main(String args[]) throws ContextualError {
+    public static void main(String args[]) throws ContextualError, DecacFatalError {
         test1();
     }
 }
