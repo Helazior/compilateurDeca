@@ -129,7 +129,7 @@ public class RegisterManager {
             if (usedRegisters[i]) {
                 nbPush++;
                 compiler.addFirst(new Line(new PUSH(Register.getR(i))));
-                compiler.addInstruction(new PUSH(Register.getR(i)));
+                compiler.addInstruction(new POP(Register.getR(i)));
             }
         }
         compiler.addFirst(new Line(new ADDSP(stackOffset)));
