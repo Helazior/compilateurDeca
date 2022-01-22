@@ -28,7 +28,7 @@
 
 
 class Type {
-	int b = 3
+	int b = 3;
 }
 
 class SousType extends Type{
@@ -51,8 +51,8 @@ class SousTest extends Test{
     float c = 0.3;
     SousType method0(int a, sousType b, float c) {
         this.a = a + 1;
-        println(this.a) // 2       | 3
-        println(a + c) // 1 + 0.5  | 2 + 1.5
+        println(this.a); // 2       | 3
+        println(a + c); // 1 + 0.5  | 2 + 1.5
 		println(b.a); // 9         | 19
         return new SousType();
     }
@@ -61,13 +61,13 @@ class SousTest extends Test{
         this.c = a;
         println(this.c);
         println(a);
-        if (!(this.c != a) {
+        if (!(this.c != a)) {
             println("ok");
         }
         if (this.c == a) {
             println("ok");
         }
-        if (!(this.b == this.c) {
+        if (!(this.b == this.c)) {
             println("ok");
         }
 
@@ -77,9 +77,9 @@ class SousTest extends Test{
 
     int method2() {
         if (this.a == 0) {
-            return new SousTest.a;
+            return new SousTest().a;
         } else {
-            return new SousTest.b;
+            return new SousTest().b;
         }
     }
 }
@@ -101,7 +101,7 @@ class SousTest extends Test{
 
 	//_____________________
 	a = 1;
-	SousType sousType = sousTest.method0(a, new SousType, 0.5);
+	SousType sousType = sousTest.method0(a, new SousType(), 0.5);
 	sousType.a = 19;
 	sousTest.method0(2, sousType, 1.5);
 	// test héritage méthode
