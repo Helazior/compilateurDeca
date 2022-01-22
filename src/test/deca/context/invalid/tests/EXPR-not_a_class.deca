@@ -9,6 +9,10 @@
 
 
 class Test {
-    int field = !5;
+    int field;
 
+}
+{
+    int i;
+    i.field = 5;
 }

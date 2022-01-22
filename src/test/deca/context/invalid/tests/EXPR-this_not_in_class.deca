@@ -9,6 +9,9 @@
 
 
 class Test {
-    int field = !5;
+    int field;
 
+}
+{
+    this.field = 5;
 }

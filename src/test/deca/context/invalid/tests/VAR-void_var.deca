@@ -2,13 +2,16 @@
 //    Affectation et typage
 //
 // Resultats:
-//    Ligne 12: initialisation d'un attribut à une valeur de type incompatible.
+//    Ligne 15: Void Type
 // 
 // Historique:
 //    cree le 01/01/2022
 
 
 class Test {
-    int field = !5;
+   int attributTest;
 
+   void fct(){
+       void a;
+   }
 }

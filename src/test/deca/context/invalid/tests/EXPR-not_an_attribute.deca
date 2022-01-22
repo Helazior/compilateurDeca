@@ -9,6 +9,10 @@
 
 
 class Test {
-    int field = !5;
+    int field;
 
+}
+{
+    Test t = new Test();
+    t.f = 5;
 }
