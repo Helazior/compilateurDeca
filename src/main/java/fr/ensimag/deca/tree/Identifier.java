@@ -206,7 +206,7 @@ public class Identifier extends AbstractIdentifier {
             throws ContextualError {
         ExpDefinition expDef = envExp.get(name);
         if(expDef == null) {
-            throw new ContextualError("the expression "+name+" is not regognised",
+            throw new ContextualError("the expression "+name+" is not recognised",
                 getLocation());
         }
         setDefinition(expDef);

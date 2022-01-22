@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.context.*;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
@@ -34,7 +35,26 @@ public class MethodCall extends AbstractExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-                throw new UnsupportedOperationException("not yet implemented");
+        Type exprType = objet.verifyExpr(compiler, localEnv, currentClass);
+        TypeDefinition typeDef = compiler.getTypeEnv().get(exprType.getName());
+        if (!typeDef.isClass()) {
+            throw new ContextualError(
+                "Type " + exprType.getName() + " is not a class type, and has thus no method.",
+                getLocation());
+        }
+        ClassDefinition classTypeDef = (ClassDefinition) typeDef;
+        EnvironmentExp envExp = classTypeDef.getMembers();
+        
+        Definition methodnameDef = nomDeMethode.verifyIdent(compiler, envExp);
+        MethodDefinition methodDef = methodnameDef.asMethodDefinition(
+            "The identifier " + nomDeMethode.getName() +
+            " in class " + classTypeDef.getType().getName() + " is not a method", 
+            getLocation()
+        );
+
+        parametres.verifyParams(compiler, localEnv, currentClass, methodDef.getSignature());
+        setType(methodDef.getType());
+        return methodDef.getType();
     }
 
     @Override
