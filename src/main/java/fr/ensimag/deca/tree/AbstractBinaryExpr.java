@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.RegisterManager;
+import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 
@@ -132,7 +133,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
 
 
     @Override
-    public void codeGenExpr(DecacCompiler compiler) {
+    public void codeGenExpr(DecacCompiler compiler) throws ContextualError {
         RegisterManager regMan = compiler.getRegMan();
         //super.codeGenExpr(compiler);
         AbstractExpr left = getLeftOperand();

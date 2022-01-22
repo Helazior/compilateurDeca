@@ -49,11 +49,10 @@ public class Modulo extends AbstractOpArith {
     }
 
 
-    /*
     @Override
-    protected void codeGenPrint(DecacCompiler compiler) {
-        super.codeGenPrint(compiler);
-    }*/
+    protected void codeGenPrint(DecacCompiler compiler, Boolean hexa) {
+        super.codeGenPrint(compiler, hexa);
+    }
 
     @Override
     protected String getOperatorName() {

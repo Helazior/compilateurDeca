@@ -159,7 +159,7 @@ public abstract class AbstractExpr extends AbstractInst {
         }
     }
 
-    protected void codeGenExpr(DecacCompiler compiler){
+    public void codeGenExpr(DecacCompiler compiler) throws ContextualError {
         throw new UnsupportedOperationException("Expr not yet implemented");
     }
 

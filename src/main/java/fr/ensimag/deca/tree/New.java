@@ -41,7 +41,7 @@ public class New extends AbstractExpr {
     }
 
     @Override
-    protected void codeGenExpr(DecacCompiler compiler){
+    public void codeGenExpr(DecacCompiler compiler){
         RegisterManager regMan = compiler.getRegMan();
 
         //GPRegister registreDest = regMan.take();

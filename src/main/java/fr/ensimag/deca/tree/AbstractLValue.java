@@ -13,5 +13,9 @@ import fr.ensimag.deca.context.EnvironmentExp;
  * @date 01/01/2022
  */
 public abstract class AbstractLValue extends AbstractExpr {
-    protected abstract void codeGenStoreLValue(DecacCompiler compiler);
+    protected abstract void codeGenStoreLValue(DecacCompiler compiler) throws ContextualError;
+//     codeGenGetLValue(compiler);
+//    id rien à faire;
+//            selection exec membre de gauche;
 }
+

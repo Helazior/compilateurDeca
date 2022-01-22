@@ -36,8 +36,9 @@ public class Assign extends AbstractBinaryExpr {
     }
 
     @Override
-    public void codeGenExpr(DecacCompiler compiler) {
+    public void codeGenExpr(DecacCompiler compiler) throws ContextualError {
         compiler.addComment("Assign");
+//        get
         getRightOperand().codeGenExpr(compiler);
         compiler.addComment("Store assign");
         getLeftOperand().codeGenStoreLValue(compiler);
