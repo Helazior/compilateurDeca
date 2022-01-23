@@ -119,7 +119,7 @@ public class RegisterManager {
         if (classes != null) {
             throw new UnsupportedOperationException("Classes already delcared");
         }
-        classes = new ClassManager(compiler, classDefs);
+        classes = new ClassManager(compiler, classDefs, imports);
         LOG.trace("REGMAN declareClasses end");
         return classes.getSize();
     }

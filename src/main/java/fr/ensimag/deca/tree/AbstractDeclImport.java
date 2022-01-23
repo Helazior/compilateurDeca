@@ -19,4 +19,5 @@ public abstract class AbstractDeclImport extends Tree {
     protected abstract void loadImportNodes(DecacCompiler compiler)
             throws ContextualError;
 
+    public abstract AbstractProgram getProgram();
 }
