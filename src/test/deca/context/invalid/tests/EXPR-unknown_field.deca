@@ -2,13 +2,15 @@
 //    Affectation et typage
 //
 // Resultats:
-//    Ligne 12: Expresion avec opérandes de type incompatible.
+//    Ligne 14: Variable non définie.
 // 
 // Historique:
 //    cree le 22/01/2022
 
 
 class Test {
-    boolean field = 5 || true;
-
+    int f;
+    void fct(){
+        t.f = 5;
+    }
 }

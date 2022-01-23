@@ -590,6 +590,7 @@ class_extension returns[AbstractIdentifier tree]
     | /* epsilon */ {
         //Attention, ici le setLocation n'a pas ete fait pas defaut de token de depart!
             $tree = new Identifier(getDecacCompiler().createSymbol("Object"));
+            $tree.setLocation(Location.BUILTIN);
         }
     ;
 

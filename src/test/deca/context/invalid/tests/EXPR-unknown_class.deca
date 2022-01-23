@@ -2,13 +2,15 @@
 //    Affectation et typage
 //
 // Resultats:
-//    Ligne 12: Expresion avec opérandes de type incompatible.
+//    Ligne 15: Appel de classe non définie.
 // 
 // Historique:
 //    cree le 22/01/2022
 
 
 class Test {
-    boolean field = 5 || true;
-
+    int f;
+}
+{
+    ClasseIndefinie t = new ClasseIndefinie();
 }

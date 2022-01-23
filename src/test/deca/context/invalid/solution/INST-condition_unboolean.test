@@ -1,0 +1,3 @@
+tests/INST-condition_unboolean.deca
+
+INST-condition_unboolean.deca:14:11: Excepted a boolean as condition

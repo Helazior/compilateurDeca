@@ -102,7 +102,7 @@ public abstract class AbstractExpr extends AbstractInst {
             return convFloat;
 
         } else if(expectedType.isClass() && actualType.isClass()
-        && ((ClassType)expectedType).isSubClassOf((ClassType)actualType)) {
+        && ((ClassType) actualType).isSubClassOf((ClassType) expectedType)) {
             return this;
         } else {
             throw new ContextualError("a " + actualType +
