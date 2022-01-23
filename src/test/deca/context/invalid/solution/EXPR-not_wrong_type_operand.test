@@ -1,0 +1,3 @@
+tests/EXPR-not_wrong_type_operand.deca
+
+EXPR-not_wrong_type_operand.deca:12:20: Error: Unsupported operands. Expected : boolean

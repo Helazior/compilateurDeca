@@ -6,7 +6,6 @@
 // Historique:
 //    cree le 21/01/2022
 
-import "/user/6/elefthet/Projet_GL/src/test/deca/syntax/valid/tests/ES-appel_field.deca"
 import "../provided/hello.deca"
 import "ES-class_decl.deca"
 

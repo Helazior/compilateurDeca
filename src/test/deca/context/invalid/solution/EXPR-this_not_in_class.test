@@ -1,0 +1,3 @@
+tests/EXPR-this_not_in_class.deca
+
+EXPR-this_not_in_class.deca:16:4: Cannot use the symbol 'this' outside a class

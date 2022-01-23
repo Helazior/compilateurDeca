@@ -1,0 +1,3 @@
+tests/VAR-already_defined.deca
+
+VAR-already_defined.deca:14:14:  This varibale is already defined in this context

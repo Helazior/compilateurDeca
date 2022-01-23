@@ -1,0 +1,3 @@
+tests/EXPR-oparith_wrong_type_operand.deca
+
+EXPR-oparith_wrong_type_operand.deca:12:16: Error: Unsupported operands. Expected : int or float
