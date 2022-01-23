@@ -69,7 +69,7 @@ public class MethodCall extends AbstractExpr {
         regMan.prepareMethodCall(parametres.size() + 1);
 
         // On saute à l'adresse de la méthode
-        compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.GB), Register.R1));
+        compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.SP), Register.R1));
         // TODO : faire les déref null
         //compiler.addInstruction(new CMP(null, Register.R1));
         //compiler.addInstruction(new BEQ(new Label("dereferencement_null")));
