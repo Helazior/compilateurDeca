@@ -40,14 +40,11 @@ public class DeclParam extends AbstractDeclParam {
     @Override
     protected Type verifyParamSignature(DecacCompiler compiler)
             throws ContextualError {
-        TypeDefinition t = compiler.getType(type.getName());
-        if (t == null) {
-            throw new ContextualError("Unknown type " + t.getType().getName(), getLocation());
-        }
-        if(t.getType().isVoid()){
+        Type t = type.verifyType(compiler);
+        if(t.isVoid()){
             throw new ContextualError("Cannot pass a voidType object in argument", getLocation());
         }
-        return t.getType();
+        return t;
     }
 
     @Override
