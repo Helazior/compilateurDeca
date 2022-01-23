@@ -29,12 +29,12 @@ public class Or extends AbstractOpBool {
      * @param compiler
      */
     @Override
-    public void codeGenOp(DecacCompiler compiler, GPRegister register1) throws DecacFatalError {
+    public void codeGenOp(DecacCompiler compiler) throws DecacFatalError {
         // TODO :  avec l'extension, nommer les labels différemment
         if (!compiler.getIsInNotOp()) { // OR
-            super.codeGenOr(compiler, register1);
+            super.codeGenOr(compiler);
         } else { // NOT op -> AND
-            super.codeGenAnd(compiler, register1);
+            super.codeGenAnd(compiler);
         }
     }
 

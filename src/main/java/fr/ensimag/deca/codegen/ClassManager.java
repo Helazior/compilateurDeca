@@ -36,7 +36,7 @@ public class ClassManager {
                 new LabelOperand(new Label("methodBody.Object.equals")),
                 Register.R1));
         classTableInitsFns.addInstruction(new STORE(
-                Register.R1, new RegisterOffset(2, Register.GB)));
+                Register.R1, new RegisterOffset(1, Register.SP)));
         classTableInitsFns.addInstruction(new RTS());
         tablesSize = 3;
         for (AbstractDeclClass classDef : classes.getList()) {
@@ -47,6 +47,7 @@ public class ClassManager {
         classTableInitsMain.addInstruction(new BSR(new Label("classTableInit.Object")));
         classTableInitsMain.addInstruction(new LOAD(new NullOperand(), Register.R1));
         classTableInitsMain.addInstruction(new STORE(Register.R1, new RegisterOffset(1, Register.GB)));
+        classTableInitsMain.addFirst(new Line(new ADDSP(3)));
         for (AbstractDeclClass classDef : classes.getList()) {
             classDef.codeGenClassTableMain(compiler, classTableInitsMain);
         }
@@ -55,7 +56,6 @@ public class ClassManager {
         classTableInitsMain.append(classTableInitsFns);
         classTableInitsFns.addComment("-------------------- Fin tables -----------------------");
         classTableInitsMain.addLabel(end);
-        classTableInitsMain.addFirst(new Line(new ADDSP(tablesSize)));
         classTableInitsMain.addFirst(new Line(new BOV(new Label("stack_overflow_error"))));
         classTableInitsMain.addFirst(new Line(new TSTO(tablesSize)));
         compiler.concatenateEndProgram(classTableInitsMain);

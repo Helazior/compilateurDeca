@@ -114,7 +114,7 @@ public class RegisterManager {
         LOG.trace("REGMAN declareVars end");
     }
 
-    public int declareClasses(ListDeclClass classDefs) {
+    public int declareClasses(ListDeclClass classDefs, ListDeclImport imports) {
         LOG.trace("REGMAN declareClasses");
         if (classes != null) {
             throw new UnsupportedOperationException("Classes already delcared");

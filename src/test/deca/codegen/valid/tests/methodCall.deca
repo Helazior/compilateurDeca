@@ -15,9 +15,9 @@ class ClassName {
 
 {
     ClassName a = new ClassName();
+    int z = 1;
 
     a.y = a.x + 4; // 7
-    int z = 1;
 
     println(a.methodAddition(a.x, a.y, z, 20));
 }

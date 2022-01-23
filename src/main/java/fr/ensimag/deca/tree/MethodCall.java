@@ -76,19 +76,15 @@ public class MethodCall extends AbstractExpr {
         // On saute au label de la méthode
 
         try {
-            compiler.addInstruction(new BSR(new Label("methodBody." + objet.getType().asClassType("", null).getName() + "." + nomDeMethode)));
+            compiler.addInstruction(new BSR(new Label("methodBody." + objet.getType()
+                .asClassType("", null).getName() + "." + nomDeMethode.getName())));
         } catch (ContextualError e) {
             e.printStackTrace();
         }
 
         // On remet la stack comme avant l'appel de méthode
         compiler.addInstruction(new SUBSP(parametres.size() + 2)); // + this * 2: in the bottom and the top
-
-    }
-
-    @Override
-    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
-        throw new UnsupportedOperationException("Method is not printable");
+        regMan.push(Register.R1);
     }
 
     @Override

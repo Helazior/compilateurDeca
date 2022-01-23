@@ -117,7 +117,7 @@ public class Program extends AbstractProgram {
         // Récupéré avec getOperand
 
         RegisterManager regMan = compiler.getRegMan();
-        int tablesize = regMan.declareClasses(classes);
+        int tablesize = regMan.declareClasses(classes, imports);
         IMAProgram classtableGen = compiler.remplaceProgram(new IMAProgram());
         
         classes.codeGenListClass(compiler);

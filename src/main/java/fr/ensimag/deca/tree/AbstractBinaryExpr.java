@@ -57,7 +57,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
-    public void codeGenOp(DecacCompiler compiler, GPRegister register1) throws DecacFatalError {
+    public void codeGenOp(DecacCompiler compiler) throws DecacFatalError {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
@@ -65,7 +65,7 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         codeGenOp(compiler, register0, register1);
     }
 
-    public void codeGenAnd(DecacCompiler compiler, GPRegister register1) throws DecacFatalError {
+    public void codeGenAnd(DecacCompiler compiler) throws DecacFatalError {
         RegisterManager regMan = compiler.getRegMan();
         compiler.addComment("Start And");
         String falseLabel = "false_and_" + compiler.getNumAnd();
@@ -74,15 +74,16 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         // On teste la condition leftOp
         getLeftOperand().codeGenExpr(compiler);
         // On récupère le résultat de la condition dans la pile
-        regMan.pop(register1);
+        GPRegister register1 = regMan.pop();
         // 0 : cond false -> goto falseLabel
         compiler.addComment(getOperatorName());
         compiler.addInstruction(new CMP(0, register1));
         compiler.addInstruction(new BEQ(new Label(falseLabel)));
+        regMan.give(register1);
         // cond true :
         // On teste rightOp
         getRightOperand().codeGenExpr(compiler);
-        regMan.pop(register1);
+        register1 = regMan.pop();
         // 0 : cond false -> goto false_and_n
         compiler.addInstruction(new CMP(0, register1));
         compiler.addInstruction(new BEQ(new Label(falseLabel)));
@@ -99,38 +100,39 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     }
 
 
-        public void codeGenOr(DecacCompiler compiler, GPRegister register1) throws DecacFatalError { // OR si on utilise le not
-            RegisterManager regMan = compiler.getRegMan();
-            compiler.addComment("Start Or");
-            String trueLabel = "true_or_" + compiler.getNumOr();
-            String endLabel = "end_or_" + compiler.getNumOr();
-            compiler.incrementNumOr();
-            // On teste la condition leftOp
-            getLeftOperand().codeGenExpr(compiler);
-            // On récupère le résultat de la condition dans la pile
-            regMan.pop(register1);
-            // 1 : cond true -> goto trueLabel
-            compiler.addComment(getOperatorName());
-            compiler.addInstruction(new CMP(1, register1));
-            compiler.addInstruction(new BEQ(new Label(trueLabel)));
-            // cond false :
-            // On teste rightOp
-            getRightOperand().codeGenExpr(compiler);
-            regMan.pop(register1);
-            // 1 : cond true -> goto true_or_n
-            compiler.addInstruction(new CMP(1, register1));
-            compiler.addInstruction(new BEQ(new Label(trueLabel)));
-            // load 0 -> goto end_or_n
-            compiler.addInstruction(new LOAD(0, register1));
-            compiler.addInstruction(new BRA(new Label(endLabel)));
-            // lbl true_and_n:
-            compiler.addLabel(new Label(trueLabel));
-            // load 1
-            compiler.addInstruction(new LOAD(1, register1));
-            // lbl end_and_n
-            compiler.addLabel(new Label(endLabel));
-            regMan.giveAndPush(register1);
-        }
+    public void codeGenOr(DecacCompiler compiler) throws DecacFatalError { // OR si on utilise le not
+        RegisterManager regMan = compiler.getRegMan();
+        compiler.addComment("Start Or");
+        String trueLabel = "true_or_" + compiler.getNumOr();
+        String endLabel = "end_or_" + compiler.getNumOr();
+        compiler.incrementNumOr();
+        // On teste la condition leftOp
+        getLeftOperand().codeGenExpr(compiler);
+        // On récupère le résultat de la condition dans la pile
+        GPRegister register1 = regMan.pop();
+        // 1 : cond true -> goto trueLabel
+        compiler.addComment(getOperatorName());
+        compiler.addInstruction(new CMP(1, register1));
+        compiler.addInstruction(new BEQ(new Label(trueLabel)));
+        regMan.give(register1);
+        // cond false :
+        // On teste rightOp
+        getRightOperand().codeGenExpr(compiler);
+        register1 = regMan.pop();
+        // 1 : cond true -> goto true_or_n
+        compiler.addInstruction(new CMP(1, register1));
+        compiler.addInstruction(new BEQ(new Label(trueLabel)));
+        // load 0 -> goto end_or_n
+        compiler.addInstruction(new LOAD(0, register1));
+        compiler.addInstruction(new BRA(new Label(endLabel)));
+        // lbl true_and_n:
+        compiler.addLabel(new Label(trueLabel));
+        // load 1
+        compiler.addInstruction(new LOAD(1, register1));
+        // lbl end_and_n
+        compiler.addLabel(new Label(endLabel));
+        regMan.giveAndPush(register1);
+    }
 
 
     @Override
