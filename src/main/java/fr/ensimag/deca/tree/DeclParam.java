@@ -6,6 +6,7 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
@@ -39,11 +40,14 @@ public class DeclParam extends AbstractDeclParam {
     @Override
     protected Type verifyParamSignature(DecacCompiler compiler)
             throws ContextualError {
-        Type t = compiler.getType(type.getName()).getType();
-        if(t.isVoid()){
+        TypeDefinition t = compiler.getType(type.getName());
+        if (t == null) {
+            throw new ContextualError("Unknown type " + t.getType().getName(), getLocation());
+        }
+        if(t.getType().isVoid()){
             throw new ContextualError("Cannot pass a voidType object in argument", getLocation());
         }
-        return t;
+        return t.getType();
     }
 
     @Override
