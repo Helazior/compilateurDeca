@@ -18,7 +18,8 @@ public abstract class AbstractMethodBody extends Tree {
      * Write all the code of a method
      * @param compiler
      * @param listDeclField
+     *
      */
     protected abstract void codeGenMethod(DecacCompiler compiler,
-                                          ListDeclParam args, ListDeclField listDeclField) throws UnsupportedOperationException, DecacFatalError;
+                                          ListDeclParam args, AbstractIdentifier classe) throws UnsupportedOperationException, DecacFatalError;
 }

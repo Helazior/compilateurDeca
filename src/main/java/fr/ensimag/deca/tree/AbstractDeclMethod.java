@@ -19,7 +19,7 @@ public abstract class AbstractDeclMethod extends Tree {
      * @param currentClass
      * @param listDeclField
      */
-    protected abstract void codeGenDeclMethod(DecacCompiler compiler, AbstractIdentifier currentClass, ListDeclField listDeclField) throws DecacFatalError;
+    protected abstract void codeGenDeclMethod(DecacCompiler compiler, AbstractIdentifier currentClass, AbstractIdentifier classe) throws DecacFatalError;
 
     /**
      * Pass 2 of [SyntaxeContextuelle]. Verify that the

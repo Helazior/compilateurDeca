@@ -86,7 +86,7 @@ public class RegisterManager {
         compiler.addInstruction(new PUSH(Register.R0));
     }
 
-    public void declareMethodVars(ListDeclParam args, ListDeclVar vars, ListDeclField listDeclField) throws DecacFatalError {
+    public void declareMethodVars(ListDeclParam args, ListDeclVar vars) throws DecacFatalError {
         if (vars == null) {
             throw new DecacFatalError("vars is null");
         }
