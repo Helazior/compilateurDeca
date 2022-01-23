@@ -16,4 +16,8 @@ public abstract class AbstractProgram extends Tree {
     public abstract void loadNodes(DecacCompiler compiler) throws ContextualError;
     public abstract void codeGenProgram(DecacCompiler compiler) throws DecacFatalError;
 
+    public abstract ListDeclImport getImports();
+    public abstract ListDeclClass getClasses();
+    public abstract AbstractMain getMain();
+
 }
