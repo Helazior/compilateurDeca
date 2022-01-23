@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;
 import static org.mockito.Mockito.*;
-import org.mockito.MockitoAnnotations;
 
 /**
  * Test for the Plus node using mockito, using @Mock and @Before annotations.
@@ -36,7 +35,6 @@ public class TestPlusAdvanced {
     
     @BeforeEach
     public void setup() throws ContextualError {
-        MockitoAnnotations.initMocks(this);
         compiler = new DecacCompiler(new CompilerOptions(), null);
         when(intexpr1.verifyExpr(compiler, null, null)).thenReturn(INT);
         when(intexpr2.verifyExpr(compiler, null, null)).thenReturn(INT);

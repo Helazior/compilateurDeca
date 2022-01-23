@@ -5,13 +5,6 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
 import java.io.PrintStream;
-import java.util.jar.Attributes.Name;
-
-import org.apache.commons.lang.Validate;
-
-import java.io.PrintStream;
-
-import org.apache.log4j.Logger;
 
 /**
  *

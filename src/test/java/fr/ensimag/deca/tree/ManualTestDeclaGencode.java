@@ -8,10 +8,8 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable;
 
-import java.io.PrintStream;
 import fr.ensimag.deca.CompilerOptions;
 
 /**

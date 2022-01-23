@@ -10,9 +10,7 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
-import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BSR;
-import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.NEW;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.SUBSP;
@@ -48,7 +46,7 @@ public class New extends AbstractExpr {
     public void codeGenExpr(DecacCompiler compiler){
         RegisterManager regMan = compiler.getRegMan();
 
-        compiler.addComment(new String("New"));
+        compiler.addComment("New");
         //GPRegister registreDest = regMan.take();
         int nbOfFiled = ((ClassType) className.getType()).getDefinition().getNumberOfFields();
         GPRegister regObject = regMan.take();

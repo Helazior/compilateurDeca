@@ -8,7 +8,6 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.context.FloatType;
 import fr.ensimag.deca.context.IntType;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.SymbolTable;

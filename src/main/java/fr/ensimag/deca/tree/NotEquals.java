@@ -3,7 +3,6 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.*;
 
 /**
@@ -17,6 +16,7 @@ public class NotEquals extends AbstractOpExactCmp {
         super(leftOperand, rightOperand);
     }
 
+    @Override
     public void codeGenOp(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
         compiler.addInstruction(new CMP(register0, register1));
         if (!compiler.getIsInNotOp()) {

@@ -3,12 +3,9 @@ package fr.ensimag.deca.codegen;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.ListIterator;
-import java.util.Map;
-import java.util.HashMap;
 
 import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.*;
-import fr.ensimag.deca.codegen.VariableTable;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.*;
@@ -35,6 +32,7 @@ public class RegisterManager {
     // maximum size of the stack for the TSTO instruction
     private int maxSizeStack;
     private int sizeStack;
+    private int classtableSize;
 
     //public final VariableTable varTable;
     private DecacCompiler compiler;
@@ -57,6 +55,7 @@ public class RegisterManager {
         this.sizeStack = 0;
         this.namedVars = null;
         this.stackOffset = 0;
+        this.classtableSize = 0;
     }
 
 
@@ -87,7 +86,7 @@ public class RegisterManager {
         compiler.addInstruction(new PUSH(Register.R0));
     }
 
-    public void declareMethodVars(ListDeclParam args, ListDeclVar vars) throws DecacFatalError {
+    public void declareMethodVars(ListDeclParam args, ListDeclVar vars, ListDeclField listDeclField) throws DecacFatalError {
         if (vars == null) {
             throw new DecacFatalError("vars is null");
         }
@@ -110,8 +109,9 @@ public class RegisterManager {
             throw new UnsupportedOperationException("Variables already delcared");
         }
         namedVars = new VariableTable(compiler);
-        this.stackOffset = namedVars.init(vars, classtableSize) + classtableSize;
+        this.stackOffset = namedVars.init(vars, classtableSize);
         LOG.trace("REGMAN declareVars end");
+        this.classtableSize = classtableSize;
     }
 
     public int declareClasses(ListDeclClass classDefs, ListDeclImport imports) {
@@ -141,8 +141,10 @@ public class RegisterManager {
 
     public void endMain() {
         compiler.addFirst(new Line(new ADDSP(stackOffset)));
+        compiler.addFirst(new Line("Leave space for local vars"));
         compiler.addFirst(new BOV(new Label("stack_overflow_error")));
         compiler.addFirst(new Line(new TSTO(maxSizeStack + stackOffset)));
+        compiler.addFirst(new Line("max size stack: " + maxSizeStack + " offset: " + stackOffset));
         init(); // reinitalize the inner strucure
     }
 

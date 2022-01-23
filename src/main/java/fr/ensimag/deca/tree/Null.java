@@ -6,12 +6,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.ima.pseudocode.ImmediateString;
-import fr.ensimag.ima.pseudocode.instructions.WSTR;
 import java.io.PrintStream;
-import org.apache.commons.lang.Validate;
-
-import org.apache.log4j.Logger;
 /**
  * String literal
  *
@@ -19,12 +14,10 @@ import org.apache.log4j.Logger;
  * @date 17/01/2022
  */
 public class Null extends AbstractExpr {
-    private static final Logger LOG = Logger.getLogger(StringLiteral.class);
 
-    public Null() {   
+    public Null() {
     }
 
-//TODO
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {

@@ -7,10 +7,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.Register;
 import org.apache.commons.lang.Validate;
-
-import javax.naming.AuthenticationNotSupportedException;
 
 /**
  * Unary expression.
@@ -33,10 +30,10 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
         throw new UnsupportedOperationException("not yet implemented");
     }
 
+    @Override
     public void codeGenExpr(DecacCompiler compiler) throws DecacFatalError {
         RegisterManager regMan = compiler.getRegMan();
 
-        AbstractExpr operand = getOperand();
         operand.codeGenExpr(compiler);
 
         compiler.addComment(getOperatorName());

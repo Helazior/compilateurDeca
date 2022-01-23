@@ -1,0 +1,165 @@
+// Description:
+//   test d'héritage
+//
+// Resultats:
+//      - 1
+//	  4.7
+//	  8
+//	  2.00
+//	  9.00
+//	  2.00
+//	  2.00
+//	  1.OO
+//	  2.00
+//	  2.00
+//	  5
+//	  10.7
+//    5
+//    10.7
+//    ...
+
+class GrandMere {
+	float a = 2;
+	float b = a;
+	float c = 5.7;
+	int d = 1;
+	float e = 10.0;
+	float methodeGM (int c) {
+		// this implicite
+		// c is the arg
+		println(a + b + c);
+		return a + b + this.c + c;
+	}
+
+	void methodeGM2() {
+	    println("methodeGM2");
+	}
+}
+
+class Mere extends GrandMere {
+	float a = 9.0;
+	float b;
+	void methodeMere0(int a, GrandMere gm, Mere m, Tante tante) {
+		println(a);
+		// this implicite
+		b = 1.0;
+		println(gm.a);
+		println(m.a);
+		println(t.a);
+		println(gm.b);
+
+		println(m.b);
+
+		println(tante.a);
+		println(tante.b);
+
+		println(gm.methodeGM(1));
+		println(m.methodeGM(1));
+		println(tante.methodeGM(1));
+	}
+}
+
+
+class Tante extends GrandMere {
+	int d = 10; // d pas la même valeur selon la classe
+	// TODO: erreur à corriger
+	e = 6; // e la même valeur selon les classes
+	float f = 10.3;
+	void methodeMere0(int a, GrandMere gm, Mere m, Tante tante) {
+		println(a);
+		println(f);
+
+		println(gm.a);
+		println(gm.b);
+
+		println(m.a);
+		println(m.b);
+
+		println(tante.a);
+		println(tante.b);
+
+		println(gm.methodeGM(gm.e));
+		println(m.methodeGM(m.e));
+		println(tante.methodeGM(tante.e));
+	}
+
+	float methodeGM (int c) {
+    	// this implicite
+    	println("Override !");
+    	return a / b - c;
+    }
+}
+
+class Fille extends Mere {
+	int e = 100;
+	GrandMere methodeFille (GrandMere gm, Mere m, Tante t)  {
+	// declVar dans une méthode et convFloat au passage
+		int nb = 1;
+		float n = nb + 5;
+		Fille fille = new Fille();
+
+		println(n);
+		gm.methodeGM(gm.e);
+		m.methodeGM(m.e);
+		t.methodeGM(t.e);
+		fille.methodeGM(t.e);
+
+		return gm;
+		println("jamais ecrit");
+	}
+}
+
+class PetiteFille extends Fille {
+	int e = 29;
+	float methodeGM (int c) {
+		println("pf ovride");
+	}
+
+	void methodeGM2(PetiteFille pf) {
+		GrandMere gm = new GrandMere();
+		Mere m = new Mere();
+		Fille fille = new fille();
+		Tante t = new Tante();
+	    println("methodeGM2");
+	    pf.methodeGM(1);
+	    gm.methodeGM(1);
+	    m.methodeGM(1);
+	    fille.methodeGM(1);
+	    t.methodeGM(1);
+	}
+}
+
+
+{
+	GrandMere gm = new GrandMere();
+	Mere m = new Mere();
+	Tante t = new Tante();
+	Fille fille = new Fille();
+	PetiteFille pf = new PetiteFille();
+
+	println(gm.methodeGM(-2 - 3));
+	// - 1
+	// 4.7
+
+	gm.methodeGM2();
+	// methodeGM2
+
+	m.methodeMere0(8, gm, m, tante);
+	// 8
+	// 2.00
+	// 9.00
+	// 2.00
+	// 2.00
+	// 1.OO
+	// 2.00
+	// 2.00
+
+	// 5
+	// 10.7
+
+	// 5
+	// 10.7
+
+	// 5
+	// 10.7
+}

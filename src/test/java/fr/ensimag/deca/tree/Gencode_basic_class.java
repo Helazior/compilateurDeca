@@ -11,8 +11,6 @@ import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.SymbolTable;
 
-import java.util.List;
-
 /**
  *
  * @author Ensimag

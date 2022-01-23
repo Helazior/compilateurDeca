@@ -12,14 +12,14 @@ import fr.ensimag.deca.context.ContextualError;
  * @date 12/01/2022
  */
 public abstract class AbstractDeclMethod extends Tree {
-//TODO
 
     /**
      * Write all the code of a method
      * @param compiler
      * @param currentClass
+     * @param listDeclField
      */
-    protected abstract void codeGenDeclMethod(DecacCompiler compiler, AbstractIdentifier currentClass) throws DecacFatalError;
+    protected abstract void codeGenDeclMethod(DecacCompiler compiler, AbstractIdentifier currentClass, ListDeclField listDeclField) throws DecacFatalError;
 
     /**
      * Pass 2 of [SyntaxeContextuelle]. Verify that the

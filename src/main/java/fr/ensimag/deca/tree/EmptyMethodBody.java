@@ -15,7 +15,6 @@ import java.io.PrintStream;
  * @date 14/01/2022
  */
 public class EmptyMethodBody extends AbstractMethodBody {
-    //TODO
     @Override
     protected void verifyMethodBody(DecacCompiler compiler, EnvironmentExp methodEnv,
         ClassDefinition currentClass, Type returnType) throws ContextualError {
@@ -24,7 +23,7 @@ public class EmptyMethodBody extends AbstractMethodBody {
 
     @Override
     protected void codeGenMethod(DecacCompiler compiler,
-            ListDeclParam args) throws UnsupportedOperationException {
+                                 ListDeclParam args, ListDeclField listDeclField) throws UnsupportedOperationException {
         // Nothing to do
     }
 

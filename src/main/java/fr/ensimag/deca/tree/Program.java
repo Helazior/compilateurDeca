@@ -127,8 +127,9 @@ public class Program extends AbstractProgram {
         main.codeGenMain(compiler, tablesize);
         compiler.addFirst(new Line("Main program"));
         if (!compiler.getCompilerOptions().getNoCheck()) {
-            compiler.addFirst(new BOV(new Label("stack_overflow_error")));
-            compiler.addFirst(new TSTO(compiler.getRegMan().getMaxSizeStack()));
+            /*compiler.addFirst(new BOV(new Label("stack_overflow_error")));
+            compiler.addFirst(new TSTO(compiler.getRegMan().getMaxSizeStack()));*/
+            regMan.endMain();
         }
         if (!compiler.getRegMan().isStackEmpty()) {
             System.err.println("Error: Pushed in RegMan more often than pop.\n"

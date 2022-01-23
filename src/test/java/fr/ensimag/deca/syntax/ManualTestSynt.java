@@ -28,7 +28,7 @@ public class ManualTestSynt {
         }
         CompilerOptions options = new CompilerOptions();
         try {
-            options.parseArgs(new String[] {"-l"});
+            options.parseArgs(new String[] {"-c"});
         } catch (CLIException e) {
             throw new RuntimeException("Error when launching TestSynth", e);
         }

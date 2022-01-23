@@ -1,19 +1,12 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacFatalError;
-import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.ImmediateFloat;
-import fr.ensimag.ima.pseudocode.ImmediateString;
-import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.SUB;
-import fr.ensimag.ima.pseudocode.instructions.WSTR;
 
 /**
  *
@@ -53,7 +46,16 @@ public class Not extends AbstractUnaryExpr {
      */
     @Override
     public void codeGenExpr(DecacCompiler compiler) throws DecacFatalError {
+        /*
         RegisterManager regMan = compiler.getRegMan();
+        GPRegister register0 = regMan.pop();
+        GPRegister register1 = regMan.take();
+
+        codeGenOp(compiler, register0, register1);
+        regMan.push(register1);
+        regMan.give(register0);
+        regMan.give(register1);
+         */
 
         AbstractExpr operand = getOperand();
         // Si on n'est pas déjà dans un NOT, on met le NOT, sinon on annule
@@ -62,16 +64,7 @@ public class Not extends AbstractUnaryExpr {
         compiler.inverseIsInNotOp();
 
         compiler.addComment(getOperatorName());
-        /*
-        GPRegister register0 = regMan.pop();
-        GPRegister register1 = regMan.take();
 
-        codeGenOp(compiler, register0, register1);
-        regMan.push(register1);
-        regMan.give(register0);
-        regMan.give(register1);
-
-         */
     }
 
 

@@ -2,7 +2,6 @@ package fr.ensimag.deca.tools;
 
 import fr.ensimag.deca.codegen.*;
 import fr.ensimag.deca.*;
-import fr.ensimag.deca.tree.*;
 import org.junit.jupiter.api.Test;
 import fr.ensimag.ima.pseudocode.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,7 +20,7 @@ public class RegisterManagerTest {
             assertTrue(i < req.length);
             assertEquals(res[i].strip(), req[i].strip());
         }
-        assertTrue(i == req.length);
+        assertEquals(i, req.length);
     }
 
     @Test

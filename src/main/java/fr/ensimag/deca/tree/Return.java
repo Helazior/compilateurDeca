@@ -9,7 +9,6 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
 import java.io.PrintStream;
-import fr.ensimag.deca.codegen.RegisterManager;
 
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
@@ -25,7 +24,6 @@ public class Return extends AbstractInst {
         this.resultat = e;
     }
 
-    //TODO
     @Override
     protected void codeGenInst(DecacCompiler compiler) throws DecacFatalError {
         resultat.codeGenExpr(compiler);

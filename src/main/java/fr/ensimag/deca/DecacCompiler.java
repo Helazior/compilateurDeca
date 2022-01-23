@@ -4,7 +4,6 @@ import fr.ensimag.deca.syntax.DecaLexer;
 import fr.ensimag.deca.syntax.DecaParser;
 import fr.ensimag.deca.syntax.DecaImportParser;
 import fr.ensimag.deca.tools.DecacInternalError;
-import fr.ensimag.deca.tree.AbstractDeclClass;
 import fr.ensimag.deca.tree.AbstractProgram;
 import fr.ensimag.deca.tree.DeclClass;
 import fr.ensimag.deca.tree.ListDeclClass;
@@ -366,7 +365,7 @@ public class DecacCompiler {
 
         Signature sig = new Signature();
         sig.add(objectType);
-        MethodDefinition equalsDef = new MethodDefinition(getType("boolean"), null, sig, 1);
+        MethodDefinition equalsDef = new MethodDefinition(getType("boolean"), null, sig, 0);
         try{
             objectType.getDefinition().getMembers().declare(expTable.create("equals"), equalsDef);
             objectType.getDefinition().incNumberOfMethods();
@@ -457,7 +456,11 @@ public class DecacCompiler {
         if (!sourceFile.substring(sourceFile.length() - 5, sourceFile.length()).equals(".deca")) {
             throw new ContextualError("Bad extension. Must be '.deca'", null);
         }
-        destFile = sourceFile.substring(0, sourceFile.length() - 5) + ".ass";
+        if (compilerOptions.getLinked()) {
+            destFile = sourceFile.substring(0, sourceFile.length() - 5) + ".deco";
+        } else {
+            destFile = sourceFile.substring(0, sourceFile.length() - 5) + ".ass";
+        }
 
         PrintStream err = System.err;
         PrintStream out = System.out;
@@ -577,9 +580,7 @@ public class DecacCompiler {
         String sourceFile = sourceImport;
         // On enlève les guillemets
         sourceFile = sourceFile.substring(1, sourceFile.length() - 1);
-        String destFile = null;
-        // Done: calculer le nom du fichier .ass à partir du nom du
-        // Done: FAIRE: fichier .deca.
+        // Done: calculer le nom du fichier .deco à partir du nom du .deca
 
         PrintStream err = System.err;
         PrintStream out = System.out;

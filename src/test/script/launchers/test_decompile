@@ -19,11 +19,11 @@ function resultGeneration {
     #generation du premier resultat
     res1_tmp=$path/tests/tmp_$file_name.deca
     res1_file=$path/generated/$file_name"1".deca
-    decac -p -l $file_src > $res1_tmp
+    decac -p -c $file_src > $res1_tmp
 
     #generation du deuxieme resultat
     res2_file=$path/generated/$file_name"2".deca
-    decac -p -l $res1_tmp > $res2_file
+    decac -p -c $res1_tmp > $res2_file
     mv $res1_tmp $res1_file
     
 

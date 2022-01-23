@@ -1,12 +1,10 @@
 package fr.ensimag.deca;
 
 import java.io.File;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import fr.ensimag.deca.CLIException;
 import static java.util.Map.entry;
 
 import org.apache.log4j.Level;
@@ -50,8 +48,8 @@ public class CompilerOptions {
         entry("-r", new OptionData("registers", "limite les registres " +
             "banalisés disponibles. Doit être comprise entre 4 et 16 inclus."
             , 1)),
-        entry("-l", new OptionData("link option", "permet et autorise " +
-            "l'imports de fichiers"
+        entry("-c", new OptionData("link option", "permet et autorise " +
+            "l'imports de fichiers.\n On compile au format objet .deco"
             , 0))
     );
 
@@ -89,7 +87,7 @@ public class CompilerOptions {
     }
 
     public boolean getLinked(){
-        return options.get("-l").isInvoked();
+        return options.get("-c").isInvoked();
     }
 
     public int getNbReg() {
