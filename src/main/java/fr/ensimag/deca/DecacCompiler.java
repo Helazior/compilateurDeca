@@ -578,14 +578,21 @@ public class DecacCompiler {
         // On enlève les guillemets
         sourceFile = sourceFile.substring(1, sourceFile.length() - 1);
         String destFile = null;
-        // Done: calculer le nom du fichier .ass à partir du nom du
-        // Done: FAIRE: fichier .deca.
+        // Done: calculer le nom du fichier .deco à partir du nom du .deca
 
+        if (!sourceFile.substring(sourceFile.length() - 5, sourceFile.length()).equals(".deca")) {
+            try {
+                throw new ContextualError("Bad extension. Must be '.deca'", null);
+            } catch (ContextualError e) {
+                e.printStackTrace();
+            }
+        }
+        destFile = sourceFile.substring(0, sourceFile.length() - 5) + ".deco";
         PrintStream err = System.err;
         PrintStream out = System.out;
-        LOG.debug("Importing file " + sourceFile);
+        LOG.debug("Importing file " + destFile);
         try {
-            return doCompileImport(sourceFile, out, err);
+            return doCompileImport(destFile, out, err);
         } catch (DecacFatalError e) {
             err.println(e.getMessage());
             return null;
