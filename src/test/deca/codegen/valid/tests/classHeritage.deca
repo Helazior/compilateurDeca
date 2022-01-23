@@ -4,19 +4,21 @@
 // Resultats:
 //    - 1
 //	  4.7
+//	  methodeGM2
 //	  8
 //	  2.00
 //	  9.00
 //	  2.00
 //	  2.00
-//	  1.OO
+//	  1.00
 //	  2.00
 //	  2.00
 //	  5
 //	  10.7
 //    5
 //    10.7
-//    ...
+//    Override
+//    1.00
 
 class GrandMere {
 	float a = 2;
@@ -126,6 +128,7 @@ class PetiteFille extends Fille {
 	    m.methodeGM(1);
 	    fille.methodeGM(1);
 	    t.methodeGM(1);
+		println(f + e);
 	}
 }
 
@@ -150,7 +153,7 @@ class PetiteFille extends Fille {
 	// 9.00
 	// 2.00
 	// 2.00
-	// 1.OO
+	// 1.00
 	// 2.00
 	// 2.00
 
@@ -162,4 +165,9 @@ class PetiteFille extends Fille {
 
 	// 5
 	// 10.7
+
+	println("\n");
+	gm = fille.methodeFille(gm, m, t);
+	gm.a = 10.5;
+	gm = pf.methodeFille(gm, m, t);
 }

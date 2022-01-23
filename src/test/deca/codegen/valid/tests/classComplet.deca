@@ -88,17 +88,17 @@ class SousTest extends Test{
     int a = 0;
     SousTest sousTest = new SousTest();
     SousType sousType;
-    if(a == sousTest.a) {println(1);} else {println(0);}            // true  : 1
+    if(a == sousTest.a) {println(1);} else {println(0);}             // true  : 1
     sousTest.b = 2;
     // tests equals
-    if(a == sousTest.b) {println(1);} else {println(0);}            // false : 0
-    if(sousTest.a == a) {println(1);} else {println(0);}            // true  : 1
-    if(sousTest.b == a) {println(1);} else {println(0);}            // false : 0
-    if(sousTest.a == sousTest.a) {println(1);} else {println(0);}   // true  : 1
-    if(sousTest.a == sousTest.a) {println(1);} else {println(0);}   // true  : 1
-    if(sousTest.b == sousTest.a) {println(1);} else {println(0);}   // false : 0
-    if(sousTest.equals(new Test())) {println(1);} else {println(0);}           // false : 0
-    if(sousTest.equals(sousTest)) {println(1);} else {println(0);}       // true  : 0
+    if(a == sousTest.b) {println(1);} else {println(0);}             // false : 0
+    if(sousTest.a == a) {println(1);} else {println(0);}             // true  : 1
+    if(sousTest.b == a) {println(1);} else {println(0);}             // false : 0
+    if(sousTest.a == sousTest.a) {println(1);} else {println(0);}    // true  : 1
+    if(sousTest.a == sousTest.a) {println(1);} else {println(0);}    // true  : 1
+    if(sousTest.b == sousTest.a) {println(1);} else {println(0);}    // false : 0
+    if(sousTest.equals(new Test())) {println(1);} else {println(0);} // false : 0
+    if(sousTest.equals(sousTest)) {println(1);} else {println(0);}   // true  : 1
 
 	//_____________________
 	a = 1;
