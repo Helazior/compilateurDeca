@@ -17,11 +17,11 @@ function resultGeneration {
     # TODO: vérifier le code de retour des commandes deca !!
 
     #generation du premier resultat
-    decac -p $file_src > $path/generated/$file_name"1".deca
+    decac -p -l $file_src > $path/generated/$file_name"1".deca
     res1_file=$path/generated/$file_name"1".deca
 
     #generation du deuxieme resultat
-    decac -p $res1_file > $path/generated/$file_name"2".deca
+    decac -p -l $res1_file > $path/generated/$file_name"2".deca
     res2_file=$path/generated/$file_name"2".deca
 
 	#On compare les fichiers

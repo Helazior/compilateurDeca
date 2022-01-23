@@ -28,8 +28,8 @@ public class DeclImport extends AbstractDeclImport {
     }
 
     public void decompile(IndentPrintStream s) {
-        s.print("import");
-        s.println("\"" + address + "\"");
+        s.print("import ");
+        s.println("\"" + program.getLocation().getFilename() + "\"");
     }
 
     @Override
