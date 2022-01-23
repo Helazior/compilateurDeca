@@ -17,7 +17,7 @@ public class ClassManager {
     public int getSize() {
         return tablesSize;
     }
-    public ClassManager(DecacCompiler compiler, ListDeclClass classes) {
+    public ClassManager(DecacCompiler compiler, ListDeclClass classes, ListDeclImport imports) {
         this.compiler = compiler;
         tablesSize = 0;
         EnvironmentType types = compiler.getTypeEnv();
@@ -38,19 +38,16 @@ public class ClassManager {
         classTableInitsFns.addInstruction(new STORE(
                 Register.R1, new RegisterOffset(1, Register.SP)));
         classTableInitsFns.addInstruction(new RTS());
-        tablesSize = 3;
-        for (AbstractDeclClass classDef : classes.getList()) {
-            int classTableSize = classDef.codeGenClassTableFn(compiler, classTableInitsFns, tablesSize);
-            tablesSize += classTableSize;
-        }
+        tablesSize = genTableFunctions(classTableInitsFns, classes, imports, 3);
+
         // Call functions and build super reference
         classTableInitsMain.addInstruction(new BSR(new Label("classTableInit.Object")));
         classTableInitsMain.addInstruction(new LOAD(new NullOperand(), Register.R1));
         classTableInitsMain.addInstruction(new STORE(Register.R1, new RegisterOffset(1, Register.GB)));
         classTableInitsMain.addFirst(new Line(new ADDSP(3)));
-        for (AbstractDeclClass classDef : classes.getList()) {
-            classDef.codeGenClassTableMain(compiler, classTableInitsMain);
-        }
+        
+        genTableMain(classTableInitsMain, classes, imports);
+
         Label end = new Label("classTableInit_end");
         classTableInitsMain.addInstruction(new BRA(end));
         classTableInitsMain.append(classTableInitsFns);
@@ -59,6 +56,36 @@ public class ClassManager {
         classTableInitsMain.addFirst(new Line(new BOV(new Label("stack_overflow_error"))));
         classTableInitsMain.addFirst(new Line(new TSTO(tablesSize)));
         compiler.concatenateEndProgram(classTableInitsMain);
+    }
+
+    private int genTableFunctions(IMAProgram program, ListDeclClass classes, ListDeclImport imports, int tablesSize) {
+        program.addComment("------------------- Imports Fn ----------------------");
+        if (imports != null) {
+            for (AbstractDeclImport imp : imports.getList()) {
+                AbstractProgram prog = imp.getProgram();
+                tablesSize = genTableFunctions(program, prog.getClasses(), prog.getImports(), tablesSize);
+            }
+        }
+        program.addComment("----------------- End Imports Fn --------------------");
+        for (AbstractDeclClass classDef : classes.getList()) {
+            int classTableSize = classDef.codeGenClassTableFn(compiler, program, tablesSize);
+            tablesSize += classTableSize;
+        }
+        return tablesSize;
+    }
+
+    private void genTableMain(IMAProgram program, ListDeclClass classes, ListDeclImport imports) {
+        program.addComment("------------------ Imports Main ---------------------");
+        if (imports != null) {
+            for (AbstractDeclImport imp : imports.getList()) {
+                AbstractProgram prog = imp.getProgram();
+                genTableMain(program, prog.getClasses(), prog.getImports());
+            }
+        }
+        program.addComment("---------------- End Imports Main -------------------");
+        for (AbstractDeclClass classDef : classes.getList()) {
+            classDef.codeGenClassTableMain(compiler, program);
+        }
     }
 
     /** Loads the field's content into a register */
