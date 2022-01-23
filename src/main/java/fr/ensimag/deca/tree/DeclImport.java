@@ -32,6 +32,10 @@ public class DeclImport extends AbstractDeclImport {
         s.println(address); // Contient déjà les guillemets
     }
 
+    public AbstractProgram getProgram() {
+        return program;
+    }
+
     @Override
     protected void loadImportNodes(DecacCompiler compiler) throws ContextualError{
         program.loadNodes(compiler);
