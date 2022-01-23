@@ -37,7 +37,7 @@ public class VariableTable {
     public void addParams(ListDeclParam params) throws DecacFatalError {
         List<AbstractDeclParam> paramsList = params.getList();
         for (int i = 0; i < paramsList.size(); i++) {
-            AbstractDeclParam param = paramsList.get(i);
+            AbstractDeclParam param = paramsList.get(paramsList.size() - i - 1);
             table.put(param.getName(), -3 - i);
         }
     }

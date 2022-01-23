@@ -365,7 +365,7 @@ public class DecacCompiler {
 
         Signature sig = new Signature();
         sig.add(objectType);
-        MethodDefinition equalsDef = new MethodDefinition(getType("boolean"), null, sig, 1);
+        MethodDefinition equalsDef = new MethodDefinition(getType("boolean"), null, sig, 0);
         try{
             objectType.getDefinition().getMembers().declare(expTable.create("equals"), equalsDef);
             objectType.getDefinition().incNumberOfMethods();
