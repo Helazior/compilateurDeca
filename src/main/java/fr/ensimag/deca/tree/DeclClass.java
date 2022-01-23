@@ -300,7 +300,7 @@ public class DeclClass extends AbstractDeclClass {
         program.addInstruction(new BSR(
             new LabelOperand(new Label("classTableInit." + type.getType().getName()))
         ));
-        program.addInstruction(new LOAD(
+        program.addInstruction(new LEA(
             new RegisterOffset(superOffset, Register.GB), Register.R1));
         program.addInstruction(new STORE(
             Register.R1, new RegisterOffset(offset, Register.GB)));
