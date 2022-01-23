@@ -44,15 +44,23 @@ public class VariableTable {
     public int init(ListDeclVar vars) throws DecacFatalError {
         return init(vars, 1);
     }
-    public void load(Symbol s, GPRegister dst) {
-        int i = get(s);
+    public boolean load(Symbol s, GPRegister dst) {
+        Integer i = get(s);
+        if (i == null) {
+            return false;
+        }
         compiler.addInstruction(new LOAD(new RegisterOffset(i, Register.LB), dst));
+        return true;
     }
-    public void store(Symbol s, GPRegister register) {
-        int i = get(s);
+    public boolean store(Symbol s, GPRegister register) {
+        Integer i = get(s);
+        if (i == null) {
+            return false;
+        }
         compiler.addInstruction(new STORE(register, new RegisterOffset(i, Register.LB)));
+        return true;
     }
-    public int get(Symbol s) {
+    public Integer get(Symbol s) {
         return table.get(s);
     }
 }

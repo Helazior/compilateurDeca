@@ -1,4 +1,4 @@
 ../../codegen/valid/tests/ecrit0.deca
--P src/test/deca/codegen/valid/tests/cond0.deca
+-P src/test/deca/codegen/valid/provided/cond0.deca
 ----
 ----

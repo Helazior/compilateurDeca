@@ -9,21 +9,21 @@
 class ClassName {
     int x = 3;
     int y;
-    void methodAddition(int nb1, int nb2, int nb3, int nb4) {
-        println(nb1 + nb2 + nb3 + nb4); // 3 + 7 + 1 + 20 = 31
+    int methodAddition(int nb1, int nb2, int nb3, int nb4) {
+        return nb1 + nb2 + nb3 + nb4; // 3 + 7 + 1 + 20 = 31
+        println("ne devrait pas s'afficher");
     }
     void methodAddition2() {
         println("passe");
-        return;
-        println("ne passe pas")
     }
 }
 
 {
     ClassName a = new ClassName();
-
-    a.y = a.x + 4; // 7
     int z = 1;
 
+    a.y = a.x + 4; // 7
+
     println(a.methodAddition(a.x, a.y, z, 20));
+    a.methodAddition2();
 }

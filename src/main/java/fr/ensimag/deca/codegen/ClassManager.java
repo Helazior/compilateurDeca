@@ -88,7 +88,7 @@ public class ClassManager {
 
     /** Loads the field's content into a register */
     public void getField(GPRegister reg, Symbol fieldName, Definition objDef,
-                         GPRegister dst, Location l) throws DecacFatalError {
+                         GPRegister dst) throws DecacFatalError {
         if (!objDef.isClass()) {
             throw new DecacFatalError(objDef.getType().getName() + " should be a class");
         }
@@ -99,7 +99,7 @@ public class ClassManager {
     }
 
     public void setField(GPRegister addr, Symbol fieldName, Definition objDef,
-                         GPRegister src, Location l) throws DecacFatalError {
+                         GPRegister src) throws DecacFatalError {
         if (!objDef.isClass()) {
             throw new DecacFatalError(objDef.getType().getName() + " should be a class");
         }
@@ -111,7 +111,7 @@ public class ClassManager {
 
     /** Loads the method's address into a register */
     public void getMethod(GPRegister reg, Symbol methName, Definition objDef,
-                         GPRegister dst, Location l) throws DecacFatalError {
+                         GPRegister dst) throws DecacFatalError {
         if (!objDef.isClass()) {
             throw new DecacFatalError(objDef.getType().getName() + " should be a class");
         }

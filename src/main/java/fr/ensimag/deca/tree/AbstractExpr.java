@@ -99,8 +99,10 @@ public abstract class AbstractExpr extends AbstractInst {
             convFloat.setType(compiler.getType("float"));
             return convFloat;
 
-        } else if(expectedType.isClass() && actualType.isClass()
-        && ((ClassType) actualType).isSubClassOf((ClassType) expectedType)) {
+        } else if(expectedType.isClass() && (actualType.isNull()
+            || actualType.isClass() 
+            && ((ClassType) actualType).isSubClassOf((ClassType) expectedType))
+        ) {
             return this;
         } else {
             throw new ContextualError("a " + actualType +

@@ -38,6 +38,7 @@ public class RegisterManager {
     private DecacCompiler compiler;
     private VariableTable namedVars;
     private ClassManager classes;
+    private ClassDefinition currentClassDef;
 
     public RegisterManager(DecacCompiler compiler, int nb_registres){
         this.compiler = compiler;
@@ -86,7 +87,9 @@ public class RegisterManager {
         compiler.addInstruction(new PUSH(Register.R0));
     }
 
-    public void declareMethodVars(ListDeclParam args, ListDeclVar vars) throws DecacFatalError {
+    public void declareMethodVars(ListDeclParam args, ListDeclVar vars,
+                                  AbstractIdentifier currentClass) throws DecacFatalError {
+        this.currentClassDef = (ClassDefinition) currentClass.getDefinition();
         if (vars == null) {
             throw new DecacFatalError("vars is null");
         }
@@ -271,7 +274,7 @@ public class RegisterManager {
         LOG.trace("REGMAN pop(dst) end");
     }
 
-    public void take(GPRegister register) {
+    private void take(GPRegister register) {
         LOG.trace("REGMAN take(reg)");
         usedRegisters[register.getNumber()] = true;
         if (register.getNumber() < 0 || register.getNumber() >= nMax) {
@@ -352,7 +355,15 @@ public class RegisterManager {
     public void load(Symbol s, GPRegister dst) {
         LOG.trace("REGMAN load");
         assert(namedVars != null);
-        namedVars.load(s, dst);
+        if (!namedVars.load(s, dst)) {
+            assert(currentClassDef != null);
+            compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), dst));
+            try {
+                getField(dst, s, currentClassDef, dst);
+            } catch (DecacFatalError e) {
+                throw new RuntimeException("Error while loading on implicit this", e);
+            }
+        }
         LOG.trace("REGMAN load end");
     }
     
@@ -368,7 +379,16 @@ public class RegisterManager {
     public void store(Symbol s, GPRegister register) {
         LOG.trace("REGMAN store");
         assert(namedVars != null);
-        namedVars.store(s, register);
+        if (!namedVars.store(s, register)) {
+            GPRegister addr = take();
+            compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), addr));
+            try {
+                setField(addr, s, currentClassDef, register);
+            } catch (DecacFatalError e) {
+                throw new RuntimeException("Error while storing on implicit this", e);
+            }
+            give(addr);
+        }
         LOG.trace("REGMAN store end");
     }
 
@@ -381,31 +401,31 @@ public class RegisterManager {
     }
 
     public void getField(GPRegister addr, Symbol fieldName, Definition objDef,
-                         GPRegister dst, Location l) throws DecacFatalError {
-        classes.getField(addr, fieldName, objDef, dst, l);
+                         GPRegister dst) throws DecacFatalError {
+        classes.getField(addr, fieldName, objDef, dst);
     }
 
-    public GPRegister getField(GPRegister addr, Symbol fieldName, Definition objDef,
-                                Location l) throws DecacFatalError {
+    public GPRegister getField(GPRegister addr, Symbol fieldName, Definition objDef)
+            throws DecacFatalError {
         GPRegister dst = take();
-        classes.getField(addr, fieldName, objDef, dst, l);
+        classes.getField(addr, fieldName, objDef, dst);
         return dst;
     }
 
     public void setField(GPRegister addr, Symbol fieldName, Definition objDef,
-                         GPRegister src, Location l) throws DecacFatalError {
-        classes.setField(addr, fieldName, objDef, src, l);
+                         GPRegister src) throws DecacFatalError {
+        classes.setField(addr, fieldName, objDef, src);
     }
 
     public void getMethod(GPRegister addr, Symbol methName, Definition objDef,
-                         GPRegister dst, Location l) throws DecacFatalError {
-        classes.getMethod(addr, methName, objDef, dst, l);
+                         GPRegister dst) throws DecacFatalError {
+        classes.getMethod(addr, methName, objDef, dst);
     }
 
-    public GPRegister getMethod(GPRegister addr, Symbol methName, Definition objDef,
-                                Location l) throws DecacFatalError {
+    public GPRegister getMethod(GPRegister addr, Symbol methName, Definition objDef)
+            throws DecacFatalError {
         GPRegister dst = take();
-        classes.getMethod(addr, methName, objDef, dst, l);
+        classes.getMethod(addr, methName, objDef, dst);
         return dst;
     }
 }

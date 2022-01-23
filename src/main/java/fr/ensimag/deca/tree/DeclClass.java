@@ -217,7 +217,7 @@ public class DeclClass extends AbstractDeclClass {
                     compiler.addInstruction(new LOAD(null, Register.R0));
                 }
             }
-            compiler.getRegMan().setField(Register.R1, declField.getName(), currentClass.getDefinition(), Register.R0, getLocation());
+            compiler.getRegMan().setField(Register.R1, declField.getName(), currentClass.getDefinition(), Register.R0);
         }
 
         // On revient au New
@@ -237,7 +237,7 @@ public class DeclClass extends AbstractDeclClass {
         IMAProgram oldProgram = compiler.remplaceProgram(new IMAProgram());
         initAttributs(compiler);
         compiler.concatenateBeginningProgram(oldProgram);
-        listDeclMethod.codeGenListDeclMethod(compiler, currentClass, currentClass);
+        listDeclMethod.codeGenListDeclMethod(compiler, currentClass);
     }
 
     /** Adds at the end of program the code to populate the classtable.

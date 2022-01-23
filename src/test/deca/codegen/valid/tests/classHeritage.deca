@@ -23,7 +23,7 @@ class GrandMere {
 	float b = a;
 	float c = 5.7;
 	int d = 1;
-	int e = 10.0;
+	int e = 10;
 	float methodeGM (int c) {
 		// this implicite
 		// c is the arg
@@ -31,7 +31,7 @@ class GrandMere {
 		return a + b + this.c + c;
 	}
 
-	void methodeGM2() {
+	void methodeGM2(PetiteFille pf) {
 	    println("methodeGM2");
 	}
 }
@@ -45,7 +45,7 @@ class Mere extends GrandMere {
 		b = 1.0;
 		println(gm.a);
 		println(m.a);
-		println(t.a);
+		println(tante.a);
 		println(gm.b);
 
 		println(m.b);
@@ -91,7 +91,7 @@ class Tante extends GrandMere {
 }
 
 class Fille extends Mere {
-	int e = 100;
+	int e = 123;
 	GrandMere methodeFille (GrandMere gm, Mere m, Tante t)  {
 	// declVar dans une méthode et convFloat au passage
 		int nb = 1;
@@ -118,7 +118,7 @@ class PetiteFille extends Fille {
 	void methodeGM2(PetiteFille pf) {
 		GrandMere gm = new GrandMere();
 		Mere m = new Mere();
-		Fille fille = new fille();
+		Fille fille = new Fille();
 		Tante t = new Tante();
 	    println("methodeGM2");
 	    pf.methodeGM(1);
@@ -141,10 +141,10 @@ class PetiteFille extends Fille {
 	// - 1
 	// 4.7
 
-	gm.methodeGM2();
+	gm.methodeGM2(null);
 	// methodeGM2
 
-	m.methodeMere0(8, gm, m, tante);
+	m.methodeMere0(8, gm, m, t);
 	// 8
 	// 2.00
 	// 9.00
