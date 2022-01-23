@@ -15,13 +15,13 @@ class A {
 	}
 
 	void setX(int x) {
-		this.x = x
+		this.x = x;
 	}
 }
 
 {
 	A a = new A();
-	A b = new B();
+	A b = new A();
 
 	b.setX(42);
 
