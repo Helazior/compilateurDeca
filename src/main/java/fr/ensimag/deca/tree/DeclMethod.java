@@ -92,7 +92,7 @@ public class DeclMethod extends AbstractDeclMethod {
         Symbol methodName = method.getName();
         Signature sig = parameters.verifyListParamSignature(compiler);
 
-        int index = superClass.getNumberOfMethods() + currentClass.getNumberOfMethods();
+        int index = superClass.getNumberOfMethods();
 
         ExpDefinition superExp = superClass.getMembers().get(methodName);
         if(superExp != null){

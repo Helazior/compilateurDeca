@@ -154,6 +154,9 @@ public class DeclClass extends AbstractDeclClass {
 
         //endregion
 
+        classDef.setNumberOfFields(superClassDef.getNumberOfFields());
+        classDef.setNumberOfMethods(superClassDef.getNumberOfMethods());
+
         listDeclField.verifyListFieldVisibility(compiler, superClassDef, classDef);
         listDeclMethod.verifyListMethodSignature(compiler, superClassDef, classDef);
     }
