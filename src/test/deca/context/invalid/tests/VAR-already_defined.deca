@@ -2,13 +2,15 @@
 //    Affectation et typage
 //
 // Resultats:
-//    Ligne 12: Expresion avec opérandes de type incompatible.
+//    Ligne 12: Double définition
 // 
 // Historique:
 //    cree le 22/01/2022
 
 
 class Test {
-    boolean field = 5 || true;
-
+    int method(){
+        int param;
+        float param;
+    }
 }

@@ -1,0 +1,3 @@
+tests/VAR-void_var.deca
+
+VAR-void_var.deca:15:12: Cannot have a 'void' type

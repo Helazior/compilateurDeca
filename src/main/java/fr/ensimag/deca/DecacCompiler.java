@@ -341,7 +341,7 @@ public class DecacCompiler {
         return typeEnv;
     }
 
-    public void initTypes() throws ContextualError{
+    private void initTypes() throws ContextualError{
 
         List<TypeDefinition> typeDefList = new LinkedList<>();
 
@@ -350,15 +350,33 @@ public class DecacCompiler {
         typeDefList.add(new TypeDefinition(new StringType(typeTable.create("string")), null));
         typeDefList.add(new TypeDefinition(new BooleanType(typeTable.create("boolean")), null));
         typeDefList.add(new TypeDefinition(new VoidType(typeTable.create("void")), null));
-
-        ClassType objectType = new ClassType(typeTable.create("Object"), null, null);
-        objectType.getDefinition().incNumberOfMethods();
-        typeDefList.add(objectType.getDefinition());
+        typeDefList.add(new TypeDefinition(new NullType(typeTable.create("Null")), null));
 
         for(TypeDefinition typeDef : typeDefList){
             createType(typeDef.getType().getName(), typeDef);
         }
+
+        objectInitialisation();
     }
+
+    private void objectInitialisation() throws ContextualError {
+
+        ClassType objectType = new ClassType(typeTable.create("Object"), null, null);
+        createType(objectType.getName(), objectType.getDefinition());
+
+        Signature sig = new Signature();
+        sig.add(objectType);
+        MethodDefinition equalsDef = new MethodDefinition(getType("boolean"), null, sig, 1);
+        try{
+            objectType.getDefinition().getMembers().declare(expTable.create("equals"), equalsDef);
+            objectType.getDefinition().incNumberOfMethods();
+        } catch (EnvironmentExp.DoubleDefException dde){
+            throw new ContextualError("Double def of equals in Object Initialisation", null);
+        }
+
+
+    }
+
 
     public void createType(Symbol symbol, TypeDefinition typeDef) throws ContextualError{
         try {

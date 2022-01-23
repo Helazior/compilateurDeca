@@ -1,0 +1,3 @@
+tests/EXPR-unknown_field.deca
+
+EXPR-unknown_field.deca:14:8: t is undefined in this context

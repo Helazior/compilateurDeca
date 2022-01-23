@@ -2,13 +2,17 @@
 //    Affectation et typage
 //
 // Resultats:
-//    Ligne 12: Expresion avec opérandes de type incompatible.
+//    Ligne 17: appel d'un attribut inexistant
 // 
 // Historique:
 //    cree le 01/01/2022
 
 
 class Test {
-    int field = 5 + true;
+    int field;
 
+}
+{
+    int i;
+    i.field = 5;
 }

@@ -5,10 +5,9 @@
 //    Ligne 12: Expresion avec opérandes de type incompatible.
 // 
 // Historique:
-//    cree le 01/01/2022
+//    cree le 22/01/2022
 
 
 class Test {
-    int field = 5 + true;
-
+    int field = 5 % true;
 }
