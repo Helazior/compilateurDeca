@@ -13,7 +13,6 @@ import fr.ensimag.ima.pseudocode.IMAProgram;
  * @date 14/01/2022
  */
 public class ListDeclMethod extends TreeList<AbstractDeclMethod> {
-    //TODO
     @Override
     public void decompile(IndentPrintStream s) {
         for (AbstractDeclMethod declMethod : getList()) {

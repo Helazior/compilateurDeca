@@ -53,7 +53,6 @@ public class Gencode_class_complet {
         SymbolTable symInt = new SymbolTable();
         SymbolTable.Symbol typeIntName = symInt.create("int");
         AbstractIdentifier intType = new Identifier(typeIntName);
-        SymbolTable symFloat = new SymbolTable();
         SymbolTable.Symbol typeName = symInt.create("int");
         AbstractIdentifier floatType = new Identifier(typeName);
         DeclField declField1 = new DeclField(intType, field1, initialization1, visibility);

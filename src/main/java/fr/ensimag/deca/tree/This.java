@@ -1,6 +1,5 @@
 package fr.ensimag.deca.tree;
 
-import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
@@ -9,15 +8,11 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.ImmediateString;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.WSTR;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
-
-import org.apache.log4j.Logger;
 /**
  * String literal
  *
@@ -25,7 +20,6 @@ import org.apache.log4j.Logger;
  * @date 17/01/2022
  */
 public class This extends AbstractExpr {
-    private static final Logger LOG = Logger.getLogger(StringLiteral.class);
     /**
      * l’attribut est vrai si et seulement si le nœud a été ajouté pendant l’analyse syntaxique 
      * sans que le programme source ne contienne le mot clé this (par exemple, m(); pour dire this.m();).
@@ -38,7 +32,6 @@ public class This extends AbstractExpr {
         this.ajouteChaine = b;
     }
 
-//TODO
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
@@ -56,11 +49,6 @@ public class This extends AbstractExpr {
         GPRegister reg = regMan.take();
         compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), reg));
         regMan.giveAndPush(reg);
-    }
-
-    @Override
-    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) throws DecacFatalError {
-       super.codeGenPrint(compiler, printHex);
     }
 
     @Override

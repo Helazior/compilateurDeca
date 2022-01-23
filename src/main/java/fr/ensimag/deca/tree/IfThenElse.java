@@ -9,11 +9,7 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
-import java.util.List;
 
-import fr.ensimag.deca.codegen.RegisterManager;
-
-import fr.ensimag.ima.pseudocode.BranchInstruction;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
@@ -65,8 +61,8 @@ public class IfThenElse extends AbstractInst {
         condition.codeGenExpr(compiler);
         // résultat de la condition dans la pile
         regMan.pop(Register.R1);
-        // On saute au label else_n si la condition == 0
-;
+        // On saute au label else_n si la condition == 0;
+
         compiler.addInstruction(new BEQ(new Label(elseLabel)));
         // On execute la thenBranch
         compiler.addComment("IF then_body");

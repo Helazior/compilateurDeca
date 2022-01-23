@@ -2,7 +2,6 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.DecacFatalError;
-import fr.ensimag.deca.context.ContextualError;
 
 /**
  * Left-hand side value of an assignment.

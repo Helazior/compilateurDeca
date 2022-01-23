@@ -11,7 +11,6 @@ import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BOV;
 import fr.ensimag.ima.pseudocode.instructions.RFLOAT;
-import fr.ensimag.ima.pseudocode.instructions.RINT;
 
 import java.io.PrintStream;
 

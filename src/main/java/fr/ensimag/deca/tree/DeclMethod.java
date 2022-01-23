@@ -39,8 +39,6 @@ public class DeclMethod extends AbstractDeclMethod {
         this.methodBody = methodBody;
     }
 
-    //TODO
-
     protected void codeGenDeclMethod(DecacCompiler compiler, AbstractIdentifier currentClass, ListDeclField listDeclField) throws DecacFatalError {
         RegisterManager regMan = compiler.getRegMan();
         // On place le label d'erreur à la fin du fichier

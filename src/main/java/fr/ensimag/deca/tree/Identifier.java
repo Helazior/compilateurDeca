@@ -2,7 +2,6 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.TypeDefinition;
-import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -13,13 +12,11 @@ import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.VariableDefinition;
-import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
-import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.ima.pseudocode.GPRegister;
@@ -214,9 +211,8 @@ public class Identifier extends AbstractIdentifier {
     @Override
     protected void codeGenStoreLValue(DecacCompiler compiler) {
         RegisterManager regMan = compiler.getRegMan();
-        Symbol name = getName();
         GPRegister reg = regMan.pop();
-        regMan.store(name, reg);
+        regMan.store(getName(), reg);
         regMan.giveAndPush(reg);
     }
 
@@ -227,8 +223,7 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public void codeGenExpr(DecacCompiler compiler) {
         RegisterManager regMan = compiler.getRegMan();
-        Symbol name = getName();
-        regMan.giveAndPush(regMan.load(name));
+        regMan.giveAndPush(regMan.load(getName()));
     }
 
     /**
@@ -237,9 +232,8 @@ public class Identifier extends AbstractIdentifier {
      */
     protected void codeGenSelectIdent(DecacCompiler compiler, Definition classDef) throws DecacFatalError {
         RegisterManager regMan = compiler.getRegMan();
-        Symbol name = getName(); // On charge l'attribut
         GPRegister reg = regMan.pop(); // On charge l'objet
-        GPRegister regDest = regMan.getField(reg, name, classDef, getLocation());
+        GPRegister regDest = regMan.getField(reg, getName(), classDef, getLocation());
         regMan.giveAndPush(regDest);
     }
 

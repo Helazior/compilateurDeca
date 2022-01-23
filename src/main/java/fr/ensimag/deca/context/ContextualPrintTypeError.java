@@ -1,7 +1,6 @@
 package fr.ensimag.deca.context;
 
 import fr.ensimag.deca.tree.Location;
-import fr.ensimag.deca.tree.LocationException;
 
 /**
  * Exception raised when a contextual type error is found.

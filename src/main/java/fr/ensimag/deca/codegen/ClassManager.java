@@ -1,8 +1,5 @@
 package fr.ensimag.deca.codegen;
 
-import java.util.Map;
-import java.util.HashMap;
-
 import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
