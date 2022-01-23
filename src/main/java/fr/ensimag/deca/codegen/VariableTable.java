@@ -26,13 +26,22 @@ public class VariableTable {
         List<AbstractDeclVar> varsList = vars.getList();
         for (int i = 0; i < varsList.size(); i++) {
             AbstractDeclVar variable = varsList.get(i);
-            Symbol varname = variable.codeGenDecl(compiler, nextKey + i).getName();
+            Symbol varname = variable.getName().getName();
             table.put(varname, nextKey + i);
         }
         nextKey += varsList.size();
         // add the number of variables in the TSTO stack's max size
         compiler.getRegMan().addSizeStack(varsList.size());
+        initalizeVars(vars, classtableSize);
         return varsList.size();
+    }
+    private void initalizeVars(ListDeclVar vars, int classtableSize) throws DecacFatalError {
+        int localNextKey = classtableSize;
+        List<AbstractDeclVar> varsList = vars.getList();
+        for (int i = 0; i < varsList.size(); i++) {
+            AbstractDeclVar variable = varsList.get(i);
+            variable.codeGenDecl(compiler, localNextKey + i);
+        }
     }
     public void addParams(ListDeclParam params) throws DecacFatalError {
         List<AbstractDeclParam> paramsList = params.getList();

@@ -40,6 +40,10 @@ public class RegisterManager {
     private ClassManager classes;
     private ClassDefinition currentClassDef;
 
+    public void setCurrentClassDef(ClassDefinition def) {
+        this.currentClassDef = def;
+    }
+
     public RegisterManager(DecacCompiler compiler, int nb_registres){
         this.compiler = compiler;
         nMax = nb_registres;
@@ -98,8 +102,8 @@ public class RegisterManager {
             throw new UnsupportedOperationException("Variables already delcared");
         }
         namedVars = new VariableTable(compiler);
-        this.stackOffset = namedVars.init(vars);
         namedVars.addParams(args);
+        this.stackOffset = namedVars.init(vars);
         LOG.trace("REGMAN declareVars end");
     }
 
@@ -354,8 +358,7 @@ public class RegisterManager {
 
     public void load(Symbol s, GPRegister dst) {
         LOG.trace("REGMAN load");
-        assert(namedVars != null);
-        if (!namedVars.load(s, dst)) {
+        if (namedVars == null || !namedVars.load(s, dst)) {
             assert(currentClassDef != null);
             compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), dst));
             try {
@@ -369,7 +372,6 @@ public class RegisterManager {
     
     public GPRegister load(Symbol s) {
         LOG.trace("REGMAN load");
-        assert(namedVars != null);
         GPRegister dst = this.take();
         load(s, dst);
         LOG.trace("REGMAN load end");
@@ -378,8 +380,8 @@ public class RegisterManager {
 
     public void store(Symbol s, GPRegister register) {
         LOG.trace("REGMAN store");
-        assert(namedVars != null);
-        if (!namedVars.store(s, register)) {
+        if (namedVars == null || !namedVars.store(s, register)) {
+            assert(currentClassDef != null);
             GPRegister addr = take();
             compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), addr));
             try {
@@ -394,7 +396,6 @@ public class RegisterManager {
 
     public void giveAndStore(Symbol s, GPRegister register) {
         LOG.trace("REGMAN giveAndStore");
-        assert(namedVars != null);
         store(s, register);
         give(register);
         LOG.trace("REGMAN giveAndStore end");

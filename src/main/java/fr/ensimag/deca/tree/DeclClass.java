@@ -230,6 +230,7 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     protected void codeGenClass(DecacCompiler compiler) throws DecacFatalError {
+        compiler.getRegMan().setCurrentClassDef(currentClass.getClassDefinition());
         compiler.addComment("--------------------------------------------------");
         compiler.addComment("                  Classe " + currentClass.getName());
         compiler.addComment("--------------------------------------------------");
@@ -238,6 +239,7 @@ public class DeclClass extends AbstractDeclClass {
         initAttributs(compiler);
         compiler.concatenateBeginningProgram(oldProgram);
         listDeclMethod.codeGenListDeclMethod(compiler, currentClass);
+        compiler.getRegMan().setCurrentClassDef(null);
     }
 
     /** Adds at the end of program the code to populate the classtable.

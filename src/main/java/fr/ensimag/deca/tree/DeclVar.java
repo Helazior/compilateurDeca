@@ -80,8 +80,12 @@ public class DeclVar extends AbstractDeclVar {
     }
 
     @Override
-    public AbstractIdentifier codeGenDecl(DecacCompiler compiler, int offset) throws DecacFatalError {
-        initialization.codeGenInit(compiler, offset);
+    public AbstractIdentifier getName() {
         return varName;
+    }
+
+    @Override
+    public void codeGenDecl(DecacCompiler compiler, int offset) throws DecacFatalError {
+        initialization.codeGenInit(compiler, offset);
     }
 }
