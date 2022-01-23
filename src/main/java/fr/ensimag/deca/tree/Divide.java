@@ -29,7 +29,7 @@ public class Divide extends AbstractOpArith {
         if (type.isInt()) {
             if (!compiler.getCompilerOptions().getNoCheck()) {
                 compiler.addInstruction(new CMP(0, register0));
-                compiler.addInstruction(new BEQ(new Label("div_by_zero_error")));
+                compiler.addInstruction(new BEQ(new Label("div..by_zero_error")));
             }
             compiler.addInstruction(new QUO(register0, register1));
 
@@ -37,7 +37,7 @@ public class Divide extends AbstractOpArith {
         } else if (type.isFloat()) {
             if (!compiler.getCompilerOptions().getNoCheck()) {
                 compiler.addInstruction(new CMP(new ImmediateFloat(0f), register0));
-                compiler.addInstruction(new BEQ(new Label("div_by_zero_error")));
+                compiler.addInstruction(new BEQ(new Label("div..by_zero_error")));
             }
             compiler.addInstruction(new DIV(register0, register1));
         }

@@ -71,7 +71,7 @@ public class MethodCall extends AbstractExpr {
         // erreur deref nul
         compiler.setIsDerefExistTrue();
         compiler.addInstruction(new CMP(new NullOperand(), Register.R1));
-        compiler.addInstruction(new BEQ(new Label("dereferencement_null")));
+        compiler.addInstruction(new BEQ(new Label("dereferencement..null")));
 
         compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.R1), Register.R1));
         MethodDefinition methodDef = (MethodDefinition) nomDeMethode.getDefinition();

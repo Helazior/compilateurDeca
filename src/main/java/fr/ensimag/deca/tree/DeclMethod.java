@@ -53,9 +53,9 @@ public class DeclMethod extends AbstractDeclMethod {
         // goto return
         // Si c'est pas un void et qu'on n'a pas eu de return on va à une erreur
         if (!returnType.getType().isVoid()) {
-            compiler.addInstruction(new BRA(new Label ("no_return_error")));
+            compiler.addInstruction(new BRA(new Label ("no..return_error")));
         }
-        compiler.addLabel(new Label("return" + compiler.getNbReturn()));
+        compiler.addLabel(new Label("return.." + compiler.getNbReturn()));
         compiler.incrementNbReturn();
 
         //________________________

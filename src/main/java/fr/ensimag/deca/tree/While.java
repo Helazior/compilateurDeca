@@ -47,8 +47,8 @@ public class While extends AbstractInst {
         // TODO :  avec l'extension, nommer les labels différemment
         RegisterManager regMan = compiler.getRegMan();
 
-        String whileLabel = "while_" + compiler.getNumWhile();
-        String endWhileLabel = "end_while_" + compiler.getNumWhile();
+        String whileLabel = "while.." + compiler.getNumWhile();
+        String endWhileLabel = "end..while_" + compiler.getNumWhile();
         compiler.incrementNumWhile();
 
         compiler.addLabel(new Label(whileLabel));

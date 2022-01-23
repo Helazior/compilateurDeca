@@ -29,7 +29,7 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
     public void codeGenOvError(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
         if (!compiler.getCompilerOptions().getNoCheck() && getType().isFloat()) {
             compiler.setOpOvExist();
-            compiler.addInstruction(new BOV(new Label("overflow_error")));
+            compiler.addInstruction(new BOV(new Label("overflow..error")));
         }
         codeGenOp(compiler, register0, register1);
     }

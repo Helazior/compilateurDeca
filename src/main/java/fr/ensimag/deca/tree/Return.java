@@ -28,7 +28,7 @@ public class Return extends AbstractInst {
     protected void codeGenInst(DecacCompiler compiler) throws DecacFatalError {
         resultat.codeGenExpr(compiler);
         compiler.getRegMan().pop(Register.R1);
-        compiler.addInstruction(new BRA(new Label("return" + compiler.getNbReturn())));
+        compiler.addInstruction(new BRA(new Label("return.." + compiler.getNbReturn())));
     }
 
     @Override

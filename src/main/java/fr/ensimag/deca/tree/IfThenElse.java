@@ -51,8 +51,8 @@ public class IfThenElse extends AbstractInst {
     protected void codeGenInst(DecacCompiler compiler) throws DecacFatalError {
         compiler.addComment("Start IF");
         // TODO :  avec l'extension, nommer les labels différemment
-        String elseLabel = "else_" + compiler.getNumIf();
-        String endIfLabel = "end_if_" + compiler.getNumIf();
+        String elseLabel = "else.." + compiler.getNumIf();
+        String endIfLabel = "end..if_" + compiler.getNumIf();
         compiler.incrementNumIf();
 
         RegisterManager regMan = compiler.getRegMan();

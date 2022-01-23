@@ -141,7 +141,7 @@ public class RegisterManager {
             }
         }
         compiler.addFirst(new Line(new ADDSP(stackOffset)));
-        compiler.addFirst(new Line(new BOV(new Label("stack_overflow_error"))));
+        compiler.addFirst(new Line(new BOV(new Label("stack..overflow_error"))));
         compiler.addFirst(new Line(new TSTO(nbPush + maxSizeStack + stackOffset)));
         init(); // reinitalize the inner strucure
     }
@@ -149,7 +149,7 @@ public class RegisterManager {
     public void endMain() {
         compiler.addFirst(new Line(new ADDSP(stackOffset)));
         compiler.addFirst(new Line("Leave space for local vars"));
-        compiler.addFirst(new BOV(new Label("stack_overflow_error")));
+        compiler.addFirst(new BOV(new Label("stack..overflow_error")));
         compiler.addFirst(new Line(new TSTO(maxSizeStack + stackOffset)));
         compiler.addFirst(new Line("max size stack: " + maxSizeStack + " offset: " + stackOffset));
         init(); // reinitalize the inner strucure

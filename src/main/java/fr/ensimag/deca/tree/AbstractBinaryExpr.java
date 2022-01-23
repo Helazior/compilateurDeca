@@ -65,8 +65,8 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     public void codeGenAnd(DecacCompiler compiler) throws DecacFatalError {
         RegisterManager regMan = compiler.getRegMan();
         compiler.addComment("Start And");
-        String falseLabel = "false_and_" + compiler.getNumAnd();
-        String endLabel = "end_and_" + compiler.getNumAnd();
+        String falseLabel = "false..and_" + compiler.getNumAnd();
+        String endLabel = "end..and_" + compiler.getNumAnd();
         compiler.incrementNumAnd();
         // On teste la condition leftOp
         getLeftOperand().codeGenExpr(compiler);
@@ -100,8 +100,8 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     public void codeGenOr(DecacCompiler compiler) throws DecacFatalError { // OR si on utilise le not
         RegisterManager regMan = compiler.getRegMan();
         compiler.addComment("Start Or");
-        String trueLabel = "true_or_" + compiler.getNumOr();
-        String endLabel = "end_or_" + compiler.getNumOr();
+        String trueLabel = "true..or_" + compiler.getNumOr();
+        String endLabel = "end..or_" + compiler.getNumOr();
         compiler.incrementNumOr();
         // On teste la condition leftOp
         getLeftOperand().codeGenExpr(compiler);

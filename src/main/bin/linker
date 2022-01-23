@@ -1,0 +1,40 @@
+#!/bin/bash
+
+k=0
+
+for file in $@
+do
+	if [[ ${file:(-5)} == ".deco" ]]; then
+		sed -i 's/false../_.'$k'.false../g' $file
+		sed -i 's/end../_.'$k'.end../g' $file
+		sed -i 's/true../_.'$k'.true../g' $file
+		sed -i 's/while../_.'$k'.while../g' $file
+		sed -i 's/else../_.'$k'.else../g' $file
+		sed -i 's/return../_.'$k'.return../g' $file
+
+		sed -i 's/div../_.'$k'.div../g' $file
+		sed -i 's/mod../_.'$k'.mod../g' $file
+		sed -i 's/io../_.'$k'.io../g' $file
+		sed -i 's/overflow../_.'$k'.overflow../g' $file
+		sed -i 's/stack../_.'$k'.stack../g' $file
+		sed -i 's/no../_.'$k'.no../g' $file
+		sed -i 's/dereferencement../_.'$k'.dereferencement./g' $file
+		let k+=1
+	else
+		echo Error: Expected a .deco. You give $file
+		exit 1
+	fi
+
+
+done
+
+dest_file=$1
+dest_file=${dest_file::(-4)}
+echo $dest_file
+#fichier solution
+dest_file+="ass"
+echo $dest_file
+echo $@
+
+#rm $dest_fime
+cat $@ > $dest_file

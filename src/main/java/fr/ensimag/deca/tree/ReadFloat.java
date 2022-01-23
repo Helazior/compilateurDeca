@@ -33,7 +33,7 @@ public class ReadFloat extends AbstractReadExpr {
         RegisterManager regMan = compiler.getRegMan();
         compiler.setIoExistTrue();
         compiler.addInstruction(new RFLOAT());
-        compiler.addInstruction(new BOV(new Label("io_error")));
+        compiler.addInstruction(new BOV(new Label("io..error")));
         regMan.push(Register.R1);
     }
 
