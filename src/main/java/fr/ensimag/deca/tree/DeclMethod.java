@@ -39,7 +39,7 @@ public class DeclMethod extends AbstractDeclMethod {
         this.methodBody = methodBody;
     }
 
-    protected void codeGenDeclMethod(DecacCompiler compiler, AbstractIdentifier currentClass, AbstractIdentifier classe) throws DecacFatalError {
+    protected void codeGenDeclMethod(DecacCompiler compiler, AbstractIdentifier currentClass) throws DecacFatalError {
         RegisterManager regMan = compiler.getRegMan();
         // On place le label d'erreur à la fin du fichier
         if (!returnType.getType().isVoid()) {
@@ -49,7 +49,7 @@ public class DeclMethod extends AbstractDeclMethod {
         // ________________________corps du programme___________________________
         compiler.addComment("----------- Code de la methode " + method.getName() + " dans la classe " + currentClass.getName());
 
-        methodBody.codeGenMethod(compiler, parameters, classe);
+        methodBody.codeGenMethod(compiler, parameters, currentClass);
         // goto return
         // Si c'est pas un void et qu'on n'a pas eu de return on va à une erreur
         if (!returnType.getType().isVoid()) {

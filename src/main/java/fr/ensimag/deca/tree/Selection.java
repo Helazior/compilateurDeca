@@ -44,7 +44,7 @@ public class Selection extends AbstractLValue {
         GPRegister regResultat = regMan.pop();
         regMan.pop(Register.R1);
         regMan.setField(Register.R1, nomDAttribut.getName(),
-            ((ClassType) objet.getType()).getDefinition(), regResultat, getLocation());
+            ((ClassType) objet.getType()).getDefinition(), regResultat);
         regMan.giveAndPush(regResultat);
     }
 

@@ -29,8 +29,8 @@ public class MethodAsmBody extends AbstractMethodBody{
 
 
 
-    protected void codeGenMethod(DecacCompiler compiler,
-                                 ListDeclParam args, AbstractIdentifier listDeclField) throws UnsupportedOperationException{
+    protected void codeGenMethod(DecacCompiler compiler, ListDeclParam args,
+            AbstractIdentifier listDeclField) throws UnsupportedOperationException{
         compiler.add(new Line(corps));
     }
 

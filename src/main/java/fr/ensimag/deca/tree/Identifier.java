@@ -233,7 +233,7 @@ public class Identifier extends AbstractIdentifier {
     protected void codeGenSelectIdent(DecacCompiler compiler, Definition classDef) throws DecacFatalError {
         RegisterManager regMan = compiler.getRegMan();
         GPRegister reg = regMan.pop(); // On charge l'objet
-        GPRegister regDest = regMan.getField(reg, getName(), classDef, getLocation());
+        GPRegister regDest = regMan.getField(reg, getName(), classDef);
         regMan.giveAndPush(regDest);
     }
 

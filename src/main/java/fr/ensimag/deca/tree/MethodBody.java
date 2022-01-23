@@ -35,7 +35,7 @@ public class MethodBody extends AbstractMethodBody{
     @Override
     protected void codeGenMethod(DecacCompiler compiler, ListDeclParam args, AbstractIdentifier classe) throws DecacFatalError {
         // déclare les variables locales et les arguments de la méthode
-        compiler.getRegMan().declareMethodVars(args, declVariables);
+        compiler.getRegMan().declareMethodVars(args, declVariables, classe);
 
         compiler.addComment("Beginning of method instructions:");
         insts.codeGenListInst(compiler);
