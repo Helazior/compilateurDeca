@@ -4,7 +4,6 @@ import fr.ensimag.deca.syntax.DecaLexer;
 import fr.ensimag.deca.syntax.DecaParser;
 import fr.ensimag.deca.syntax.DecaImportParser;
 import fr.ensimag.deca.tools.DecacInternalError;
-import fr.ensimag.deca.tree.AbstractDeclClass;
 import fr.ensimag.deca.tree.AbstractProgram;
 import fr.ensimag.deca.tree.DeclClass;
 import fr.ensimag.deca.tree.ListDeclClass;

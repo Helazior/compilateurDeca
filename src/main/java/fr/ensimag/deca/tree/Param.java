@@ -1,15 +1,7 @@
 package fr.ensimag.deca.tree;
 
-import fr.ensimag.deca.context.Type;
-import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.context.ClassDefinition;
-import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
-import java.util.jar.Attributes.Name;
-
-import org.apache.commons.lang.Validate;
 
 /**
  * Délcaration d'une méthode
@@ -19,7 +11,6 @@ import org.apache.commons.lang.Validate;
  */
 public class Param extends Tree{
 
-    
     private AbstractIdentifier type;
     private AbstractIdentifier name;
 

@@ -5,14 +5,12 @@
  */
 package fr.ensimag.deca.tree;
 
-import com.sun.org.apache.xpath.internal.operations.Div;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.FloatType;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.SymbolTable;
-import net.bytebuddy.implementation.bytecode.Division;
 import fr.ensimag.deca.CompilerOptions;
 
 /**

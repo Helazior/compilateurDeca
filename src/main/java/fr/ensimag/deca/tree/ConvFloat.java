@@ -1,6 +1,5 @@
 package fr.ensimag.deca.tree;
 
-import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
 
 import org.apache.commons.lang.Validate;
@@ -10,11 +9,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.ImmediateFloat;
-import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.FLOAT;
-import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.SUB;
 
 /**
  * Conversion of an int into a float. Used for implicit conversions.
@@ -37,8 +32,6 @@ public class ConvFloat extends AbstractUnaryExpr {
 
     @Override
     public void codeGenOp(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
-        RegisterManager regMan = compiler.getRegMan();
-
         compiler.addInstruction(new FLOAT(register0, register1));
     }
 

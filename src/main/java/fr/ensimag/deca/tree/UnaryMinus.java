@@ -7,16 +7,8 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateFloat;
-import fr.ensimag.ima.pseudocode.ImmediateInteger;
-import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.POP;
-import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.SUB;
-
-import java.awt.image.RescaleOp;
-
-import fr.ensimag.deca.codegen.RegisterManager;
 
 /**
  * @author gl60
@@ -45,7 +37,6 @@ public class UnaryMinus extends AbstractUnaryExpr {
 
     @Override
     public void codeGenOp(DecacCompiler compiler, GPRegister register0, GPRegister register1) {
-        RegisterManager regMan = compiler.getRegMan();
         Type type = getType();
         if (type.isInt()) {
             compiler.addInstruction(new LOAD(0, register1));

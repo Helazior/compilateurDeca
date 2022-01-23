@@ -1,19 +1,16 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
-import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 import java.io.PrintStream;
-import java.util.jar.Attributes.Name;
 
 import org.apache.commons.lang.Validate;
 
@@ -39,8 +36,6 @@ public class DeclField extends AbstractDeclField {
         this.visibility = visibility;
     }
 
-    //TODO toute la suite
-
     @Override
     protected Symbol getName() {
         return field.getName();
@@ -61,7 +56,6 @@ public class DeclField extends AbstractDeclField {
             ClassDefinition superClass, ClassDefinition currentClass)
             throws ContextualError {
         Type t = type.verifyType(compiler); 
-        //Type t = compiler.getType(type.).getType();
         if(t.isVoid()){
             throw new ContextualError("A field cannot be a 'void' type", getLocation());
         }
@@ -72,7 +66,7 @@ public class DeclField extends AbstractDeclField {
                 "because its parent already define it another way", getLocation());
         }
 
-        int index = currentClass.getNumberOfFields() + superClass.getNumberOfFields();
+        int index = currentClass.getNumberOfFields();
         field.setDefinition(new FieldDefinition(t, getLocation(), visibility, currentClass, index));
 
         try{
@@ -92,11 +86,8 @@ public class DeclField extends AbstractDeclField {
     @Override
     public void decompile(IndentPrintStream s) {
         s.println();
-        switch(visibility){
-            case PUBLIC: //s.print("public ");
-            break;
-            case PROTECTED: s.print("protected ");
-            break;
+        if(visibility == Visibility.PROTECTED){
+            s.print("protected ");
         }
         type.decompile(s);
         s.print(" ");

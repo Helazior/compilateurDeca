@@ -1,6 +1,5 @@
 package fr.ensimag.deca.tree;
 
-import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -8,11 +7,6 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
-
-import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.instructions.*;
-import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.ImmediateInteger;
 
 /**
  * Absence of initialization (e.g. "int x;" as opposed to "int x =
@@ -66,6 +60,5 @@ public class NoInitialization extends AbstractInitialization {
     @Override
     public void codeGenInit(DecacCompiler compiler, int offset) {
         //...welll.... I'd like to put 0, but IDK the type :upside_down:
-        //#TODO
     }
 }

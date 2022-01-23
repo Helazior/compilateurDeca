@@ -11,7 +11,6 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.*;
 import fr.ensimag.ima.pseudocode.instructions.*;
-import sun.java2d.pipe.SpanClipRenderer;
 
 import java.io.PrintStream;
 
@@ -32,7 +31,6 @@ public class MethodCall extends AbstractExpr {
         this.parametres = p;
     }
 
-//TODO
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
@@ -75,7 +73,7 @@ public class MethodCall extends AbstractExpr {
         //compiler.addInstruction(new BEQ(new Label("dereferencement_null")));
         compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.R1), Register.R1));
         MethodDefinition methodDef = (MethodDefinition) nomDeMethode.getDefinition();
-        compiler.addInstruction(new BSR(new RegisterOffset(methodDef.getIndex(), Register.R1)));
+        compiler.addInstruction(new BSR(new RegisterOffset(methodDef.getIndex() + 1, Register.R1)));
 
         // On remet la stack comme avant l'appel de méthode
         compiler.addInstruction(new SUBSP(parametres.size() + 2)); // + this * 2: in the bottom and the top

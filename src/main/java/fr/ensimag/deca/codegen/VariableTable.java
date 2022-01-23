@@ -22,7 +22,7 @@ public class VariableTable {
         this.compiler = compiler;
     }
     public int init(ListDeclVar vars, int classtableSize) throws DecacFatalError {
-        nextKey = classtableSize + 1;
+        nextKey = classtableSize;
         List<AbstractDeclVar> varsList = vars.getList();
         for (int i = 0; i < varsList.size(); i++) {
             AbstractDeclVar variable = varsList.get(i);

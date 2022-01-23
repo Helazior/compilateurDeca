@@ -5,7 +5,6 @@ import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.ContextualError;
 
 import fr.ensimag.ima.pseudocode.*;
-import fr.ensimag.ima.pseudocode.instructions.*;
 
 /**
  * Class declaration.

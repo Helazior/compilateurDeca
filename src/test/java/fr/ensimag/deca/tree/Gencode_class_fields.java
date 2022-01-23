@@ -32,7 +32,6 @@ public class Gencode_class_fields {
 
         SymbolTable.Symbol typeIntName = st.create("int");
         AbstractIdentifier intType = new Identifier(typeIntName);
-        SymbolTable symFloat = new SymbolTable();
         SymbolTable.Symbol typeName = st.create("int");
         AbstractIdentifier floatType = new Identifier(typeName);
         DeclField declField1 = new DeclField(intType, field1, initialization1, visibility);

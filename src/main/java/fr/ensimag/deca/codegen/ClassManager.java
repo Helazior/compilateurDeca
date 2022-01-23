@@ -1,8 +1,5 @@
 package fr.ensimag.deca.codegen;
 
-import java.util.Map;
-import java.util.HashMap;
-
 import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
@@ -45,7 +42,7 @@ public class ClassManager {
         classTableInitsMain.addInstruction(new LOAD(new NullOperand(), Register.R1));
         classTableInitsMain.addInstruction(new STORE(Register.R1, new RegisterOffset(1, Register.GB)));
         classTableInitsMain.addFirst(new LEA(new RegisterOffset(1, Register.GB), Register.R1));
-        classTableInitsMain.addFirst(new Line(new ADDSP(3)));
+        classTableInitsMain.addFirst(new Line(new ADDSP(2)));
         
         genTableMain(classTableInitsMain, classes, imports);
 
