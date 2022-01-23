@@ -65,4 +65,11 @@ public class codeGenError {
         compiler.addInstruction(new WNL());
         compiler.addInstruction(new ERROR());
     }
+
+    static public void derefNullError(DecacCompiler compiler) {
+        compiler.addLabel(new Label("dereferencement_null"));
+        compiler.addInstruction(new WSTR("Erreur : dereferencement de null"));
+        compiler.addInstruction(new WNL());
+        compiler.addInstruction(new ERROR());
+    }
 }

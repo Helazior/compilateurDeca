@@ -90,9 +90,11 @@ public class Program extends AbstractProgram {
             if (compiler.getModuloExist()) {
                 codeGenError.modByZeroError(compiler);
             }
-
             if (compiler.getOpOvExist()) {
                 codeGenError.overflowError(compiler);
+            }
+            if (compiler.getIsDerefExist()) {
+                codeGenError.derefNullError(compiler);
             }
 
             codeGenError.stackOverflowError(compiler);

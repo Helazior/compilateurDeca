@@ -78,6 +78,7 @@ public class DecacCompiler {
      */
     private static boolean isInNotOp = false;
     private static boolean noVoidMethodExist = false;
+    private static boolean isDerefExist = false;
 
     public DecacCompiler(CompilerOptions compilerOptions, File source) {
         super();
@@ -116,6 +117,14 @@ public class DecacCompiler {
 
     public void setDivideExistTrue() {
         divideExist = true;
+    }
+
+    public boolean getIsDerefExist() {
+        return isDerefExist;
+    }
+
+    public void setIsDerefExistTrue() {
+        isDerefExist = true;
     }
 
     public boolean getModuloExist() {
