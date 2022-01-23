@@ -34,9 +34,9 @@ public class ClassManager {
 
         classTableInitsFns.addInstruction(new LOAD(
                 new LabelOperand(new Label("methodBody.Object.equals")),
-                Register.R1));
+                Register.R0));
         classTableInitsFns.addInstruction(new STORE(
-                Register.R1, new RegisterOffset(1, Register.SP)));
+                Register.R0, new RegisterOffset(1, Register.R1)));
         classTableInitsFns.addInstruction(new RTS());
         tablesSize = genTableFunctions(classTableInitsFns, classes, imports, 3);
 
@@ -44,6 +44,7 @@ public class ClassManager {
         classTableInitsMain.addInstruction(new BSR(new Label("classTableInit.Object")));
         classTableInitsMain.addInstruction(new LOAD(new NullOperand(), Register.R1));
         classTableInitsMain.addInstruction(new STORE(Register.R1, new RegisterOffset(1, Register.GB)));
+        classTableInitsMain.addFirst(new LEA(new RegisterOffset(1, Register.GB), Register.R1));
         classTableInitsMain.addFirst(new Line(new ADDSP(3)));
         
         genTableMain(classTableInitsMain, classes, imports);
