@@ -43,13 +43,13 @@ public class ListDeclMethod extends TreeList<AbstractDeclMethod> {
         }
     }
 
-    public void codeGenListDeclMethod(DecacCompiler compiler, AbstractIdentifier currentClass, ListDeclField listDeclField) throws DecacFatalError {
+    public void codeGenListDeclMethod(DecacCompiler compiler, AbstractIdentifier currentClass, AbstractIdentifier classe) throws DecacFatalError {
         for (AbstractDeclMethod declMethod : getList()) {
             IMAProgram newProgram = new IMAProgram();
             // On écrit la méthode dans un nouveau programme. Plus facile pour les addFirst
             IMAProgram oldProgram = compiler.remplaceProgram(newProgram);
             // On écrit notre méthode
-            declMethod.codeGenDeclMethod(compiler, currentClass, listDeclField);
+            declMethod.codeGenDeclMethod(compiler, currentClass, classe);
             // On rajoute notre nouveau programme à la fin de l'ancien.
             // Le nouveau programme contiendra tous les programmes
             compiler.concatenateBeginningProgram(oldProgram);

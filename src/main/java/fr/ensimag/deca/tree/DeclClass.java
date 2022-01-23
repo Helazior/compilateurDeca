@@ -237,7 +237,7 @@ public class DeclClass extends AbstractDeclClass {
         IMAProgram oldProgram = compiler.remplaceProgram(new IMAProgram());
         initAttributs(compiler);
         compiler.concatenateBeginningProgram(oldProgram);
-        listDeclMethod.codeGenListDeclMethod(compiler, currentClass, listDeclField);
+        listDeclMethod.codeGenListDeclMethod(compiler, currentClass, currentClass);
     }
 
     /** Adds at the end of program the code to populate the classtable.

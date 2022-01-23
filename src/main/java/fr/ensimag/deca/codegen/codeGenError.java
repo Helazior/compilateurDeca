@@ -12,6 +12,7 @@ public class codeGenError {
         compiler.addInstruction(new WSTR("Error: Division by zero"));
         compiler.addInstruction(new WNL());
         compiler.addInstruction(new ERROR());
+
     }
 
     static public void modByZeroError(DecacCompiler compiler) {
