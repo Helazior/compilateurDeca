@@ -17,6 +17,7 @@ do
 		sed -i 's/overflow_/num'$k'overflow_/g' $file
 		sed -i 's/stack_/num'$k'stack_/g' $file
 		sed -i 's/no_/num'$k'no_/g' $file
+		sed -i 's/dereferencement_/num'$k'dereferencement_/g' $file
 		let k+=1
 	else
 		echo Error: Expected a .deco. You give $file

@@ -68,9 +68,11 @@ public class MethodCall extends AbstractExpr {
 
         // On saute à l'adresse de la méthode
         compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.SP), Register.R1));
-        // TODO : faire les déref null
-        //compiler.addInstruction(new CMP(null, Register.R1));
-        //compiler.addInstruction(new BEQ(new Label("dereferencement_null")));
+        // erreur deref nul
+        compiler.setIsDerefExistTrue();
+        compiler.addInstruction(new CMP(null, Register.R1));
+        compiler.addInstruction(new BEQ(new Label("dereferencement_null")));
+
         compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.R1), Register.R1));
         MethodDefinition methodDef = (MethodDefinition) nomDeMethode.getDefinition();
         compiler.addInstruction(new BSR(new RegisterOffset(methodDef.getIndex() + 1, Register.R1)));

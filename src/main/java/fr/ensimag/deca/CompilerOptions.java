@@ -38,9 +38,7 @@ public class CompilerOptions {
             "Supprime les tests de division par 0, de débordement arithmétique " +
             "sur les flottants, de l'absence de `return` à une méthode, " +
             "de convesion de type impossible, de déréférencement de null, " +
-            "de débordement mémoire, d'accès à des variables non-initialisées, " +
-            "d'utilisation d'une méthode écrite en assembleur non compatible " +
-            "avec l’assembleur généré par le compilateur.", 0)),
+            "de débordement mémoire", 0)),
         entry("-d", new OptionData("debug", 
             "active les traces de debug. Répéter l'option plusieurs fois " +
             "pour avoir plus de traces.", 0)),
