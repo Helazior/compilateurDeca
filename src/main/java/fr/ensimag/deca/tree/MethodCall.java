@@ -75,7 +75,7 @@ public class MethodCall extends AbstractExpr {
         //compiler.addInstruction(new BEQ(new Label("dereferencement_null")));
         compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.R1), Register.R1));
         MethodDefinition methodDef = (MethodDefinition) nomDeMethode.getDefinition();
-        compiler.addInstruction(new BSR(new RegisterOffset(methodDef.getIndex(), Register.R1)));
+        compiler.addInstruction(new BSR(new RegisterOffset(methodDef.getIndex() + 1, Register.R1)));
 
         // On remet la stack comme avant l'appel de méthode
         compiler.addInstruction(new SUBSP(parametres.size() + 2)); // + this * 2: in the bottom and the top

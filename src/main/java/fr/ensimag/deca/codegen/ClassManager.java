@@ -45,7 +45,7 @@ public class ClassManager {
         classTableInitsMain.addInstruction(new LOAD(new NullOperand(), Register.R1));
         classTableInitsMain.addInstruction(new STORE(Register.R1, new RegisterOffset(1, Register.GB)));
         classTableInitsMain.addFirst(new LEA(new RegisterOffset(1, Register.GB), Register.R1));
-        classTableInitsMain.addFirst(new Line(new ADDSP(3)));
+        classTableInitsMain.addFirst(new Line(new ADDSP(2)));
         
         genTableMain(classTableInitsMain, classes, imports);
 
