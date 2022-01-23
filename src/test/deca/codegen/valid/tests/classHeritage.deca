@@ -20,7 +20,7 @@
 
 class GrandMere {
 	float a = 2;
-	float b = 2;
+	float b = a;
 	float c = 5.7;
 	int d = 1;
 	int e = 10;
