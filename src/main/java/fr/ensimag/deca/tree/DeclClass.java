@@ -194,7 +194,7 @@ public class DeclClass extends AbstractDeclClass {
 
         RegisterManager regMan = compiler.getRegMan();
         compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
-        compiler.addInstruction(new LOAD(new RegisterOffset(
+        compiler.addInstruction(new LEA(new RegisterOffset(
                 ((ClassDefinition) currentClass.getDefinition()).getTablePlace(), Register.GB
             ), Register.R0));
         compiler.addInstruction(new STORE( Register.R0, new RegisterOffset(0, Register.R1)));
@@ -276,10 +276,10 @@ public class DeclClass extends AbstractDeclClass {
             }
             program.addInstruction(new LOAD(
                 new LabelOperand(new Label("methodBody."+className+"."+methName)),
-                Register.R1));
+                Register.R0));
             program.addInstruction(new STORE(
-                Register.R1,
-                new RegisterOffset(index, Register.SP)));
+                Register.R0,
+                new RegisterOffset(index, Register.R1)));
         }
         // The asm function building the classtable is finished
         program.addInstruction(new RTS());
@@ -296,6 +296,7 @@ public class DeclClass extends AbstractDeclClass {
         int superOffset = superType.getTablePlace();
 
         program.addInstruction(new ADDSP(type.getNumberOfMethods() + 1));
+        program.addInstruction(new LEA(new RegisterOffset(offset, Register.GB), Register.R1));
         program.addInstruction(new BSR(
             new LabelOperand(new Label("classTableInit." + type.getType().getName()))
         ));
