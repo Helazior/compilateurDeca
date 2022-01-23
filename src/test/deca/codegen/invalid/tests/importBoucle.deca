@@ -1,0 +1,13 @@
+// Description:
+//   test boucle infini
+//
+// Resultats:
+//      Error:...
+//
+
+import "importBoucle2.deca"
+
+{
+	A a = new A();
+	print(a.x);
+}
