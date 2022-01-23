@@ -2,7 +2,7 @@
 //   test d'héritage
 //
 // Resultats:
-//      - 1
+//    - 1
 //	  4.7
 //	  8
 //	  2.00
@@ -23,7 +23,7 @@ class GrandMere {
 	float b = a;
 	float c = 5.7;
 	int d = 1;
-	float e = 10.0;
+	int e = 10.0;
 	float methodeGM (int c) {
 		// this implicite
 		// c is the arg
@@ -63,7 +63,7 @@ class Mere extends GrandMere {
 class Tante extends GrandMere {
 	int d = 10; // d pas la même valeur selon la classe
 	// TODO: erreur à corriger
-	e = 6; // e la même valeur selon les classes
+	int e = 6;
 	float f = 10.3;
 	void methodeMere0(int a, GrandMere gm, Mere m, Tante tante) {
 		println(a);

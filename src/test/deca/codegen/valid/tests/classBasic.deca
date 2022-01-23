@@ -8,10 +8,10 @@
 //
 
 class A {
-	int x = 2;
+	int x = 1;
 
 	int getX() {
-		return 8;
+		return this.x;
 	}
 
 	void setX(int x) {
@@ -23,8 +23,8 @@ class A {
 	A a = new A();
 	A b = new A();
 
-	a.x = 5;
+	b.setX(42);
 
-	println(a.x);
-	println(b.x);
+	println(a.getX());
+	println(b.getX());
 }
