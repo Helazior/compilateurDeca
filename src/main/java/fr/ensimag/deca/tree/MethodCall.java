@@ -9,13 +9,8 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.Label;
-import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.instructions.BRA;
-import fr.ensimag.ima.pseudocode.instructions.BSR;
-import fr.ensimag.ima.pseudocode.instructions.PUSH;
-import fr.ensimag.ima.pseudocode.instructions.SUBSP;
+import fr.ensimag.ima.pseudocode.*;
+import fr.ensimag.ima.pseudocode.instructions.*;
 import sun.java2d.pipe.SpanClipRenderer;
 
 import java.io.PrintStream;
@@ -73,14 +68,14 @@ public class MethodCall extends AbstractExpr {
         // Il y a this en plus
         regMan.prepareMethodCall(parametres.size() + 1);
 
-        // On saute au label de la méthode
-
-        try {
-            compiler.addInstruction(new BSR(new Label("methodBody." + objet.getType()
-                .asClassType("", null).getName() + "." + nomDeMethode.getName())));
-        } catch (ContextualError e) {
-            e.printStackTrace();
-        }
+        // On saute à l'adresse de la méthode
+        compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.SP), Register.R1));
+        // TODO : faire les déref null
+        //compiler.addInstruction(new CMP(null, Register.R1));
+        //compiler.addInstruction(new BEQ(new Label("dereferencement_null")));
+        compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.R1), Register.R1));
+        MethodDefinition methodDef = (MethodDefinition) nomDeMethode.getDefinition();
+        compiler.addInstruction(new BSR(new RegisterOffset(methodDef.getIndex(), Register.R1)));
 
         // On remet la stack comme avant l'appel de méthode
         compiler.addInstruction(new SUBSP(parametres.size() + 2)); // + this * 2: in the bottom and the top
