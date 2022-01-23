@@ -24,7 +24,7 @@ public class EmptyMethodBody extends AbstractMethodBody {
 
     @Override
     protected void codeGenMethod(DecacCompiler compiler,
-            ListDeclParam args) throws UnsupportedOperationException {
+                                 ListDeclParam args, ListDeclField listDeclField) throws UnsupportedOperationException {
         // Nothing to do
     }
 

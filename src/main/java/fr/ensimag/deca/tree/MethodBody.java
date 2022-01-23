@@ -7,10 +7,8 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.ima.pseudocode.GPRegister;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
 
 import org.apache.commons.lang.Validate;
 
@@ -35,9 +33,9 @@ public class MethodBody extends AbstractMethodBody{
     }
 
     @Override
-    protected void codeGenMethod(DecacCompiler compiler, ListDeclParam args) throws DecacFatalError {
+    protected void codeGenMethod(DecacCompiler compiler, ListDeclParam args, ListDeclField listDeclField) throws DecacFatalError {
         // déclare les variables locales et les arguments de la méthode
-        compiler.getRegMan().declareMethodVars(args, declVariables);
+        compiler.getRegMan().declareMethodVars(args, declVariables, listDeclField);
 
         compiler.addComment("Beginning of method instructions:");
         insts.codeGenListInst(compiler);
