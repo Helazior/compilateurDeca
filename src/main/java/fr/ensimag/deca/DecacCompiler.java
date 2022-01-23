@@ -457,7 +457,11 @@ public class DecacCompiler {
         if (!sourceFile.substring(sourceFile.length() - 5, sourceFile.length()).equals(".deca")) {
             throw new ContextualError("Bad extension. Must be '.deca'", null);
         }
-        destFile = sourceFile.substring(0, sourceFile.length() - 5) + ".ass";
+        if (compilerOptions.getLinked()) {
+            destFile = sourceFile.substring(0, sourceFile.length() - 5) + ".deco";
+        } else {
+            destFile = sourceFile.substring(0, sourceFile.length() - 5) + ".ass";
+        }
 
         PrintStream err = System.err;
         PrintStream out = System.out;
@@ -577,22 +581,13 @@ public class DecacCompiler {
         String sourceFile = sourceImport;
         // On enlève les guillemets
         sourceFile = sourceFile.substring(1, sourceFile.length() - 1);
-        String destFile = null;
         // Done: calculer le nom du fichier .deco à partir du nom du .deca
 
-        if (!sourceFile.substring(sourceFile.length() - 5, sourceFile.length()).equals(".deca")) {
-            try {
-                throw new ContextualError("Bad extension. Must be '.deca'", null);
-            } catch (ContextualError e) {
-                e.printStackTrace();
-            }
-        }
-        destFile = sourceFile.substring(0, sourceFile.length() - 5) + ".deco";
         PrintStream err = System.err;
         PrintStream out = System.out;
-        LOG.debug("Importing file " + destFile);
+        LOG.debug("Importing file " + sourceFile);
         try {
-            return doCompileImport(destFile, out, err);
+            return doCompileImport(sourceFile, out, err);
         } catch (DecacFatalError e) {
             err.println(e.getMessage());
             return null;
