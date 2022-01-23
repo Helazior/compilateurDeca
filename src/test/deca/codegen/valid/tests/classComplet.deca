@@ -87,6 +87,7 @@ class SousTest extends Test{
 {
     int a = 0;
     SousTest sousTest = new sousTest();
+	SousType sousType;
     println(a.equals(sousTest.a));            // true  : 1
     sousTest.b = 2;
     // tests equals
@@ -101,11 +102,11 @@ class SousTest extends Test{
 
 	//_____________________
 	a = 1;
-	SousType sousType = sousTest.method0(a, new SousType(), 0.5);
+	sousType = sousTest.method0(a, new SousType(), 0.5);
 	sousType.a = 19;
 	sousTest.method0(2, sousType, 1.5);
 	// test héritage méthode
-	printf(new SousTest.method());              // ok, 123
+	printf(new SousTest().method());              // ok, 123
 	// test héritage champs
 	println(sousType.b);                        // 3
 }
