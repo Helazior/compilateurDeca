@@ -72,7 +72,7 @@ public class DeclField extends AbstractDeclField {
                 "because its parent already define it another way", getLocation());
         }
 
-        int index = currentClass.getNumberOfFields() + superClass.getNumberOfFields();
+        int index = currentClass.getNumberOfFields();
         field.setDefinition(new FieldDefinition(t, getLocation(), visibility, currentClass, index));
 
         try{
