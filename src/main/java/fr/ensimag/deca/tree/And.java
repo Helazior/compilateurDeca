@@ -29,11 +29,11 @@ public class And extends AbstractOpBool {
      * @param compiler
      */
     @Override
-    public void codeGenOp(DecacCompiler compiler, GPRegister register1) throws DecacFatalError {
+    public void codeGenOp(DecacCompiler compiler) throws DecacFatalError {
         if (!compiler.getIsInNotOp()) { // AND
-            super.codeGenAnd(compiler, register1);
+            super.codeGenAnd(compiler);
         } else { // OR si on utilise le not
-            super.codeGenOr(compiler, register1);
+            super.codeGenOr(compiler);
         }
     }
 
