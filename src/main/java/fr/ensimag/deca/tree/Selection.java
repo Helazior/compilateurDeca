@@ -13,7 +13,12 @@ import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
+
 import java.io.PrintStream;
 
 /**
@@ -34,6 +39,10 @@ public class Selection extends AbstractLValue {
     @Override
     public void codeGenExpr(DecacCompiler compiler) throws DecacFatalError {
         objet.codeGenExpr(compiler);
+
+        // TODO : IMPORTANT !!! METTRE ERREUR DEREF NUL
+        // Mais je sais pas si c'est exactement là qu'il faut pour codeGenGetLValue
+
         this.nomDAttribut.codeGenSelectIdent(compiler,
             ((ClassType) objet.getType()).getDefinition());
     }
@@ -43,6 +52,12 @@ public class Selection extends AbstractLValue {
         RegisterManager regMan = compiler.getRegMan();
         GPRegister regResultat = regMan.pop();
         regMan.pop(Register.R1);
+
+        // erreur deref nul
+        compiler.setIsDerefExistTrue();
+        compiler.addInstruction(new CMP(new NullOperand(), Register.R1));
+        compiler.addInstruction(new BEQ(new Label("dereferencement_null")));
+
         regMan.setField(Register.R1, nomDAttribut.getName(),
             ((ClassType) objet.getType()).getDefinition(), regResultat);
         regMan.giveAndPush(regResultat);
