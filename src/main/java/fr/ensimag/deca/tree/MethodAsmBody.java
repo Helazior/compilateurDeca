@@ -30,7 +30,7 @@ public class MethodAsmBody extends AbstractMethodBody{
 
 
     protected void codeGenMethod(DecacCompiler compiler,
-            ListDeclParam args) throws UnsupportedOperationException{
+                                 ListDeclParam args, ListDeclField listDeclField) throws UnsupportedOperationException{
         compiler.add(new Line(corps));
     }
 

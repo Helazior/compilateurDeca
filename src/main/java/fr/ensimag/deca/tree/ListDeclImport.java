@@ -21,7 +21,7 @@ public class ListDeclImport extends TreeList<AbstractDeclImport> {
         s.println();
     }
 
-        /**
+    /**
      * Pass 0
      * It's goal is to define a link between the classes and their
      * affilied Node in the Tree

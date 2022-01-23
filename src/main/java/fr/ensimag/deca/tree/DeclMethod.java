@@ -16,12 +16,9 @@ import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Line;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.RTS;
-import net.bytebuddy.description.type.TypeDefinition.SuperClassIterator;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 import java.io.PrintStream;
-
-import org.apache.commons.lang.Validate;
 
 /**
  * Declaration of a class (<code>class name extends superClass {members}<code>).
@@ -44,7 +41,7 @@ public class DeclMethod extends AbstractDeclMethod {
 
     //TODO
 
-    protected void codeGenDeclMethod(DecacCompiler compiler, AbstractIdentifier currentClass) throws DecacFatalError {
+    protected void codeGenDeclMethod(DecacCompiler compiler, AbstractIdentifier currentClass, ListDeclField listDeclField) throws DecacFatalError {
         RegisterManager regMan = compiler.getRegMan();
         // On place le label d'erreur à la fin du fichier
         if (!returnType.getType().isVoid()) {
@@ -54,7 +51,7 @@ public class DeclMethod extends AbstractDeclMethod {
         // ________________________corps du programme___________________________
         compiler.addComment("----------- Code de la methode " + method.getName() + " dans la classe " + currentClass.getName());
 
-        methodBody.codeGenMethod(compiler, parameters);
+        methodBody.codeGenMethod(compiler, parameters, listDeclField);
         // goto return
         // Si c'est pas un void et qu'on n'a pas eu de return on va à une erreur
         if (!returnType.getType().isVoid()) {

@@ -1,0 +1,9 @@
+// Description:
+//   test boucle infini
+//
+// Resultats:
+
+
+void A {
+	int x = 10;
+}

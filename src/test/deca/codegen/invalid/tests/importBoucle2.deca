@@ -1,0 +1,10 @@
+// Description:
+//   test boucle infini
+//
+// Resultats:
+
+import "importBoucle.deca"
+
+void A {
+	int x = 10;
+}

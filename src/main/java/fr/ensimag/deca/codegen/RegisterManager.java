@@ -3,12 +3,9 @@ package fr.ensimag.deca.codegen;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.ListIterator;
-import java.util.Map;
-import java.util.HashMap;
 
 import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.*;
-import fr.ensimag.deca.codegen.VariableTable;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.*;
@@ -87,7 +84,7 @@ public class RegisterManager {
         compiler.addInstruction(new PUSH(Register.R0));
     }
 
-    public void declareMethodVars(ListDeclParam args, ListDeclVar vars) throws DecacFatalError {
+    public void declareMethodVars(ListDeclParam args, ListDeclVar vars, ListDeclField listDeclField) throws DecacFatalError {
         if (vars == null) {
             throw new DecacFatalError("vars is null");
         }
@@ -119,7 +116,7 @@ public class RegisterManager {
         if (classes != null) {
             throw new UnsupportedOperationException("Classes already delcared");
         }
-        classes = new ClassManager(compiler, classDefs);
+        classes = new ClassManager(compiler, classDefs, imports);
         LOG.trace("REGMAN declareClasses end");
         return classes.getSize();
     }
