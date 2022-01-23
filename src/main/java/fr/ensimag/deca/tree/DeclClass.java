@@ -114,10 +114,11 @@ public class DeclClass extends AbstractDeclClass {
 
         //endregion
 
-        TypeDefinition def = compiler.getType(superName);
+        TypeDefinition superDef = compiler.getType(superName);
 
-        ClassType classType = new ClassType(name, getLocation(), (ClassDefinition)def);
+        ClassType classType = new ClassType(name, getLocation(), (ClassDefinition)superDef);
 
+        superClass.setDefinition(superDef);
         currentClass.setDefinition(classType.getDefinition());
         try {
             compiler.createType(currentClass.getName(), classType.getDefinition());
