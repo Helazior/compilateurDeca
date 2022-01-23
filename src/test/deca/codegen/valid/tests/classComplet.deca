@@ -40,7 +40,7 @@ class SousType extends Type{
 
 class Test {
     int method(){
-		printf("ok");
+		println("ok");
 		return 123;
     }
 }
@@ -49,7 +49,7 @@ class SousTest extends Test{
     int a = 0;
     int b;
     float c = 0.3;
-    SousType method0(int a, sousType b, float c) {
+    SousType method0(int a, SousType b, float c) {
         this.a = a + 1;
         println(this.a); // 2       | 3
         println(a + c); // 1 + 0.5  | 2 + 1.5
@@ -86,26 +86,27 @@ class SousTest extends Test{
 
 {
     int a = 0;
-    SousTest sousTest = new sousTest();
-    println(a.equals(sousTest.a));            // true  : 1
+    SousTest sousTest = new SousTest();
+    SousType sousType;
+    if(a == sousTest.a) {println(1);} else {println(0);}            // true  : 1
     sousTest.b = 2;
     // tests equals
-    println(a.equals(sousTest.b));            // false : 0
-    println(sousTest.a.equals(a));            // true  : 1
-    println(sousTest.b.equals(a));            // false : 0
-    println(sousTest.a.equals(sousTest.a));   // true  : 1
-    println(sousTest.a.equals(sousTest.a));   // true  : 1
-    println(sousTest.b.equals(sousTest.a));   // false : 0
-    println(sousTest.equals(Test));           // false : 0
-    println(sousTest.equals(sousTest));       // true  : 0
+    if(a == sousTest.b) {println(1);} else {println(0);}            // false : 0
+    if(sousTest.a == a) {println(1);} else {println(0);}            // true  : 1
+    if(sousTest.b == a) {println(1);} else {println(0);}            // false : 0
+    if(sousTest.a == sousTest.a) {println(1);} else {println(0);}   // true  : 1
+    if(sousTest.a == sousTest.a) {println(1);} else {println(0);}   // true  : 1
+    if(sousTest.b == sousTest.a) {println(1);} else {println(0);}   // false : 0
+    if(sousTest.equals(new Test())) {println(1);} else {println(0);}           // false : 0
+    if(sousTest.equals(sousTest)) {println(1);} else {println(0);}       // true  : 0
 
 	//_____________________
 	a = 1;
-	SousType sousType = sousTest.method0(a, new SousType(), 0.5);
+	sousType = sousTest.method0(a, new SousType(), 0.5);
 	sousType.a = 19;
 	sousTest.method0(2, sousType, 1.5);
 	// test héritage méthode
-	printf(new SousTest.method());              // ok, 123
+	println(new SousTest().method());              // ok, 123
 	// test héritage champs
 	println(sousType.b);                        // 3
 }
