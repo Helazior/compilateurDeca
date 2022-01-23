@@ -29,7 +29,7 @@ public class DeclImport extends AbstractDeclImport {
 
     public void decompile(IndentPrintStream s) {
         s.print("import ");
-        s.println("\"" + program.getLocation().getFilename() + "\"");
+        s.println(address); // Contient déjà les guillemets
     }
 
     @Override
