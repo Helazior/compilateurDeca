@@ -1,11 +1,14 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.instructions.*;
+import fr.ensimag.ima.pseudocode.*;
 import java.io.PrintStream;
 /**
  * String literal
@@ -31,8 +34,16 @@ public class Null extends AbstractExpr {
     }
 
     @Override
+    public void codeGenExpr(DecacCompiler compiler) {
+        RegisterManager regman = compiler.getRegMan();
+        GPRegister reg = regman.take();
+        compiler.addInstruction(new LOAD(new NullOperand(), reg));
+        regman.giveAndPush(reg);
+    }
+
+    @Override
     public void decompile(IndentPrintStream s) {
-        s.print("Null");
+        s.print("null");
     }
 
     @Override
