@@ -28,3 +28,7 @@ class sous_Test extends Test{
    }
 }
 
+{
+   println("everything went fine");
+}
+
