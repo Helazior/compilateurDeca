@@ -11,7 +11,6 @@ import fr.ensimag.deca.tools.SymbolTable;
  * @date 14/01/2022
  */
 public abstract class AbstractDeclField extends Tree {
-    //TODO
 
     protected abstract SymbolTable.Symbol getName();
 

@@ -12,7 +12,6 @@ import fr.ensimag.deca.context.ContextualError;
  * @date 12/01/2022
  */
 public abstract class AbstractDeclMethod extends Tree {
-//TODO
 
     /**
      * Write all the code of a method

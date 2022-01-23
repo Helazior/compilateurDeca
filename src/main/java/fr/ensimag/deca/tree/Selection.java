@@ -1,6 +1,5 @@
 package fr.ensimag.deca.tree;
 
-import com.sun.org.apache.bcel.internal.generic.ArrayElementValueGen;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.DecacFatalError;
@@ -14,18 +13,8 @@ import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.ImmediateString;
 import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.RegisterOffset;
-import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.WSTR;
 import java.io.PrintStream;
-
-import jdk.jfr.consumer.RecordedThreadGroup;
-import org.apache.commons.lang.Validate;
-
-import org.apache.log4j.Logger;
-import sun.tools.jconsole.inspector.XObject;
 
 /**
  * String literal
@@ -41,8 +30,6 @@ public class Selection extends AbstractLValue {
         this.objet = e;
         this.nomDAttribut = i;
     }
-
-//TODO
 
     @Override
     public void codeGenExpr(DecacCompiler compiler) throws DecacFatalError {
@@ -100,11 +87,6 @@ public class Selection extends AbstractLValue {
         }
         setType(fieldDef.getType());
         return fieldDef.getType();
-    }
-
-    @Override
-    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) throws DecacFatalError {
-        super.codeGenPrint(compiler, printHex);
     }
 
     @Override

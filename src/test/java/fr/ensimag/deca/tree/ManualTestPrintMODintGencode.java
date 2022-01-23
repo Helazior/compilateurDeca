@@ -5,7 +5,6 @@
  */
 package fr.ensimag.deca.tree;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.ContextualError;

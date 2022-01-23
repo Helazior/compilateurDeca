@@ -11,7 +11,6 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.*;
 import fr.ensimag.ima.pseudocode.instructions.*;
-import sun.java2d.pipe.SpanClipRenderer;
 
 import java.io.PrintStream;
 
@@ -32,7 +31,6 @@ public class MethodCall extends AbstractExpr {
         this.parametres = p;
     }
 
-//TODO
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {

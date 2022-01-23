@@ -9,7 +9,6 @@ import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.context.EnvironmentExp;
-import fr.ensimag.deca.context.Type;
 /**
  * @author gl60
  * @date 01/01/2022

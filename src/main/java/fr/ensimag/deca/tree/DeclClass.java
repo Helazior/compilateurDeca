@@ -3,10 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.context.Definition;
-import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.deca.tools.SymbolTable;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import java.io.PrintStream;
@@ -55,7 +52,8 @@ public class DeclClass extends AbstractDeclClass {
         s.println("}");
     }
 
-    public int lastPassNumber; //PABO
+    private int lastPassNumber; //PABO
+
     /**
      * Astuce ou idée pour l'extension :
      * On effectue un appel récursif sur le parent de la classe actuel de sorte que
@@ -104,7 +102,7 @@ public class DeclClass extends AbstractDeclClass {
         lastPassNumber = 1;
 
         //récursion
-        if(superName.getName() != "Object"){
+        if(!superName.getName().equals("Object")){
             DeclClass superClassNode = compiler.getClassNode(superName);
             if(superClassNode == null){
                 throw new ContextualError("the parent of this class should be a class", getLocation());
@@ -148,7 +146,7 @@ public class DeclClass extends AbstractDeclClass {
         lastPassNumber = 2;
 
         //récursion
-        if(superName.getName() != "Object"){
+        if(!superName.getName().equals("Object")){
             compiler.getClassNode(superName).verifyClassMembers(compiler);
         }
 
@@ -181,7 +179,6 @@ public class DeclClass extends AbstractDeclClass {
     @Override
     protected void iterChildren(TreeFunction f) {
         currentClass.iter(f);
-        //TODO:  à check
         superClass.iter(f);
         listDeclField.iter(f);
         listDeclMethod.iter(f);
@@ -250,7 +247,6 @@ public class DeclClass extends AbstractDeclClass {
      */
     @Override
     public int codeGenClassTableFn(DecacCompiler compiler, IMAProgram program, int stackPos) {
-        RegisterManager regman = compiler.getRegMan();
         Symbol className = currentClass.getName();
         ClassDefinition type = (ClassDefinition) compiler.getTypeEnv().get(className);
         type.setTablePlace(stackPos);
@@ -292,7 +288,6 @@ public class DeclClass extends AbstractDeclClass {
     /** Sets the pointer to the parent in the method table */
     @Override
     public void codeGenClassTableMain(DecacCompiler compiler, IMAProgram program) {
-        RegisterManager regman = compiler.getRegMan();
         ClassDefinition type = (ClassDefinition) compiler.getTypeEnv().get(currentClass.getName());
         ClassDefinition superType = (ClassDefinition) compiler.getTypeEnv().get(superClass.getName());
         int offset = type.getTablePlace();

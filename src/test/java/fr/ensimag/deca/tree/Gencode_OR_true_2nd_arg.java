@@ -9,7 +9,6 @@ import fr.ensimag.deca.CompilerOptions;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.tools.SymbolTable;
 
 /**
  *
@@ -19,7 +18,6 @@ import fr.ensimag.deca.tools.SymbolTable;
 public class Gencode_OR_true_2nd_arg {
 
     public static AbstractProgram initTest1() {
-        SymbolTable st = new SymbolTable();
         ListInst linst = new ListInst();
         ListInst linsttrue = new ListInst();
         ListInst linstfalse = new ListInst();
