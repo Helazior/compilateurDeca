@@ -1,7 +1,7 @@
 package fr.ensimag.deca.context;
 
-import fr.ensimag.deca.context.ClassType;
-import fr.ensimag.deca.context.ContextualError;
+import org.apache.commons.lang.Validate;
+
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.Location;
 
@@ -20,6 +20,15 @@ public abstract class Type {
      * classes, this means they represent the same class).
      */
     public abstract boolean sameType(Type otherType);
+
+    public boolean isSubTypeOf(Type otherType){
+        if(otherType instanceof ClassType && this instanceof ClassType){
+            Validate.isTrue(this instanceof ClassType);
+            return ((ClassType)this).isSubClassOf((ClassType)otherType);
+        } else {
+            return this.sameType(otherType);
+        }
+    }
 
     private final Symbol name;
 
@@ -79,5 +88,5 @@ public abstract class Type {
             throws ContextualError {
         throw new ContextualError(errorMessage, l);
     }
-
+    
 }

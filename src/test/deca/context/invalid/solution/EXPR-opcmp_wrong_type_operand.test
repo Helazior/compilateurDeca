@@ -1,0 +1,3 @@
+tests/EXPR-opcmp_wrong_type_operand.deca
+
+EXPR-opcmp_wrong_type_operand.deca:16:4: Error: Unsupported operands. Expected : int or float

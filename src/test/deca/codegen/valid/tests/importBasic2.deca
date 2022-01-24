@@ -1,0 +1,12 @@
+// Description:
+//   test boucle infini
+//
+// Resultats:
+
+
+class A {
+	int x = 10;
+	void f() {
+		print(3);
+	}
+}

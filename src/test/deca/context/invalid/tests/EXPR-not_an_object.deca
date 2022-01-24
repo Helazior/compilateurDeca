@@ -1,0 +1,18 @@
+// Description:
+//    Affectation et typage
+//
+// Resultats:
+//    Ligne 17: appel d'un attribut inexistant
+// 
+// Historique:
+//    cree le 01/01/2022
+
+
+class Test {
+    int field;
+
+}
+{
+    int i;
+    i.field = 5;
+}

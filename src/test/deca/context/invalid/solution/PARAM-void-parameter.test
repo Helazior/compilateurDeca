@@ -1,0 +1,3 @@
+tests/PARAM-void-parameter.deca
+
+PARAM-void-parameter.deca:12:14: Cannot pass a voidType object in argument

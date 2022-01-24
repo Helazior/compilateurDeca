@@ -1,0 +1,3 @@
+provided/affect-incompatible.deca
+
+affect-incompatible.deca:15:7: a boolean can't be assigned to a int

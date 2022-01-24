@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacFatalError;
 import org.junit.jupiter.api.Test;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
@@ -12,13 +13,13 @@ import fr.ensimag.deca.tools.SymbolTable;
  */
 public class TestAssign {
 
-    public static String gencodeSource(AbstractProgram source, DecacCompiler compiler) {
+    public static String gencodeSource(AbstractProgram source, DecacCompiler compiler) throws ContextualError, DecacFatalError {
         source.codeGenProgram(compiler);
         return compiler.displayIMAProgram();
     }
 
     @Test
-    public static void test1() {
+    public static void test1() throws ContextualError, DecacFatalError {
         DecacCompiler compiler = new DecacCompiler(new CompilerOptions(), null);
         SymbolTable symTab = new SymbolTable();
         ListDeclVar vars = new ListDeclVar();
@@ -63,7 +64,7 @@ public class TestAssign {
 
 
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws ContextualError, DecacFatalError {
         test1();
     }
 }

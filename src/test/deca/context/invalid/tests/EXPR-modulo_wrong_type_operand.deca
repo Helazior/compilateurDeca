@@ -1,0 +1,13 @@
+// Description:
+//    Affectation et typage
+//
+// Resultats:
+//    Ligne 12: Expresion avec opérandes de type incompatible.
+// 
+// Historique:
+//    cree le 22/01/2022
+
+
+class Test {
+    int field = 5 % true;
+}

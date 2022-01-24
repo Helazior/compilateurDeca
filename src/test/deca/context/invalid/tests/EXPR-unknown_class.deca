@@ -1,0 +1,16 @@
+// Description:
+//    Affectation et typage
+//
+// Resultats:
+//    Ligne 15: Appel de classe non définie.
+// 
+// Historique:
+//    cree le 22/01/2022
+
+
+class Test {
+    int f;
+}
+{
+    ClasseIndefinie t = new ClasseIndefinie();
+}

@@ -1,0 +1,87 @@
+#!/bin/bash
+
+# Ansi color code variables
+red="\e[0;91m"
+green="\e[0;92m"
+white="\e[0;97m"
+reset="\e[0;0m"
+
+#Tout s'est bien passé
+exit_value=0
+
+function simplifyResult {
+    while read line; do
+        new_line=${line##*"/"}
+        echo -e "$new_line" >> $2
+    done < $1
+}
+
+function test_file {
+    path=$1
+    file_src=$2
+    file_name=$3
+    src_file=$path/$(head -n 1 $file_src)
+    deca_file=$path/generated/$file_name.deca
+    asm_file=$path/generated/$file_name.ass
+    in_file=$path/generated/$file_name.in
+    out_file=$path/generated/$file_name.out
+    sol_file=$path/generated/$file_name.sol
+
+    #recuperation de la solution attendue
+    sed '/^$/q' $file_src | tail -n +2 > $in_file
+    sed '1,/^$/d' $file_src > $sol_file
+
+    #generation du resultat
+    cp $src_file $deca_file
+    if decac $deca_file 2> $out_file; then
+        ima $asm_file < $in_file > $out_file
+    else
+        tmp_file=$path/generated/tmp_file.out
+
+        simplifyResult $out_file $tmp_file
+
+        mv $tmp_file $out_file
+    fi
+
+    #On compare les fichiers
+    if cmp -s $out_file $sol_file; then
+        echo -e "${green} ${bold} PASSED $file_name ${reset}"
+        rm $path/generated/$file_name.*
+    else
+        exit_value=1
+        echo -e "${red} ${bold} FAILED $file_name"
+        diff $out_file $sol_file
+        echo -e  "${reset}"
+    fi
+}
+
+# Récupération du dossier de travail
+if [[ $# -eq 0 ]]; then
+    folder_path=./src/test/deca/context/invalid
+else
+    folder_path=$1
+fi
+
+# Creation de la hierarchie de dossier
+mkdir -p $folder_path/generated
+mkdir -p $folder_path/provided
+mkdir -p $folder_path/solution
+mkdir -p $folder_path/tests
+
+# Récupération des fichiers à tester
+if [[ $# -le 1 ]]; then
+    files="$(echo $folder_path)"
+else
+    files=$@
+    files=${files#* } # On enlève le premier élément (qui est le dossier de travail)
+fi
+
+for file_src in $files/solution/*.test; do
+    #nom du fichier
+    file_name=$(basename ${file_src%%".test"})
+    folder_path=${file_src%%"/solution/$file_name.test"}
+    #echo $folder_path
+    test_file $folder_path $file_src $file_name
+done
+
+exit $exit_value

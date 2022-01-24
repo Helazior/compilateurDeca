@@ -3,11 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.deca.tools.SymbolTable.Symbol;
-
-import org.apache.log4j.Logger;
 
 /**
  *
@@ -16,12 +12,10 @@ import org.apache.log4j.Logger;
  */
 public class ListDeclField extends TreeList<AbstractDeclField> {
 
-    //TODO
     @Override
     public void decompile(IndentPrintStream s) {
         for (AbstractDeclField declField : getList()) {
             declField.decompile(s);
-            s.println();
         }
     }
 
@@ -31,16 +25,22 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
     public void verifyListFieldVisibility(DecacCompiler compiler,
             ClassDefinition superClass, ClassDefinition currentClass)
             throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+
+        for (AbstractDeclField declField : getList()) {
+            declField.verifyFieldVisibility(compiler, superClass, currentClass);
+            currentClass.incNumberOfFields();
+        }
     }
 
     /**
      * Pass 3 of [SyntaxeContextuelle]
      */
-    public void verifyListFieldType(DecacCompiler compiler,
-            EnvironmentExp localEnv, ClassDefinition currentClass)
+    public void verifyListFieldType(DecacCompiler compiler, ClassDefinition currentClass)
             throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+
+        for (AbstractDeclField declField : getList()) {
+            declField.verifyFieldType(compiler, currentClass);
+        }
     }
 
 }

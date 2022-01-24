@@ -1,0 +1,17 @@
+// Description:
+//    Affectation et typage
+//
+// Resultats:
+//    Ligne 15: Void Type
+// 
+// Historique:
+//    cree le 22/01/2022
+
+
+class Test {
+   int attributTest;
+
+   void fct(){
+       void a;
+   }
+}

@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
@@ -8,11 +9,7 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
-import java.util.List;
 
-import fr.ensimag.deca.codegen.RegisterManager;
-
-import fr.ensimag.ima.pseudocode.BranchInstruction;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
@@ -51,11 +48,11 @@ public class IfThenElse extends AbstractInst {
 
 
     @Override
-    protected void codeGenInst(DecacCompiler compiler) {
+    protected void codeGenInst(DecacCompiler compiler) throws DecacFatalError {
         compiler.addComment("Start IF");
         // TODO :  avec l'extension, nommer les labels différemment
-        String elseLabel = "else_" + compiler.getNumIf();
-        String endIfLabel = "end_if_" + compiler.getNumIf();
+        String elseLabel = "else.." + compiler.getNumIf();
+        String endIfLabel = "end..if_" + compiler.getNumIf();
         compiler.incrementNumIf();
 
         RegisterManager regMan = compiler.getRegMan();
@@ -64,8 +61,8 @@ public class IfThenElse extends AbstractInst {
         condition.codeGenExpr(compiler);
         // résultat de la condition dans la pile
         regMan.pop(Register.R1);
-        // On saute au label else_n si la condition == 0
-;
+        // On saute au label else_n si la condition == 0;
+
         compiler.addInstruction(new BEQ(new Label(elseLabel)));
         // On execute la thenBranch
         compiler.addComment("IF then_body");
@@ -91,11 +88,11 @@ public class IfThenElse extends AbstractInst {
     public void decompile(IndentPrintStream s) {
         s.print("if(");
         condition.decompile(s);
-        s.print("){");
+        s.println("){");
         s.indent();
         thenBranch.decompile(s);
         s.unindent();
-        s.print("} else {");
+        s.println("} else {");
         s.indent();
         elseBranch.decompile(s);
         s.unindent();

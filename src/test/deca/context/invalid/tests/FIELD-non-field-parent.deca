@@ -1,0 +1,19 @@
+// Description:
+//    Affectation et typage
+//
+// Resultats:
+//    Ligne 12: reuse of an already defined expression
+// 
+// Historique:
+//    cree le 01/01/2022
+
+
+class Test {
+   void method(){
+      //nothing
+   }
+}
+
+class sous_Test extends Test{
+   int method;
+}

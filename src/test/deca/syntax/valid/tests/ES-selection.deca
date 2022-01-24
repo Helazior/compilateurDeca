@@ -1,0 +1,27 @@
+// Description:
+//    On teste selection
+//
+//    
+//
+// Historique:
+//    cree le 18/01/2022
+
+
+class Test1 {
+
+    int age;
+    protected string name;
+
+    void Test1() {
+        this.age = 10;
+        this.nom = "hello";
+    }
+    
+}
+
+class Test2 {
+    int fct() {
+        Test1 var = new Test1();
+        int a = var.age;
+    }
+}

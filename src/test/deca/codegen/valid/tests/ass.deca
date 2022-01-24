@@ -1,0 +1,14 @@
+
+class A {
+	void methodAss()
+		asm("LOAD #1, R0
+			LOAD #2, R1
+			; +
+			ADD R0, R1
+			WINT
+			WNL");
+}
+
+{
+	new A().methodAss();
+}

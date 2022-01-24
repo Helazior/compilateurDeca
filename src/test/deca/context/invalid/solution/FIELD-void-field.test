@@ -1,0 +1,3 @@
+tests/FIELD-void-field.deca
+
+FIELD-void-field.deca:12:8: A field cannot be a 'void' type

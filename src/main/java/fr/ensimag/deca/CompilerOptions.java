@@ -1,12 +1,10 @@
 package fr.ensimag.deca;
 
 import java.io.File;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import fr.ensimag.deca.CLIException;
 import static java.util.Map.entry;
 
 import org.apache.log4j.Level;
@@ -40,16 +38,17 @@ public class CompilerOptions {
             "Supprime les tests de division par 0, de débordement arithmétique " +
             "sur les flottants, de l'absence de `return` à une méthode, " +
             "de convesion de type impossible, de déréférencement de null, " +
-            "de débordement mémoire, d'accès à des variables non-initialisées, " +
-            "d'utilisation d'une méthode écrite en assembleur non compatible " +
-            "avec l’assembleur généré par le compilateur.", 0)),
+            "de débordement mémoire", 0)),
         entry("-d", new OptionData("debug", 
             "active les traces de debug. Répéter l'option plusieurs fois " +
             "pour avoir plus de traces.", 0)),
         entry("-h", new OptionData("help", "Affiche cette aide", 0)),
         entry("-r", new OptionData("registers", "limite les registres " +
-            "banalisés disponibles. Doit être compris entre 4 et 16 inclus."
-            , 1))
+            "banalisés disponibles. Doit être comprise entre 4 et 16 inclus."
+            , 1)),
+        entry("-c", new OptionData("link option", "permet et autorise " +
+            "l'imports de fichiers.\n On compile au format objet .deco"
+            , 0))
     );
 
     private int debug = 0;
@@ -83,6 +82,10 @@ public class CompilerOptions {
 
     public boolean getDecompile() {
         return options.get("-p").isInvoked();
+    }
+
+    public boolean getLinked(){
+        return options.get("-c").isInvoked();
     }
 
     public int getNbReg() {

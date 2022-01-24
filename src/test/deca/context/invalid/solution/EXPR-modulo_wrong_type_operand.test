@@ -1,0 +1,3 @@
+tests/EXPR-modulo_wrong_type_operand.deca
+
+EXPR-modulo_wrong_type_operand.deca:12:16: Error: Unsupported operands. Expected : int

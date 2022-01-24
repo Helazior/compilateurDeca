@@ -6,7 +6,6 @@ import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateFloat;
 import fr.ensimag.ima.pseudocode.Label;
-import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.DIV;
@@ -30,7 +29,7 @@ public class Divide extends AbstractOpArith {
         if (type.isInt()) {
             if (!compiler.getCompilerOptions().getNoCheck()) {
                 compiler.addInstruction(new CMP(0, register0));
-                compiler.addInstruction(new BEQ(new Label("div_by_zero_error")));
+                compiler.addInstruction(new BEQ(new Label("div..by_zero_error")));
             }
             compiler.addInstruction(new QUO(register0, register1));
 
@@ -38,23 +37,12 @@ public class Divide extends AbstractOpArith {
         } else if (type.isFloat()) {
             if (!compiler.getCompilerOptions().getNoCheck()) {
                 compiler.addInstruction(new CMP(new ImmediateFloat(0f), register0));
-                compiler.addInstruction(new BEQ(new Label("div_by_zero_error")));
+                compiler.addInstruction(new BEQ(new Label("div..by_zero_error")));
             }
             compiler.addInstruction(new DIV(register0, register1));
         }
     }
 
-    /**
-     *
-     * Generate code to print the expression
-     *
-     * @param compiler
-     * @param printHex
-     */
-    @Override
-    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
-        super.codeGenPrint(compiler, printHex);
-    }
 
     @Override
     protected String getOperatorName() {

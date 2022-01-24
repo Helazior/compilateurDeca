@@ -2,8 +2,11 @@ package fr.ensimag.deca;
 
 import fr.ensimag.deca.syntax.DecaLexer;
 import fr.ensimag.deca.syntax.DecaParser;
+import fr.ensimag.deca.syntax.DecaImportParser;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tree.AbstractProgram;
+import fr.ensimag.deca.tree.DeclClass;
+import fr.ensimag.deca.tree.ListDeclClass;
 import fr.ensimag.deca.tree.LocationException;
 import fr.ensimag.ima.pseudocode.*;
 
@@ -20,14 +23,17 @@ import org.apache.log4j.Logger;
 import fr.ensimag.deca.tools.SymbolTable;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.Location;
+
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.nio.file.Paths;
+import java.nio.file.Path;
 
 import fr.ensimag.deca.codegen.RegisterManager;
-
-import fr.ensimag.deca.context.EnvironmentExp;
-
 import fr.ensimag.deca.context.*;
+import fr.ensimag.deca.context.EnvironmentType.DoubleDefException;
 /**
  * Decac compiler instance.
  *
@@ -58,6 +64,8 @@ public class DecacCompiler {
     private static int numWhile = 0;
     private static int numAnd = 0;
     private static int numOr = 0;
+    // to go at the end of the method when the program return and manage the stack
+    private static int nbReturn = 0;
     /**
      * To show the div_zero error or not
      */
@@ -65,6 +73,12 @@ public class DecacCompiler {
     private static boolean modExist = false;
     private static boolean ioExist = false;
     private static boolean opOvExist = false;
+    /**
+     * Optimize not operation
+     */
+    private static boolean isInNotOp = false;
+    private static boolean noVoidMethodExist = false;
+    private static boolean isDerefExist = false;
 
     public DecacCompiler(CompilerOptions compilerOptions, File source) {
         super();
@@ -79,12 +93,38 @@ public class DecacCompiler {
         }
     }
 
+
+    public boolean getNoVoidMethodExist() {
+        return noVoidMethodExist;
+    }
+
+    public void setNoVoidMethodExist() {
+        noVoidMethodExist = true;
+    }
+
+
+    public boolean getIsInNotOp() {
+        return isInNotOp;
+    }
+
+    public void inverseIsInNotOp() {
+        isInNotOp = !getIsInNotOp();
+    }
+
     public boolean getDivideExist() {
         return divideExist;
     }
 
     public void setDivideExistTrue() {
         divideExist = true;
+    }
+
+    public boolean getIsDerefExist() {
+        return isDerefExist;
+    }
+
+    public void setIsDerefExistTrue() {
+        isDerefExist = true;
     }
 
     public boolean getModuloExist() {
@@ -109,6 +149,14 @@ public class DecacCompiler {
 
     public void setIoExistTrue() {
         ioExist = true;
+    }
+
+    public int getNbReturn() {
+        return nbReturn;
+    }
+
+    public void incrementNbReturn() {
+        nbReturn++;
     }
 
     public int getNumIf() {
@@ -201,6 +249,8 @@ public class DecacCompiler {
         program.addFirst(line);
     }
 
+
+
     /**
      * @see
      * fr.ensimag.ima.pseudocode.IMAProgram#addInstruction(fr.ensimag.ima.pseudocode.Instruction,
@@ -227,20 +277,69 @@ public class DecacCompiler {
     /**
      * The main program. Every instruction generated will eventually end up here.
      */
-    private final IMAProgram program = new IMAProgram();
+    private IMAProgram program = new IMAProgram();
 
 
     /**
-     * (demander à Gwennan en cas de PB)
+     * Gestionnaire des registres pour la génération de code
      */
     private RegisterManager regManager;
 
+
+    public IMAProgram remplaceProgram(IMAProgram newProgram) {
+        IMAProgram oldProgram = program;
+        program = newProgram;
+        return oldProgram;
+    }
+
     /**
-     * Permet d'avoir des types dans la partie B
-     * (demander à Gwennan en cas de PB)
-     * 
-     * Cela correspond en fait à la definition de
-     * l'environnmeent des types de base du compilateur
+     * oldProgram se place au début du programme
+     * @param oldProgram
+     */
+    public void concatenateBeginningProgram(IMAProgram oldProgram) {
+        oldProgram.append(program);
+        program = oldProgram;
+    }
+
+    /**
+     * oldProgram se place au début du programme
+     * @param oldProgram
+     */
+    public void concatenateEndProgram(IMAProgram oldProgram) {
+        program.append(oldProgram);
+    }
+
+//region TREE NODE MAP
+    /**
+     * Sert à redéfinir l'ordre de parcours des classes de sorte que les classes
+     * parents soient toujours parcouru et défini avant leurs enfants
+     */
+    private final Map<Symbol,DeclClass> classNodes = new HashMap<>();
+    private ListDeclClass listClassNodes = new ListDeclClass();
+
+    public void addClassNode(Symbol symbol, DeclClass classNode) throws DoubleDefException{
+        if(classNodes.containsKey(symbol)){
+            throw new DoubleDefException();
+        }
+        listClassNodes.add(classNode);
+        classNodes.put(symbol, classNode);
+    }
+
+    public DeclClass getClassNode(Symbol symbol){
+        return classNodes.get(symbol);
+    }
+
+    public ListDeclClass getListClassNodes(){
+        return listClassNodes;
+    }
+//endregion
+
+
+
+//region TYPE ENVIRONMENT
+
+    /**
+     * Environnement des types définis lors de l'étape B de la compilation
      */
 
     private final EnvironmentType typeEnv = new EnvironmentType(null);
@@ -250,7 +349,7 @@ public class DecacCompiler {
         return typeEnv;
     }
 
-    public void initTypes() throws ContextualError{
+    private void initTypes() throws ContextualError{
 
         List<TypeDefinition> typeDefList = new LinkedList<>();
 
@@ -259,14 +358,38 @@ public class DecacCompiler {
         typeDefList.add(new TypeDefinition(new StringType(typeTable.create("string")), null));
         typeDefList.add(new TypeDefinition(new BooleanType(typeTable.create("boolean")), null));
         typeDefList.add(new TypeDefinition(new VoidType(typeTable.create("void")), null));
+        typeDefList.add(new TypeDefinition(new NullType(typeTable.create("Null")), null));
 
         for(TypeDefinition typeDef : typeDefList){
             createType(typeDef.getType().getName(), typeDef);
         }
+
+        objectInitialisation();
     }
+
+    private void objectInitialisation() throws ContextualError {
+
+        ClassType objectType = new ClassType(typeTable.create("Object"), null, null);
+        createType(objectType.getName(), objectType.getDefinition());
+
+        Signature sig = new Signature();
+        sig.add(objectType);
+        MethodDefinition equalsDef = new MethodDefinition(getType("boolean"), null, sig, 0);
+        try{
+            objectType.getDefinition().getMembers().declare(expTable.create("equals"), equalsDef);
+            objectType.getDefinition().incNumberOfMethods();
+        } catch (EnvironmentExp.DoubleDefException dde){
+            throw new ContextualError("Double def of equals in Object Initialisation", null);
+        }
+
+
+    }
+
 
     public void createType(Symbol symbol, TypeDefinition typeDef) throws ContextualError{
         try {
+            //System.out.println("----------------------------------------------------\n");
+            //System.out.println(typeEnv.toString() + "\n");
             typeEnv.declare(symbol, typeDef);
         } catch (EnvironmentType.DoubleDefException e) {
             throw new ContextualError(e + " This type is already defined", null);
@@ -283,10 +406,9 @@ public class DecacCompiler {
         Symbol type = typeTable.create(typeName);
         return getType(type).getType();
     }
+//endregion
 
-
-
-
+//region EXP ENVIRONMENT
     /**
     * correspond à un environement de symboles hors des class et méthodes
     * ne sert que pour le parser en principe, car ensuite les symboles sont tous placé
@@ -324,10 +446,7 @@ public class DecacCompiler {
         return expTable.create(expName);
     }
 
-
-
-
-
+//endregion
 
 
 
@@ -337,14 +456,20 @@ public class DecacCompiler {
      *
      * @return true on error
      */
-    public boolean compile() {
+    public boolean compile() throws ContextualError {
         String sourceFile = source.getAbsolutePath();
         String destFile = null;
         // Done: calculer le nom du fichier .ass à partir du nom du
         // Done: FAIRE: fichier .deca.
-        // TODO: est-ce qu'il faut vérifier le format du nom en entrée ?
 
-        destFile = sourceFile.substring(0, sourceFile.length() - 5) + ".ass";
+        if (!sourceFile.substring(sourceFile.length() - 5, sourceFile.length()).equals(".deca")) {
+            throw new ContextualError("Bad extension. Must be '.deca'", null);
+        }
+        if (compilerOptions.getLinked()) {
+            destFile = sourceFile.substring(0, sourceFile.length() - 5) + ".deco";
+        } else {
+            destFile = sourceFile.substring(0, sourceFile.length() - 5) + ".ass";
+        }
 
         PrintStream err = System.err;
         PrintStream out = System.out;
@@ -388,6 +513,7 @@ public class DecacCompiler {
     private boolean doCompile(String sourceName, String destName,
             PrintStream out, PrintStream err)
             throws DecacFatalError, LocationException {
+
         AbstractProgram prog = doLexingAndParsing(sourceName, err);
 
         if (prog == null) {
@@ -407,9 +533,7 @@ public class DecacCompiler {
         if(compilerOptions.getVerification()){
             return false;
         }
-        addComment("start main program");
         prog.codeGenProgram(this);
-        addComment("end main program");
         LOG.debug("Generated assembly code:" + nl + program.display());
         LOG.info("Output file assembly file is: " + destName);
 
@@ -455,4 +579,102 @@ public class DecacCompiler {
         return parser.parseProgramAndManageErrors(err);
     }
 
+
+
+
+
+
+
+    public AbstractProgram compileImport(String sourceImport) {
+        String sourceFile = sourceImport;
+        // On enlève les guillemets
+        sourceFile = sourceFile.substring(1, sourceFile.length() - 1);
+        // Done: calculer le nom du fichier .deco à partir du nom du .deca
+
+        PrintStream err = System.err;
+        PrintStream out = System.out;
+        LOG.debug("Importing file " + sourceFile);
+        try {
+            return doCompileImport(sourceFile, out, err);
+        } catch (DecacFatalError e) {
+            err.println(e.getMessage());
+            return null;
+        } catch (StackOverflowError e) {
+            LOG.debug("stack overflow", e);
+            err.println("Stack overflow while compiling file " + sourceFile + ".");
+            return null;
+        } catch (Exception e) {
+            LOG.fatal("Exception raised while compiling file " + sourceFile
+                    + ":", e);
+            err.println("Internal compiler error while compiling file " + sourceFile + ", sorry.");
+            return null;
+        } catch (AssertionError e) {
+            LOG.fatal("Assertion failed while compiling file " + sourceFile
+                    + ":", e);
+            err.println("Internal compiler error while compiling file " + sourceFile + ", sorry.");
+            return null;
+        }
+    }
+
+    /**
+     * Internal function that does the job of compiling (i.e. calling lexer,
+     * verification and code generation).
+     *
+     * @param sourceName name of the source (deca) file
+     * @param out stream to use for standard output (output of decac -p)
+     * @param err stream to use to display compilation errors
+     *
+     * @return true on error
+     */
+    private AbstractProgram doCompileImport(String sourceName, PrintStream out, PrintStream err)
+            throws DecacFatalError, DecacInternalError {
+
+        AbstractProgram prog = doLexingAndParsingImport(sourceName, err);
+
+        if (prog == null) {
+            LOG.info("Parsing failed");
+            return null;
+        }
+        assert(prog.checkAllLocations());
+
+        return prog;
+    }
+
+    /**
+     * Build and call the lexer and parser to build the primitive abstract
+     * syntax tree.
+     *
+     * @param sourceName Name of the file to parse
+     * @param err Stream to send error messages to
+     * @return the abstract syntax tree
+     * @throws DecacFatalError When an error prevented opening the source file
+     * @throws DecacInternalError When an inconsistency was detected in the
+     * compiler.
+     * @throws LocationException When a compilation error (incorrect program)
+     * occurs.
+     */
+    protected AbstractProgram doLexingAndParsingImport(String sourceName, PrintStream err)
+            throws DecacFatalError, DecacInternalError {
+        DecaLexer lex;
+        Path filePath = Paths.get(sourceName);
+        LOG.debug("fPath: " + filePath);
+        if (!filePath.isAbsolute()) {
+            Path parentDir = Paths.get(source.getAbsolutePath()).getParent();
+            assert(parentDir != null);
+            LOG.debug("Parent: " + parentDir);
+            filePath = Paths.get(parentDir.toString(), filePath.toString());
+            assert(filePath.isAbsolute());
+            LOG.debug("New Path: " + filePath);
+        }
+        try {
+            lex = new DecaLexer(CharStreams.fromPath(filePath));
+        } catch (IOException ex) {
+            throw new RuntimeException("Can't open", ex);
+        }
+        lex.setDecacCompiler(this);
+        CommonTokenStream tokens = new CommonTokenStream(lex);
+        DecaImportParser parser = new DecaImportParser(tokens);
+        parser.setDecacCompiler(this);
+        return parser.parseProgramAndManageErrors(err);
+    }
 }

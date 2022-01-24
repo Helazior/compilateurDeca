@@ -1,0 +1,14 @@
+// Description:
+//    On teste les suites d'imports avec un chemin absolu ou relatif.
+//
+//    
+//
+// Historique:
+//    cree le 21/01/2022
+
+import "../provided/hello.deca"
+import "ES-class_decl.deca"
+
+{
+    println("Miracle!");
+}

@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
@@ -8,7 +9,6 @@ import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.context.EnvironmentExp;
-import fr.ensimag.deca.context.Type;
 /**
  * @author gl60
  * @date 01/01/2022
@@ -18,6 +18,7 @@ public class Main extends AbstractMain {
     
     private ListDeclVar declVariables;
     private ListInst insts;
+
     public Main(ListDeclVar declVariables,
             ListInst insts) {
         Validate.notNull(declVariables);
@@ -39,10 +40,12 @@ public class Main extends AbstractMain {
     }
 
     @Override
-    protected void codeGenMain(DecacCompiler compiler) {
-        compiler.getRegMan().declareVars(declVariables);
+    protected void codeGenMain(DecacCompiler compiler, int tablesSize) throws DecacFatalError {
+        compiler.getRegMan().declareGlobalVars(declVariables, tablesSize);
 
-        compiler.addComment("Beginning of main instructions:");
+        compiler.addComment("---------------------------------------------------");
+        compiler.addComment("          Beginning of main instructions:");
+        compiler.addComment("---------------------------------------------------");
         insts.codeGenListInst(compiler);
     }
     
@@ -51,6 +54,7 @@ public class Main extends AbstractMain {
         s.println("{");
         s.indent();
         declVariables.decompile(s);
+        s.println();
         insts.decompile(s);
         s.unindent();
         s.println("}");

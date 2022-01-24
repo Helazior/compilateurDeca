@@ -1,0 +1,3 @@
+tests/METHOD-already-defined.deca
+
+METHOD-already-defined.deca:17:4: This varibale is already defined in this context

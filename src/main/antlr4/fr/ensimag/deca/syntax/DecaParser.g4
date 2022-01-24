@@ -38,11 +38,20 @@ options {
 }
 
 prog returns[AbstractProgram tree]
-    : list_classes main EOF {
-            //assert($list_classes.tree != null);
+    :  list_imports list_classes main EOF {
+            assert($list_classes.tree != null);
             assert($main.tree != null);
-            $tree = new Program($list_classes.tree, $main.tree);
-            setLocation($tree, $list_classes.start);
+
+            if(getDecacCompiler().getCompilerOptions().getLinked()){
+                $tree = new Program($list_imports.tree, $list_classes.tree, $main.tree);
+                setLocation($tree, $list_imports.start);
+            } else {
+                if(!$list_imports.tree.isEmpty()) {
+                    throw new InvalidImport(this, $ctx);
+                }
+                $tree = new Program($list_classes.tree, $main.tree);
+                setLocation($tree, $list_classes.start);
+            }
         }
     ;
 
@@ -153,12 +162,10 @@ inst returns[AbstractInst tree]
             $tree = new Println(true, $list_expr.tree);
             setLocation($tree, $list_expr.start);
         }
-    //TODO
     | if_then_else {
             assert($if_then_else.tree != null);
             $tree = $if_then_else.tree;
         }
-    //TODO
     | WHILE OPARENT condition=expr CPARENT OBRACE body=list_inst CBRACE {
             assert($condition.tree != null);
             assert($body.tree != null);
@@ -168,11 +175,11 @@ inst returns[AbstractInst tree]
     //TODO
     | RETURN expr SEMI {
             assert($expr.tree != null);
-            $tree = $expr.tree;
+            $tree = new Return($expr.tree);
+            setLocation($tree, $expr.start);
         }
     ;
 
-//TODO-Regarder en détail la position du setLocation
 if_then_else returns[IfThenElse tree]
 @init {
     // Pour pouvoir construire l'arbre dans le bon ordre, on liste les conditions
@@ -235,7 +242,6 @@ if_then_else returns[IfThenElse tree]
       }
     ;
 
-// DONE
 list_expr returns[ListExpr tree]
 @init {
     $tree = new ListExpr();
@@ -251,7 +257,7 @@ list_expr returns[ListExpr tree]
        )* )?
     ;
 
-// DONE
+
 expr returns[AbstractExpr tree]
     : assign_expr {
             assert($assign_expr.tree != null);
@@ -260,11 +266,11 @@ expr returns[AbstractExpr tree]
         }
     ;
 
-// DONE
+
 assign_expr returns[AbstractExpr tree]
     : e=or_expr (
         /* condition: expression e must be a "LVALUE" */ {
-            if (! ($e.tree instanceof AbstractLValue)) {
+            if (!($e.tree instanceof AbstractLValue)) {
                 throw new InvalidLValue(this, $ctx);
             }
 
@@ -283,7 +289,6 @@ assign_expr returns[AbstractExpr tree]
       )
     ;
 
-// DONE
 or_expr returns[AbstractExpr tree]
     : e=and_expr {
             assert($e.tree != null);
@@ -297,7 +302,6 @@ or_expr returns[AbstractExpr tree]
        }
     ;
 
-// DONE
 and_expr returns[AbstractExpr tree]
     : e=eq_neq_expr {
             assert($e.tree != null);
@@ -311,7 +315,6 @@ and_expr returns[AbstractExpr tree]
         }
     ;
 
-// DONE
 eq_neq_expr returns[AbstractExpr tree]
     : e=inequality_expr {
             assert($e.tree != null);
@@ -428,6 +431,7 @@ unary_expr returns[AbstractExpr tree]
     | select_expr {
             assert($select_expr.tree != null);
             $tree = $select_expr.tree;
+            setLocation($tree, $select_expr.start);
         }
     ;
     
@@ -439,20 +443,20 @@ select_expr returns[AbstractExpr tree]
             setLocation($tree, $e.start);
         }
     | e1=select_expr DOT i=ident {
-            // TODO: Implémenter la classe Selection et implémenter ça
-            System.err.println("Attention: Selection n'est pas implémenté !!");
             assert($e1.tree != null);
             assert($i.tree != null);
             
         }
         (o=OPARENT args=list_expr CPARENT {
-            // TODO: Implémenter la classe MethodCall et implémenter ça
-            System.err.println("Attention: MethodCall n'est pas implémenté !!");
             assert($args.tree != null);
+            $tree = new MethodCall($e1.tree, $i.tree, $args.tree);
+            setLocation($tree, $e1.start);
             
         }
         | /* epsilon */ {
-            // we matched "e.i"
+            //Attention, ici le setLocation n'a pas ete fait pas defaut de token de depart!
+            $tree = new Selection($e1.tree, $i.tree);
+            setLocation($tree, $e1.start);
         }
         )
     ;
@@ -466,6 +470,10 @@ primary_expr returns[AbstractExpr tree]
     | m=ident OPARENT args=list_expr CPARENT {
             assert($args.tree != null);
             assert($m.tree != null);
+            This t = new This(true);
+            setLocation(t, $m.start);
+            $tree = new MethodCall(t, $m.tree, $args.tree);
+            setLocation($tree, $m.start);
         }
     | OPARENT expr CPARENT {
             assert($expr.tree != null);
@@ -480,7 +488,9 @@ primary_expr returns[AbstractExpr tree]
         }
     | NEW ident OPARENT CPARENT {
             assert($ident.tree != null);
+            $tree= new New($ident.tree);
         }
+    
     | cast=OPARENT type CPARENT OPARENT expr CPARENT {
             assert($type.tree != null);
             assert($expr.tree != null);
@@ -491,7 +501,7 @@ primary_expr returns[AbstractExpr tree]
         }
     ;
 
-// DONE
+
 type returns[AbstractIdentifier tree]
     : ident {
             assert($ident.tree != null);
@@ -502,18 +512,26 @@ type returns[AbstractIdentifier tree]
 // MODIFIED
 literal returns[AbstractExpr tree]
     : INT {
-        assert($INT.text != null);
-        String value = $INT.text;
-        int valint = Integer.parseInt(value);
-        $tree = new IntLiteral(valint);
-        setLocation($tree, $INT);
+        try {
+            assert($INT.text != null);
+            String value = $INT.text;
+            int valint = Integer.parseInt(value);
+            $tree = new IntLiteral(valint);
+            setLocation($tree, $INT);
+        } catch (NumberFormatException e) {
+            throw new InvalidInt(this, $ctx);
+        }
         }
     | FLOAT {
-        assert($FLOAT.text != null);
-        String value = $FLOAT.text;
-        float valfloat = Float.parseFloat(value);
-        $tree = new FloatLiteral(valfloat);
-        setLocation($tree, $FLOAT);
+        try {
+            assert($FLOAT.text != null);
+            String value = $FLOAT.text;
+            float valfloat = Float.parseFloat(value);
+            $tree = new FloatLiteral(valfloat);
+            setLocation($tree, $FLOAT);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidFloat(this, $ctx);
+        }
         }
     | STRING {
         assert($STRING.text != null);
@@ -530,9 +548,12 @@ literal returns[AbstractExpr tree]
         setLocation($tree, $FALSE);
         }
     | THIS {
+        $tree = new This(false);
+        setLocation($tree, $THIS);
         }
     | NULL {
-        $tree = null;
+        $tree = new Null();
+        setLocation($tree, $NULL);
         }
     ;
 
@@ -549,73 +570,133 @@ ident returns[AbstractIdentifier tree]
 list_classes returns[ListDeclClass tree]
 @init {
     $tree = new ListDeclClass();
-}
+    }
     :
       (c1=class_decl {
+          assert($c1.tree != null);
+          $tree.add($c1.tree);
         }
       )*
     ;
 
-class_decl
+class_decl returns [AbstractDeclClass tree]
     : CLASS name=ident superclass=class_extension OBRACE class_body CBRACE {
+            assert($name.tree != null);
+            assert($superclass.tree != null);
+            assert($class_body.fields != null);
+            assert($class_body.methodes != null);
+            $tree = new DeclClass($name.tree, $superclass.tree, $class_body.fields, $class_body.methodes);
+            setLocation($tree, $name.start);
         }
     ;
 
 class_extension returns[AbstractIdentifier tree]
     : EXTENDS ident {
+            assert($ident.tree != null);
+            $tree = $ident.tree;
         }
     | /* epsilon */ {
+        //Attention, ici le setLocation n'a pas ete fait pas defaut de token de depart!
+            $tree = new Identifier(getDecacCompiler().createSymbol("Object"));
+            $tree.setLocation(Location.BUILTIN);
         }
     ;
 
-class_body
+class_body returns[ListDeclMethod methodes, ListDeclField fields]
+@init {
+    $methodes = new ListDeclMethod();
+    $fields = new ListDeclField();
+}
     : (m=decl_method {
+            assert($m.tree != null);
+            $methodes.add($m.tree);
         }
-      | decl_field_set
-      )*
+      |n=decl_field_set[$fields] {
+        }
+      )* {
+        }
     ;
 
-decl_field_set
-    : v=visibility t=type list_decl_field
-      SEMI
+decl_field_set [ListDeclField f]
+    : v=visibility t=type list_decl_field[$f, $t.tree, $v.tree] SEMI
     ;
 
-visibility
-    : /* epsilon */ {
+visibility returns[Visibility tree]
+    : /* epsilon */ { 
+        $tree = Visibility.PUBLIC;
         }
     | PROTECTED {
+        $tree = Visibility.PROTECTED;
         }
     ;
 
-list_decl_field
-    : dv1=decl_field
-        (COMMA dv2=decl_field
+list_decl_field [ListDeclField f, AbstractIdentifier t, Visibility v] 
+    : dv1=decl_field[$t, $v]{
+        assert($dv1.tree != null);
+        $f.add($dv1.tree);
+        }
+        (COMMA dv2=decl_field[$t, $v]{
+            assert($dv2.tree != null);
+            $f.add($dv2.tree);
+        }
       )*
     ;
 
-decl_field
+decl_field [AbstractIdentifier t, Visibility v] returns[AbstractDeclField tree]
+@init   {
+            AbstractIdentifier field;
+            AbstractInitialization initialization = new NoInitialization();
+        }
     : i=ident {
+            assert($i.tree != null);
+            field = $i.tree;
         }
       (EQUALS e=expr {
+            assert($e.tree != null);
+            initialization = new Initialization($e.tree);
+            setLocation(initialization, $e.start);
         }
       )? {
+            $tree = new DeclField($t, field, initialization, $v);
+            setLocation($tree, $i.start);
         }
     ;
 
-decl_method
-@init {
-}
+decl_method returns[DeclMethod tree]
     : type ident OPARENT params=list_params CPARENT (block {
+            assert($block.decls != null);
+            assert($block.insts != null);
+            MethodBody methodBody = new MethodBody($block.decls, $block.insts);
+            setLocation(methodBody, $block.start);
+            $tree = new DeclMethod($type.tree, $ident.tree, $params.tree, methodBody);
+
         }
       | ASM OPARENT code=multi_line_string CPARENT SEMI {
+            assert($code.text != null);
+            assert($code.location != null);
+            MethodAsmBody methodBody = new MethodAsmBody($code.text, $code.location);
+            setLocation(methodBody, $multi_line_string.start);
+            $tree = new DeclMethod($type.tree, $ident.tree, $params.tree, methodBody);
+
         }
       ) {
+            assert($type.tree != null);
+            assert($ident.tree != null);
+            assert($params.tree != null);
+            setLocation($tree, $type.start);
         }
     ;
 
-list_params
+list_params returns[ListDeclParam tree]
+@init {
+    $tree = new ListDeclParam();
+}
     : (p1=param {
+        assert($p1.tree != null);
+        $tree.add($p1.tree);
         } (COMMA p2=param {
+            assert($p2.tree != null);
+            $tree.add($p2.tree);
         }
       )*)?
     ;
@@ -631,7 +712,38 @@ multi_line_string returns[String text, Location location]
         }
     ;
 
-param
-    : type ident {
+param returns[DeclParam tree]
+    : type ident { 
+        assert($type.tree != null);
+        assert($ident.tree != null);
+        $tree = new DeclParam($type.tree, $ident.tree);
+        setLocation($tree, $type.start);
         }
+    ;
+
+/****     Imports related rules     ****/
+
+list_imports returns[ListDeclImport tree]
+@init{
+    $tree = new ListDeclImport();
+}
+    : (IMPORT import_decl {
+        assert($import_decl.tree != null);
+        $tree.add($import_decl.tree);
+    }
+    )*
+    ;
+
+import_decl returns[AbstractDeclImport tree]
+    : STRING {
+        try{
+            String address = $STRING.text;
+            AbstractProgram program = getDecacCompiler().compileImport(address);
+            $tree = new DeclImport(address, program);
+            assert($tree != null);
+            setLocation($tree, $STRING);
+        }  catch (java.lang.AssertionError e){
+            throw new InvalidFile(this, $ctx);
+        }
+    }
     ;

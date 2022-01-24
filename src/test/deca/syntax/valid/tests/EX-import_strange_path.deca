@@ -1,0 +1,13 @@
+// Description:
+//    On teste les suites d'imports avec un chemin relatif "bizarement construit".
+//
+//    
+//
+// Historique:
+//    cree le 21/01/2022
+
+import "../../valid/tests/ES-class_decl.deca"
+
+{
+    println("Miracle!");
+}

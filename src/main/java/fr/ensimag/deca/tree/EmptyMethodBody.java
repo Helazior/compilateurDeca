@@ -1,7 +1,10 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 
@@ -12,15 +15,16 @@ import java.io.PrintStream;
  * @date 14/01/2022
  */
 public class EmptyMethodBody extends AbstractMethodBody {
-    //TODO
     @Override
-    protected void verifyMethodBody(DecacCompiler compiler) throws ContextualError {
+    protected void verifyMethodBody(DecacCompiler compiler, EnvironmentExp methodEnv,
+        ClassDefinition currentClass, Type returnType) throws ContextualError {
         // Wow everything's good !
     }
 
     @Override
-    protected void codeGenMethod(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("not yet implemented");
+    protected void codeGenMethod(DecacCompiler compiler, ListDeclParam args,
+            AbstractIdentifier listDeclField) throws UnsupportedOperationException {
+        // Nothing to do
     }
 
     /**

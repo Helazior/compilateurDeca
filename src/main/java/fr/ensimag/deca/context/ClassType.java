@@ -1,13 +1,7 @@
 package fr.ensimag.deca.context;
 
-import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.Location;
-
-import java.util.jar.Attributes.Name;
-
-import org.apache.commons.lang.Validate;
-
 /**
  * Type defined by a class.
  *
@@ -63,7 +57,7 @@ public class ClassType extends Type {
      * Return true if potentialSuperClass is a superclass of this class.
      */
     public boolean isSubClassOf(ClassType potentialSuperClass) {
-        ClassDefinition currClass = definition.getSuperClass();
+        ClassDefinition currClass = definition;
         while(currClass != null){
             if(potentialSuperClass.sameType(currClass.getType())){
                 return true;

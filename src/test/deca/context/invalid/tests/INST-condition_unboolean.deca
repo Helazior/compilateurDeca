@@ -1,0 +1,19 @@
+// Description:
+//    Affectation et typage
+//
+// Resultats:
+//    Ligne 15: Condition de type non booléen.
+// 
+// Historique:
+//    cree le 01/01/2022
+
+
+class Test {
+   int attributTest;
+    void fct(){
+        if(5){
+
+        }
+    }
+   
+}

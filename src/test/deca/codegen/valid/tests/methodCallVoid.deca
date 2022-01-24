@@ -1,0 +1,29 @@
+// Description:
+//   test d'appel de méthode
+//
+// Resultats:
+//      31
+//      passe
+
+
+class ClassName {
+    int x = 3;
+    int y;
+    int methodAddition(int nb1, int nb2, int nb3, int nb4) {
+        return nb1 + nb2 + nb3 + nb4; // 3 + 7 + 1 + 20 = 31
+        println("ne devrait pas s'afficher");
+    }
+    void methodAddition2() {
+        println("passe");
+    }
+}
+
+{
+    ClassName a = new ClassName();
+    int z = 1;
+
+    a.y = a.x + 4; // 7
+
+    println(a.methodAddition(a.x, a.y, z, 20));
+    a.methodAddition2();
+}

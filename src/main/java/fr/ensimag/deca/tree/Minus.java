@@ -3,7 +3,6 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.SUB;
 
 /**
@@ -20,16 +19,6 @@ public class Minus extends AbstractOpArith {
         compiler.addInstruction(new SUB(register0, register1));
     }
 
-    /**
-     * Generate code to print the expression
-     *
-     * @param compiler
-     * @param printHex
-     */
-    @Override
-    protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
-        super.codeGenPrint(compiler, printHex);
-    }
 
     @Override
     protected String getOperatorName() {

@@ -1,0 +1,112 @@
+// Description:
+//   test d'appel de méthode
+//
+// Resultats:
+//      1
+//		0
+//		1
+//		0
+//		1
+//		1
+//		0
+//		0
+//		1
+//      2
+//      1.5
+//      9
+//      3
+//      3.5
+//      19
+//      ok
+//      123
+//      3
+//
+
+
+
+
+
+
+class Type {
+	int b = 3;
+}
+
+class SousType extends Type{
+	int a = 9;
+	void methodSousType(int a) {
+		println(a);
+	}
+}
+
+class Test {
+    int method(){
+		println("ok");
+		return 123;
+    }
+}
+
+class SousTest extends Test{
+    int a = 0;
+    int b;
+    float c = 0.3;
+    SousType method0(int a, SousType b, float c) {
+        this.a = a + 1;
+        println(this.a); // 2       | 3
+        println(a + c); // 1 + 0.5  | 2 + 1.5
+		println(b.a); // 9         | 19
+        return new SousType();
+    }
+
+    SousTest method1(int a, SousTest s) {
+        this.c = a;
+        println(this.c);
+        println(a);
+        if (!(this.c != a)) {
+            println("ok");
+        }
+        if (this.c == a) {
+            println("ok");
+        }
+        if (!(this.b == this.c)) {
+            println("ok");
+        }
+
+		println(s.b);
+		return new SousTest();
+    }
+
+    int method2() {
+        if (this.a == 0) {
+            return new SousTest().a;
+        } else {
+            return new SousTest().b;
+        }
+    }
+}
+
+{
+    int a = 0;
+    SousTest sousTest = new SousTest();
+    SousType sousType;
+    if(a == sousTest.a) {println(1);} else {println(0);}             // true  : 1
+    sousTest.b = 2;
+    // tests equals
+    if(a == sousTest.b) {println(1);} else {println(0);}             // false : 0
+    if(sousTest.a == a) {println(1);} else {println(0);}             // true  : 1
+    if(sousTest.b == a) {println(1);} else {println(0);}             // false : 0
+    if(sousTest.a == sousTest.a) {println(1);} else {println(0);}    // true  : 1
+    if(sousTest.a == sousTest.a) {println(1);} else {println(0);}    // true  : 1
+    if(sousTest.b == sousTest.a) {println(1);} else {println(0);}    // false : 0
+    if(sousTest.equals(new Test())) {println(1);} else {println(0);} // false : 0
+    if(sousTest.equals(sousTest)) {println(1);} else {println(0);}   // true  : 1
+
+	//_____________________
+	a = 1;
+	sousType = sousTest.method0(a, new SousType(), 0.5);
+	sousType.a = 19;
+	sousTest.method0(2, sousType, 1.5);
+	// test héritage méthode
+	println(new SousTest().method());              // ok, 123
+	// test héritage champs
+	println(sousType.b);                        // 3
+}

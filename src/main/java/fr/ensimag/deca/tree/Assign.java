@@ -1,10 +1,10 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
 
 /**
@@ -36,12 +36,13 @@ public class Assign extends AbstractBinaryExpr {
     }
 
     @Override
-    public void codeGenExpr(DecacCompiler compiler) {
-        compiler.addComment("Assign");
+    public void codeGenExpr(DecacCompiler compiler) throws DecacFatalError {
+        compiler.addComment("Assign (" + compiler.getRegMan().getSizeVirtualStack() + ")");
+        getLeftOperand().codeGenGetLValue(compiler);
         getRightOperand().codeGenExpr(compiler);
-        compiler.addComment("Store assign");
+        compiler.addComment("Store assign (" + compiler.getRegMan().getSizeVirtualStack() + ")");
         getLeftOperand().codeGenStoreLValue(compiler);
-        compiler.addComment("End assign");
+        compiler.addComment("End assign (" + compiler.getRegMan().getSizeVirtualStack() + ")");
     }
 
     @Override

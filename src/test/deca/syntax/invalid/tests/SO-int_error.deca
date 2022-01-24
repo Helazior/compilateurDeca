@@ -1,0 +1,10 @@
+// Description:
+//    On vérifie qu'une erreur est détectée lorsque l'entier dépasse les 32 bits
+//
+//
+// Historique:
+//    cree le 19/01/2022
+
+{
+    int i = 999999999999999999999;
+}

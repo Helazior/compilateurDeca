@@ -2,8 +2,8 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.TypeDefinition;
-import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
@@ -12,13 +12,11 @@ import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.VariableDefinition;
-import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
-import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.ima.pseudocode.GPRegister;
@@ -155,6 +153,7 @@ public class Identifier extends AbstractIdentifier {
 
     @Override
     public void setDefinition(Definition definition) {
+        assert(definition != null);
         this.definition = definition;
     }
 
@@ -179,8 +178,7 @@ public class Identifier extends AbstractIdentifier {
         }
 
         setType(expDef.getType());
-        Definition def = new VariableDefinition(getType(), getLocation());
-        setDefinition(def);
+        setDefinition(expDef);
 
         return getType();
     }
@@ -191,25 +189,52 @@ public class Identifier extends AbstractIdentifier {
      */
     @Override
     public Type verifyType(DecacCompiler compiler) throws ContextualError {
-        setType(compiler.getType(name.getName()));
+        TypeDefinition tDef = compiler.getType(name);
+        if(tDef == null) {throw new ContextualError("the type "+name.getName()+" is not regognised", getLocation());}
+        setType(tDef.getType());
         setDefinition(new TypeDefinition(getType(), getLocation()));
         return getType();
     }
 
     @Override
-    protected void codeGenStoreLValue(DecacCompiler compiler) {
-        RegisterManager regMan = compiler.getRegMan();
-        Symbol name = getName();
-        GPRegister reg = regMan.pop();
-        regMan.store(name, reg);
-        regMan.giveAndPush(reg);
+    public ExpDefinition verifyIdent(DecacCompiler compiler, EnvironmentExp envExp)
+            throws ContextualError {
+        ExpDefinition expDef = envExp.get(name);
+        if(expDef == null) {
+            throw new ContextualError("the expression "+name+" is not recognised",
+                getLocation());
+        }
+        setDefinition(expDef);
+        return expDef;
     }
 
     @Override
-    protected void codeGenExpr(DecacCompiler compiler){
+    protected void codeGenStoreLValue(DecacCompiler compiler) {
         RegisterManager regMan = compiler.getRegMan();
-        Symbol name = getName();
-        regMan.giveAndPush(regMan.load(name));
+        GPRegister reg = regMan.pop();
+        regMan.store(getName(), reg);
+        regMan.giveAndPush(reg);
+    }
+
+    protected void codeGenGetLValue(DecacCompiler compiler) {
+        // nothing to do
+    }
+
+    @Override
+    public void codeGenExpr(DecacCompiler compiler) {
+        RegisterManager regMan = compiler.getRegMan();
+        regMan.giveAndPush(regMan.load(getName()));
+    }
+
+    /**
+     * Pour utiliser l'attribut d'un objet. est appelé dans la class Selection
+     * @param compiler
+     */
+    protected void codeGenSelectIdent(DecacCompiler compiler, Definition classDef) throws DecacFatalError {
+        RegisterManager regMan = compiler.getRegMan();
+        GPRegister reg = regMan.pop(); // On charge l'objet
+        GPRegister regDest = regMan.getField(reg, getName(), classDef);
+        regMan.giveAndPush(regDest);
     }
 
     private Definition definition;

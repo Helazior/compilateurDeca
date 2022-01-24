@@ -1,21 +1,17 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
-import java.util.jar.Attributes.Name;
 
 import org.apache.commons.lang.Validate;
-
-import fr.ensimag.ima.pseudocode.instructions.*;
-import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 /**
@@ -42,9 +38,10 @@ public class DeclVar extends AbstractDeclVar {
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
         Type t = type.verifyType(compiler);
-        if( t.isVoid()){
+        if (t.isVoid()) {
             throw new ContextualError("Cannot have a 'void' type", getLocation());
         }
+
         Symbol name = varName.getName();
         initialization.verifyInitialization(compiler, t, localEnv, currentClass);
 
@@ -52,7 +49,7 @@ public class DeclVar extends AbstractDeclVar {
         try{
             localEnv.declare(name, varName.getVariableDefinition());
         } catch (DoubleDefException e) {
-            throw new ContextualError(e + " This varibale is already defined in this context", getLocation());
+            throw new ContextualError(" This varibale is already defined in this context", getLocation());
         }
     }
 
@@ -83,8 +80,12 @@ public class DeclVar extends AbstractDeclVar {
     }
 
     @Override
-    public AbstractIdentifier codeGenDecl(DecacCompiler compiler, int offset) {
-        initialization.codeGenInit(compiler, offset);
+    public AbstractIdentifier getName() {
         return varName;
+    }
+
+    @Override
+    public void codeGenDecl(DecacCompiler compiler, int offset) throws DecacFatalError {
+        initialization.codeGenInit(compiler, offset);
     }
 }

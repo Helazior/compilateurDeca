@@ -1,0 +1,76 @@
+#!/bin/bash
+
+k=0
+dests=""
+
+if [ $# -eq 0 ]; then
+	echo Error: command \"$(basename "$0")\" needs arguments.
+	echo See \'$(basename "$0") -h\' for more information
+	exit 1
+fi
+
+if [[ "$@" == *-h* ]]; then
+	echo "Usage: $(basename "$0") <main_program> <imported_programs>..."
+	echo
+	echo "The command $(basename "$0") takes as argument a non-empty list of deca object files."
+	echo "It links the object files into a single assembly file (for the virtual machine ima)."
+	echo "All files should be '.deco' object files, generated thanks to 'decac -c'."
+	echo
+	echo "The resulting assembly file will only contain the main program of the first argument,"
+	echo "but also contain any class defined in the other files."
+	echo "Thus, when compiling a '.deca' file, any imported '.deca' file must be also compiled,"
+	echo "and all the subsequent '.deco' files should be linked together using '$(basename "$0")'."
+	echo
+	echo "NB: $(basename "$0") creates and deletes some '*.tmp.ass' files."
+	exit 0
+fi
+
+for file in $@
+do
+	if [[ ${file:(-5)} != ".deco" ]]; then
+		echo Error: Expected a "'*.deco'" file. You gave "'$file'".
+		rm $dests
+		exit 1
+	fi
+	tmp_dest_file="${file::(-4)}tmp.ass"
+	echo "; =====================================" > $tmp_dest_file
+	echo ";      file n°$k: $file" >> $tmp_dest_file
+	echo "; =====================================" >> $tmp_dest_file
+	cat $file >> $tmp_dest_file
+
+	if [[ k -ne 0 ]]; then
+		perl -i -pe 'BEGIN{undef $/;} s/# start Object.*?# end Object//smg' $tmp_dest_file
+		perl -i -pe 'BEGIN{undef $/;} s/# start tablegen.*?# end tablegen//smg' $tmp_dest_file
+		perl -i -pe 'BEGIN{undef $/;} s/# start main.*?# end main//smg' $tmp_dest_file
+		perl -i -pe 'BEGIN{undef $/;} s/# start errors.*?# end errors//smg' $tmp_dest_file
+	fi
+
+	sed -i 's/false../file.'$k'.false../g' $tmp_dest_file
+	sed -i 's/end../file.'$k'.end../g' $tmp_dest_file
+	sed -i 's/true../file.'$k'.true../g' $tmp_dest_file
+	sed -i 's/while../file.'$k'.while../g' $tmp_dest_file
+	sed -i 's/else../file.'$k'.else../g' $tmp_dest_file
+	sed -i 's/return../file.'$k'.return../g' $tmp_dest_file
+
+	#sed -i 's/div../_.'$k'.div../g' $tmp_dest_file
+	#sed -i 's/mod../_.'$k'.mod../g' $tmp_dest_file
+	#sed -i 's/io../_.'$k'.io../g' $tmp_dest_file
+	#sed -i 's/overflow../_.'$k'.overflow../g' $tmp_dest_file
+	#sed -i 's/stack../_.'$k'.stack../g' $tmp_dest_file
+	#sed -i 's/no../_.'$k'.no../g' $tmp_dest_file
+	#sed -i 's/dereferencement../_.'$k'.dereferencement./g' $tmp_dest_file
+	
+	dests="$dests $tmp_dest_file"
+	let k+=1
+done
+
+dest_file=$1
+dest_file="${dest_file::(-4)}ass"
+
+#fichier solution
+echo $dest_file
+echo $dests
+
+#rm $dest_fime
+cat $dests > $dest_file
+rm $dests

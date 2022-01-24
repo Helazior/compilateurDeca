@@ -14,11 +14,12 @@ options {
 
 //RESERVED WORDS
    ASM: 'asm';
-   //CLASS: 'class';
+   CLASS: 'class';
    EXTENDS: 'extends';
    ELSE: 'else';
    FALSE: 'false';
    IF: 'if';
+   IMPORT: 'import' ;
    INSTANCEOF: 'instanceof';
    NEW: 'new';
    NULL: 'null';
@@ -107,8 +108,8 @@ OR: '||';
 //
 
 //INCLUDE
-   fragment FILENAME: (LETTER | DIGIT | '.' | '-' | '_')+;
-   INCLUDE: '#include' (' ')* '"' FILENAME '"' {doInclude(getText()); skip(); };
+   fragment FILENAME: '"' (LETTER | DIGIT | '.' | '-' | '_')+ '"';
+   INCLUDE: '#include' (' ')* FILENAME {doInclude(getText()); skip(); };
 //
 
 //CLASS

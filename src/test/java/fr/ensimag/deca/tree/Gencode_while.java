@@ -7,7 +7,8 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.CompilerOptions;
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.tools.SymbolTable;
+import fr.ensimag.deca.DecacFatalError;
+import fr.ensimag.deca.context.ContextualError;
 
 /**
  *
@@ -17,12 +18,9 @@ import fr.ensimag.deca.tools.SymbolTable;
 public class Gencode_while {
 
     public static AbstractProgram initTest1() {
-        // TODO : quand on aura des variables^^
-        SymbolTable st = new SymbolTable();
         ListInst linst = new ListInst();
         ListInst linsttrue = new ListInst();
         ListExpr exprtrue = new ListExpr();
-        ListExpr exprfalse = new ListExpr();
         exprtrue.add(new StringLiteral("\"Dans le While !\""));
         linsttrue.add(new Println(false, exprtrue));
         Equals p1 = new Equals(new IntLiteral(50), new IntLiteral(50));     // true
@@ -36,13 +34,13 @@ public class Gencode_while {
         return source;
     }
 
-    public static String gencodeSource(AbstractProgram source) {
+    public static String gencodeSource(AbstractProgram source) throws ContextualError, DecacFatalError {
         DecacCompiler compiler = new DecacCompiler(new CompilerOptions(), null);
         source.codeGenProgram(compiler);
         return compiler.displayIMAProgram();
     }
 
-    public static void test1() {
+    public static void test1() throws ContextualError, DecacFatalError {
         AbstractProgram source = initTest1();
         //System.out.println("---- From the following Abstract Syntax Tree ----");
         //source.prettyPrint(System.out);
@@ -54,7 +52,7 @@ public class Gencode_while {
 
 
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws ContextualError, DecacFatalError {
         test1();
     }
 }

@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
@@ -11,7 +12,6 @@ import fr.ensimag.ima.pseudocode.Label;
 import java.io.PrintStream;
 
 import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.BNE;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
@@ -43,12 +43,12 @@ public class While extends AbstractInst {
 
 
     @Override
-    protected void codeGenInst(DecacCompiler compiler) {
+    protected void codeGenInst(DecacCompiler compiler) throws DecacFatalError {
         // TODO :  avec l'extension, nommer les labels différemment
         RegisterManager regMan = compiler.getRegMan();
 
-        String whileLabel = "while_" + compiler.getNumWhile();
-        String endWhileLabel = "end_while_" + compiler.getNumWhile();
+        String whileLabel = "while.." + compiler.getNumWhile();
+        String endWhileLabel = "end..while_" + compiler.getNumWhile();
         compiler.incrementNumWhile();
 
         compiler.addLabel(new Label(whileLabel));

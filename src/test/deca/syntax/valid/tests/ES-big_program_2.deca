@@ -1,0 +1,158 @@
+// Description:
+//    On teste un programme quelconque
+//
+//    
+//
+// Historique:
+//    cree le 19/01/2022
+
+
+class Animal {
+
+    protected int age;
+    protected string name;
+    int nb_pattes;
+        
+}
+
+
+class Chien extends Animal {
+    
+    boolean collier;
+    boolean aboie;
+
+    Chien init(int age, string name, int nb_pattes, boolean collier) {
+        Chien medor = new Chien();
+        medor.age = age;
+        medor.name = name;
+        medor.nb_pattes = nb_pattes;
+        medor.collier = collier;
+        return medor;
+    }
+
+    void Aboyer() {
+        println("Woof");
+        this.aboie = true;
+    }
+
+    void toString() {
+        println("Le chien s'appelle "); // + this.name);
+    }
+}
+
+class Chat extends Animal {
+    
+    boolean sauvage;
+    boolean miaule;
+
+    Chat init(int age, string name, int nb_pattes, boolean sauvage) {
+        Chat chat = new Chat();
+        chat.age = age;
+        chat.name = name;
+        chat.nb_pattes = nb_pattes;
+        chat.sauvage = sauvage;
+        return chat;
+    }
+
+    void toString() {
+        println("Le chat s'appelle "); // + this.name);
+    }
+
+    void Miauler() {
+        println("Miaou");
+        this.miaule = true;
+    }
+}
+
+class Maitre {
+    boolean gender;
+    Chien chien;
+    Chat chat;
+    int x;
+    int y;
+
+    Maitre init(boolean gender) {
+        Maitre paul = new Maitre();
+        paul.gender = gender;
+        paul.chien = new Chien();
+        paul.chien = paul.chien.init(5, "Arthur", 4, true);
+        paul.chat = new Chat();
+        paul.chat = paul.chat.init(4, "miaouss", 3, false);
+        return paul;
+    }
+
+    void Translate(int a, int b) {
+        this.x = this.x + a;
+        this.y = this.y + b;
+    }
+
+    void toString() {
+        if(this.gender == true) {
+            println("Le maitre a un chat et un chien");
+        }
+        else {
+            println("La maitresse a un chat et un chien");
+        }
+        this.chat.toString();
+        this.chien.toString();
+    }
+}
+
+class Voiture {
+    string couleur;
+    string marque;
+    string modele;
+    int annee;
+    float kilometrage;
+
+    void couleur_choice(string color) {
+        this.couleur = color;
+    }
+
+    void marque_choice(string marque) {
+        this.marque = marque;
+    }
+
+    void modele_choice(string modele) {
+        this.modele = modele;
+    }
+
+    void annee_choice(int annee) {
+        this.annee = annee;
+    }
+
+    void calcul_kilometrage(float distance) {
+        this.kilometrage = this.kilometrage + distance;
+    }
+
+    string getModele() {
+        return this.modele;
+    }
+}
+
+class Environnement {
+    Maitre personne;
+    Voiture car;
+
+    void toString() {
+        this.personne.toString();
+        println("La voiture est une ");// + this.car.getModele);
+        println(this.car.getModele());
+    }
+}
+
+{
+    Maitre maitre = new Maitre();
+    Environnement evnt = new Environnement();
+
+    maitre = maitre.init(true);
+
+    maitre.Translate(10, 10);
+    println("position = ( " ); //+ maitre.x + " ; " + maitre.y + " )");
+    maitre.chien.Aboyer();
+
+    evnt.personne = maitre;
+    evnt.car = new Voiture();
+    evnt.car.modele_choice("107");
+    evnt.toString();
+}

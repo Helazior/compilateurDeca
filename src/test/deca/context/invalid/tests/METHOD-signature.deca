@@ -1,0 +1,21 @@
+// Description:
+//    Affectation et typage
+//
+// Resultats:
+//    Ligne 18: Wrong signature
+// 
+// Historique:
+//    cree le 01/01/2022
+
+
+class Test {
+   int IntVar(float param1, int param2){
+      //nothing
+   }
+}
+
+class sous_Test extends Test{
+   int IntVar(float param1, string param2){
+      //nothing
+   }
+}

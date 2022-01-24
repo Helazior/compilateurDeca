@@ -1,0 +1,3 @@
+tests/PARAM-already-defined.deca
+
+PARAM-already-defined.deca:12:26: A parameter with the same name already exist in this context

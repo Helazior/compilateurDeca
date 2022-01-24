@@ -1,5 +1,6 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -13,7 +14,6 @@ import fr.ensimag.ima.pseudocode.instructions.*;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
-import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.deca.codegen.RegisterManager;
 
 /**
@@ -42,11 +42,11 @@ public class Initialization extends AbstractInitialization {
     protected void verifyInitialization(DecacCompiler compiler, Type t,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {
-        expression.verifyRValue(compiler, localEnv, currentClass, t);
+        expression = expression.verifyRValue(compiler, localEnv, currentClass, t);
     }
 
     @Override
-    public void codeGenInit(DecacCompiler compiler, int offset) {
+    public void codeGenInit(DecacCompiler compiler, int offset) throws DecacFatalError {
         RegisterManager regMan = compiler.getRegMan();
         expression.codeGenExpr(compiler);
         GPRegister reg = regMan.pop();
@@ -54,6 +54,14 @@ public class Initialization extends AbstractInitialization {
         regMan.give(reg);
     }
 
+    public boolean isInitialized() {
+        return true;
+    }
+
+    @Override
+    public void pushValue(DecacCompiler compiler) throws DecacFatalError {
+        expression.codeGenExpr(compiler);
+    }
 
     @Override
     public void decompile(IndentPrintStream s) {

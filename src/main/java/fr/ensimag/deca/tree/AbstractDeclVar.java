@@ -1,11 +1,10 @@
 package fr.ensimag.deca.tree;
 
-import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
-import fr.ensimag.ima.pseudocode.ImmediateInteger;
 
 /**
  * Variable declaration
@@ -31,5 +30,6 @@ public abstract class AbstractDeclVar extends Tree {
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError;
 
-    abstract public AbstractIdentifier codeGenDecl(DecacCompiler compiler, int offset);
+    abstract public AbstractIdentifier getName();
+    abstract public void codeGenDecl(DecacCompiler compiler, int offset) throws DecacFatalError;
 }

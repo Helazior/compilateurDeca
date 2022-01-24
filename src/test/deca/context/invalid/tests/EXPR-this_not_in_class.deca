@@ -1,0 +1,17 @@
+// Description:
+//    Affectation et typage
+//
+// Resultats:
+//    Ligne 16: utilisation de this hors d'une déclaration de classe.
+// 
+// Historique:
+//    cree le 22/01/2022
+
+
+class Test {
+    int field;
+
+}
+{
+    this.field = 5;
+}

@@ -1,11 +1,14 @@
 package fr.ensimag.deca.tree;
 
-import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ParamDefinition;
+import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
-import java.util.jar.Attributes.Name;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 /**
  * Declaration of a class (<code>class name extends superClass {members}<code>).
@@ -17,31 +20,37 @@ public class DeclParam extends AbstractDeclParam {
     private AbstractIdentifier type;
     private AbstractIdentifier name;
     
-    public DeclParam(AbstractIdentifier typeParam, AbstractIdentifier nameParam){
-        this.name = nameParam;
-        this.type = typeParam;
+    public DeclParam(AbstractIdentifier type, AbstractIdentifier name){
+        this.name = name;
+        this.type = type;
     }
 
-    //TODO
     @Override
     public void decompile(IndentPrintStream s) {
-        s.println("{");
-        s.indent();
-        name.decompile(s);
         type.decompile(s);
-        s.unindent();
-        s.println("}");
+        s.print(" ");
+        name.decompile(s);
     }
 
     @Override
-    protected void verifyParamSignature(DecacCompiler compiler)
+    protected Type verifyParamSignature(DecacCompiler compiler)
             throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        Type t = type.verifyType(compiler);
+        if(t.isVoid()){
+            throw new ContextualError("Cannot pass a voidType object in argument", getLocation());
+        }
+        return t;
     }
 
     @Override
-    protected void verifyParamType(DecacCompiler compiler) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    protected void verifyParamType(DecacCompiler compiler, EnvironmentExp methodEnv) throws ContextualError {
+        ParamDefinition def = new ParamDefinition(type.verifyType(compiler), getLocation());
+        try{
+            methodEnv.declare(name.getName(), def);
+        } catch(DoubleDefException e){
+            throw new ContextualError("A parameter with the same name already exist in this context", getLocation());
+        }
+        name.setDefinition(def);
     }
 
 
@@ -57,4 +66,8 @@ public class DeclParam extends AbstractDeclParam {
         type.iter(f);    
     }
 
+    @Override
+    public Symbol getName() {
+        return name.getName();
+    }
 }

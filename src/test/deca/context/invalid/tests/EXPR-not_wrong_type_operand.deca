@@ -1,0 +1,14 @@
+// Description:
+//    Affectation et typage
+//
+// Resultats:
+//    Ligne 12: Appel de not sur une expression non booléenne
+// 
+// Historique:
+//    cree le 22/01/2022
+
+
+class Test {
+    boolean field = !5;
+
+}

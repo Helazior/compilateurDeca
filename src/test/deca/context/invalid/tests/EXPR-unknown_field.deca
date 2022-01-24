@@ -1,0 +1,16 @@
+// Description:
+//    Affectation et typage
+//
+// Resultats:
+//    Ligne 14: Variable non définie.
+// 
+// Historique:
+//    cree le 22/01/2022
+
+
+class Test {
+    int f;
+    void fct(){
+        t.f = 5;
+    }
+}

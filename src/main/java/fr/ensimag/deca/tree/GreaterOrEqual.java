@@ -3,9 +3,8 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.SGE;
-import fr.ensimag.ima.pseudocode.instructions.SGT;
+import fr.ensimag.ima.pseudocode.instructions.SLT;
 
 /**
  * Operator "x >= y"
@@ -21,7 +20,11 @@ public class GreaterOrEqual extends AbstractOpIneq {
 
     @Override
     public void codeGenOpIneq(DecacCompiler compiler, GPRegister register) {
-        compiler.addInstruction(new SGE(register));
+        if (!compiler.getIsInNotOp()) {
+            compiler.addInstruction(new SGE(register));
+        } else {
+            compiler.addInstruction(new SLT(register));
+        }
     }
 
     @Override
