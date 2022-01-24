@@ -1,0 +1,19 @@
+// Description:
+//    test de convFloat
+//
+// Resultats:
+//      
+//
+// Date:
+//     24/01/22
+
+class Test{
+    void fct(float f){
+
+    }
+}
+{
+    int i = 10;
+    Test t = new Test();
+    t.fct(i);
+}

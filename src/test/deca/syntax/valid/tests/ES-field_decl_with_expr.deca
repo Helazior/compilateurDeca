@@ -1,0 +1,40 @@
+// Description:
+//    On teste un programme quelconque
+//
+// Resultat:
+//    i1 = 1;
+//    i2 = 2;
+//    i3 = 1;
+//    i4 = 2;
+//    i5 = 2;
+//    i6 = 0;
+//    i7 = -1;
+//    b1 = true;
+//    b2 = false;
+//    b3 = false;
+//    b4 = true;
+
+//
+// Historique:
+//    cree le 18/01/2022
+
+class DeclAvecExpr{
+    protected int i1 = 1;
+    int i2 = i1 + i1;
+    int i3 = i2 - i1;
+    int i4 = i2 * i1;
+    int i5 = i2 / i1;
+    int i6 = i2 % i1;
+    int i7 = -i1;
+    boolean b1 = true;
+    boolean b2 = !b1;
+    boolean b3 = b1 && b2;
+    boolean b4 = b1 || b2;
+    boolean b5 = i2 > i1;
+    boolean b6 = i2 >= i1;
+    boolean b5 = i2 < i1;
+    boolean b6 = i2 <= i1;
+    boolean b5 = i2 == i1;
+    boolean b6 = i2 != i1;
+    float f;
+}
