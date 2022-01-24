@@ -1,0 +1,3 @@
+tests/derefNullGetLvalue.deca
+
+Erreur : dereferencement de null
