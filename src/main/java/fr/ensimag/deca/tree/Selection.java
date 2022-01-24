@@ -87,6 +87,9 @@ public class Selection extends AbstractLValue {
         if (fieldDef.getVisibility() == Visibility.PROTECTED) {
             ClassType exprClassType = exprType.asClassType("Internal error: type is not "+
                 "a class type, but should be", getLocation());
+            if(currentClass == null){
+                throw new ContextualError("Cannot access " + exprClassType.getName() + "'s field \"" + nomDAttribut.getName() + "\" from Main", getLocation());
+            }
             if (!exprClassType.isSubClassOf(currentClass.getType())) {
                 throw new ContextualError(
                     "Cannot access " + exprClassType.getName() + "'s attributes from class "
