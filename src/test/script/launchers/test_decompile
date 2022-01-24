@@ -14,28 +14,30 @@ function resultGeneration {
     file_src=$2
     file_name=$3
 
-    # TODO: vérifier le code de retour des commandes deca !!
+    if [[ $file_name != tmp_* ]]; then
+        # TODO: vérifier le code de retour des commandes deca !!
 
-    #generation du premier resultat
-    res1_tmp=$path/tests/tmp_$file_name.deca
-    res1_file=$path/generated/$file_name"1".deca
-    decac -p -c $file_src > $res1_tmp
+        #generation du premier resultat
+        res1_tmp=$path/tests/tmp_$file_name.deca
+        res1_file=$path/generated/$file_name"1".deca
+        decac -p -c $file_src > $res1_tmp
 
-    #generation du deuxieme resultat
-    res2_file=$path/generated/$file_name"2".deca
-    decac -p -c $res1_tmp > $res2_file
-    mv $res1_tmp $res1_file
-    
+        #generation du deuxieme resultat
+        res2_file=$path/generated/$file_name"2".deca
+        decac -p -c $res1_tmp > $res2_file
+        mv $res1_tmp $res1_file
+        
 
-	#On compare les fichiers
-    if cmp -s $res1_file $res2_file; then
-		echo -e "${green} ${bold} PASSED $file_name ${reset}"
-        rm $res1_file
-        rm $res2_file
-	else
-		exit_value=1
-		echo -e "${red} ${bold} FAILED $file_name ${reset}"
-	fi
+        #On compare les fichiers
+        if cmp -s $res1_file $res2_file; then
+            echo -e "${green} ${bold} PASSED $file_name ${reset}"
+            rm $res1_file
+            rm $res2_file
+        else
+            exit_value=1
+            echo -e "${red} ${bold} FAILED $file_name ${reset}"
+        fi
+    fi
 }
 
 # Récupération du dossier de travail
