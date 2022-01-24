@@ -29,22 +29,25 @@ function test_file {
     deco_files=
     #generation du resultat
     for src_deca in $src_decas; do
-        echo "$src_deca"
         src_file=$path/$src_deca
         deca_file=$test_dir/$(basename $src_deca)
-        deca_files="$deca_files $deca_file"
         cp $src_file $deca_file
+        deca_files="$deca_files $deca_file"
+    done
+    for deca_file in $deca_files; do
         deco_file=${deca_file%%".deca"}.deco
         deco_files="$deco_files $deco_file"
-        echo "decac -c $deca_file"
         decac -c $deca_file
+        if [[ $? -ne 0 ]]; then
+            echo -e "${red} ${bold} COMPILATION ERROR $file_name"
+            echo -e  "${reset}"
+            exit 2
+        fi
     done
 
-    echo "linker $deco_files"
     linker $deco_files
     asm_file=$(echo $deco_files | cut -d" " -f1)
     asm_file=${asm_file%%".deco"}.ass
-    echo "ima $asm_file < $in_file > $out_file"
     ima $asm_file < $in_file > $out_file
 
     #On compare les fichiers

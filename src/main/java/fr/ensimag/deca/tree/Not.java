@@ -46,6 +46,11 @@ public class Not extends AbstractUnaryExpr {
      */
     @Override
     public void codeGenExpr(DecacCompiler compiler) throws DecacFatalError {
+        codeGenNotExpr(compiler);
+    }
+
+    @Override
+    public void codeGenNotExpr(DecacCompiler compiler) throws DecacFatalError {
         /*
         RegisterManager regMan = compiler.getRegMan();
         GPRegister register0 = regMan.pop();
@@ -60,7 +65,7 @@ public class Not extends AbstractUnaryExpr {
         AbstractExpr operand = getOperand();
         // Si on n'est pas déjà dans un NOT, on met le NOT, sinon on annule
         compiler.inverseIsInNotOp();
-        operand.codeGenExpr(compiler);
+        operand.codeGenNotExpr(compiler);
         compiler.inverseIsInNotOp();
 
         compiler.addComment(getOperatorName());
@@ -68,7 +73,7 @@ public class Not extends AbstractUnaryExpr {
     }
 
 
-        @Override
+    @Override
     protected String getOperatorName() {
         return "!";
     }
