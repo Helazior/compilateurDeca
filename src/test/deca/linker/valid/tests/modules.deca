@@ -1,0 +1,34 @@
+
+class Math {
+    boolean equals(Object o){
+        return true;
+    }
+    int sum(int a, int b){
+        return a + b;
+    }
+    float div(float a, float b){
+        return a / b;
+    }
+    void mult(Vector v, float f) {
+        v.x = v.x * f;
+        v.y = v.y * f;
+        v.z = v.z * f;
+    }
+}
+
+class Vector {
+    float x;
+    float y;
+    float z;
+    void init(float x, float y, float z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
+    void move(float dx, float dy, float dz) {
+        x = dx;
+        y = dy;
+        z = dz;
+    }
+}

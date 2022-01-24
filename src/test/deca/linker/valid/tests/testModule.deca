@@ -1,0 +1,30 @@
+import "modules.deca"
+
+class BetterVector extends Vector {
+    protected float a;
+    void init(float x, float y, float z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        a = x + y + z;
+    }
+    boolean coherent() {
+        return a == x + y + z;
+    }
+}
+
+{
+    BetterVector bv = new BetterVector();
+    Vector v = bv;
+    v.init(3, 2.2, 5);
+    if (!bv.coherent()) {
+        println("NOOOOOO!!!!");
+    } else {
+        v.move(2,3,4);
+        if (bv.coherent()) {
+            println("NOOOOOO!!!! 2");
+        } else {
+            println("Good !");
+        }
+    }
+}
