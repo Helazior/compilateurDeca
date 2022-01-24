@@ -120,6 +120,8 @@ public class Program extends AbstractProgram {
 
         RegisterManager regMan = compiler.getRegMan();
         int tablesize = regMan.declareClasses(classes, imports);
+        compiler.addFirst(new Line("# start tablegen"));
+        compiler.addLine(new Line("# end tablegen"));
         IMAProgram classtableGen = compiler.remplaceProgram(new IMAProgram());
         
         classes.codeGenListClass(compiler);
@@ -140,11 +142,14 @@ public class Program extends AbstractProgram {
         // termine le programme
         compiler.addInstruction(new HALT());
 
+        compiler.addFirst(new Line("# start main"));
+        compiler.addLine(new Line("# end main"));
 
         IMAProgram mainProg = compiler.remplaceProgram(new IMAProgram());
 
         errorsMessages(compiler);
-
+        compiler.addFirst(new Line("# start errors"));
+        compiler.addLine(new Line("# end errors"));
         IMAProgram errorsFns = compiler.remplaceProgram(new IMAProgram());
 
         compiler.concatenateBeginningProgram(mainProg);
