@@ -43,7 +43,9 @@ public class StringLiteral extends AbstractStringLiteral {
     @Override
     protected void codeGenPrint(DecacCompiler compiler, Boolean printHex) {
         LOG.debug("codegen str litteral: value is " + value);
-        compiler.addInstruction(new WSTR(new ImmediateString(value.substring(1, value.length() - 1))));
+        value = value.substring(1, value.length() - 1);
+        value = value.replace("\\\\", "\\").replace("\\\"", "\"");
+        compiler.addInstruction(new WSTR(new ImmediateString(value)));
     }
 
     @Override

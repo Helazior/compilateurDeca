@@ -115,6 +115,7 @@ class PetiteFille extends Fille {
 	int e = 29;
 	float methodeGM (int c) {
 		println("pf ovride");
+		return 1.2;
 	}
 
 	void methodeGM2(PetiteFille pf) {
@@ -128,7 +129,6 @@ class PetiteFille extends Fille {
 	    m.methodeGM(1);
 	    fille.methodeGM(1);
 	    t.methodeGM(1);
-		println(f + e);
 	}
 }
 
@@ -166,8 +166,12 @@ class PetiteFille extends Fille {
 	// 5
 	// 10.7
 
-	println("\n");
+	println();
 	gm = fille.methodeFille(gm, m, t);
 	gm.a = 10.5;
 	gm = pf.methodeFille(gm, m, t);
+
+	println("\\\\\"");
+	println(pf.methodeGM(pf.e));
+	pf.methodeGM2(pf);
 }
