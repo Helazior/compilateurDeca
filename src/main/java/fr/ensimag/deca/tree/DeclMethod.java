@@ -103,7 +103,7 @@ public class DeclMethod extends AbstractDeclMethod {
             index = superMethod.getIndex();
 
             if(!t.isSubTypeOf(superMethod.getType())){
-                throw new ContextualError("the returned type of this method should be " +
+                throw new ContextualError("The returned type of this method should be " +
                 "a sub-type of the one of its parent ", getLocation());
             }
             if(!sig.equals(superMethod.getSignature())){

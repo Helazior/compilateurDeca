@@ -1,0 +1,16 @@
+// Description:
+//   test d'appel de méthode
+//
+// Resultats:
+//      31
+
+import "basic1.deca"
+
+{
+    ClassName a = new ClassName();
+    int z = 1;
+
+    a.y = a.x + 4; // 7
+
+    println(a.methodAddition(a.x, a.y, z, 20));
+}

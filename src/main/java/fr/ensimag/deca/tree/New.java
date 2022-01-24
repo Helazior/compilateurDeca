@@ -36,7 +36,7 @@ public class New extends AbstractExpr {
         //Type t = compiler.getType(className.getName()).getType();
         Type t = className.verifyType(compiler);
         if(!t.isClass()){
-            throw new ContextualError("the 'New' symbol can only be use to defined Classes", getLocation());
+            throw new ContextualError("The 'New' symbol can only be use to defined Classes", getLocation());
         }
         setType(t);
         return t;

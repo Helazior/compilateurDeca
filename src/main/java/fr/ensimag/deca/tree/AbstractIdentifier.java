@@ -27,7 +27,6 @@ public abstract class AbstractIdentifier extends AbstractLValue {
      * This method essentially performs a cast, but throws an explicit exception
      * when the cast fails.
      *
-     * @throws DecacInternalError
      *             if the definition is not a class definition.
      */
     public abstract ClassDefinition getClassDefinition();
@@ -41,7 +40,6 @@ public abstract class AbstractIdentifier extends AbstractLValue {
      * This method essentially performs a cast, but throws an explicit exception
      * when the cast fails.
      *
-     * @throws DecacInternalError
      *             if the definition is not a field definition.
      */
     public abstract FieldDefinition getFieldDefinition();

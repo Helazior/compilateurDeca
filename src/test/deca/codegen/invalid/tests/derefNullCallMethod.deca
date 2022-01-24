@@ -1,0 +1,10 @@
+class A {
+	void method() {
+		println("deref nul");
+	}
+}
+
+{
+	A a = null;
+	a.method();
+}
