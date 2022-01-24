@@ -41,6 +41,7 @@ public class objectEquals {
         // On return
         compiler.addInstruction(new RTS());
 
-
+        compiler.addFirst(new Line("# start Object"));
+        compiler.addLine(new Line("# end Object"));
     }
 }
