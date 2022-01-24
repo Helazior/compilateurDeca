@@ -1,3 +1,3 @@
 tests/EXPR-not_an_attribute.deca
 
-EXPR-not_an_attribute.deca:17:6: the expression f is not recognised
+EXPR-not_an_attribute.deca:17:6: the expression f is not recognized
