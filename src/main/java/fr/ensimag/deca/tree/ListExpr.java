@@ -39,7 +39,7 @@ public class ListExpr extends TreeList<AbstractExpr> {
         for (int i = 0; i < getList().size(); i++) {
             AbstractExpr expr = getList().get(i);
             Type sigtype = sig.paramNumber(i);
-            expr.verifyRValue(compiler, localEnv, currentClass, sigtype);
+            set(i, expr.verifyRValue(compiler, localEnv, currentClass, sigtype));
         }
     }
 }

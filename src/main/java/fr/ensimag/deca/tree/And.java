@@ -15,6 +15,10 @@ public class And extends AbstractOpBool {
         super(leftOperand, rightOperand);
     }
 
+    @Override
+    public void codeGenExpr(DecacCompiler compiler) throws DecacFatalError {
+        codeGenNotExpr(compiler);
+    }
 
     /**
      * codeGen de l'opération &&
