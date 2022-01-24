@@ -61,18 +61,10 @@ main returns[AbstractMain tree]
     ;
 
 block returns[ListDeclVar decls, ListInst insts]
-    : OBRACE list_decl list_inst CBRACE {
-            assert($list_decl.tree != null);
-            assert($list_inst.tree != null);
-            $decls = $list_decl.tree;
-            $insts = $list_inst.tree;
-        }
+    : OBRACE list_decl list_inst CBRACE 
     ;
 
 list_decl returns[ListDeclVar tree]
-@init   {
-            $tree = new ListDeclVar();
-        }
     : decl_var_set[$tree]*
     ;
 
@@ -82,157 +74,39 @@ decl_var_set[ListDeclVar l]
 
 
 list_decl_var[ListDeclVar l, AbstractIdentifier t]
-    : dv1=decl_var[$t] {
-        assert($dv1.tree != null);
-        $l.add($dv1.tree);
-        } (COMMA dv2=decl_var[$t] {
-            assert($dv2.tree != null);
-            $l.add($dv2.tree);
-        }
-      )*
+    : dv1=decl_var[$t] 
+     (COMMA dv2=decl_var[$t])*
     ;
 
 //TODO
 decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
-@init   {
-            AbstractIdentifier name;
-            AbstractInitialization initialization = new NoInitialization();
-        }
-    : i=ident {
-            assert($i.tree != null);
-            name = $i.tree;
-        }
-      (EQUALS e=expr {
-            assert($e.tree != null);
-            initialization = new Initialization($e.tree);
-            setLocation(initialization, $e.start);
-        }
-      )? {
-            $tree = new DeclVar($t, name, initialization);
-            setLocation($tree, $i.start);
-        }
+
+    : i=ident (EQUALS e=expr)? 
     ;
 
 // DONE
 list_inst returns[ListInst tree]
-@init {
-    $tree = new ListInst();
-}
-    : (inst {
-            assert($inst.tree != null);
-            $tree.add($inst.tree);
-        }
-      )*
+    : (inst)*
     ;
 
 // DONE
 inst returns[AbstractInst tree]
-    : e1=expr SEMI {
-            assert($e1.tree != null);
-            $tree = $e1.tree;
-        }
-    | SEMI {
-            $tree = new NoOperation();
-            setLocation($tree, $SEMI);
-        }
-    | PRINT OPARENT list_expr CPARENT SEMI {
-            assert($list_expr.tree != null);
-            $tree = new Print(false, $list_expr.tree);
-            setLocation($tree, $list_expr.start);
-        }
-    | PRINTLN OPARENT list_expr CPARENT SEMI {
-            assert($list_expr.tree != null);
-            $tree = new Println(false, $list_expr.tree);
-            setLocation($tree, $list_expr.start);
-        }
-    | PRINTX OPARENT list_expr CPARENT SEMI {
-            assert($list_expr.tree != null);
-            $tree = new Print(true, $list_expr.tree);
-            setLocation($tree, $list_expr.start);
-        }
-    | PRINTLNX OPARENT list_expr CPARENT SEMI {
-            assert($list_expr.tree != null);
-            $tree = new Println(true, $list_expr.tree);
-            setLocation($tree, $list_expr.start);
-        }
-    | if_then_else {
-            assert($if_then_else.tree != null);
-            $tree = $if_then_else.tree;
-        }
-    | WHILE OPARENT condition=expr CPARENT OBRACE body=list_inst CBRACE {
-            assert($condition.tree != null);
-            assert($body.tree != null);
-            $tree = new While($condition.tree, $body.tree);
-            setLocation($tree, $condition.start);
-        }
+    : e1=expr SEMI 
+    | SEMI 
+    | PRINT OPARENT list_expr CPARENT SEMI 
+    | PRINTLN OPARENT list_expr CPARENT SEMI 
+    | PRINTX OPARENT list_expr CPARENT SEMI 
+    | PRINTLNX OPARENT list_expr CPARENT SEMI 
+    | if_then_else 
+    | WHILE OPARENT condition=expr CPARENT OBRACE body=list_inst CBRACE 
     //TODO
-    | RETURN expr SEMI {
-            assert($expr.tree != null);
-            $tree = new Return($expr.tree);
-            setLocation($tree, $expr.start);
-        }
+    | RETURN expr SEMI 
     ;
 
 if_then_else returns[IfThenElse tree]
-@init {
-    // Pour pouvoir construire l'arbre dans le bon ordre, on liste les conditions
-    // et instructions, puis on construit l'arbre depuis la fin
-    List<AbstractExpr> conditions = new ArrayList<AbstractExpr>();
-    List<Token> treeNodes = new ArrayList<Token>();
-    List<ListInst> thens = new ArrayList<ListInst>();
-    ListInst elseListInst = new ListInst(); // Si le else n'est pas spécifié, il est vide
-}
-    : if1=IF OPARENT condition=expr CPARENT OBRACE li_if=list_inst CBRACE {
-        assert($condition.tree != null);
-        assert($li_if.tree != null);
-
-        conditions.add($condition.tree);
-        thens.add($li_if.tree);
-
-        treeNodes.add($condition.start);
-        }
-      (ELSE elsif=IF OPARENT elsif_cond=expr CPARENT OBRACE elsif_li=list_inst CBRACE {
-            assert($elsif_cond.tree != null);
-            assert($elsif_li.tree != null);
-
-            conditions.add($elsif_cond.tree);
-            thens.add($elsif_li.tree);
-
-            treeNodes.add($elsif_cond.start);
-        }
-      )*
-      (ELSE OBRACE li_else=list_inst CBRACE {
-            assert($li_else.tree != null);
-            elseListInst = $li_else.tree;
-        }
-      )?
-      {
-        // On est sûrs d'avoir au moins 1 élément
-        AbstractExpr cond = conditions.remove(conditions.size() - 1);
-        ListInst then = thens.remove(thens.size() - 1);
-        Token node = treeNodes.remove(treeNodes.size() -1);
-
-        $tree = new IfThenElse(cond, then, elseListInst);
-        setLocation($tree, node);
-
-        // On s'occupe du reste
-        while (!conditions.isEmpty()) {
-            assert(!thens.isEmpty());
-            assert(!treeNodes.isEmpty());
-
-            ListInst subtree = new ListInst();
-            subtree.add($tree);
-
-            cond = conditions.remove(conditions.size() - 1);
-            then = thens.remove(thens.size() - 1);
-            node = treeNodes.remove(treeNodes.size() -1);
-
-            $tree = new IfThenElse(cond, then, subtree);
-            setLocation($tree, node);
-        }
-        assert(thens.isEmpty());
-        assert(treeNodes.isEmpty());
-      }
+    : if1=IF OPARENT condition=expr CPARENT OBRACE li_if=list_inst CBRACE 
+      (ELSE elsif=IF OPARENT elsif_cond=expr CPARENT OBRACE elsif_li=list_inst CBRACE )*
+      (ELSE OBRACE li_else=list_inst CBRACE )?
     ;
 
 
