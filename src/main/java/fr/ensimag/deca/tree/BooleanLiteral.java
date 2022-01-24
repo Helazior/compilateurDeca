@@ -38,6 +38,11 @@ public class BooleanLiteral extends AbstractExpr {
 
     @Override
     public void codeGenExpr(DecacCompiler compiler) {
+        codeGenNotExpr(compiler);
+    }
+
+    @Override
+    public void codeGenNotExpr(DecacCompiler compiler) {
         RegisterManager regMan = compiler.getRegMan();
         GPRegister register = regMan.take();
         if (value) {

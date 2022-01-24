@@ -134,6 +134,11 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
 
     @Override
     public void codeGenExpr(DecacCompiler compiler) throws DecacFatalError {
+        codeGenNotExpr(compiler);
+    }
+
+    @Override
+    public void codeGenNotExpr(DecacCompiler compiler) throws DecacFatalError {
         RegisterManager regMan = compiler.getRegMan();
         //super.codeGenExpr(compiler);
         AbstractExpr left = getLeftOperand();

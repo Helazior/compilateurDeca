@@ -21,6 +21,11 @@ public abstract class AbstractOpBool extends AbstractBinaryExpr {
 
     @Override
     public void codeGenExpr(DecacCompiler compiler) throws DecacFatalError {
+        codeGenNotExpr(compiler);
+    }
+
+    @Override
+    public void codeGenNotExpr(DecacCompiler compiler) throws DecacFatalError {
         codeGenOp(compiler);
     }
 
