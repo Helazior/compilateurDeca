@@ -61,7 +61,7 @@ main returns[AbstractMain tree]
     ;
 
 block returns[ListDeclVar decls, ListInst insts]
-    : OBRACE list_decl list_inst CBRACE 
+    : OBRACE list_decl list_inst CBRACE
     ;
 
 list_decl returns[ListDeclVar tree]
@@ -72,39 +72,33 @@ decl_var_set[ListDeclVar l]
     : type list_decl_var[$l,$type.tree] SEMI
     ;
 
-
 list_decl_var[ListDeclVar l, AbstractIdentifier t]
-    : dv1=decl_var[$t] 
+    : dv1=decl_var[$t]
      (COMMA dv2=decl_var[$t])*
     ;
 
-//TODO
 decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
-
-    : i=ident (EQUALS e=expr)? 
+    : i=ident (EQUALS e=expr)?
     ;
 
-// DONE
 list_inst returns[ListInst tree]
     : (inst)*
     ;
 
-// DONE
 inst returns[AbstractInst tree]
-    : e1=expr SEMI 
-    | SEMI 
-    | PRINT OPARENT list_expr CPARENT SEMI 
-    | PRINTLN OPARENT list_expr CPARENT SEMI 
-    | PRINTX OPARENT list_expr CPARENT SEMI 
-    | PRINTLNX OPARENT list_expr CPARENT SEMI 
-    | if_then_else 
-    | WHILE OPARENT condition=expr CPARENT OBRACE body=list_inst CBRACE 
-    //TODO
-    | RETURN expr SEMI 
+    : e1=expr SEMI
+    | SEMI
+    | PRINT OPARENT list_expr CPARENT SEMI
+    | PRINTLN OPARENT list_expr CPARENT SEMI
+    | PRINTX OPARENT list_expr CPARENT SEMI
+    | PRINTLNX OPARENT list_expr CPARENT SEMI
+    | if_then_else
+    | WHILE OPARENT condition=expr CPARENT OBRACE body=list_inst CBRACE
+    | RETURN expr SEMI
     ;
 
 if_then_else returns[IfThenElse tree]
-    : if1=IF OPARENT condition=expr CPARENT OBRACE li_if=list_inst CBRACE 
+    : if1=IF OPARENT condition=expr CPARENT OBRACE li_if=list_inst CBRACE
       (ELSE elsif=IF OPARENT elsif_cond=expr CPARENT OBRACE elsif_li=list_inst CBRACE )*
       (ELSE OBRACE li_else=list_inst CBRACE )?
     ;
@@ -176,7 +170,7 @@ and_expr returns[AbstractExpr tree]
             $tree = $e.tree;
         }
     |  e1=and_expr AND e2=eq_neq_expr {
-            assert($e1.tree != null);                         
+            assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new And($e1.tree, $e2.tree);
             setLocation($tree, $e1.start);
@@ -265,7 +259,7 @@ mult_expr returns[AbstractExpr tree]
             $tree = $e.tree;
         }
     | e1=mult_expr TIMES e2=unary_expr {
-            assert($e1.tree != null);                                         
+            assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new Multiply($e1.tree, $e2.tree);
             setLocation($tree, $e1.start);
@@ -302,7 +296,7 @@ unary_expr returns[AbstractExpr tree]
             setLocation($tree, $select_expr.start);
         }
     ;
-    
+
 // MODIFIED
 select_expr returns[AbstractExpr tree]
     : e=primary_expr {
@@ -313,13 +307,11 @@ select_expr returns[AbstractExpr tree]
     | e1=select_expr DOT i=ident {
             assert($e1.tree != null);
             assert($i.tree != null);
-            
         }
         (o=OPARENT args=list_expr CPARENT {
             assert($args.tree != null);
             $tree = new MethodCall($e1.tree, $i.tree, $args.tree);
             setLocation($tree, $e1.start);
-            
         }
         | /* epsilon */ {
             //Attention, ici le setLocation n'a pas ete fait pas defaut de token de depart!
@@ -358,7 +350,6 @@ primary_expr returns[AbstractExpr tree]
             assert($ident.tree != null);
             $tree= new New($ident.tree);
         }
-    
     | cast=OPARENT type CPARENT OPARENT expr CPARENT {
             assert($type.tree != null);
             assert($expr.tree != null);
@@ -491,7 +482,7 @@ decl_field_set [ListDeclField f]
     ;
 
 visibility returns[Visibility tree]
-    : /* epsilon */ { 
+    : /* epsilon */ {
         $tree = Visibility.PUBLIC;
         }
     | PROTECTED {

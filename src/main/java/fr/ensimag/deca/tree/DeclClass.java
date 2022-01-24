@@ -105,7 +105,7 @@ public class DeclClass extends AbstractDeclClass {
         if(!superName.getName().equals("Object")){
             DeclClass superClassNode = compiler.getClassNode(superName);
             if(superClassNode == null){
-                throw new ContextualError("the parent of this class should be a class", getLocation());
+                throw new ContextualError("The parent of this class should be a class", getLocation());
             }
             superClassNode.verifyClass(compiler);
         }
