@@ -16,6 +16,12 @@ import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import java.io.PrintStream;
+
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.NullOperand;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 import org.apache.commons.lang.Validate;
 
 import fr.ensimag.deca.codegen.RegisterManager;
@@ -233,6 +239,14 @@ public class Identifier extends AbstractIdentifier {
     protected void codeGenSelectIdent(DecacCompiler compiler, Definition classDef) throws DecacFatalError {
         RegisterManager regMan = compiler.getRegMan();
         GPRegister reg = regMan.pop(); // On charge l'objet
+
+        // erreur deref nul
+        if (!compiler.getCompilerOptions().getNoCheck()) {
+            compiler.setIsDerefExistTrue();
+            compiler.addInstruction(new CMP(new NullOperand(), reg));
+            compiler.addInstruction(new BEQ(new Label("dereferencement..null")));
+        }
+
         GPRegister regDest = regMan.getField(reg, getName(), classDef);
         regMan.giveAndPush(regDest);
     }

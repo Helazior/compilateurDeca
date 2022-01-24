@@ -40,9 +40,6 @@ public class Selection extends AbstractLValue {
     public void codeGenExpr(DecacCompiler compiler) throws DecacFatalError {
         objet.codeGenExpr(compiler);
 
-        // TODO : IMPORTANT !!! METTRE ERREUR DEREF NUL
-        // Mais je sais pas si c'est exactement là qu'il faut pour codeGenGetLValue
-
         this.nomDAttribut.codeGenSelectIdent(compiler,
             ((ClassType) objet.getType()).getDefinition());
     }
