@@ -36,5 +36,5 @@ class DeclAvecExpr{
     boolean b6 = i2 <= i1;
     boolean b5 = i2 == i1;
     boolean b6 = i2 != i1;
-
+    float f;
 }
