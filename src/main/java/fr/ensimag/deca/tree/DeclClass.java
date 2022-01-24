@@ -227,7 +227,7 @@ public class DeclClass extends AbstractDeclClass {
         compiler.addFirst(new Line(new Label("init." + currentClass.getName())));
         compiler.addInstruction(new RTS());
         compiler.addFirst(new Line("# start init"));
-        compiler.addLine(new Line("# end init"));
+        compiler.addComment("# end init");
     }
 
     @Override

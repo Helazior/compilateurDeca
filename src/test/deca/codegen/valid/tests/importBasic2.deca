@@ -4,6 +4,9 @@
 // Resultats:
 
 
-void A {
+class A {
 	int x = 10;
+	void f() {
+		print(3);
+	}
 }

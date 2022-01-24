@@ -7,7 +7,16 @@
 
 import "importBasic2.deca"
 
+class B {
+	int y = 10;
+	void f() {
+		print(y);
+	}
+}
+
 {
 	A a = new A();
+	B b = new B();
 	print(a.x);
+	b.f();
 }
