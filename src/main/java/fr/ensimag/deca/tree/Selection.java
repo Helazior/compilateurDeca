@@ -40,9 +40,6 @@ public class Selection extends AbstractLValue {
     public void codeGenExpr(DecacCompiler compiler) throws DecacFatalError {
         objet.codeGenExpr(compiler);
 
-        // TODO : IMPORTANT !!! METTRE ERREUR DEREF NUL
-        // Mais je sais pas si c'est exactement là qu'il faut pour codeGenGetLValue
-
         this.nomDAttribut.codeGenSelectIdent(compiler,
             ((ClassType) objet.getType()).getDefinition());
     }
@@ -54,9 +51,11 @@ public class Selection extends AbstractLValue {
         regMan.pop(Register.R1);
 
         // erreur deref nul
-        compiler.setIsDerefExistTrue();
-        compiler.addInstruction(new CMP(new NullOperand(), Register.R1));
-        compiler.addInstruction(new BEQ(new Label("dereferencement..null")));
+        if (!compiler.getCompilerOptions().getNoCheck()) {
+            compiler.setIsDerefExistTrue();
+            compiler.addInstruction(new CMP(new NullOperand(), Register.R1));
+            compiler.addInstruction(new BEQ(new Label("dereferencement..null")));
+        }
 
         regMan.setField(Register.R1, nomDAttribut.getName(),
             ((ClassType) objet.getType()).getDefinition(), regResultat);

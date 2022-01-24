@@ -1,0 +1,14 @@
+class Type {
+    int b = 3;
+}
+
+class SousType extends Type{
+    int a = 9;
+    void methodSousType(int a) {
+        println(a);
+    }
+}
+
+{
+    println("ERREURRRRRR!!!!!!!!!!! c'est pas le bon code source");
+}

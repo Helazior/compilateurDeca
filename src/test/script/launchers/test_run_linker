@@ -1,0 +1,90 @@
+#!/bin/bash
+
+# Ansi color code variables
+red="\e[0;91m"
+green="\e[0;92m"
+white="\e[0;97m"
+reset="\e[0;0m"
+
+#Tout s'est bien passé
+exit_value=0
+
+function test_file {
+    path=$1
+    file_src=$2
+    file_name=$3
+    
+    src_decas=$(head -n 1 $file_src)
+    test_dir=$folder_path/generated/$file_name
+    mkdir -p $test_dir
+    in_file=$path/generated/$file_name.in
+    out_file=$path/generated/$file_name.out
+    sol_file=$path/generated/$file_name.sol
+
+    #recuperation de la solution attendue
+    sed '/^$/q' $file_src | tail -n +2 > $in_file
+    sed '1,/^$/d' $file_src > $sol_file
+
+    deca_files=
+    deco_files=
+    #generation du resultat
+    for src_deca in $src_decas; do
+        src_file=$path/$src_deca
+        deca_file=$test_dir/$(basename $src_deca)
+        cp $src_file $deca_file
+        deca_files="$deca_files $deca_file"
+    done
+    for deca_file in $deca_files; do
+        deco_file=${deca_file%%".deca"}.deco
+        deco_files="$deco_files $deco_file"
+        decac -c $deca_file
+        if [[ $? -ne 0 ]]; then
+            echo -e "${red} ${bold} COMPILATION ERROR $file_name"
+            echo -e  "${reset}"
+            exit 2
+        fi
+    done
+
+    linker $deco_files
+    asm_file=$(echo $deco_files | cut -d" " -f1)
+    asm_file=${asm_file%%".deco"}.ass
+    ima $asm_file < $in_file > $out_file
+
+    #On compare les fichiers
+    if cmp -s $out_file $sol_file; then
+        echo -e "${green} ${bold} PASSED $file_name ${reset}"
+        rm $path/generated/$file_name.*
+        rm -r $test_dir
+    else
+        exit_value=1
+        echo -e "${red} ${bold} FAILED $file_name"
+        diff $out_file $sol_file
+        echo -e  "${reset}"
+    fi
+}
+
+# Récupération du dossier de travail
+if [[ $# -eq 0 ]]; then
+    folder_path=./src/test/deca/linker/valid
+else
+    folder_path=$1
+fi
+
+# Creation de la hierarchie de dossier
+mkdir -p $folder_path/generated
+
+# Récupération des fichiers à tester
+if [[ $# -le 1 ]]; then
+    files="$(echo $folder_path/*.test)"
+else
+    files=$@
+    files=${files#* } # On enlève le premier élément (qui est le dossier de travail)
+fi
+
+for file_src in $files; do
+    #nom du fichier
+    file_name=$(basename ${file_src%%".test"})
+    test_file $folder_path $file_src $file_name
+done
+
+exit $exit_value

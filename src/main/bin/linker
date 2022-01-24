@@ -45,12 +45,12 @@ do
 		perl -i -pe 'BEGIN{undef $/;} s/# start errors.*?# end errors//smg' $tmp_dest_file
 	fi
 
-	sed -i 's/false../file.'$k'.false../g' $tmp_dest_file
-	sed -i 's/end../file.'$k'.end../g' $tmp_dest_file
-	sed -i 's/true../file.'$k'.true../g' $tmp_dest_file
-	sed -i 's/while../file.'$k'.while../g' $tmp_dest_file
-	sed -i 's/else../file.'$k'.else../g' $tmp_dest_file
-	sed -i 's/return../file.'$k'.return../g' $tmp_dest_file
+	sed -i "s/false\\.\\./file\\.$k\\.false\\.\\./g" $tmp_dest_file
+	sed -i "s/end\\.\\./file\\.$k\\.end\\.\\./g" $tmp_dest_file
+	sed -i "s/true\\.\\./file\\.$k\\.true\\.\\./g" $tmp_dest_file
+	sed -i "s/while\\.\\./file\\.$k\\.while\\.\\./g" $tmp_dest_file
+	sed -i "s/else\\.\\./file\\.$k\\.else\\.\\./g" $tmp_dest_file
+	sed -i "s/return\\.\\./file\\.$k\\.return\\.\\./g" $tmp_dest_file
 
 	#sed -i 's/div../_.'$k'.div../g' $tmp_dest_file
 	#sed -i 's/mod../_.'$k'.mod../g' $tmp_dest_file
@@ -66,10 +66,6 @@ done
 
 dest_file=$1
 dest_file="${dest_file::(-4)}ass"
-
-#fichier solution
-echo $dest_file
-echo $dests
 
 #rm $dest_fime
 cat $dests > $dest_file

@@ -12,6 +12,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 
 import java.io.PrintStream;
 
+import fr.ensimag.ima.pseudocode.*;
 import fr.ensimag.ima.pseudocode.instructions.*;
 import org.apache.commons.lang.Validate;
 
@@ -162,6 +163,19 @@ public abstract class AbstractExpr extends AbstractInst {
 
     public void codeGenExpr(DecacCompiler compiler) throws DecacFatalError {
         throw new UnsupportedOperationException("Expr not yet implemented");
+    }
+
+    /*
+     * Code gen expr qui prend en compte le not
+     */
+    public void codeGenNotExpr(DecacCompiler compiler) throws DecacFatalError {
+        RegisterManager regMan = compiler.getRegMan();
+        codeGenExpr(compiler);
+        if (compiler.getIsInNotOp()) {
+            GPRegister reg = regMan.pop();
+            compiler.addInstruction(new SUB(new ImmediateInteger(1), reg));
+            regMan.giveAndPush(reg);
+        }
     }
 
     @Override
