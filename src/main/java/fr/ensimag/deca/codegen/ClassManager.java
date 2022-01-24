@@ -51,8 +51,10 @@ public class ClassManager {
         classTableInitsMain.append(classTableInitsFns);
         classTableInitsFns.addComment("-------------------- Fin tables -----------------------");
         classTableInitsMain.addLabel(end);
-        classTableInitsMain.addFirst(new Line(new BOV(new Label("stack..overflow_error"))));
-        classTableInitsMain.addFirst(new Line(new TSTO(tablesSize)));
+        if (!compiler.getCompilerOptions().getNoCheck()) {
+            classTableInitsMain.addFirst(new Line(new BOV(new Label("stack..overflow_error"))));
+            classTableInitsMain.addFirst(new Line(new TSTO(tablesSize)));
+        }
         compiler.concatenateEndProgram(classTableInitsMain);
     }
 
