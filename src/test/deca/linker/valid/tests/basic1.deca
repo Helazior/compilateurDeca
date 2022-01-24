@@ -1,0 +1,7 @@
+class ClassName {
+    int x = 3;
+    int y;
+    int methodAddition(int nb1, int nb2, int nb3, int nb4) {
+        return nb1 + nb2 + nb3 + nb4; // 3 + 7 + 1 + 20 = 31
+    }
+}
