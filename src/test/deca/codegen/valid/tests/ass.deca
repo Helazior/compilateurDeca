@@ -1,15 +1,4 @@
-class Test {
 
-    int attributTest;
-    
-    void fctTest()
-    asm("ADDSP #0
-    WSTR \"Hello\"
-	WNL");
-}
-
-
-/*
 class A {
 	void methodAss()
 		asm("LOAD #1, R0
@@ -21,6 +10,5 @@ class A {
 }
 
 {
-	new A().methodAss;
+	new A().methodAss();
 }
-*/

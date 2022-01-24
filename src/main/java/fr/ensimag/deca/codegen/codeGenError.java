@@ -45,7 +45,7 @@ public class codeGenError {
             ERROR
         */
         //compiler.addComment("Manage ov error");
-        compiler.addLabel(new Label("overflow.error"));
+        compiler.addLabel(new Label("overflow..error"));
         compiler.addInstruction(new WSTR("Error: Overflow during arithmetic operation"));
         compiler.addInstruction(new WNL());
         compiler.addInstruction(new ERROR());

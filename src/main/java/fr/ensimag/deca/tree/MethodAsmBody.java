@@ -7,6 +7,7 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Line;
+import fr.ensimag.ima.pseudocode.InlinePortion;
 
 import java.io.PrintStream;
 
@@ -31,7 +32,8 @@ public class MethodAsmBody extends AbstractMethodBody{
 
     protected void codeGenMethod(DecacCompiler compiler, ListDeclParam args,
             AbstractIdentifier listDeclField) throws UnsupportedOperationException{
-        compiler.add(new Line(corps));
+        compiler.add(new InlinePortion(
+            corps.substring(1, corps.length() - 1).replace("\\\"", "\"").replace("\\\\", "\\")));
     }
 
     @Override
