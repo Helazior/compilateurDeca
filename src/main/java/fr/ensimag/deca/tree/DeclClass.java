@@ -97,7 +97,7 @@ public class DeclClass extends AbstractDeclClass {
 
         if(lastPassNumber == 1){
             // Ici, on rencontre une classe qui n'est pas défini mais qui a déja été appelé par cette fonction avant
-            throw new ContextualError("It seams that there is a fishy loop in the class hierarchy", getLocation());
+            throw new ContextualError("It seems that there is a fishy loop in the class hierarchy", getLocation());
         }
         lastPassNumber = 1;
 
