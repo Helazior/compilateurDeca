@@ -190,7 +190,7 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyType(DecacCompiler compiler) throws ContextualError {
         TypeDefinition tDef = compiler.getType(name);
-        if(tDef == null) {throw new ContextualError("the type "+name.getName()+" is not recognized", getLocation());}
+        if(tDef == null) {throw new ContextualError("The type "+name.getName()+" is not recognized", getLocation());}
         setType(tDef.getType());
         setDefinition(new TypeDefinition(getType(), getLocation()));
         return getType();
@@ -201,7 +201,7 @@ public class Identifier extends AbstractIdentifier {
             throws ContextualError {
         ExpDefinition expDef = envExp.get(name);
         if(expDef == null) {
-            throw new ContextualError("the expression "+name+" is not recognized",
+            throw new ContextualError("The expression "+name+" is not recognized",
                 getLocation());
         }
         setDefinition(expDef);
