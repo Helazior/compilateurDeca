@@ -40,7 +40,7 @@ options {
 
 prog returns[AbstractProgram tree]
     :  list_imports list_classes main EOF {
-            //assert($list_classes.tree != null);
+            assert($list_classes.tree != null);
             assert($main.tree != null);
 
             // On est dans import, donc on a forcément droit aux imports
@@ -56,6 +56,7 @@ main returns[AbstractMain tree]
         }
     | block {
             $tree = new EmptyMain();
+            setLocation($tree, $block.start);
         }
     ;
 
@@ -464,6 +465,7 @@ primary_expr returns[AbstractExpr tree]
             assert($args.tree != null);
             assert($m.tree != null);
             This t = new This(true);
+            setLocation(t, $m.start);
             $tree = new MethodCall(t, $m.tree, $args.tree);
             setLocation($tree, $m.start);
         }
@@ -647,7 +649,7 @@ decl_field [AbstractIdentifier t, Visibility v] returns[AbstractDeclField tree]
       (EQUALS e=expr {
             assert($e.tree != null);
             initialization = new Initialization($e.tree);
-          
+            setLocation(initialization, $e.start);
         }
       )? {
             $tree = new DeclField(t, field, initialization, v);
@@ -715,7 +717,7 @@ list_imports returns[ListDeclImport tree]
 @init{
     $tree = new ListDeclImport();
 }
-    : (IMPORT import_decl EOL{
+    : (IMPORT import_decl {
         assert($import_decl.tree != null);
         $tree.add($import_decl.tree);
     }
