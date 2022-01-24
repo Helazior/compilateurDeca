@@ -54,9 +54,11 @@ public class Selection extends AbstractLValue {
         regMan.pop(Register.R1);
 
         // erreur deref nul
-        compiler.setIsDerefExistTrue();
-        compiler.addInstruction(new CMP(new NullOperand(), Register.R1));
-        compiler.addInstruction(new BEQ(new Label("dereferencement..null")));
+        if (!compiler.getCompilerOptions().getNoCheck()) {
+            compiler.setIsDerefExistTrue();
+            compiler.addInstruction(new CMP(new NullOperand(), Register.R1));
+            compiler.addInstruction(new BEQ(new Label("dereferencement..null")));
+        }
 
         regMan.setField(Register.R1, nomDAttribut.getName(),
             ((ClassType) objet.getType()).getDefinition(), regResultat);

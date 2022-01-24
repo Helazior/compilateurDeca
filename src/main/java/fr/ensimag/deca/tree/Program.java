@@ -75,25 +75,25 @@ public class Program extends AbstractProgram {
         compiler.addComment("---------------------------------------------------");
         compiler.addComment("               Messages d'erreur");
         compiler.addComment("---------------------------------------------------");
-        if (compiler.getIoExist()) {
+        if (compiler.getCompilerOptions().getLinked() || compiler.getIoExist()) {
             codeGenError.ioError(compiler);
         }
 
-        if (compiler.getNoVoidMethodExist()) {
+        if (compiler.getCompilerOptions().getLinked() || compiler.getNoVoidMethodExist()) {
             codeGenError.noReturnError(compiler);
         }
 
         if (!compiler.getCompilerOptions().getNoCheck()) {
-            if (compiler.getDivideExist()) {
+            if (compiler.getCompilerOptions().getLinked() || compiler.getDivideExist()) {
                 codeGenError.divByZeroError(compiler);
             }
-            if (compiler.getModuloExist()) {
+            if (compiler.getCompilerOptions().getLinked() || compiler.getModuloExist()) {
                 codeGenError.modByZeroError(compiler);
             }
-            if (compiler.getOpOvExist()) {
+            if (compiler.getCompilerOptions().getLinked() || compiler.getOpOvExist()) {
                 codeGenError.overflowError(compiler);
             }
-            if (compiler.getIsDerefExist()) {
+            if (compiler.getCompilerOptions().getLinked() || compiler.getIsDerefExist()) {
                 codeGenError.derefNullError(compiler);
             }
 
@@ -130,11 +130,7 @@ public class Program extends AbstractProgram {
         // parcours de l'arbre. On écrit dans le main :
         main.codeGenMain(compiler, tablesize);
         compiler.addFirst(new Line("Main program"));
-        if (!compiler.getCompilerOptions().getNoCheck()) {
-            /*compiler.addFirst(new BOV(new Label("stack_overflow_error")));
-            compiler.addFirst(new TSTO(compiler.getRegMan().getMaxSizeStack()));*/
-            regMan.endMain();
-        }
+        regMan.endMain();
         if (!compiler.getRegMan().isStackEmpty()) {
             System.err.println("Error: Pushed in RegMan more often than pop.\n"
                 + "The compilation still finishes so the assembly could be inspected.");
