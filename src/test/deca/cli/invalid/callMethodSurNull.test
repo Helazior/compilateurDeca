@@ -1,0 +1,6 @@
+tests/callMethodSurNull.deca
+
+----
+/home/clement/Projet_GL/src/test/deca/codegen/invalid/callMethodSurNull.deca:8:1: Type Null is not a class type, and has thus no method.
+----
+
