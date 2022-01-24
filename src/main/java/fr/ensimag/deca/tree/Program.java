@@ -75,25 +75,25 @@ public class Program extends AbstractProgram {
         compiler.addComment("---------------------------------------------------");
         compiler.addComment("               Messages d'erreur");
         compiler.addComment("---------------------------------------------------");
-        if (compiler.getIoExist()) {
+        if (compiler.getCompilerOptions().getLinked() || compiler.getIoExist()) {
             codeGenError.ioError(compiler);
         }
 
-        if (compiler.getNoVoidMethodExist()) {
+        if (compiler.getCompilerOptions().getLinked() || compiler.getNoVoidMethodExist()) {
             codeGenError.noReturnError(compiler);
         }
 
         if (!compiler.getCompilerOptions().getNoCheck()) {
-            if (compiler.getDivideExist()) {
+            if (compiler.getCompilerOptions().getLinked() || compiler.getDivideExist()) {
                 codeGenError.divByZeroError(compiler);
             }
-            if (compiler.getModuloExist()) {
+            if (compiler.getCompilerOptions().getLinked() || compiler.getModuloExist()) {
                 codeGenError.modByZeroError(compiler);
             }
-            if (compiler.getOpOvExist()) {
+            if (compiler.getCompilerOptions().getLinked() || compiler.getOpOvExist()) {
                 codeGenError.overflowError(compiler);
             }
-            if (compiler.getIsDerefExist()) {
+            if (compiler.getCompilerOptions().getLinked() || compiler.getIsDerefExist()) {
                 codeGenError.derefNullError(compiler);
             }
 
