@@ -2,6 +2,7 @@ package fr.ensimag.deca.context;
 
 import fr.ensimag.deca.CompilerOptions;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.CLIException;
 import fr.ensimag.deca.syntax.AbstractDecaLexer;
 import fr.ensimag.deca.syntax.DecaLexer;
 import fr.ensimag.deca.syntax.DecaParser;
@@ -19,12 +20,14 @@ import org.apache.log4j.Logger;
  * @date 01/01/2022
  */
 public class ManualTestContext {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, CLIException {
         Logger.getRootLogger().setLevel(Level.DEBUG);
         DecaLexer lex = AbstractDecaLexer.createLexerFromArgs(args);
         CommonTokenStream tokens = new CommonTokenStream(lex);
         DecaParser parser = new DecaParser(tokens);
-        DecacCompiler compiler = new DecacCompiler(new CompilerOptions(), null);
+        CompilerOptions options = new CompilerOptions();
+        options.parseArgs(new String[] {"-c"});
+        DecacCompiler compiler = new DecacCompiler(options, null);
         parser.setDecacCompiler(compiler);
         AbstractProgram prog = parser.parseProgramAndManageErrors(System.err);
         if (prog == null) {
