@@ -132,7 +132,6 @@ class IO {
 		if (player.num == 1 || iaPlay == false) {
 			numBox = io.askWhereToPlay(grid);
 		} else {
-			println("dans ia.play()");
 			numBox = ia.play(grid);
 		}
 
