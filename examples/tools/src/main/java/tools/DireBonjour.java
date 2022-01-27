@@ -11,10 +11,10 @@ public class DireBonjour extends SayHello {
         return "Bonjour";
     }
 
+
     @Override
     public String getOtherMessage() {
         LOG.trace("Appel de getOtherMessage() dans DireBonjour");
         return "Au revoir";
     }
-
 }

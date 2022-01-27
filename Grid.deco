@@ -1,0 +1,1787 @@
+; # start tablegen
+	TSTO #15
+	BOV stack..overflow_error
+	ADDSP #2
+	LEA 1(GB), R1
+	BSR classTableInit.Object
+	LOAD #null, R1
+	STORE R1, 1(GB)
+; ------------------ Imports Main ---------------------
+; ------------------ Imports Main ---------------------
+; ---------------- End Imports Main -------------------
+	ADDSP #3
+	LEA 3(GB), R1
+	BSR classTableInit.Player
+	LEA 1(GB), R1
+	STORE R1, 3(GB)
+; ---------------- End Imports Main -------------------
+	ADDSP #9
+	LEA 6(GB), R1
+	BSR classTableInit.Grid
+	LEA 1(GB), R1
+	STORE R1, 6(GB)
+	BRA classTableInit_end
+; ---------------------------------------------------
+;     Construction tables des methodes
+; ---------------------------------------------------
+; -------------------- Object -----------------------
+classTableInit.Object:
+	LOAD methodBody.Object.equals, R0
+	STORE R0, 1(R1)
+	RTS
+; ------------------- Imports Fn ----------------------
+; ------------------- Imports Fn ----------------------
+; ----------------- End Imports Fn --------------------
+; ----------------------------------------
+; Player
+classTableInit.Player:
+	BSR classTableInit.Object
+	LOAD methodBody.Player.changePlayer, R0
+	STORE R0, 2(R1)
+	RTS
+; ----------------- End Imports Fn --------------------
+; ----------------------------------------
+; Grid
+classTableInit.Grid:
+	BSR classTableInit.Object
+	LOAD methodBody.Grid.isWin, R0
+	STORE R0, 2(R1)
+	LOAD methodBody.Grid.isGameEnd, R0
+	STORE R0, 3(R1)
+	LOAD methodBody.Grid.boxDecrement, R0
+	STORE R0, 4(R1)
+	LOAD methodBody.Grid.isBoxEmpty, R0
+	STORE R0, 5(R1)
+	LOAD methodBody.Grid.placeInBoxes, R0
+	STORE R0, 6(R1)
+	LOAD methodBody.Grid.drawBox, R0
+	STORE R0, 7(R1)
+	LOAD methodBody.Grid.renderGrid, R0
+	STORE R0, 8(R1)
+	RTS
+classTableInit_end:
+; # end tablegen
+; # start main
+; max size stack: 0 offset: 0
+	TSTO #0
+	BOV stack..overflow_error
+; Leave space for local vars
+	ADDSP #0
+; Main program
+; ----- Main is empty -----
+	HALT
+; # end main
+; # start Object
+; -------------------------------------------------
+;                   Classe Object
+; -------------------------------------------------
+init.Object:
+; ----------- Initialisation des champs de Object
+	LOAD -2(LB), R1
+	LEA 1(GB), R0
+	STORE R0, 0(R1)
+	RTS
+methodBody.Object.equals:
+; ----------- Code de la methode equals dans la classe Object
+; Beginning of method instructions:
+	LOAD -2(LB), R0
+	LOAD -3(LB), R1
+	CMP R0, R1
+	SEQ R1
+	RTS
+; # end Object
+; --------------------------------------------------
+;                   Classe Grid
+; --------------------------------------------------
+; # start init
+init.Grid:
+; ----------- Initialisation des champs de Grid
+	TSTO #1
+	BOV stack..overflow_error
+	ADDSP #0
+	PUSH R2
+	LOAD -2(LB), R0
+	PUSH R0
+	BSR init.Object
+	SUBSP #1
+	LOAD -2(LB), R1
+	LEA 6(GB), R0
+	STORE R0, 0(R1)
+; field box00
+;   -> init by default
+	LOAD #0, R0
+	STORE R0, 1(R1)
+; field box01
+;   -> init by default
+	LOAD #0, R0
+	STORE R0, 2(R1)
+; field box02
+;   -> init by default
+	LOAD #0, R0
+	STORE R0, 3(R1)
+; field box10
+;   -> init by default
+	LOAD #0, R0
+	STORE R0, 4(R1)
+; field box11
+;   -> init by default
+	LOAD #0, R0
+	STORE R0, 5(R1)
+; field box12
+;   -> init by default
+	LOAD #0, R0
+	STORE R0, 6(R1)
+; field box20
+;   -> init by default
+	LOAD #0, R0
+	STORE R0, 7(R1)
+; field box21
+;   -> init by default
+	LOAD #0, R0
+	STORE R0, 8(R1)
+; field box22
+;   -> init by default
+	LOAD #0, R0
+	STORE R0, 9(R1)
+; field boxLeft
+;   -> init by exr
+	LOAD #9, R2
+	LOAD R2, R0
+	STORE R0, 10(R1)
+	POP R2
+	RTS
+; # end init
+methodBody.Grid.isWin:
+	TSTO #2
+	BOV stack..overflow_error
+	ADDSP #0
+	PUSH R3
+	PUSH R2
+; ----------- Code de la methode isWin dans la classe Grid
+; Beginning of method instructions:
+; Start Or
+; Start Or
+; Start Or
+; Start Or
+; Start Or
+; Start Or
+; Start Or
+; Start And
+; Start And
+	LOAD -2(LB), R2
+	LOAD 1(R2), R2
+	LOAD -2(LB), R3
+	LOAD 2(R3), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+; &&
+	CMP #0, R2
+	BEQ false..and_2
+	LOAD -2(LB), R2
+	LOAD 2(R2), R2
+	LOAD -2(LB), R3
+	LOAD 3(R3), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	CMP #0, R2
+	BEQ false..and_2
+	LOAD #1, R2
+	BRA end..and_2
+false..and_2:
+	LOAD #0, R2
+end..and_2:
+; &&
+	CMP #0, R2
+	BEQ false..and_1
+	LOAD -2(LB), R2
+	LOAD 1(R2), R2
+	LOAD -3(LB), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	CMP #0, R2
+	BEQ false..and_1
+	LOAD #1, R2
+	BRA end..and_1
+false..and_1:
+	LOAD #0, R2
+end..and_1:
+; ||
+	CMP #1, R2
+	BEQ true..or_6
+; Start And
+; Start And
+	LOAD -2(LB), R2
+	LOAD 4(R2), R2
+	LOAD -2(LB), R3
+	LOAD 5(R3), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+; &&
+	CMP #0, R2
+	BEQ false..and_4
+	LOAD -2(LB), R2
+	LOAD 5(R2), R2
+	LOAD -2(LB), R3
+	LOAD 6(R3), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	CMP #0, R2
+	BEQ false..and_4
+	LOAD #1, R2
+	BRA end..and_4
+false..and_4:
+	LOAD #0, R2
+end..and_4:
+; &&
+	CMP #0, R2
+	BEQ false..and_3
+	LOAD -2(LB), R2
+	LOAD 4(R2), R2
+	LOAD -3(LB), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	CMP #0, R2
+	BEQ false..and_3
+	LOAD #1, R2
+	BRA end..and_3
+false..and_3:
+	LOAD #0, R2
+end..and_3:
+	CMP #1, R2
+	BEQ true..or_6
+	LOAD #0, R2
+	BRA end..or_6
+true..or_6:
+	LOAD #1, R2
+end..or_6:
+; ||
+	CMP #1, R2
+	BEQ true..or_5
+; Start And
+; Start And
+	LOAD -2(LB), R2
+	LOAD 7(R2), R2
+	LOAD -2(LB), R3
+	LOAD 8(R3), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+; &&
+	CMP #0, R2
+	BEQ false..and_6
+	LOAD -2(LB), R2
+	LOAD 8(R2), R2
+	LOAD -2(LB), R3
+	LOAD 9(R3), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	CMP #0, R2
+	BEQ false..and_6
+	LOAD #1, R2
+	BRA end..and_6
+false..and_6:
+	LOAD #0, R2
+end..and_6:
+; &&
+	CMP #0, R2
+	BEQ false..and_5
+	LOAD -2(LB), R2
+	LOAD 7(R2), R2
+	LOAD -3(LB), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	CMP #0, R2
+	BEQ false..and_5
+	LOAD #1, R2
+	BRA end..and_5
+false..and_5:
+	LOAD #0, R2
+end..and_5:
+	CMP #1, R2
+	BEQ true..or_5
+	LOAD #0, R2
+	BRA end..or_5
+true..or_5:
+	LOAD #1, R2
+end..or_5:
+; ||
+	CMP #1, R2
+	BEQ true..or_4
+; Start And
+; Start And
+	LOAD -2(LB), R2
+	LOAD 1(R2), R2
+	LOAD -2(LB), R3
+	LOAD 5(R3), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+; &&
+	CMP #0, R2
+	BEQ false..and_8
+	LOAD -2(LB), R2
+	LOAD 5(R2), R2
+	LOAD -2(LB), R3
+	LOAD 9(R3), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	CMP #0, R2
+	BEQ false..and_8
+	LOAD #1, R2
+	BRA end..and_8
+false..and_8:
+	LOAD #0, R2
+end..and_8:
+; &&
+	CMP #0, R2
+	BEQ false..and_7
+	LOAD -2(LB), R2
+	LOAD 1(R2), R2
+	LOAD -3(LB), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	CMP #0, R2
+	BEQ false..and_7
+	LOAD #1, R2
+	BRA end..and_7
+false..and_7:
+	LOAD #0, R2
+end..and_7:
+	CMP #1, R2
+	BEQ true..or_4
+	LOAD #0, R2
+	BRA end..or_4
+true..or_4:
+	LOAD #1, R2
+end..or_4:
+; ||
+	CMP #1, R2
+	BEQ true..or_3
+; Start And
+; Start And
+	LOAD -2(LB), R2
+	LOAD 7(R2), R2
+	LOAD -2(LB), R3
+	LOAD 5(R3), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+; &&
+	CMP #0, R2
+	BEQ false..and_10
+	LOAD -2(LB), R2
+	LOAD 5(R2), R2
+	LOAD -2(LB), R3
+	LOAD 3(R3), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	CMP #0, R2
+	BEQ false..and_10
+	LOAD #1, R2
+	BRA end..and_10
+false..and_10:
+	LOAD #0, R2
+end..and_10:
+; &&
+	CMP #0, R2
+	BEQ false..and_9
+	LOAD -2(LB), R2
+	LOAD 7(R2), R2
+	LOAD -3(LB), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	CMP #0, R2
+	BEQ false..and_9
+	LOAD #1, R2
+	BRA end..and_9
+false..and_9:
+	LOAD #0, R2
+end..and_9:
+	CMP #1, R2
+	BEQ true..or_3
+	LOAD #0, R2
+	BRA end..or_3
+true..or_3:
+	LOAD #1, R2
+end..or_3:
+; ||
+	CMP #1, R2
+	BEQ true..or_2
+; Start And
+; Start And
+	LOAD -2(LB), R2
+	LOAD 1(R2), R2
+	LOAD -2(LB), R3
+	LOAD 4(R3), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+; &&
+	CMP #0, R2
+	BEQ false..and_12
+	LOAD -2(LB), R2
+	LOAD 4(R2), R2
+	LOAD -2(LB), R3
+	LOAD 7(R3), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	CMP #0, R2
+	BEQ false..and_12
+	LOAD #1, R2
+	BRA end..and_12
+false..and_12:
+	LOAD #0, R2
+end..and_12:
+; &&
+	CMP #0, R2
+	BEQ false..and_11
+	LOAD -2(LB), R2
+	LOAD 1(R2), R2
+	LOAD -3(LB), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	CMP #0, R2
+	BEQ false..and_11
+	LOAD #1, R2
+	BRA end..and_11
+false..and_11:
+	LOAD #0, R2
+end..and_11:
+	CMP #1, R2
+	BEQ true..or_2
+	LOAD #0, R2
+	BRA end..or_2
+true..or_2:
+	LOAD #1, R2
+end..or_2:
+; ||
+	CMP #1, R2
+	BEQ true..or_1
+; Start And
+; Start And
+	LOAD -2(LB), R2
+	LOAD 2(R2), R2
+	LOAD -2(LB), R3
+	LOAD 5(R3), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+; &&
+	CMP #0, R2
+	BEQ false..and_14
+	LOAD -2(LB), R2
+	LOAD 5(R2), R2
+	LOAD -2(LB), R3
+	LOAD 8(R3), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	CMP #0, R2
+	BEQ false..and_14
+	LOAD #1, R2
+	BRA end..and_14
+false..and_14:
+	LOAD #0, R2
+end..and_14:
+; &&
+	CMP #0, R2
+	BEQ false..and_13
+	LOAD -2(LB), R2
+	LOAD 2(R2), R2
+	LOAD -3(LB), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	CMP #0, R2
+	BEQ false..and_13
+	LOAD #1, R2
+	BRA end..and_13
+false..and_13:
+	LOAD #0, R2
+end..and_13:
+	CMP #1, R2
+	BEQ true..or_1
+	LOAD #0, R2
+	BRA end..or_1
+true..or_1:
+	LOAD #1, R2
+end..or_1:
+; ||
+	CMP #1, R2
+	BEQ true..or_0
+; Start And
+; Start And
+	LOAD -2(LB), R2
+	LOAD 3(R2), R2
+	LOAD -2(LB), R3
+	LOAD 6(R3), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+; &&
+	CMP #0, R2
+	BEQ false..and_16
+	LOAD -2(LB), R2
+	LOAD 6(R2), R2
+	LOAD -2(LB), R3
+	LOAD 9(R3), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	CMP #0, R2
+	BEQ false..and_16
+	LOAD #1, R2
+	BRA end..and_16
+false..and_16:
+	LOAD #0, R2
+end..and_16:
+; &&
+	CMP #0, R2
+	BEQ false..and_15
+	LOAD -2(LB), R2
+	LOAD 3(R2), R2
+	LOAD -3(LB), R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	CMP #0, R2
+	BEQ false..and_15
+	LOAD #1, R2
+	BRA end..and_15
+false..and_15:
+	LOAD #0, R2
+end..and_15:
+	CMP #1, R2
+	BEQ true..or_0
+	LOAD #0, R2
+	BRA end..or_0
+true..or_0:
+	LOAD #1, R2
+end..or_0:
+	LOAD R2, R1
+	BRA return..1
+	BRA no..return_error
+return..1:
+	POP R2
+	POP R3
+	RTS
+methodBody.Grid.isGameEnd:
+	TSTO #3
+	BOV stack..overflow_error
+	ADDSP #0
+	PUSH R4
+	PUSH R3
+	PUSH R2
+; ----------- Code de la methode isGameEnd dans la classe Grid
+; Beginning of method instructions:
+; Start IF
+; cond IF
+	LOAD -2(LB), R2
+	LOAD #1, R3
+	PUSH R2
+	PUSH R3
+	LOAD -1(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 2(R1)
+	SUBSP #3
+	LOAD R1, R2
+	LOAD R2, R1
+	BEQ else..4
+; IF then_body
+	LOAD #1, R2
+	LOAD R2, R1
+	BRA return..2
+	BRA end..if_4
+else..4:
+; IF else_body
+; FI
+end..if_4:
+; Start IF
+; cond IF
+	LOAD -2(LB), R2
+	LOAD #2, R3
+	PUSH R2
+	PUSH R3
+	LOAD -1(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 2(R1)
+	SUBSP #3
+	LOAD R1, R2
+	LOAD R2, R1
+	BEQ else..5
+; IF then_body
+	LOAD #2, R2
+	LOAD R2, R1
+	BRA return..2
+	BRA end..if_5
+else..5:
+; IF else_body
+; FI
+end..if_5:
+; Start IF
+; cond IF
+	LOAD -2(LB), R2
+	LOAD 10(R2), R2
+	LOAD #0, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..6
+; IF then_body
+	LOAD #1, R2
+; -
+	LOAD #0, R3
+	SUB R2, R3
+	LOAD R3, R4
+	LOAD R4, R1
+	BRA return..2
+	BRA end..if_6
+else..6:
+; IF else_body
+; FI
+end..if_6:
+	LOAD #0, R2
+	LOAD R2, R1
+	BRA return..2
+	BRA no..return_error
+return..2:
+	POP R2
+	POP R3
+	POP R4
+	RTS
+methodBody.Grid.boxDecrement:
+	TSTO #2
+	BOV stack..overflow_error
+	ADDSP #0
+	PUSH R3
+	PUSH R2
+; ----------- Code de la methode boxDecrement dans la classe Grid
+; Beginning of method instructions:
+; Assign (0)
+	LOAD -2(LB), R2
+	LOAD 10(R2), R2
+	LOAD #1, R3
+; -
+	SUB R3, R2
+; Store assign (1)
+	LOAD -2(LB), R3
+	STORE R2, 10(R3)
+; End assign (1)
+return..3:
+	POP R2
+	POP R3
+	RTS
+methodBody.Grid.isBoxEmpty:
+	TSTO #2
+	BOV stack..overflow_error
+	ADDSP #0
+	PUSH R3
+	PUSH R2
+; ----------- Code de la methode isBoxEmpty dans la classe Grid
+; Beginning of method instructions:
+; Start IF
+; cond IF
+	LOAD -3(LB), R2
+	LOAD #1, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..7
+; IF then_body
+	LOAD -2(LB), R2
+	LOAD 1(R2), R2
+	LOAD #0, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BRA return..4
+	BRA end..if_7
+else..7:
+; IF else_body
+; Start IF
+; cond IF
+	LOAD -3(LB), R2
+	LOAD #2, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..8
+; IF then_body
+	LOAD -2(LB), R2
+	LOAD 2(R2), R2
+	LOAD #0, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BRA return..4
+	BRA end..if_8
+else..8:
+; IF else_body
+; Start IF
+; cond IF
+	LOAD -3(LB), R2
+	LOAD #3, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..9
+; IF then_body
+	LOAD -2(LB), R2
+	LOAD 3(R2), R2
+	LOAD #0, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BRA return..4
+	BRA end..if_9
+else..9:
+; IF else_body
+; Start IF
+; cond IF
+	LOAD -3(LB), R2
+	LOAD #4, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..10
+; IF then_body
+	LOAD -2(LB), R2
+	LOAD 4(R2), R2
+	LOAD #0, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BRA return..4
+	BRA end..if_10
+else..10:
+; IF else_body
+; Start IF
+; cond IF
+	LOAD -3(LB), R2
+	LOAD #5, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..11
+; IF then_body
+	LOAD -2(LB), R2
+	LOAD 5(R2), R2
+	LOAD #0, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BRA return..4
+	BRA end..if_11
+else..11:
+; IF else_body
+; Start IF
+; cond IF
+	LOAD -3(LB), R2
+	LOAD #6, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..12
+; IF then_body
+	LOAD -2(LB), R2
+	LOAD 6(R2), R2
+	LOAD #0, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BRA return..4
+	BRA end..if_12
+else..12:
+; IF else_body
+; Start IF
+; cond IF
+	LOAD -3(LB), R2
+	LOAD #7, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..13
+; IF then_body
+	LOAD -2(LB), R2
+	LOAD 7(R2), R2
+	LOAD #0, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BRA return..4
+	BRA end..if_13
+else..13:
+; IF else_body
+; Start IF
+; cond IF
+	LOAD -3(LB), R2
+	LOAD #8, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..14
+; IF then_body
+	LOAD -2(LB), R2
+	LOAD 8(R2), R2
+	LOAD #0, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BRA return..4
+	BRA end..if_14
+else..14:
+; IF else_body
+; Start IF
+; cond IF
+	LOAD -3(LB), R2
+	LOAD #9, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..15
+; IF then_body
+	LOAD -2(LB), R2
+	LOAD 9(R2), R2
+	LOAD #0, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BRA return..4
+	BRA end..if_15
+else..15:
+; IF else_body
+; FI
+end..if_15:
+; FI
+end..if_14:
+; FI
+end..if_13:
+; FI
+end..if_12:
+; FI
+end..if_11:
+; FI
+end..if_10:
+; FI
+end..if_9:
+; FI
+end..if_8:
+; FI
+end..if_7:
+	BRA no..return_error
+return..4:
+	POP R2
+	POP R3
+	RTS
+methodBody.Grid.placeInBoxes:
+	TSTO #2
+	BOV stack..overflow_error
+	ADDSP #0
+	PUSH R3
+	PUSH R2
+; ----------- Code de la methode placeInBoxes dans la classe Grid
+; Beginning of method instructions:
+; Start IF
+; cond IF
+	LOAD -4(LB), R2
+	LOAD #1, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..16
+; IF then_body
+; Assign (0)
+	LOAD -3(LB), R2
+; Store assign (1)
+	LOAD -2(LB), R3
+	STORE R2, 1(R3)
+; End assign (1)
+	BRA end..if_16
+else..16:
+; IF else_body
+; Start IF
+; cond IF
+	LOAD -4(LB), R2
+	LOAD #2, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..17
+; IF then_body
+; Assign (0)
+	LOAD -3(LB), R2
+; Store assign (1)
+	LOAD -2(LB), R3
+	STORE R2, 2(R3)
+; End assign (1)
+	BRA end..if_17
+else..17:
+; IF else_body
+; Start IF
+; cond IF
+	LOAD -4(LB), R2
+	LOAD #3, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..18
+; IF then_body
+; Assign (0)
+	LOAD -3(LB), R2
+; Store assign (1)
+	LOAD -2(LB), R3
+	STORE R2, 3(R3)
+; End assign (1)
+	BRA end..if_18
+else..18:
+; IF else_body
+; Start IF
+; cond IF
+	LOAD -4(LB), R2
+	LOAD #4, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..19
+; IF then_body
+; Assign (0)
+	LOAD -3(LB), R2
+; Store assign (1)
+	LOAD -2(LB), R3
+	STORE R2, 4(R3)
+; End assign (1)
+	BRA end..if_19
+else..19:
+; IF else_body
+; Start IF
+; cond IF
+	LOAD -4(LB), R2
+	LOAD #5, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..20
+; IF then_body
+; Assign (0)
+	LOAD -3(LB), R2
+; Store assign (1)
+	LOAD -2(LB), R3
+	STORE R2, 5(R3)
+; End assign (1)
+	BRA end..if_20
+else..20:
+; IF else_body
+; Start IF
+; cond IF
+	LOAD -4(LB), R2
+	LOAD #6, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..21
+; IF then_body
+; Assign (0)
+	LOAD -3(LB), R2
+; Store assign (1)
+	LOAD -2(LB), R3
+	STORE R2, 6(R3)
+; End assign (1)
+	BRA end..if_21
+else..21:
+; IF else_body
+; Start IF
+; cond IF
+	LOAD -4(LB), R2
+	LOAD #7, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..22
+; IF then_body
+; Assign (0)
+	LOAD -3(LB), R2
+; Store assign (1)
+	LOAD -2(LB), R3
+	STORE R2, 7(R3)
+; End assign (1)
+	BRA end..if_22
+else..22:
+; IF else_body
+; Start IF
+; cond IF
+	LOAD -4(LB), R2
+	LOAD #8, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..23
+; IF then_body
+; Assign (0)
+	LOAD -3(LB), R2
+; Store assign (1)
+	LOAD -2(LB), R3
+	STORE R2, 8(R3)
+; End assign (1)
+	BRA end..if_23
+else..23:
+; IF else_body
+; Start IF
+; cond IF
+	LOAD -4(LB), R2
+	LOAD #9, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..24
+; IF then_body
+; Assign (0)
+	LOAD -3(LB), R2
+; Store assign (1)
+	LOAD -2(LB), R3
+	STORE R2, 9(R3)
+; End assign (1)
+	BRA end..if_24
+else..24:
+; IF else_body
+; FI
+end..if_24:
+; FI
+end..if_23:
+; FI
+end..if_22:
+; FI
+end..if_21:
+; FI
+end..if_20:
+; FI
+end..if_19:
+; FI
+end..if_18:
+; FI
+end..if_17:
+; FI
+end..if_16:
+return..5:
+	POP R2
+	POP R3
+	RTS
+methodBody.Grid.drawBox:
+	TSTO #2
+	BOV stack..overflow_error
+	ADDSP #0
+	PUSH R3
+	PUSH R2
+; ----------- Code de la methode drawBox dans la classe Grid
+; Beginning of method instructions:
+; Start IF
+; cond IF
+	LOAD -3(LB), R2
+	LOAD #1, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..25
+; IF then_body
+; Start IF
+; cond IF
+	LOAD -4(LB), R2
+	LOAD #1, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..26
+; IF then_body
+	WSTR "│         "
+	BRA end..if_26
+else..26:
+; IF else_body
+; Start IF
+; cond IF
+	LOAD -4(LB), R2
+	LOAD #2, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..27
+; IF then_body
+	WSTR "│         "
+	BRA end..if_27
+else..27:
+; IF else_body
+	WSTR "│         "
+; FI
+end..if_27:
+; FI
+end..if_26:
+	BRA end..if_25
+else..25:
+; IF else_body
+; Start IF
+; cond IF
+	LOAD -3(LB), R2
+	LOAD #2, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..28
+; IF then_body
+; Start IF
+; cond IF
+	LOAD -4(LB), R2
+	LOAD #1, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..29
+; IF then_body
+	WSTR "│    🟢   "
+	BRA end..if_29
+else..29:
+; IF else_body
+; Start IF
+; cond IF
+	LOAD -4(LB), R2
+	LOAD #2, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..30
+; IF then_body
+	WSTR "│    ❌   "
+	BRA end..if_30
+else..30:
+; IF else_body
+	WSTR "│         "
+; FI
+end..if_30:
+; FI
+end..if_29:
+	BRA end..if_28
+else..28:
+; IF else_body
+; Start IF
+; cond IF
+	LOAD -3(LB), R2
+	LOAD #3, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..31
+; IF then_body
+; Start IF
+; cond IF
+	LOAD -4(LB), R2
+	LOAD #1, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..32
+; IF then_body
+	WSTR "│         "
+	BRA end..if_32
+else..32:
+; IF else_body
+; Start IF
+; cond IF
+	LOAD -4(LB), R2
+	LOAD #2, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..33
+; IF then_body
+	WSTR "│         "
+	BRA end..if_33
+else..33:
+; IF else_body
+	WSTR "│         "
+; FI
+end..if_33:
+; FI
+end..if_32:
+	BRA end..if_31
+else..31:
+; IF else_body
+; FI
+end..if_31:
+; FI
+end..if_28:
+; FI
+end..if_25:
+return..6:
+	POP R2
+	POP R3
+	RTS
+methodBody.Grid.renderGrid:
+	TSTO #3
+	BOV stack..overflow_error
+	ADDSP #0
+	PUSH R4
+	PUSH R3
+	PUSH R2
+; ----------- Code de la methode renderGrid dans la classe Grid
+; Beginning of method instructions:
+	WNL
+	WNL
+	WNL
+	WNL
+	WNL
+	WNL
+	WSTR "┌─────────┬─────────┬─────────┐"
+	WNL
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 1(R3), R3
+	LOAD #1, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 2(R3), R3
+	LOAD #1, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 3(R3), R3
+	LOAD #1, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	WSTR "│"
+	WNL
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 1(R3), R3
+	LOAD #2, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 2(R3), R3
+	LOAD #2, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 3(R3), R3
+	LOAD #2, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	WSTR "│"
+	WNL
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 1(R3), R3
+	LOAD #3, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 2(R3), R3
+	LOAD #3, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 3(R3), R3
+	LOAD #3, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	WSTR "│"
+	WNL
+	WSTR "├─────────┼─────────┼─────────┤"
+	WNL
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 4(R3), R3
+	LOAD #1, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 5(R3), R3
+	LOAD #1, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 6(R3), R3
+	LOAD #1, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	WSTR "│"
+	WNL
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 4(R3), R3
+	LOAD #2, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 5(R3), R3
+	LOAD #2, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 6(R3), R3
+	LOAD #2, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	WSTR "│"
+	WNL
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 4(R3), R3
+	LOAD #3, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 5(R3), R3
+	LOAD #3, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 6(R3), R3
+	LOAD #3, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	WSTR "│"
+	WNL
+	WSTR "├─────────┼─────────┼─────────┤"
+	WNL
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 7(R3), R3
+	LOAD #1, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 8(R3), R3
+	LOAD #1, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 9(R3), R3
+	LOAD #1, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	WSTR "│"
+	WNL
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 7(R3), R3
+	LOAD #2, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 8(R3), R3
+	LOAD #2, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 9(R3), R3
+	LOAD #2, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	WSTR "│"
+	WNL
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 7(R3), R3
+	LOAD #3, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 8(R3), R3
+	LOAD #3, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	LOAD -2(LB), R2
+	LOAD -2(LB), R3
+	LOAD 9(R3), R3
+	LOAD #3, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+	WSTR "│"
+	WNL
+	WSTR "└─────────┴─────────┴─────────┘"
+	WNL
+	WNL
+	WNL
+	WNL
+return..7:
+	POP R2
+	POP R3
+	POP R4
+	RTS
+; # start errors
+; ---------------------------------------------------
+;                Messages d'erreur
+; ---------------------------------------------------
+io..error:
+	WSTR "Error: Input/Output error"
+	WNL
+	ERROR
+no..return_error:
+	WSTR "Error: Expected a return at the and of a no void method"
+	WNL
+	ERROR
+div..by_zero_error:
+	WSTR "Error: Division by zero"
+	WNL
+	ERROR
+mod..by_zero_error:
+	WSTR "Error: Modulo by zero"
+	WNL
+	ERROR
+overflow..error:
+	WSTR "Error: Overflow during arithmetic operation"
+	WNL
+	ERROR
+dereferencement..null:
+	WSTR "Erreur : dereferencement de null"
+	WNL
+	ERROR
+stack..overflow_error:
+	WSTR "Error: Stack Overflow"
+	WNL
+	ERROR
+; # end errors

@@ -18,7 +18,7 @@ public class codeGenError {
     static public void modByZeroError(DecacCompiler compiler) {
         //compiler.addComment("Manage division by zero error");
         compiler.addLabel(new Label("mod..by_zero_error"));
-        compiler.addInstruction(new WSTR("Error: Modulo by zero"));
+            compiler.addInstruction(new WSTR("Error: Modulo by zero"));
         compiler.addInstruction(new WNL());
         compiler.addInstruction(new ERROR());
     }

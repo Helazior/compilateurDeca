@@ -1,0 +1,442 @@
+; # start tablegen
+	TSTO #18
+	BOV stack..overflow_error
+	ADDSP #2
+	LEA 1(GB), R1
+	BSR classTableInit.Object
+	LOAD #null, R1
+	STORE R1, 1(GB)
+; ------------------ Imports Main ---------------------
+; ------------------ Imports Main ---------------------
+; ------------------ Imports Main ---------------------
+; ---------------- End Imports Main -------------------
+	ADDSP #3
+	LEA 3(GB), R1
+	BSR classTableInit.Player
+	LEA 1(GB), R1
+	STORE R1, 3(GB)
+; ---------------- End Imports Main -------------------
+	ADDSP #9
+	LEA 6(GB), R1
+	BSR classTableInit.Grid
+	LEA 1(GB), R1
+	STORE R1, 6(GB)
+; ---------------- End Imports Main -------------------
+	ADDSP #3
+	LEA 15(GB), R1
+	BSR classTableInit.IO
+	LEA 1(GB), R1
+	STORE R1, 15(GB)
+	BRA classTableInit_end
+; ---------------------------------------------------
+;     Construction tables des methodes
+; ---------------------------------------------------
+; -------------------- Object -----------------------
+classTableInit.Object:
+	LOAD methodBody.Object.equals, R0
+	STORE R0, 1(R1)
+	RTS
+; ------------------- Imports Fn ----------------------
+; ------------------- Imports Fn ----------------------
+; ------------------- Imports Fn ----------------------
+; ----------------- End Imports Fn --------------------
+; ----------------------------------------
+; Player
+classTableInit.Player:
+	BSR classTableInit.Object
+	LOAD methodBody.Player.changePlayer, R0
+	STORE R0, 2(R1)
+	RTS
+; ----------------- End Imports Fn --------------------
+; ----------------------------------------
+; Grid
+classTableInit.Grid:
+	BSR classTableInit.Object
+	LOAD methodBody.Grid.isWin, R0
+	STORE R0, 2(R1)
+	LOAD methodBody.Grid.isGameEnd, R0
+	STORE R0, 3(R1)
+	LOAD methodBody.Grid.boxDecrement, R0
+	STORE R0, 4(R1)
+	LOAD methodBody.Grid.isBoxEmpty, R0
+	STORE R0, 5(R1)
+	LOAD methodBody.Grid.placeInBoxes, R0
+	STORE R0, 6(R1)
+	LOAD methodBody.Grid.drawBox, R0
+	STORE R0, 7(R1)
+	LOAD methodBody.Grid.renderGrid, R0
+	STORE R0, 8(R1)
+	RTS
+; ----------------- End Imports Fn --------------------
+; ----------------------------------------
+; IO
+classTableInit.IO:
+	BSR classTableInit.Object
+	LOAD methodBody.IO.askWhereToPlay, R0
+	STORE R0, 2(R1)
+	RTS
+classTableInit_end:
+; # end tablegen
+; # start main
+; max size stack: 3 offset: 3
+	TSTO #6
+	BOV stack..overflow_error
+; Leave space for local vars
+	ADDSP #3
+; Main program
+; New
+	NEW #1, R2
+	PUSH R2
+	BSR init.IO
+	SUBSP #1
+	STORE R2, 18(LB)
+; New
+	NEW #11, R2
+	PUSH R2
+	BSR init.Grid
+	SUBSP #1
+	STORE R2, 19(LB)
+; New
+	NEW #2, R2
+	PUSH R2
+	BSR init.Player
+	SUBSP #1
+	STORE R2, 20(LB)
+; ---------------------------------------------------
+;           Beginning of main instructions:
+; ---------------------------------------------------
+while..1:
+	LOAD 19(LB), R2
+	PUSH R2
+	LOAD 0(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 3(R1)
+	SUBSP #2
+	LOAD R1, R2
+	LOAD #0, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	CMP #1, R1
+	BNE end..while_1
+	WSTR "Player "
+	LOAD 20(LB), R2
+	CMP #null, R2
+	BEQ dereferencement..null
+	LOAD 1(R2), R3
+	LOAD R3, R1
+	WINT
+	WNL
+	LOAD 19(LB), R3
+	PUSH R3
+	LOAD 0(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 8(R1)
+	SUBSP #2
+	LOAD R1, R3
+	LOAD 19(LB), R3
+	LOAD 18(LB), R4
+	LOAD 19(LB), R5
+	PUSH R4
+	PUSH R5
+	LOAD -1(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 2(R1)
+	SUBSP #3
+	LOAD R1, R4
+	LOAD 20(LB), R5
+	CMP #null, R5
+	BEQ dereferencement..null
+	LOAD 1(R5), R6
+	PUSH R3
+	PUSH R4
+	PUSH R6
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 6(R1)
+	SUBSP #4
+	LOAD R1, R3
+	LOAD 20(LB), R3
+	PUSH R3
+	LOAD 0(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 2(R1)
+	SUBSP #2
+	LOAD R1, R3
+	LOAD 19(LB), R3
+	PUSH R3
+	LOAD 0(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 4(R1)
+	SUBSP #2
+	LOAD R1, R3
+	BRA while..1
+end..while_1:
+	LOAD 19(LB), R3
+	PUSH R3
+	LOAD 0(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 8(R1)
+	SUBSP #2
+	LOAD R1, R3
+; Start IF
+; cond IF
+	LOAD 19(LB), R3
+	PUSH R3
+	LOAD 0(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 3(R1)
+	SUBSP #2
+	LOAD R1, R3
+	LOAD #1, R4
+; -
+	LOAD #0, R6
+	SUB R4, R6
+	LOAD R6, R7
+; ==
+	CMP R7, R3
+	SEQ R3
+	LOAD R3, R1
+	BEQ else..2
+; IF then_body
+	WSTR "Egalité ! 🤷"
+	WNL
+	BRA end..if_2
+else..2:
+; IF else_body
+; Start IF
+; cond IF
+	LOAD 19(LB), R3
+	PUSH R3
+	LOAD 0(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 3(R1)
+	SUBSP #2
+	LOAD R1, R3
+	LOAD #1, R4
+; ==
+	CMP R4, R3
+	SEQ R3
+	LOAD R3, R1
+	BEQ else..3
+; IF then_body
+	WSTR "Bravo ! 🥳"
+	WNL
+	BRA end..if_3
+else..3:
+; IF else_body
+	WSTR "L'IA est vraiment trop forte ! 🤖"
+	WNL
+; FI
+end..if_3:
+; FI
+end..if_2:
+	HALT
+; # end main
+; # start Object
+; -------------------------------------------------
+;                   Classe Object
+; -------------------------------------------------
+init.Object:
+; ----------- Initialisation des champs de Object
+	LOAD -2(LB), R1
+	LEA 1(GB), R0
+	STORE R0, 0(R1)
+	RTS
+methodBody.Object.equals:
+; ----------- Code de la methode equals dans la classe Object
+; Beginning of method instructions:
+	LOAD -2(LB), R0
+	LOAD -3(LB), R1
+	CMP R0, R1
+	SEQ R1
+	RTS
+; # end Object
+; --------------------------------------------------
+;                   Classe IO
+; --------------------------------------------------
+; # start init
+init.IO:
+; ----------- Initialisation des champs de IO
+	TSTO #0
+	BOV stack..overflow_error
+	ADDSP #0
+	LOAD -2(LB), R0
+	PUSH R0
+	BSR init.Object
+	SUBSP #1
+	LOAD -2(LB), R1
+	LEA 15(GB), R0
+	STORE R0, 0(R1)
+	RTS
+; # end init
+methodBody.IO.askWhereToPlay:
+	TSTO #6
+	BOV stack..overflow_error
+	ADDSP #2
+	PUSH R3
+	PUSH R2
+; ----------- Code de la methode askWhereToPlay dans la classe IO
+	LOAD #0, R2
+	STORE R2, 1(LB)
+; Beginning of method instructions:
+while..0:
+	LOAD 1(LB), R2
+	LOAD #0, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	CMP #1, R1
+	BNE end..while_0
+	WSTR "Where would you play (1 - 9): "
+; Assign (0)
+	RINT
+	BOV io..error
+	LOAD R1, R2
+; Store assign (1)
+	STORE R2, 2(LB)
+; End assign (1)
+; Start IF
+; cond IF
+; Start And
+	LOAD #1, R2
+	LOAD 2(LB), R3
+; <=
+	SUB R3, R2
+	SLE R2
+; &&
+	CMP #0, R2
+	BEQ false..and_0
+	LOAD 2(LB), R2
+	LOAD #9, R3
+; <=
+	SUB R3, R2
+	SLE R2
+	CMP #0, R2
+	BEQ false..and_0
+	LOAD #1, R2
+	BRA end..and_0
+false..and_0:
+	LOAD #0, R2
+end..and_0:
+	LOAD R2, R1
+	BEQ else..0
+; IF then_body
+; Start IF
+; cond IF
+	LOAD -3(LB), R2
+	LOAD 2(LB), R3
+	PUSH R2
+	PUSH R3
+	LOAD -1(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 5(R1)
+	SUBSP #3
+	LOAD R1, R2
+	LOAD R2, R1
+	BEQ else..1
+; IF then_body
+; Assign (0)
+	LOAD #1, R2
+; Store assign (1)
+	STORE R2, 1(LB)
+; End assign (1)
+	BRA end..if_1
+else..1:
+; IF else_body
+	WSTR "This box is not empty!"
+	WNL
+; FI
+end..if_1:
+	BRA end..if_0
+else..0:
+; IF else_body
+	WSTR "Bad input, need to be between 1 and 9."
+	WNL
+; FI
+end..if_0:
+	BRA while..0
+end..while_0:
+	LOAD 2(LB), R2
+	LOAD R2, R1
+	BRA return..0
+	BRA no..return_error
+return..0:
+	POP R2
+	POP R3
+	RTS
+; # start errors
+; ---------------------------------------------------
+;                Messages d'erreur
+; ---------------------------------------------------
+io..error:
+	WSTR "Error: Input/Output error"
+	WNL
+	ERROR
+no..return_error:
+	WSTR "Error: Expected a return at the and of a no void method"
+	WNL
+	ERROR
+div..by_zero_error:
+	WSTR "Error: Division by zero"
+	WNL
+	ERROR
+mod..by_zero_error:
+	WSTR "Error: Modulo by zero"
+	WNL
+	ERROR
+overflow..error:
+	WSTR "Error: Overflow during arithmetic operation"
+	WNL
+	ERROR
+dereferencement..null:
+	WSTR "Erreur : dereferencement de null"
+	WNL
+	ERROR
+stack..overflow_error:
+	WSTR "Error: Stack Overflow"
+	WNL
+	ERROR
+; # end errors
