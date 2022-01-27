@@ -142,10 +142,7 @@ class IA extends Player {
 			if (numBox == -1) {
 				numBox = defendIfPossible(grid);
 			}
-			if (grid.isBoxEmpty(numBox) == false) {
-				println(numBox);
-			}
-			if (numBox == -1) {
+			if (numBox == -1 || grid.isBoxEmpty(numBox) == false) {
 				numBox = getNextPrio();
 			}
 		}

@@ -264,8 +264,6 @@ end..or_0:
 	BRA end..if_3
 else..3:
 ; IF else_body
-	WSTR "dans ia.play()"
-	WNL
 ; Assign (0)
 	LOAD 39(LB), R4
 	LOAD 37(LB), R5
