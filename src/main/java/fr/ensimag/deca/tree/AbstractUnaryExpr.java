@@ -41,9 +41,8 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
         GPRegister register1 = regMan.take();
 
         codeGenOp(compiler, register0, register1);
-        regMan.push(register1);
+        regMan.giveAndPush(register1);
         regMan.give(register0);
-        regMan.give(register1);
     }
 
     protected abstract String getOperatorName();

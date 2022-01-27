@@ -1,8 +1,3 @@
-import "Player.deca"
-
-
-
-
 /*
  *	Draw the grid
  */
@@ -63,7 +58,7 @@ class Grid {
 		else if (numBox == 7) {return box20 == 0;}
 		else if (numBox == 8) {return box21 == 0;}
 		else if (numBox == 9) {return box22 == 0;}
-
+		else {return false;}
 	}
 
 	void placeInBoxes(int numBox, int numPlayer) {

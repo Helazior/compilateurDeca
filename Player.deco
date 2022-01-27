@@ -1,5 +1,5 @@
 ; # start tablegen
-	TSTO #6
+	TSTO #30
 	BOV stack..overflow_error
 	ADDSP #2
 	LEA 1(GB), R1
@@ -7,12 +7,24 @@
 	LOAD #null, R1
 	STORE R1, 1(GB)
 ; ------------------ Imports Main ---------------------
+; ------------------ Imports Main ---------------------
 ; ---------------- End Imports Main -------------------
-	ADDSP #3
+	ADDSP #9
 	LEA 3(GB), R1
-	BSR classTableInit.Player
+	BSR classTableInit.Grid
 	LEA 1(GB), R1
 	STORE R1, 3(GB)
+; ---------------- End Imports Main -------------------
+	ADDSP #3
+	LEA 12(GB), R1
+	BSR classTableInit.Player
+	LEA 1(GB), R1
+	STORE R1, 12(GB)
+	ADDSP #15
+	LEA 15(GB), R1
+	BSR classTableInit.IA
+	LEA 12(GB), R1
+	STORE R1, 15(GB)
 	BRA classTableInit_end
 ; ---------------------------------------------------
 ;     Construction tables des methodes
@@ -23,6 +35,27 @@ classTableInit.Object:
 	STORE R0, 1(R1)
 	RTS
 ; ------------------- Imports Fn ----------------------
+; ------------------- Imports Fn ----------------------
+; ----------------- End Imports Fn --------------------
+; ----------------------------------------
+; Grid
+classTableInit.Grid:
+	BSR classTableInit.Object
+	LOAD methodBody.Grid.isWin, R0
+	STORE R0, 2(R1)
+	LOAD methodBody.Grid.isGameEnd, R0
+	STORE R0, 3(R1)
+	LOAD methodBody.Grid.boxDecrement, R0
+	STORE R0, 4(R1)
+	LOAD methodBody.Grid.isBoxEmpty, R0
+	STORE R0, 5(R1)
+	LOAD methodBody.Grid.placeInBoxes, R0
+	STORE R0, 6(R1)
+	LOAD methodBody.Grid.drawBox, R0
+	STORE R0, 7(R1)
+	LOAD methodBody.Grid.renderGrid, R0
+	STORE R0, 8(R1)
+	RTS
 ; ----------------- End Imports Fn --------------------
 ; ----------------------------------------
 ; Player
@@ -30,6 +63,35 @@ classTableInit.Player:
 	BSR classTableInit.Object
 	LOAD methodBody.Player.changePlayer, R0
 	STORE R0, 2(R1)
+	RTS
+; ----------------------------------------
+; IA
+classTableInit.IA:
+	BSR classTableInit.Player
+	LOAD methodBody.IA.getNextPrio, R0
+	STORE R0, 3(R1)
+	LOAD methodBody.IA.checkDouble0, R0
+	STORE R0, 4(R1)
+	LOAD methodBody.IA.checkDouble1, R0
+	STORE R0, 5(R1)
+	LOAD methodBody.IA.checkDouble2, R0
+	STORE R0, 6(R1)
+	LOAD methodBody.IA.checkDouble3, R0
+	STORE R0, 7(R1)
+	LOAD methodBody.IA.checkDouble4, R0
+	STORE R0, 8(R1)
+	LOAD methodBody.IA.checkDouble5, R0
+	STORE R0, 9(R1)
+	LOAD methodBody.IA.checkDouble6, R0
+	STORE R0, 10(R1)
+	LOAD methodBody.IA.checkDouble7, R0
+	STORE R0, 11(R1)
+	LOAD methodBody.IA.winIfPossible, R0
+	STORE R0, 12(R1)
+	LOAD methodBody.IA.defendIfPossible, R0
+	STORE R0, 13(R1)
+	LOAD methodBody.IA.play, R0
+	STORE R0, 14(R1)
 	RTS
 classTableInit_end:
 ; # end tablegen
@@ -77,7 +139,7 @@ init.Player:
 	BSR init.Object
 	SUBSP #1
 	LOAD -2(LB), R1
-	LEA 3(GB), R0
+	LEA 12(GB), R0
 	STORE R0, 0(R1)
 ; field num
 ;   -> init by exr
@@ -88,10 +150,9 @@ init.Player:
 	RTS
 ; # end init
 methodBody.Player.changePlayer:
-	TSTO #3
+	TSTO #2
 	BOV stack..overflow_error
 	ADDSP #0
-	PUSH R4
 	PUSH R3
 	PUSH R2
 ; ----------- Code de la methode changePlayer dans la classe Player
@@ -102,15 +163,2559 @@ methodBody.Player.changePlayer:
 ; -
 	LOAD #0, R3
 	SUB R2, R3
-	LOAD R3, R4
 	LOAD #3, R2
 ; +
-	ADD R2, R4
+	ADD R2, R3
 ; Store assign (1)
 	LOAD -2(LB), R2
-	STORE R4, 1(R2)
+	STORE R3, 1(R2)
 ; End assign (1)
-return..8:
+return..11:
+	POP R2
+	POP R3
+	RTS
+; --------------------------------------------------
+;                   Classe IA
+; --------------------------------------------------
+; # start init
+init.IA:
+; ----------- Initialisation des champs de IA
+	TSTO #1
+	BOV stack..overflow_error
+	ADDSP #0
+	PUSH R2
+	LOAD -2(LB), R0
+	PUSH R0
+	BSR init.Player
+	SUBSP #1
+	LOAD -2(LB), R1
+	LEA 15(GB), R0
+	STORE R0, 0(R1)
+; field listPriorite
+;   -> init by exr
+	LOAD #864291730, R2
+	LOAD R2, R0
+	STORE R0, 2(R1)
+	POP R2
+	RTS
+; # end init
+methodBody.IA.getNextPrio:
+	TSTO #2
+	BOV stack..overflow_error
+	ADDSP #0
+	PUSH R3
+	PUSH R2
+; ----------- Code de la methode getNextPrio dans la classe IA
+; Beginning of method instructions:
+; Assign (0)
+	LOAD -2(LB), R2
+	LOAD 2(R2), R2
+	LOAD #10, R3
+; /
+	CMP #0, R3
+	BEQ div..by_zero_error
+	QUO R3, R2
+; Store assign (1)
+	LOAD -2(LB), R3
+	STORE R2, 2(R3)
+; End assign (1)
+	LOAD -2(LB), R2
+	LOAD 2(R2), R2
+	LOAD #10, R3
+; %
+	CMP #0, R3
+	BEQ mod..by_zero_error
+	REM R3, R2
+	LOAD R2, R1
+	BRA return..12
+	BRA no..return_error
+return..12:
+	POP R2
+	POP R3
+	RTS
+methodBody.IA.checkDouble0:
+	TSTO #11
+	BOV stack..overflow_error
+	ADDSP #0
+	PUSH R12
+	PUSH R11
+	PUSH R10
+	PUSH R9
+	PUSH R8
+	PUSH R7
+	PUSH R6
+	PUSH R5
+	PUSH R4
+	PUSH R3
+	PUSH R2
+; ----------- Code de la methode checkDouble0 dans la classe IA
+; Beginning of method instructions:
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R2
+	CMP #null, R2
+	BEQ dereferencement..null
+	LOAD 1(R2), R3
+	LOAD -3(LB), R4
+; ==
+	CMP R4, R3
+	SEQ R3
+; &&
+	CMP #0, R3
+	BEQ false..and_19
+	LOAD -4(LB), R3
+	CMP #null, R3
+	BEQ dereferencement..null
+	LOAD 2(R3), R4
+	LOAD -3(LB), R5
+; ==
+	CMP R5, R4
+	SEQ R4
+	CMP #0, R4
+	BEQ false..and_19
+	LOAD #1, R4
+	BRA end..and_19
+false..and_19:
+	LOAD #0, R4
+end..and_19:
+; &&
+	CMP #0, R4
+	BEQ false..and_18
+	LOAD -4(LB), R4
+	CMP #null, R4
+	BEQ dereferencement..null
+	LOAD 3(R4), R5
+	LOAD #0, R6
+; ==
+	CMP R6, R5
+	SEQ R5
+	CMP #0, R5
+	BEQ false..and_18
+	LOAD #1, R5
+	BRA end..and_18
+false..and_18:
+	LOAD #0, R5
+end..and_18:
+	LOAD R5, R1
+	BEQ else..36
+; IF then_body
+	LOAD #3, R5
+	LOAD R5, R1
+	BRA return..13
+	BRA end..if_36
+else..36:
+; IF else_body
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R5
+	CMP #null, R5
+	BEQ dereferencement..null
+	LOAD 2(R5), R6
+	LOAD -3(LB), R7
+; ==
+	CMP R7, R6
+	SEQ R6
+; &&
+	CMP #0, R6
+	BEQ false..and_21
+	LOAD -4(LB), R6
+	CMP #null, R6
+	BEQ dereferencement..null
+	LOAD 3(R6), R7
+	LOAD -3(LB), R8
+; ==
+	CMP R8, R7
+	SEQ R7
+	CMP #0, R7
+	BEQ false..and_21
+	LOAD #1, R7
+	BRA end..and_21
+false..and_21:
+	LOAD #0, R7
+end..and_21:
+; &&
+	CMP #0, R7
+	BEQ false..and_20
+	LOAD -4(LB), R7
+	CMP #null, R7
+	BEQ dereferencement..null
+	LOAD 1(R7), R8
+	LOAD #0, R9
+; ==
+	CMP R9, R8
+	SEQ R8
+	CMP #0, R8
+	BEQ false..and_20
+	LOAD #1, R8
+	BRA end..and_20
+false..and_20:
+	LOAD #0, R8
+end..and_20:
+	LOAD R8, R1
+	BEQ else..37
+; IF then_body
+	LOAD #1, R8
+	LOAD R8, R1
+	BRA return..13
+	BRA end..if_37
+else..37:
+; IF else_body
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R8
+	CMP #null, R8
+	BEQ dereferencement..null
+	LOAD 1(R8), R9
+	LOAD -3(LB), R10
+; ==
+	CMP R10, R9
+	SEQ R9
+; &&
+	CMP #0, R9
+	BEQ false..and_23
+	LOAD -4(LB), R9
+	CMP #null, R9
+	BEQ dereferencement..null
+	LOAD 3(R9), R10
+	LOAD -3(LB), R11
+; ==
+	CMP R11, R10
+	SEQ R10
+	CMP #0, R10
+	BEQ false..and_23
+	LOAD #1, R10
+	BRA end..and_23
+false..and_23:
+	LOAD #0, R10
+end..and_23:
+; &&
+	CMP #0, R10
+	BEQ false..and_22
+	LOAD -4(LB), R10
+	CMP #null, R10
+	BEQ dereferencement..null
+	LOAD 2(R10), R11
+	LOAD #0, R12
+; ==
+	CMP R12, R11
+	SEQ R11
+	CMP #0, R11
+	BEQ false..and_22
+	LOAD #1, R11
+	BRA end..and_22
+false..and_22:
+	LOAD #0, R11
+end..and_22:
+	LOAD R11, R1
+	BEQ else..38
+; IF then_body
+	LOAD #2, R11
+	LOAD R11, R1
+	BRA return..13
+	BRA end..if_38
+else..38:
+; IF else_body
+; FI
+end..if_38:
+; FI
+end..if_37:
+; FI
+end..if_36:
+	LOAD #1, R11
+; -
+	LOAD #0, R12
+	SUB R11, R12
+	LOAD R12, R1
+	BRA return..13
+	BRA no..return_error
+return..13:
+	POP R2
+	POP R3
+	POP R4
+	POP R5
+	POP R6
+	POP R7
+	POP R8
+	POP R9
+	POP R10
+	POP R11
+	POP R12
+	RTS
+methodBody.IA.checkDouble1:
+	TSTO #11
+	BOV stack..overflow_error
+	ADDSP #0
+	PUSH R12
+	PUSH R11
+	PUSH R10
+	PUSH R9
+	PUSH R8
+	PUSH R7
+	PUSH R6
+	PUSH R5
+	PUSH R4
+	PUSH R3
+	PUSH R2
+; ----------- Code de la methode checkDouble1 dans la classe IA
+; Beginning of method instructions:
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R2
+	CMP #null, R2
+	BEQ dereferencement..null
+	LOAD 4(R2), R3
+	LOAD -3(LB), R4
+; ==
+	CMP R4, R3
+	SEQ R3
+; &&
+	CMP #0, R3
+	BEQ false..and_25
+	LOAD -4(LB), R3
+	CMP #null, R3
+	BEQ dereferencement..null
+	LOAD 5(R3), R4
+	LOAD -3(LB), R5
+; ==
+	CMP R5, R4
+	SEQ R4
+	CMP #0, R4
+	BEQ false..and_25
+	LOAD #1, R4
+	BRA end..and_25
+false..and_25:
+	LOAD #0, R4
+end..and_25:
+; &&
+	CMP #0, R4
+	BEQ false..and_24
+	LOAD -4(LB), R4
+	CMP #null, R4
+	BEQ dereferencement..null
+	LOAD 6(R4), R5
+	LOAD #0, R6
+; ==
+	CMP R6, R5
+	SEQ R5
+	CMP #0, R5
+	BEQ false..and_24
+	LOAD #1, R5
+	BRA end..and_24
+false..and_24:
+	LOAD #0, R5
+end..and_24:
+	LOAD R5, R1
+	BEQ else..39
+; IF then_body
+	LOAD #6, R5
+	LOAD R5, R1
+	BRA return..14
+	BRA end..if_39
+else..39:
+; IF else_body
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R5
+	CMP #null, R5
+	BEQ dereferencement..null
+	LOAD 5(R5), R6
+	LOAD -3(LB), R7
+; ==
+	CMP R7, R6
+	SEQ R6
+; &&
+	CMP #0, R6
+	BEQ false..and_27
+	LOAD -4(LB), R6
+	CMP #null, R6
+	BEQ dereferencement..null
+	LOAD 6(R6), R7
+	LOAD -3(LB), R8
+; ==
+	CMP R8, R7
+	SEQ R7
+	CMP #0, R7
+	BEQ false..and_27
+	LOAD #1, R7
+	BRA end..and_27
+false..and_27:
+	LOAD #0, R7
+end..and_27:
+; &&
+	CMP #0, R7
+	BEQ false..and_26
+	LOAD -4(LB), R7
+	CMP #null, R7
+	BEQ dereferencement..null
+	LOAD 4(R7), R8
+	LOAD #0, R9
+; ==
+	CMP R9, R8
+	SEQ R8
+	CMP #0, R8
+	BEQ false..and_26
+	LOAD #1, R8
+	BRA end..and_26
+false..and_26:
+	LOAD #0, R8
+end..and_26:
+	LOAD R8, R1
+	BEQ else..40
+; IF then_body
+	LOAD #4, R8
+	LOAD R8, R1
+	BRA return..14
+	BRA end..if_40
+else..40:
+; IF else_body
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R8
+	CMP #null, R8
+	BEQ dereferencement..null
+	LOAD 4(R8), R9
+	LOAD -3(LB), R10
+; ==
+	CMP R10, R9
+	SEQ R9
+; &&
+	CMP #0, R9
+	BEQ false..and_29
+	LOAD -4(LB), R9
+	CMP #null, R9
+	BEQ dereferencement..null
+	LOAD 6(R9), R10
+	LOAD -3(LB), R11
+; ==
+	CMP R11, R10
+	SEQ R10
+	CMP #0, R10
+	BEQ false..and_29
+	LOAD #1, R10
+	BRA end..and_29
+false..and_29:
+	LOAD #0, R10
+end..and_29:
+; &&
+	CMP #0, R10
+	BEQ false..and_28
+	LOAD -4(LB), R10
+	CMP #null, R10
+	BEQ dereferencement..null
+	LOAD 5(R10), R11
+	LOAD #0, R12
+; ==
+	CMP R12, R11
+	SEQ R11
+	CMP #0, R11
+	BEQ false..and_28
+	LOAD #1, R11
+	BRA end..and_28
+false..and_28:
+	LOAD #0, R11
+end..and_28:
+	LOAD R11, R1
+	BEQ else..41
+; IF then_body
+	LOAD #5, R11
+	LOAD R11, R1
+	BRA return..14
+	BRA end..if_41
+else..41:
+; IF else_body
+; FI
+end..if_41:
+; FI
+end..if_40:
+; FI
+end..if_39:
+	LOAD #1, R11
+; -
+	LOAD #0, R12
+	SUB R11, R12
+	LOAD R12, R1
+	BRA return..14
+	BRA no..return_error
+return..14:
+	POP R2
+	POP R3
+	POP R4
+	POP R5
+	POP R6
+	POP R7
+	POP R8
+	POP R9
+	POP R10
+	POP R11
+	POP R12
+	RTS
+methodBody.IA.checkDouble2:
+	TSTO #11
+	BOV stack..overflow_error
+	ADDSP #0
+	PUSH R12
+	PUSH R11
+	PUSH R10
+	PUSH R9
+	PUSH R8
+	PUSH R7
+	PUSH R6
+	PUSH R5
+	PUSH R4
+	PUSH R3
+	PUSH R2
+; ----------- Code de la methode checkDouble2 dans la classe IA
+; Beginning of method instructions:
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R2
+	CMP #null, R2
+	BEQ dereferencement..null
+	LOAD 7(R2), R3
+	LOAD -3(LB), R4
+; ==
+	CMP R4, R3
+	SEQ R3
+; &&
+	CMP #0, R3
+	BEQ false..and_31
+	LOAD -4(LB), R3
+	CMP #null, R3
+	BEQ dereferencement..null
+	LOAD 8(R3), R4
+	LOAD -3(LB), R5
+; ==
+	CMP R5, R4
+	SEQ R4
+	CMP #0, R4
+	BEQ false..and_31
+	LOAD #1, R4
+	BRA end..and_31
+false..and_31:
+	LOAD #0, R4
+end..and_31:
+; &&
+	CMP #0, R4
+	BEQ false..and_30
+	LOAD -4(LB), R4
+	CMP #null, R4
+	BEQ dereferencement..null
+	LOAD 9(R4), R5
+	LOAD #0, R6
+; ==
+	CMP R6, R5
+	SEQ R5
+	CMP #0, R5
+	BEQ false..and_30
+	LOAD #1, R5
+	BRA end..and_30
+false..and_30:
+	LOAD #0, R5
+end..and_30:
+	LOAD R5, R1
+	BEQ else..42
+; IF then_body
+	LOAD #9, R5
+	LOAD R5, R1
+	BRA return..15
+	BRA end..if_42
+else..42:
+; IF else_body
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R5
+	CMP #null, R5
+	BEQ dereferencement..null
+	LOAD 8(R5), R6
+	LOAD -3(LB), R7
+; ==
+	CMP R7, R6
+	SEQ R6
+; &&
+	CMP #0, R6
+	BEQ false..and_33
+	LOAD -4(LB), R6
+	CMP #null, R6
+	BEQ dereferencement..null
+	LOAD 9(R6), R7
+	LOAD -3(LB), R8
+; ==
+	CMP R8, R7
+	SEQ R7
+	CMP #0, R7
+	BEQ false..and_33
+	LOAD #1, R7
+	BRA end..and_33
+false..and_33:
+	LOAD #0, R7
+end..and_33:
+; &&
+	CMP #0, R7
+	BEQ false..and_32
+	LOAD -4(LB), R7
+	CMP #null, R7
+	BEQ dereferencement..null
+	LOAD 7(R7), R8
+	LOAD #0, R9
+; ==
+	CMP R9, R8
+	SEQ R8
+	CMP #0, R8
+	BEQ false..and_32
+	LOAD #1, R8
+	BRA end..and_32
+false..and_32:
+	LOAD #0, R8
+end..and_32:
+	LOAD R8, R1
+	BEQ else..43
+; IF then_body
+	LOAD #7, R8
+	LOAD R8, R1
+	BRA return..15
+	BRA end..if_43
+else..43:
+; IF else_body
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R8
+	CMP #null, R8
+	BEQ dereferencement..null
+	LOAD 7(R8), R9
+	LOAD -3(LB), R10
+; ==
+	CMP R10, R9
+	SEQ R9
+; &&
+	CMP #0, R9
+	BEQ false..and_35
+	LOAD -4(LB), R9
+	CMP #null, R9
+	BEQ dereferencement..null
+	LOAD 9(R9), R10
+	LOAD -3(LB), R11
+; ==
+	CMP R11, R10
+	SEQ R10
+	CMP #0, R10
+	BEQ false..and_35
+	LOAD #1, R10
+	BRA end..and_35
+false..and_35:
+	LOAD #0, R10
+end..and_35:
+; &&
+	CMP #0, R10
+	BEQ false..and_34
+	LOAD -4(LB), R10
+	CMP #null, R10
+	BEQ dereferencement..null
+	LOAD 8(R10), R11
+	LOAD #0, R12
+; ==
+	CMP R12, R11
+	SEQ R11
+	CMP #0, R11
+	BEQ false..and_34
+	LOAD #1, R11
+	BRA end..and_34
+false..and_34:
+	LOAD #0, R11
+end..and_34:
+	LOAD R11, R1
+	BEQ else..44
+; IF then_body
+	LOAD #8, R11
+	LOAD R11, R1
+	BRA return..15
+	BRA end..if_44
+else..44:
+; IF else_body
+; FI
+end..if_44:
+; FI
+end..if_43:
+; FI
+end..if_42:
+	LOAD #1, R11
+; -
+	LOAD #0, R12
+	SUB R11, R12
+	LOAD R12, R1
+	BRA return..15
+	BRA no..return_error
+return..15:
+	POP R2
+	POP R3
+	POP R4
+	POP R5
+	POP R6
+	POP R7
+	POP R8
+	POP R9
+	POP R10
+	POP R11
+	POP R12
+	RTS
+methodBody.IA.checkDouble3:
+	TSTO #11
+	BOV stack..overflow_error
+	ADDSP #0
+	PUSH R12
+	PUSH R11
+	PUSH R10
+	PUSH R9
+	PUSH R8
+	PUSH R7
+	PUSH R6
+	PUSH R5
+	PUSH R4
+	PUSH R3
+	PUSH R2
+; ----------- Code de la methode checkDouble3 dans la classe IA
+; Beginning of method instructions:
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R2
+	CMP #null, R2
+	BEQ dereferencement..null
+	LOAD 1(R2), R3
+	LOAD -3(LB), R4
+; ==
+	CMP R4, R3
+	SEQ R3
+; &&
+	CMP #0, R3
+	BEQ false..and_37
+	LOAD -4(LB), R3
+	CMP #null, R3
+	BEQ dereferencement..null
+	LOAD 4(R3), R4
+	LOAD -3(LB), R5
+; ==
+	CMP R5, R4
+	SEQ R4
+	CMP #0, R4
+	BEQ false..and_37
+	LOAD #1, R4
+	BRA end..and_37
+false..and_37:
+	LOAD #0, R4
+end..and_37:
+; &&
+	CMP #0, R4
+	BEQ false..and_36
+	LOAD -4(LB), R4
+	CMP #null, R4
+	BEQ dereferencement..null
+	LOAD 7(R4), R5
+	LOAD #0, R6
+; ==
+	CMP R6, R5
+	SEQ R5
+	CMP #0, R5
+	BEQ false..and_36
+	LOAD #1, R5
+	BRA end..and_36
+false..and_36:
+	LOAD #0, R5
+end..and_36:
+	LOAD R5, R1
+	BEQ else..45
+; IF then_body
+	LOAD #7, R5
+	LOAD R5, R1
+	BRA return..16
+	BRA end..if_45
+else..45:
+; IF else_body
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R5
+	CMP #null, R5
+	BEQ dereferencement..null
+	LOAD 1(R5), R6
+	LOAD -3(LB), R7
+; ==
+	CMP R7, R6
+	SEQ R6
+; &&
+	CMP #0, R6
+	BEQ false..and_39
+	LOAD -4(LB), R6
+	CMP #null, R6
+	BEQ dereferencement..null
+	LOAD 7(R6), R7
+	LOAD -3(LB), R8
+; ==
+	CMP R8, R7
+	SEQ R7
+	CMP #0, R7
+	BEQ false..and_39
+	LOAD #1, R7
+	BRA end..and_39
+false..and_39:
+	LOAD #0, R7
+end..and_39:
+; &&
+	CMP #0, R7
+	BEQ false..and_38
+	LOAD -4(LB), R7
+	CMP #null, R7
+	BEQ dereferencement..null
+	LOAD 4(R7), R8
+	LOAD #0, R9
+; ==
+	CMP R9, R8
+	SEQ R8
+	CMP #0, R8
+	BEQ false..and_38
+	LOAD #1, R8
+	BRA end..and_38
+false..and_38:
+	LOAD #0, R8
+end..and_38:
+	LOAD R8, R1
+	BEQ else..46
+; IF then_body
+	LOAD #4, R8
+	LOAD R8, R1
+	BRA return..16
+	BRA end..if_46
+else..46:
+; IF else_body
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R8
+	CMP #null, R8
+	BEQ dereferencement..null
+	LOAD 4(R8), R9
+	LOAD -3(LB), R10
+; ==
+	CMP R10, R9
+	SEQ R9
+; &&
+	CMP #0, R9
+	BEQ false..and_41
+	LOAD -4(LB), R9
+	CMP #null, R9
+	BEQ dereferencement..null
+	LOAD 7(R9), R10
+	LOAD -3(LB), R11
+; ==
+	CMP R11, R10
+	SEQ R10
+	CMP #0, R10
+	BEQ false..and_41
+	LOAD #1, R10
+	BRA end..and_41
+false..and_41:
+	LOAD #0, R10
+end..and_41:
+; &&
+	CMP #0, R10
+	BEQ false..and_40
+	LOAD -4(LB), R10
+	CMP #null, R10
+	BEQ dereferencement..null
+	LOAD 1(R10), R11
+	LOAD #0, R12
+; ==
+	CMP R12, R11
+	SEQ R11
+	CMP #0, R11
+	BEQ false..and_40
+	LOAD #1, R11
+	BRA end..and_40
+false..and_40:
+	LOAD #0, R11
+end..and_40:
+	LOAD R11, R1
+	BEQ else..47
+; IF then_body
+	LOAD #1, R11
+	LOAD R11, R1
+	BRA return..16
+	BRA end..if_47
+else..47:
+; IF else_body
+; FI
+end..if_47:
+; FI
+end..if_46:
+; FI
+end..if_45:
+	LOAD #1, R11
+; -
+	LOAD #0, R12
+	SUB R11, R12
+	LOAD R12, R1
+	BRA return..16
+	BRA no..return_error
+return..16:
+	POP R2
+	POP R3
+	POP R4
+	POP R5
+	POP R6
+	POP R7
+	POP R8
+	POP R9
+	POP R10
+	POP R11
+	POP R12
+	RTS
+methodBody.IA.checkDouble4:
+	TSTO #11
+	BOV stack..overflow_error
+	ADDSP #0
+	PUSH R12
+	PUSH R11
+	PUSH R10
+	PUSH R9
+	PUSH R8
+	PUSH R7
+	PUSH R6
+	PUSH R5
+	PUSH R4
+	PUSH R3
+	PUSH R2
+; ----------- Code de la methode checkDouble4 dans la classe IA
+; Beginning of method instructions:
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R2
+	CMP #null, R2
+	BEQ dereferencement..null
+	LOAD 2(R2), R3
+	LOAD -3(LB), R4
+; ==
+	CMP R4, R3
+	SEQ R3
+; &&
+	CMP #0, R3
+	BEQ false..and_43
+	LOAD -4(LB), R3
+	CMP #null, R3
+	BEQ dereferencement..null
+	LOAD 5(R3), R4
+	LOAD -3(LB), R5
+; ==
+	CMP R5, R4
+	SEQ R4
+	CMP #0, R4
+	BEQ false..and_43
+	LOAD #1, R4
+	BRA end..and_43
+false..and_43:
+	LOAD #0, R4
+end..and_43:
+; &&
+	CMP #0, R4
+	BEQ false..and_42
+	LOAD -4(LB), R4
+	CMP #null, R4
+	BEQ dereferencement..null
+	LOAD 8(R4), R5
+	LOAD #0, R6
+; ==
+	CMP R6, R5
+	SEQ R5
+	CMP #0, R5
+	BEQ false..and_42
+	LOAD #1, R5
+	BRA end..and_42
+false..and_42:
+	LOAD #0, R5
+end..and_42:
+	LOAD R5, R1
+	BEQ else..48
+; IF then_body
+	LOAD #8, R5
+	LOAD R5, R1
+	BRA return..17
+	BRA end..if_48
+else..48:
+; IF else_body
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R5
+	CMP #null, R5
+	BEQ dereferencement..null
+	LOAD 2(R5), R6
+	LOAD -3(LB), R7
+; ==
+	CMP R7, R6
+	SEQ R6
+; &&
+	CMP #0, R6
+	BEQ false..and_45
+	LOAD -4(LB), R6
+	CMP #null, R6
+	BEQ dereferencement..null
+	LOAD 8(R6), R7
+	LOAD -3(LB), R8
+; ==
+	CMP R8, R7
+	SEQ R7
+	CMP #0, R7
+	BEQ false..and_45
+	LOAD #1, R7
+	BRA end..and_45
+false..and_45:
+	LOAD #0, R7
+end..and_45:
+; &&
+	CMP #0, R7
+	BEQ false..and_44
+	LOAD -4(LB), R7
+	CMP #null, R7
+	BEQ dereferencement..null
+	LOAD 5(R7), R8
+	LOAD #0, R9
+; ==
+	CMP R9, R8
+	SEQ R8
+	CMP #0, R8
+	BEQ false..and_44
+	LOAD #1, R8
+	BRA end..and_44
+false..and_44:
+	LOAD #0, R8
+end..and_44:
+	LOAD R8, R1
+	BEQ else..49
+; IF then_body
+	LOAD #5, R8
+	LOAD R8, R1
+	BRA return..17
+	BRA end..if_49
+else..49:
+; IF else_body
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R8
+	CMP #null, R8
+	BEQ dereferencement..null
+	LOAD 5(R8), R9
+	LOAD -3(LB), R10
+; ==
+	CMP R10, R9
+	SEQ R9
+; &&
+	CMP #0, R9
+	BEQ false..and_47
+	LOAD -4(LB), R9
+	CMP #null, R9
+	BEQ dereferencement..null
+	LOAD 8(R9), R10
+	LOAD -3(LB), R11
+; ==
+	CMP R11, R10
+	SEQ R10
+	CMP #0, R10
+	BEQ false..and_47
+	LOAD #1, R10
+	BRA end..and_47
+false..and_47:
+	LOAD #0, R10
+end..and_47:
+; &&
+	CMP #0, R10
+	BEQ false..and_46
+	LOAD -4(LB), R10
+	CMP #null, R10
+	BEQ dereferencement..null
+	LOAD 2(R10), R11
+	LOAD #0, R12
+; ==
+	CMP R12, R11
+	SEQ R11
+	CMP #0, R11
+	BEQ false..and_46
+	LOAD #1, R11
+	BRA end..and_46
+false..and_46:
+	LOAD #0, R11
+end..and_46:
+	LOAD R11, R1
+	BEQ else..50
+; IF then_body
+	LOAD #2, R11
+	LOAD R11, R1
+	BRA return..17
+	BRA end..if_50
+else..50:
+; IF else_body
+; FI
+end..if_50:
+; FI
+end..if_49:
+; FI
+end..if_48:
+	LOAD #1, R11
+; -
+	LOAD #0, R12
+	SUB R11, R12
+	LOAD R12, R1
+	BRA return..17
+	BRA no..return_error
+return..17:
+	POP R2
+	POP R3
+	POP R4
+	POP R5
+	POP R6
+	POP R7
+	POP R8
+	POP R9
+	POP R10
+	POP R11
+	POP R12
+	RTS
+methodBody.IA.checkDouble5:
+	TSTO #11
+	BOV stack..overflow_error
+	ADDSP #0
+	PUSH R12
+	PUSH R11
+	PUSH R10
+	PUSH R9
+	PUSH R8
+	PUSH R7
+	PUSH R6
+	PUSH R5
+	PUSH R4
+	PUSH R3
+	PUSH R2
+; ----------- Code de la methode checkDouble5 dans la classe IA
+; Beginning of method instructions:
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R2
+	CMP #null, R2
+	BEQ dereferencement..null
+	LOAD 3(R2), R3
+	LOAD -3(LB), R4
+; ==
+	CMP R4, R3
+	SEQ R3
+; &&
+	CMP #0, R3
+	BEQ false..and_49
+	LOAD -4(LB), R3
+	CMP #null, R3
+	BEQ dereferencement..null
+	LOAD 6(R3), R4
+	LOAD -3(LB), R5
+; ==
+	CMP R5, R4
+	SEQ R4
+	CMP #0, R4
+	BEQ false..and_49
+	LOAD #1, R4
+	BRA end..and_49
+false..and_49:
+	LOAD #0, R4
+end..and_49:
+; &&
+	CMP #0, R4
+	BEQ false..and_48
+	LOAD -4(LB), R4
+	CMP #null, R4
+	BEQ dereferencement..null
+	LOAD 9(R4), R5
+	LOAD #0, R6
+; ==
+	CMP R6, R5
+	SEQ R5
+	CMP #0, R5
+	BEQ false..and_48
+	LOAD #1, R5
+	BRA end..and_48
+false..and_48:
+	LOAD #0, R5
+end..and_48:
+	LOAD R5, R1
+	BEQ else..51
+; IF then_body
+	LOAD #9, R5
+	LOAD R5, R1
+	BRA return..18
+	BRA end..if_51
+else..51:
+; IF else_body
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R5
+	CMP #null, R5
+	BEQ dereferencement..null
+	LOAD 3(R5), R6
+	LOAD -3(LB), R7
+; ==
+	CMP R7, R6
+	SEQ R6
+; &&
+	CMP #0, R6
+	BEQ false..and_51
+	LOAD -4(LB), R6
+	CMP #null, R6
+	BEQ dereferencement..null
+	LOAD 9(R6), R7
+	LOAD -3(LB), R8
+; ==
+	CMP R8, R7
+	SEQ R7
+	CMP #0, R7
+	BEQ false..and_51
+	LOAD #1, R7
+	BRA end..and_51
+false..and_51:
+	LOAD #0, R7
+end..and_51:
+; &&
+	CMP #0, R7
+	BEQ false..and_50
+	LOAD -4(LB), R7
+	CMP #null, R7
+	BEQ dereferencement..null
+	LOAD 6(R7), R8
+	LOAD #0, R9
+; ==
+	CMP R9, R8
+	SEQ R8
+	CMP #0, R8
+	BEQ false..and_50
+	LOAD #1, R8
+	BRA end..and_50
+false..and_50:
+	LOAD #0, R8
+end..and_50:
+	LOAD R8, R1
+	BEQ else..52
+; IF then_body
+	LOAD #6, R8
+	LOAD R8, R1
+	BRA return..18
+	BRA end..if_52
+else..52:
+; IF else_body
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R8
+	CMP #null, R8
+	BEQ dereferencement..null
+	LOAD 6(R8), R9
+	LOAD -3(LB), R10
+; ==
+	CMP R10, R9
+	SEQ R9
+; &&
+	CMP #0, R9
+	BEQ false..and_53
+	LOAD -4(LB), R9
+	CMP #null, R9
+	BEQ dereferencement..null
+	LOAD 9(R9), R10
+	LOAD -3(LB), R11
+; ==
+	CMP R11, R10
+	SEQ R10
+	CMP #0, R10
+	BEQ false..and_53
+	LOAD #1, R10
+	BRA end..and_53
+false..and_53:
+	LOAD #0, R10
+end..and_53:
+; &&
+	CMP #0, R10
+	BEQ false..and_52
+	LOAD -4(LB), R10
+	CMP #null, R10
+	BEQ dereferencement..null
+	LOAD 3(R10), R11
+	LOAD #0, R12
+; ==
+	CMP R12, R11
+	SEQ R11
+	CMP #0, R11
+	BEQ false..and_52
+	LOAD #1, R11
+	BRA end..and_52
+false..and_52:
+	LOAD #0, R11
+end..and_52:
+	LOAD R11, R1
+	BEQ else..53
+; IF then_body
+	LOAD #3, R11
+	LOAD R11, R1
+	BRA return..18
+	BRA end..if_53
+else..53:
+; IF else_body
+; FI
+end..if_53:
+; FI
+end..if_52:
+; FI
+end..if_51:
+	LOAD #1, R11
+; -
+	LOAD #0, R12
+	SUB R11, R12
+	LOAD R12, R1
+	BRA return..18
+	BRA no..return_error
+return..18:
+	POP R2
+	POP R3
+	POP R4
+	POP R5
+	POP R6
+	POP R7
+	POP R8
+	POP R9
+	POP R10
+	POP R11
+	POP R12
+	RTS
+methodBody.IA.checkDouble6:
+	TSTO #11
+	BOV stack..overflow_error
+	ADDSP #0
+	PUSH R12
+	PUSH R11
+	PUSH R10
+	PUSH R9
+	PUSH R8
+	PUSH R7
+	PUSH R6
+	PUSH R5
+	PUSH R4
+	PUSH R3
+	PUSH R2
+; ----------- Code de la methode checkDouble6 dans la classe IA
+; Beginning of method instructions:
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R2
+	CMP #null, R2
+	BEQ dereferencement..null
+	LOAD 1(R2), R3
+	LOAD -3(LB), R4
+; ==
+	CMP R4, R3
+	SEQ R3
+; &&
+	CMP #0, R3
+	BEQ false..and_55
+	LOAD -4(LB), R3
+	CMP #null, R3
+	BEQ dereferencement..null
+	LOAD 5(R3), R4
+	LOAD -3(LB), R5
+; ==
+	CMP R5, R4
+	SEQ R4
+	CMP #0, R4
+	BEQ false..and_55
+	LOAD #1, R4
+	BRA end..and_55
+false..and_55:
+	LOAD #0, R4
+end..and_55:
+; &&
+	CMP #0, R4
+	BEQ false..and_54
+	LOAD -4(LB), R4
+	CMP #null, R4
+	BEQ dereferencement..null
+	LOAD 9(R4), R5
+	LOAD #0, R6
+; ==
+	CMP R6, R5
+	SEQ R5
+	CMP #0, R5
+	BEQ false..and_54
+	LOAD #1, R5
+	BRA end..and_54
+false..and_54:
+	LOAD #0, R5
+end..and_54:
+	LOAD R5, R1
+	BEQ else..54
+; IF then_body
+	LOAD #9, R5
+	LOAD R5, R1
+	BRA return..19
+	BRA end..if_54
+else..54:
+; IF else_body
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R5
+	CMP #null, R5
+	BEQ dereferencement..null
+	LOAD 1(R5), R6
+	LOAD -3(LB), R7
+; ==
+	CMP R7, R6
+	SEQ R6
+; &&
+	CMP #0, R6
+	BEQ false..and_57
+	LOAD -4(LB), R6
+	CMP #null, R6
+	BEQ dereferencement..null
+	LOAD 9(R6), R7
+	LOAD -3(LB), R8
+; ==
+	CMP R8, R7
+	SEQ R7
+	CMP #0, R7
+	BEQ false..and_57
+	LOAD #1, R7
+	BRA end..and_57
+false..and_57:
+	LOAD #0, R7
+end..and_57:
+; &&
+	CMP #0, R7
+	BEQ false..and_56
+	LOAD -4(LB), R7
+	CMP #null, R7
+	BEQ dereferencement..null
+	LOAD 5(R7), R8
+	LOAD #0, R9
+; ==
+	CMP R9, R8
+	SEQ R8
+	CMP #0, R8
+	BEQ false..and_56
+	LOAD #1, R8
+	BRA end..and_56
+false..and_56:
+	LOAD #0, R8
+end..and_56:
+	LOAD R8, R1
+	BEQ else..55
+; IF then_body
+	LOAD #5, R8
+	LOAD R8, R1
+	BRA return..19
+	BRA end..if_55
+else..55:
+; IF else_body
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R8
+	CMP #null, R8
+	BEQ dereferencement..null
+	LOAD 5(R8), R9
+	LOAD -3(LB), R10
+; ==
+	CMP R10, R9
+	SEQ R9
+; &&
+	CMP #0, R9
+	BEQ false..and_59
+	LOAD -4(LB), R9
+	CMP #null, R9
+	BEQ dereferencement..null
+	LOAD 9(R9), R10
+	LOAD -3(LB), R11
+; ==
+	CMP R11, R10
+	SEQ R10
+	CMP #0, R10
+	BEQ false..and_59
+	LOAD #1, R10
+	BRA end..and_59
+false..and_59:
+	LOAD #0, R10
+end..and_59:
+; &&
+	CMP #0, R10
+	BEQ false..and_58
+	LOAD -4(LB), R10
+	CMP #null, R10
+	BEQ dereferencement..null
+	LOAD 1(R10), R11
+	LOAD #0, R12
+; ==
+	CMP R12, R11
+	SEQ R11
+	CMP #0, R11
+	BEQ false..and_58
+	LOAD #1, R11
+	BRA end..and_58
+false..and_58:
+	LOAD #0, R11
+end..and_58:
+	LOAD R11, R1
+	BEQ else..56
+; IF then_body
+	LOAD #1, R11
+	LOAD R11, R1
+	BRA return..19
+	BRA end..if_56
+else..56:
+; IF else_body
+; FI
+end..if_56:
+; FI
+end..if_55:
+; FI
+end..if_54:
+	LOAD #1, R11
+; -
+	LOAD #0, R12
+	SUB R11, R12
+	LOAD R12, R1
+	BRA return..19
+	BRA no..return_error
+return..19:
+	POP R2
+	POP R3
+	POP R4
+	POP R5
+	POP R6
+	POP R7
+	POP R8
+	POP R9
+	POP R10
+	POP R11
+	POP R12
+	RTS
+methodBody.IA.checkDouble7:
+	TSTO #11
+	BOV stack..overflow_error
+	ADDSP #0
+	PUSH R12
+	PUSH R11
+	PUSH R10
+	PUSH R9
+	PUSH R8
+	PUSH R7
+	PUSH R6
+	PUSH R5
+	PUSH R4
+	PUSH R3
+	PUSH R2
+; ----------- Code de la methode checkDouble7 dans la classe IA
+; Beginning of method instructions:
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R2
+	CMP #null, R2
+	BEQ dereferencement..null
+	LOAD 3(R2), R3
+	LOAD -3(LB), R4
+; ==
+	CMP R4, R3
+	SEQ R3
+; &&
+	CMP #0, R3
+	BEQ false..and_61
+	LOAD -4(LB), R3
+	CMP #null, R3
+	BEQ dereferencement..null
+	LOAD 5(R3), R4
+	LOAD -3(LB), R5
+; ==
+	CMP R5, R4
+	SEQ R4
+	CMP #0, R4
+	BEQ false..and_61
+	LOAD #1, R4
+	BRA end..and_61
+false..and_61:
+	LOAD #0, R4
+end..and_61:
+; &&
+	CMP #0, R4
+	BEQ false..and_60
+	LOAD -4(LB), R4
+	CMP #null, R4
+	BEQ dereferencement..null
+	LOAD 7(R4), R5
+	LOAD #0, R6
+; ==
+	CMP R6, R5
+	SEQ R5
+	CMP #0, R5
+	BEQ false..and_60
+	LOAD #1, R5
+	BRA end..and_60
+false..and_60:
+	LOAD #0, R5
+end..and_60:
+	LOAD R5, R1
+	BEQ else..57
+; IF then_body
+	LOAD #7, R5
+	LOAD R5, R1
+	BRA return..20
+	BRA end..if_57
+else..57:
+; IF else_body
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R5
+	CMP #null, R5
+	BEQ dereferencement..null
+	LOAD 3(R5), R6
+	LOAD -3(LB), R7
+; ==
+	CMP R7, R6
+	SEQ R6
+; &&
+	CMP #0, R6
+	BEQ false..and_63
+	LOAD -4(LB), R6
+	CMP #null, R6
+	BEQ dereferencement..null
+	LOAD 7(R6), R7
+	LOAD -3(LB), R8
+; ==
+	CMP R8, R7
+	SEQ R7
+	CMP #0, R7
+	BEQ false..and_63
+	LOAD #1, R7
+	BRA end..and_63
+false..and_63:
+	LOAD #0, R7
+end..and_63:
+; &&
+	CMP #0, R7
+	BEQ false..and_62
+	LOAD -4(LB), R7
+	CMP #null, R7
+	BEQ dereferencement..null
+	LOAD 5(R7), R8
+	LOAD #0, R9
+; ==
+	CMP R9, R8
+	SEQ R8
+	CMP #0, R8
+	BEQ false..and_62
+	LOAD #1, R8
+	BRA end..and_62
+false..and_62:
+	LOAD #0, R8
+end..and_62:
+	LOAD R8, R1
+	BEQ else..58
+; IF then_body
+	LOAD #5, R8
+	LOAD R8, R1
+	BRA return..20
+	BRA end..if_58
+else..58:
+; IF else_body
+; Start IF
+; cond IF
+; Start And
+; Start And
+	LOAD -4(LB), R8
+	CMP #null, R8
+	BEQ dereferencement..null
+	LOAD 5(R8), R9
+	LOAD -3(LB), R10
+; ==
+	CMP R10, R9
+	SEQ R9
+; &&
+	CMP #0, R9
+	BEQ false..and_65
+	LOAD -4(LB), R9
+	CMP #null, R9
+	BEQ dereferencement..null
+	LOAD 7(R9), R10
+	LOAD -3(LB), R11
+; ==
+	CMP R11, R10
+	SEQ R10
+	CMP #0, R10
+	BEQ false..and_65
+	LOAD #1, R10
+	BRA end..and_65
+false..and_65:
+	LOAD #0, R10
+end..and_65:
+; &&
+	CMP #0, R10
+	BEQ false..and_64
+	LOAD -4(LB), R10
+	CMP #null, R10
+	BEQ dereferencement..null
+	LOAD 3(R10), R11
+	LOAD #0, R12
+; ==
+	CMP R12, R11
+	SEQ R11
+	CMP #0, R11
+	BEQ false..and_64
+	LOAD #1, R11
+	BRA end..and_64
+false..and_64:
+	LOAD #0, R11
+end..and_64:
+	LOAD R11, R1
+	BEQ else..59
+; IF then_body
+	LOAD #3, R11
+	LOAD R11, R1
+	BRA return..20
+	BRA end..if_59
+else..59:
+; IF else_body
+; FI
+end..if_59:
+; FI
+end..if_58:
+; FI
+end..if_57:
+	LOAD #1, R11
+; -
+	LOAD #0, R12
+	SUB R11, R12
+	LOAD R12, R1
+	BRA return..20
+	BRA no..return_error
+return..20:
+	POP R2
+	POP R3
+	POP R4
+	POP R5
+	POP R6
+	POP R7
+	POP R8
+	POP R9
+	POP R10
+	POP R11
+	POP R12
+	RTS
+methodBody.IA.winIfPossible:
+	TSTO #5
+	BOV stack..overflow_error
+	ADDSP #1
+	PUSH R4
+	PUSH R3
+	PUSH R2
+; ----------- Code de la methode winIfPossible dans la classe IA
+; Beginning of method instructions:
+; Assign (0)
+	LOAD -2(LB), R2
+	LOAD -3(LB), R3
+	LOAD #2, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 4(R1)
+	SUBSP #4
+	LOAD R1, R2
+; Store assign (1)
+	STORE R2, 1(LB)
+; End assign (1)
+; Start IF
+; cond IF
+	LOAD 1(LB), R2
+	LOAD #1, R3
+; -
+	LOAD #0, R4
+	SUB R3, R4
+; ==
+	CMP R4, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..60
+; IF then_body
+; Assign (0)
+	LOAD -2(LB), R2
+	LOAD -3(LB), R3
+	LOAD #2, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 5(R1)
+	SUBSP #4
+	LOAD R1, R2
+; Store assign (1)
+	STORE R2, 1(LB)
+; End assign (1)
+	BRA end..if_60
+else..60:
+; IF else_body
+; FI
+end..if_60:
+; Start IF
+; cond IF
+	LOAD 1(LB), R2
+	LOAD #1, R3
+; -
+	LOAD #0, R4
+	SUB R3, R4
+; ==
+	CMP R4, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..61
+; IF then_body
+; Assign (0)
+	LOAD -2(LB), R2
+	LOAD -3(LB), R3
+	LOAD #2, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 6(R1)
+	SUBSP #4
+	LOAD R1, R2
+; Store assign (1)
+	STORE R2, 1(LB)
+; End assign (1)
+	BRA end..if_61
+else..61:
+; IF else_body
+; FI
+end..if_61:
+; Start IF
+; cond IF
+	LOAD 1(LB), R2
+	LOAD #1, R3
+; -
+	LOAD #0, R4
+	SUB R3, R4
+; ==
+	CMP R4, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..62
+; IF then_body
+; Assign (0)
+	LOAD -2(LB), R2
+	LOAD -3(LB), R3
+	LOAD #2, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+; Store assign (1)
+	STORE R2, 1(LB)
+; End assign (1)
+	BRA end..if_62
+else..62:
+; IF else_body
+; FI
+end..if_62:
+; Start IF
+; cond IF
+	LOAD 1(LB), R2
+	LOAD #1, R3
+; -
+	LOAD #0, R4
+	SUB R3, R4
+; ==
+	CMP R4, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..63
+; IF then_body
+; Assign (0)
+	LOAD -2(LB), R2
+	LOAD -3(LB), R3
+	LOAD #2, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 8(R1)
+	SUBSP #4
+	LOAD R1, R2
+; Store assign (1)
+	STORE R2, 1(LB)
+; End assign (1)
+	BRA end..if_63
+else..63:
+; IF else_body
+; FI
+end..if_63:
+; Start IF
+; cond IF
+	LOAD 1(LB), R2
+	LOAD #1, R3
+; -
+	LOAD #0, R4
+	SUB R3, R4
+; ==
+	CMP R4, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..64
+; IF then_body
+; Assign (0)
+	LOAD -2(LB), R2
+	LOAD -3(LB), R3
+	LOAD #2, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 9(R1)
+	SUBSP #4
+	LOAD R1, R2
+; Store assign (1)
+	STORE R2, 1(LB)
+; End assign (1)
+	BRA end..if_64
+else..64:
+; IF else_body
+; FI
+end..if_64:
+; Start IF
+; cond IF
+	LOAD 1(LB), R2
+	LOAD #1, R3
+; -
+	LOAD #0, R4
+	SUB R3, R4
+; ==
+	CMP R4, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..65
+; IF then_body
+; Assign (0)
+	LOAD -2(LB), R2
+	LOAD -3(LB), R3
+	LOAD #2, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 10(R1)
+	SUBSP #4
+	LOAD R1, R2
+; Store assign (1)
+	STORE R2, 1(LB)
+; End assign (1)
+	BRA end..if_65
+else..65:
+; IF else_body
+; FI
+end..if_65:
+; Start IF
+; cond IF
+	LOAD 1(LB), R2
+	LOAD #1, R3
+; -
+	LOAD #0, R4
+	SUB R3, R4
+; ==
+	CMP R4, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..66
+; IF then_body
+; Assign (0)
+	LOAD -2(LB), R2
+	LOAD -3(LB), R3
+	LOAD #2, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 11(R1)
+	SUBSP #4
+	LOAD R1, R2
+; Store assign (1)
+	STORE R2, 1(LB)
+; End assign (1)
+	BRA end..if_66
+else..66:
+; IF else_body
+; FI
+end..if_66:
+	LOAD 1(LB), R2
+	LOAD R2, R1
+	BRA return..21
+	BRA no..return_error
+return..21:
+	POP R2
+	POP R3
+	POP R4
+	RTS
+methodBody.IA.defendIfPossible:
+	TSTO #5
+	BOV stack..overflow_error
+	ADDSP #1
+	PUSH R4
+	PUSH R3
+	PUSH R2
+; ----------- Code de la methode defendIfPossible dans la classe IA
+; Beginning of method instructions:
+; Assign (0)
+	LOAD -2(LB), R2
+	LOAD -3(LB), R3
+	LOAD #1, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 4(R1)
+	SUBSP #4
+	LOAD R1, R2
+; Store assign (1)
+	STORE R2, 1(LB)
+; End assign (1)
+; Start IF
+; cond IF
+	LOAD 1(LB), R2
+	LOAD #1, R3
+; -
+	LOAD #0, R4
+	SUB R3, R4
+; ==
+	CMP R4, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..67
+; IF then_body
+; Assign (0)
+	LOAD -2(LB), R2
+	LOAD -3(LB), R3
+	LOAD #1, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 5(R1)
+	SUBSP #4
+	LOAD R1, R2
+; Store assign (1)
+	STORE R2, 1(LB)
+; End assign (1)
+	BRA end..if_67
+else..67:
+; IF else_body
+; FI
+end..if_67:
+; Start IF
+; cond IF
+	LOAD 1(LB), R2
+	LOAD #1, R3
+; -
+	LOAD #0, R4
+	SUB R3, R4
+; ==
+	CMP R4, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..68
+; IF then_body
+; Assign (0)
+	LOAD -2(LB), R2
+	LOAD -3(LB), R3
+	LOAD #1, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 6(R1)
+	SUBSP #4
+	LOAD R1, R2
+; Store assign (1)
+	STORE R2, 1(LB)
+; End assign (1)
+	BRA end..if_68
+else..68:
+; IF else_body
+; FI
+end..if_68:
+; Start IF
+; cond IF
+	LOAD 1(LB), R2
+	LOAD #1, R3
+; -
+	LOAD #0, R4
+	SUB R3, R4
+; ==
+	CMP R4, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..69
+; IF then_body
+; Assign (0)
+	LOAD -2(LB), R2
+	LOAD -3(LB), R3
+	LOAD #1, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 7(R1)
+	SUBSP #4
+	LOAD R1, R2
+; Store assign (1)
+	STORE R2, 1(LB)
+; End assign (1)
+	BRA end..if_69
+else..69:
+; IF else_body
+; FI
+end..if_69:
+; Start IF
+; cond IF
+	LOAD 1(LB), R2
+	LOAD #1, R3
+; -
+	LOAD #0, R4
+	SUB R3, R4
+; ==
+	CMP R4, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..70
+; IF then_body
+; Assign (0)
+	LOAD -2(LB), R2
+	LOAD -3(LB), R3
+	LOAD #1, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 8(R1)
+	SUBSP #4
+	LOAD R1, R2
+; Store assign (1)
+	STORE R2, 1(LB)
+; End assign (1)
+	BRA end..if_70
+else..70:
+; IF else_body
+; FI
+end..if_70:
+; Start IF
+; cond IF
+	LOAD 1(LB), R2
+	LOAD #1, R3
+; -
+	LOAD #0, R4
+	SUB R3, R4
+; ==
+	CMP R4, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..71
+; IF then_body
+; Assign (0)
+	LOAD -2(LB), R2
+	LOAD -3(LB), R3
+	LOAD #1, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 9(R1)
+	SUBSP #4
+	LOAD R1, R2
+; Store assign (1)
+	STORE R2, 1(LB)
+; End assign (1)
+	BRA end..if_71
+else..71:
+; IF else_body
+; FI
+end..if_71:
+; Start IF
+; cond IF
+	LOAD 1(LB), R2
+	LOAD #1, R3
+; -
+	LOAD #0, R4
+	SUB R3, R4
+; ==
+	CMP R4, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..72
+; IF then_body
+; Assign (0)
+	LOAD -2(LB), R2
+	LOAD -3(LB), R3
+	LOAD #1, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 10(R1)
+	SUBSP #4
+	LOAD R1, R2
+; Store assign (1)
+	STORE R2, 1(LB)
+; End assign (1)
+	BRA end..if_72
+else..72:
+; IF else_body
+; FI
+end..if_72:
+; Start IF
+; cond IF
+	LOAD 1(LB), R2
+	LOAD #1, R3
+; -
+	LOAD #0, R4
+	SUB R3, R4
+; ==
+	CMP R4, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..73
+; IF then_body
+; Assign (0)
+	LOAD -2(LB), R2
+	LOAD -3(LB), R3
+	LOAD #1, R4
+	PUSH R2
+	PUSH R3
+	PUSH R4
+	LOAD -2(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 11(R1)
+	SUBSP #4
+	LOAD R1, R2
+; Store assign (1)
+	STORE R2, 1(LB)
+; End assign (1)
+	BRA end..if_73
+else..73:
+; IF else_body
+; FI
+end..if_73:
+	LOAD 1(LB), R2
+	LOAD R2, R1
+	BRA return..22
+	BRA no..return_error
+return..22:
+	POP R2
+	POP R3
+	POP R4
+	RTS
+methodBody.IA.play:
+	TSTO #7
+	BOV stack..overflow_error
+	ADDSP #2
+	PUSH R4
+	PUSH R3
+	PUSH R2
+; ----------- Code de la methode play dans la classe IA
+	LOAD #1, R2
+; -
+	LOAD #0, R3
+	SUB R2, R3
+	STORE R3, 1(LB)
+	LOAD #199999, R2
+	STORE R2, 2(LB)
+; Beginning of method instructions:
+while..3:
+	LOAD -3(LB), R2
+	LOAD 1(LB), R3
+	PUSH R2
+	PUSH R3
+	LOAD -1(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 5(R1)
+	SUBSP #3
+	LOAD R1, R2
+	LOAD #0, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	CMP #1, R1
+	BNE end..while_3
+; Assign (0)
+	LOAD -2(LB), R2
+	LOAD -3(LB), R3
+	PUSH R2
+	PUSH R3
+	LOAD -1(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 12(R1)
+	SUBSP #3
+	LOAD R1, R2
+; Store assign (1)
+	STORE R2, 1(LB)
+; End assign (1)
+; Start IF
+; cond IF
+	LOAD 1(LB), R2
+	LOAD #1, R3
+; -
+	LOAD #0, R4
+	SUB R3, R4
+; ==
+	CMP R4, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..74
+; IF then_body
+; Assign (0)
+	LOAD -2(LB), R2
+	LOAD -3(LB), R3
+	PUSH R2
+	PUSH R3
+	LOAD -1(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 13(R1)
+	SUBSP #3
+	LOAD R1, R2
+; Store assign (1)
+	STORE R2, 1(LB)
+; End assign (1)
+	BRA end..if_74
+else..74:
+; IF else_body
+; FI
+end..if_74:
+; Start IF
+; cond IF
+	LOAD -3(LB), R2
+	LOAD 1(LB), R3
+	PUSH R2
+	PUSH R3
+	LOAD -1(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 5(R1)
+	SUBSP #3
+	LOAD R1, R2
+	LOAD #0, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..75
+; IF then_body
+	LOAD 1(LB), R2
+	LOAD R2, R1
+	WINT
+	WNL
+	BRA end..if_75
+else..75:
+; IF else_body
+; FI
+end..if_75:
+; Start IF
+; cond IF
+	LOAD 1(LB), R2
+	LOAD #1, R3
+; -
+	LOAD #0, R4
+	SUB R3, R4
+; ==
+	CMP R4, R2
+	SEQ R2
+	LOAD R2, R1
+	BEQ else..76
+; IF then_body
+; Assign (0)
+	LOAD -2(LB), R2
+	PUSH R2
+	LOAD 0(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 3(R1)
+	SUBSP #2
+	LOAD R1, R2
+; Store assign (1)
+	STORE R2, 1(LB)
+; End assign (1)
+	BRA end..if_76
+else..76:
+; IF else_body
+; FI
+end..if_76:
+	BRA while..3
+end..while_3:
+while..4:
+	LOAD 2(LB), R2
+	LOAD #0, R3
+; >
+	SUB R3, R2
+	SGT R2
+	LOAD R2, R1
+	CMP #1, R1
+	BNE end..while_4
+; Assign (0)
+	LOAD 2(LB), R2
+	LOAD #1, R3
+; -
+	SUB R3, R2
+; Store assign (1)
+	STORE R2, 2(LB)
+; End assign (1)
+	BRA while..4
+end..while_4:
+	LOAD 1(LB), R2
+	LOAD R2, R1
+	BRA return..23
+	BRA no..return_error
+return..23:
 	POP R2
 	POP R3
 	POP R4

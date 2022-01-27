@@ -1,7 +1,158 @@
+import "Grid.deca"
+
 class Player {
 	int num = 1;
 	
 	void changePlayer() {
 		num = -num + 3; // 1 -> 2 et 2 -> 1
+	}
+}
+
+class IA extends Player {
+	int listPriorite = 864291730;
+	int getNextPrio() {
+		listPriorite = listPriorite / 10;
+		return listPriorite % 10;
+	}
+	
+	int checkDouble0(Grid g, int p) {
+		if (g.box00 == p && g.box01 == p && g.box02 == 0) {return 3;}
+		else if (g.box01 == p && g.box02 == p && g.box00 == 0) {return 1;}
+		else if (g.box00 == p && g.box02 == p && g.box01 == 0) {return 2;}
+		return -1;
+	}
+
+	int checkDouble1(Grid g, int p) {
+		if (g.box10 == p && g.box11 == p && g.box12 == 0) {return 6;}
+		else if (g.box11 == p && g.box12 == p && g.box10 == 0) {return 4;}
+		else if (g.box10 == p && g.box12 == p && g.box11 == 0) {return 5;}
+
+		return -1;
+
+	}
+	
+	int checkDouble2(Grid g, int p) {
+		if (g.box20 == p && g.box21 == p && g.box22 == 0) {return 9;}
+		else if (g.box21 == p && g.box22 == p && g.box20 == 0) {return 7;}
+		else if (g.box20 == p && g.box22 == p && g.box21 == 0) {return 8;}
+		return -1;
+	}
+
+	int checkDouble3(Grid g, int p) {
+		if (g.box00 == p && g.box10 == p && g.box20 == 0) {return 7;}
+		else if (g.box00 == p && g.box20 == p && g.box10 == 0) {return 4;}
+		else if (g.box10 == p && g.box20 == p && g.box00 == 0) {return 1;}
+		return -1;
+	}
+
+	int checkDouble4(Grid g, int p) {
+		if (g.box01 == p && g.box11 == p && g.box21 == 0) {return 8;}
+		else if (g.box01 == p && g.box21 == p && g.box11 == 0) {return 5;}
+		else if (g.box11 == p && g.box21 == p && g.box01 == 0) {return 2;}
+		return -1;
+	}
+
+	int checkDouble5(Grid g, int p) {
+		if (g.box02 == p && g.box12 == p && g.box22 == 0) {return 9;}
+		else if (g.box02 == p && g.box22 == p && g.box12 == 0) {return 6;}
+		else if (g.box12 == p && g.box22 == p && g.box02 == 0) {return 3;}
+		return -1;
+	}
+
+	int checkDouble6(Grid g, int p) {
+		if (g.box00 == p && g.box11 == p && g.box22 == 0) {return 9;}
+		else if (g.box00 == p && g.box22 == p && g.box11 == 0) {return 5;}
+		else if (g.box11 == p && g.box22 == p && g.box00 == 0) {return 1;}
+		return -1;
+	}
+
+	int checkDouble7(Grid g, int p) {
+		if (g.box02 == p && g.box11 == p && g.box20 == 0) {return 7;}
+		else if (g.box02 == p && g.box20 == p && g.box11 == 0) {return 5;}
+		else if (g.box11 == p && g.box20 == p && g.box02 == 0) {return 3;}
+
+		return -1;
+	}
+
+
+
+	int winIfPossible(Grid g) {
+		int numBox;
+		// 1 méthode fait planter le programme :/
+		// du coup faut être inventif
+		numBox = checkDouble0(g, 2);
+		if (numBox == -1) {
+			numBox = checkDouble1(g, 2);
+		}
+		if (numBox == -1) {
+			numBox = checkDouble2(g, 2);
+		}
+		if (numBox == -1) {
+			numBox = checkDouble3(g, 2);
+		}
+		if (numBox == -1) {
+			numBox = checkDouble4(g, 2);
+		}
+		if (numBox == -1) {
+			numBox = checkDouble5(g, 2);
+		}
+		if (numBox == -1) {
+			numBox = checkDouble6(g, 2);
+		}
+		if (numBox == -1) {
+			numBox = checkDouble7(g, 2);
+		}
+
+		return numBox;
+	}
+
+	int defendIfPossible(Grid g) {
+		int numBox;
+
+		numBox = checkDouble0(g, 1);
+		if (numBox == -1) {
+			numBox = checkDouble1(g, 1);
+		}
+		if (numBox == -1) {
+			numBox = checkDouble2(g, 1);
+		}
+		if (numBox == -1) {
+			numBox = checkDouble3(g, 1);
+		}
+		if (numBox == -1) {
+			numBox = checkDouble4(g, 1);
+		}
+		if (numBox == -1) {
+			numBox = checkDouble5(g, 1);
+		}
+		if (numBox == -1) {
+			numBox = checkDouble6(g, 1);
+		}
+		if (numBox == -1) {
+			numBox = checkDouble7(g, 1);
+		}
+		return numBox;
+	}
+
+	int play(Grid grid) {
+		int numBox = -1;
+		int timeToPlay = 199999;
+		while (grid.isBoxEmpty(numBox) == false) {
+			numBox = winIfPossible(grid);
+			if (numBox == -1) {
+				numBox = defendIfPossible(grid);
+			}
+			if (grid.isBoxEmpty(numBox) == false) {
+				println(numBox);
+			}
+			if (numBox == -1) {
+				numBox = getNextPrio();
+			}
+		}
+		// the AI take time to play
+		while (timeToPlay > 0) {
+			timeToPlay = timeToPlay - 1;
+		}
+		return numBox;
 	}
 }

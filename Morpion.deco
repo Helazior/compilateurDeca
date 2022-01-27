@@ -1,5 +1,5 @@
 ; # start tablegen
-	TSTO #18
+	TSTO #36
 	BOV stack..overflow_error
 	ADDSP #2
 	LEA 1(GB), R1
@@ -10,23 +10,28 @@
 ; ------------------ Imports Main ---------------------
 ; ------------------ Imports Main ---------------------
 ; ---------------- End Imports Main -------------------
-	ADDSP #3
+	ADDSP #9
 	LEA 3(GB), R1
-	BSR classTableInit.Player
+	BSR classTableInit.Grid
 	LEA 1(GB), R1
 	STORE R1, 3(GB)
 ; ---------------- End Imports Main -------------------
-	ADDSP #9
-	LEA 6(GB), R1
-	BSR classTableInit.Grid
-	LEA 1(GB), R1
-	STORE R1, 6(GB)
-; ---------------- End Imports Main -------------------
 	ADDSP #3
+	LEA 12(GB), R1
+	BSR classTableInit.Player
+	LEA 1(GB), R1
+	STORE R1, 12(GB)
+	ADDSP #15
 	LEA 15(GB), R1
+	BSR classTableInit.IA
+	LEA 12(GB), R1
+	STORE R1, 15(GB)
+; ---------------- End Imports Main -------------------
+	ADDSP #6
+	LEA 30(GB), R1
 	BSR classTableInit.IO
 	LEA 1(GB), R1
-	STORE R1, 15(GB)
+	STORE R1, 30(GB)
 	BRA classTableInit_end
 ; ---------------------------------------------------
 ;     Construction tables des methodes
@@ -39,14 +44,6 @@ classTableInit.Object:
 ; ------------------- Imports Fn ----------------------
 ; ------------------- Imports Fn ----------------------
 ; ------------------- Imports Fn ----------------------
-; ----------------- End Imports Fn --------------------
-; ----------------------------------------
-; Player
-classTableInit.Player:
-	BSR classTableInit.Object
-	LOAD methodBody.Player.changePlayer, R0
-	STORE R0, 2(R1)
-	RTS
 ; ----------------- End Imports Fn --------------------
 ; ----------------------------------------
 ; Grid
@@ -69,44 +66,119 @@ classTableInit.Grid:
 	RTS
 ; ----------------- End Imports Fn --------------------
 ; ----------------------------------------
+; Player
+classTableInit.Player:
+	BSR classTableInit.Object
+	LOAD methodBody.Player.changePlayer, R0
+	STORE R0, 2(R1)
+	RTS
+; ----------------------------------------
+; IA
+classTableInit.IA:
+	BSR classTableInit.Player
+	LOAD methodBody.IA.getNextPrio, R0
+	STORE R0, 3(R1)
+	LOAD methodBody.IA.checkDouble0, R0
+	STORE R0, 4(R1)
+	LOAD methodBody.IA.checkDouble1, R0
+	STORE R0, 5(R1)
+	LOAD methodBody.IA.checkDouble2, R0
+	STORE R0, 6(R1)
+	LOAD methodBody.IA.checkDouble3, R0
+	STORE R0, 7(R1)
+	LOAD methodBody.IA.checkDouble4, R0
+	STORE R0, 8(R1)
+	LOAD methodBody.IA.checkDouble5, R0
+	STORE R0, 9(R1)
+	LOAD methodBody.IA.checkDouble6, R0
+	STORE R0, 10(R1)
+	LOAD methodBody.IA.checkDouble7, R0
+	STORE R0, 11(R1)
+	LOAD methodBody.IA.winIfPossible, R0
+	STORE R0, 12(R1)
+	LOAD methodBody.IA.defendIfPossible, R0
+	STORE R0, 13(R1)
+	LOAD methodBody.IA.play, R0
+	STORE R0, 14(R1)
+	RTS
+; ----------------- End Imports Fn --------------------
+; ----------------------------------------
 ; IO
 classTableInit.IO:
 	BSR classTableInit.Object
-	LOAD methodBody.IO.askWhereToPlay, R0
+	LOAD methodBody.IO.printHello, R0
 	STORE R0, 2(R1)
+	LOAD methodBody.IO.printLink, R0
+	STORE R0, 3(R1)
+	LOAD methodBody.IO.askVsWho, R0
+	STORE R0, 4(R1)
+	LOAD methodBody.IO.askWhereToPlay, R0
+	STORE R0, 5(R1)
 	RTS
 classTableInit_end:
 ; # end tablegen
 ; # start main
-; max size stack: 3 offset: 3
-	TSTO #6
+; max size stack: 6 offset: 6
+	TSTO #12
 	BOV stack..overflow_error
 ; Leave space for local vars
-	ADDSP #3
+	ADDSP #6
 ; Main program
 ; New
 	NEW #1, R2
 	PUSH R2
 	BSR init.IO
 	SUBSP #1
-	STORE R2, 18(LB)
+	STORE R2, 36(LB)
 ; New
 	NEW #11, R2
 	PUSH R2
 	BSR init.Grid
 	SUBSP #1
-	STORE R2, 19(LB)
+	STORE R2, 37(LB)
 ; New
 	NEW #2, R2
 	PUSH R2
 	BSR init.Player
 	SUBSP #1
-	STORE R2, 20(LB)
+	STORE R2, 38(LB)
+; New
+	NEW #3, R2
+	PUSH R2
+	BSR init.IA
+	SUBSP #1
+	STORE R2, 39(LB)
 ; ---------------------------------------------------
 ;           Beginning of main instructions:
 ; ---------------------------------------------------
-while..1:
-	LOAD 19(LB), R2
+	LOAD 36(LB), R2
+	PUSH R2
+	LOAD 0(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 2(R1)
+	SUBSP #2
+	LOAD R1, R2
+; Assign (0)
+	LOAD 36(LB), R2
+	PUSH R2
+	LOAD 0(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 4(R1)
+	SUBSP #2
+	LOAD R1, R2
+; Store assign (1)
+	STORE R2, 41(LB)
+; End assign (1)
+while..2:
+	LOAD 37(LB), R2
 	PUSH R2
 	LOAD 0(SP), R0
 	PUSH R0
@@ -123,16 +195,16 @@ while..1:
 	SEQ R2
 	LOAD R2, R1
 	CMP #1, R1
-	BNE end..while_1
+	BNE end..while_2
 	WSTR "Player "
-	LOAD 20(LB), R2
+	LOAD 38(LB), R2
 	CMP #null, R2
 	BEQ dereferencement..null
 	LOAD 1(R2), R3
 	LOAD R3, R1
 	WINT
 	WNL
-	LOAD 19(LB), R3
+	LOAD 37(LB), R3
 	PUSH R3
 	LOAD 0(SP), R0
 	PUSH R0
@@ -143,9 +215,38 @@ while..1:
 	BSR 8(R1)
 	SUBSP #2
 	LOAD R1, R3
-	LOAD 19(LB), R3
-	LOAD 18(LB), R4
-	LOAD 19(LB), R5
+; Start IF
+; cond IF
+; Start Or
+	LOAD 38(LB), R3
+	CMP #null, R3
+	BEQ dereferencement..null
+	LOAD 1(R3), R4
+	LOAD #1, R5
+; ==
+	CMP R5, R4
+	SEQ R4
+; ||
+	CMP #1, R4
+	BEQ true..or_0
+	LOAD 41(LB), R4
+	LOAD #0, R5
+; ==
+	CMP R5, R4
+	SEQ R4
+	CMP #1, R4
+	BEQ true..or_0
+	LOAD #0, R4
+	BRA end..or_0
+true..or_0:
+	LOAD #1, R4
+end..or_0:
+	LOAD R4, R1
+	BEQ else..3
+; IF then_body
+; Assign (0)
+	LOAD 36(LB), R4
+	LOAD 37(LB), R5
 	PUSH R4
 	PUSH R5
 	LOAD -1(SP), R0
@@ -154,16 +255,45 @@ while..1:
 	CMP #null, R1
 	BEQ dereferencement..null
 	LOAD 0(R1), R1
-	BSR 2(R1)
+	BSR 5(R1)
 	SUBSP #3
 	LOAD R1, R4
-	LOAD 20(LB), R5
-	CMP #null, R5
-	BEQ dereferencement..null
-	LOAD 1(R5), R6
-	PUSH R3
+; Store assign (1)
+	STORE R4, 40(LB)
+; End assign (1)
+	BRA end..if_3
+else..3:
+; IF else_body
+	WSTR "dans ia.play()"
+	WNL
+; Assign (0)
+	LOAD 39(LB), R4
+	LOAD 37(LB), R5
 	PUSH R4
-	PUSH R6
+	PUSH R5
+	LOAD -1(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 14(R1)
+	SUBSP #3
+	LOAD R1, R4
+; Store assign (1)
+	STORE R4, 40(LB)
+; End assign (1)
+; FI
+end..if_3:
+	LOAD 37(LB), R4
+	LOAD 40(LB), R5
+	LOAD 38(LB), R6
+	CMP #null, R6
+	BEQ dereferencement..null
+	LOAD 1(R6), R7
+	PUSH R4
+	PUSH R5
+	PUSH R7
 	LOAD -2(SP), R0
 	PUSH R0
 	LOAD 0(SP), R1
@@ -172,9 +302,9 @@ while..1:
 	LOAD 0(R1), R1
 	BSR 6(R1)
 	SUBSP #4
-	LOAD R1, R3
-	LOAD 20(LB), R3
-	PUSH R3
+	LOAD R1, R4
+	LOAD 38(LB), R4
+	PUSH R4
 	LOAD 0(SP), R0
 	PUSH R0
 	LOAD 0(SP), R1
@@ -183,9 +313,9 @@ while..1:
 	LOAD 0(R1), R1
 	BSR 2(R1)
 	SUBSP #2
-	LOAD R1, R3
-	LOAD 19(LB), R3
-	PUSH R3
+	LOAD R1, R4
+	LOAD 37(LB), R4
+	PUSH R4
 	LOAD 0(SP), R0
 	PUSH R0
 	LOAD 0(SP), R1
@@ -194,11 +324,11 @@ while..1:
 	LOAD 0(R1), R1
 	BSR 4(R1)
 	SUBSP #2
-	LOAD R1, R3
-	BRA while..1
-end..while_1:
-	LOAD 19(LB), R3
-	PUSH R3
+	LOAD R1, R4
+	BRA while..2
+end..while_2:
+	LOAD 37(LB), R4
+	PUSH R4
 	LOAD 0(SP), R0
 	PUSH R0
 	LOAD 0(SP), R1
@@ -207,11 +337,11 @@ end..while_1:
 	LOAD 0(R1), R1
 	BSR 8(R1)
 	SUBSP #2
-	LOAD R1, R3
+	LOAD R1, R4
 ; Start IF
 ; cond IF
-	LOAD 19(LB), R3
-	PUSH R3
+	LOAD 37(LB), R4
+	PUSH R4
 	LOAD 0(SP), R0
 	PUSH R0
 	LOAD 0(SP), R1
@@ -220,27 +350,27 @@ end..while_1:
 	LOAD 0(R1), R1
 	BSR 3(R1)
 	SUBSP #2
-	LOAD R1, R3
-	LOAD #1, R4
+	LOAD R1, R4
+	LOAD #1, R5
 ; -
-	LOAD #0, R6
-	SUB R4, R6
-	LOAD R6, R7
+	LOAD #0, R7
+	SUB R5, R7
 ; ==
-	CMP R7, R3
-	SEQ R3
-	LOAD R3, R1
-	BEQ else..2
+	CMP R7, R4
+	SEQ R4
+	LOAD R4, R1
+	BEQ else..4
 ; IF then_body
 	WSTR "Egalité ! 🤷"
 	WNL
-	BRA end..if_2
-else..2:
+	BRA end..if_4
+else..4:
 ; IF else_body
 ; Start IF
 ; cond IF
-	LOAD 19(LB), R3
-	PUSH R3
+; Start Or
+	LOAD 37(LB), R4
+	PUSH R4
 	LOAD 0(SP), R0
 	PUSH R0
 	LOAD 0(SP), R1
@@ -249,25 +379,51 @@ else..2:
 	LOAD 0(R1), R1
 	BSR 3(R1)
 	SUBSP #2
-	LOAD R1, R3
-	LOAD #1, R4
+	LOAD R1, R4
+	LOAD #1, R5
 ; ==
-	CMP R4, R3
-	SEQ R3
-	LOAD R3, R1
-	BEQ else..3
+	CMP R5, R4
+	SEQ R4
+; ||
+	CMP #1, R4
+	BEQ true..or_1
+	LOAD 41(LB), R4
+	LOAD #0, R5
+; ==
+	CMP R5, R4
+	SEQ R4
+	CMP #1, R4
+	BEQ true..or_1
+	LOAD #0, R4
+	BRA end..or_1
+true..or_1:
+	LOAD #1, R4
+end..or_1:
+	LOAD R4, R1
+	BEQ else..5
 ; IF then_body
+	LOAD 36(LB), R4
+	PUSH R4
+	LOAD 0(SP), R0
+	PUSH R0
+	LOAD 0(SP), R1
+	CMP #null, R1
+	BEQ dereferencement..null
+	LOAD 0(R1), R1
+	BSR 3(R1)
+	SUBSP #2
+	LOAD R1, R4
 	WSTR "Bravo ! 🥳"
 	WNL
-	BRA end..if_3
-else..3:
+	BRA end..if_5
+else..5:
 ; IF else_body
-	WSTR "L'IA est vraiment trop forte ! 🤖"
+	WSTR "Cette IA est trop forte ! 🤖"
 	WNL
 ; FI
-end..if_3:
+end..if_5:
 ; FI
-end..if_2:
+end..if_4:
 	HALT
 ; # end main
 ; # start Object
@@ -303,10 +459,220 @@ init.IO:
 	BSR init.Object
 	SUBSP #1
 	LOAD -2(LB), R1
-	LEA 15(GB), R0
+	LEA 30(GB), R0
 	STORE R0, 0(R1)
 	RTS
 ; # end init
+methodBody.IO.printHello:
+	TSTO #0
+	BOV stack..overflow_error
+	ADDSP #0
+; ----------- Code de la methode printHello dans la classe IO
+; Beginning of method instructions:
+	WNL
+	WNL
+	WNL
+	WNL
+	WNL
+	WNL
+	WNL
+	WNL
+	WNL
+	WNL
+	WNL
+	WNL
+	WNL
+	WSTR "┼┼┼┼┼┼┼┼┼┼┼┼▄▀▀▀▄▄▄▄▄▄▄▀▀▀▄┼┼┼┼┼┼┼┼┼┼┼"
+	WNL
+	WSTR "┼┼┼┼┼┼┼┼┼┼┼┼█▒▒░░░░░░░░░▒▒█┼┼┼┼┼┼┼┼┼┼┼"
+	WNL
+	WSTR "┼┼┼┼┼┼┼┼┼┼┼┼┼█░░█░░░░░█░░█┼┼┼┼┼┼┼┼┼┼┼┼"
+	WNL
+	WSTR "┼┼┼┼┼┼┼┼┼─▄▄──█░░░▀█▀░░░█──▄▄─┼┼┼┼┼┼┼┼"
+	WNL
+	WSTR "┼┼┼┼┼┼┼┼┼█░░█─▀▄░░░░░░░▄▀─█░░█┼┼┼┼┼┼┼┼"
+	WNL
+	WSTR "┼┼┼┼┼┼██░██░████░██░░░██░░░█████┼┼┼┼┼┼"
+	WNL
+	WSTR "┼┼┼┼┼┼██▄██░██▄▄░██░░░██░░░██░██┼┼┼┼┼┼"
+	WNL
+	WSTR "┼┼┼┼┼┼██▀██░██▀▀░██░░░██░░░██░██┼┼┼┼┼┼"
+	WNL
+	WSTR "┼┼┼┼┼┼██░██░████░████░████░█████┼┼┼┼┼┼"
+	WNL
+	WNL
+return..0:
+	RTS
+methodBody.IO.printLink:
+	TSTO #0
+	BOV stack..overflow_error
+	ADDSP #0
+; ----------- Code de la methode printLink dans la classe IO
+; Beginning of method instructions:
+	WSTR "                          ††¥¥"
+	WNL
+	WSTR "                         ††††¥¥"
+	WNL
+	WSTR "                        ††††††¥¥"
+	WNL
+	WSTR "                       ††††††††¥¥"
+	WNL
+	WSTR "                      ††††††††††¥¥"
+	WNL
+	WSTR "                     ††††††††††††¥¥"
+	WNL
+	WSTR "                    ††††††††††††††¥¥"
+	WNL
+	WSTR "                   ††††††††††††††††¥¥"
+	WNL
+	WSTR "                  ††††††††††††††††††¥¥"
+	WNL
+	WSTR "                 ††††††††††††††††††††¥¥"
+	WNL
+	WSTR "                ††††††††††††††††††††††¥¥"
+	WNL
+	WSTR "               ††††††††††††††††††††††††¥¥"
+	WNL
+	WSTR "              ††††††††††††††††††††††††††¥¥"
+	WNL
+	WSTR "             ††††††††††††††††††††††††††††¥¥"
+	WNL
+	WSTR "            ††¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥††¥¥"
+	WNL
+	WSTR "           ††††¥¥¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯††††¥¥"
+	WNL
+	WSTR "          ††††††¥¥¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯††††††¥¥"
+	WNL
+	WSTR "         ††††††††¥¥¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯††††††††¥¥"
+	WNL
+	WSTR "        ††††††††††¥¥¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯††††††††††¥¥"
+	WNL
+	WSTR "       ††††††††††††¥¥¯¯¯¯¯¯¯¯¯¯¯¯¯¯††††††††††††¥¥"
+	WNL
+	WSTR "      ††††††††††††††¥¥¯¯¯¯¯¯¯¯¯¯¯¯††††††††††††††¥¥"
+	WNL
+	WSTR "     ††††††††††††††††¥¥¯¯¯¯¯¯¯¯¯¯††††††††††††††††¥¥"
+	WNL
+	WSTR "    ††††††††††††††††††¥¥¯¯¯¯¯¯¯¯††††††††††††††††††¥¥"
+	WNL
+	WSTR "   ††††††††††††††††††††¥¥¯¯¯¯¯¯††††††††††††††††††††¥¥"
+	WNL
+	WSTR "  ††††††††††††††††††††††¥¥¯¯¯¯††††††††††††††††††††††¥¥"
+	WNL
+	WSTR " ††††††††††††††††††††††††¥¥¯¯††††††††††††††††††††††††¥¥"
+	WNL
+	WSTR "††††††††††††††††††††††††††††††††††††††††††††††††††††††¥¥"
+	WNL
+	WSTR "¯¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥"
+	WNL
+	WSTR "            ¶¶3333¶   ¶¶¶¶ÿÿÿÿ¶¶¶¶   ¶3333¶¶"
+	WNL
+	WSTR "            ¶¶33333¶ ¶ÿÿÿÿÿÿÿÿÿÿÿÿ¶ ¶33333¶¶"
+	WNL
+	WSTR "            ¶¶¶¶¶¶¶¶ÿÿ¶¶¶¶¶¶¶¶¶¶¶¶ÿÿ¶¶¶¶¶¶¶¶"
+	WNL
+	WSTR "            ¶¶0000¶¶¶77777777777777¶¶¶0000¶¶"
+	WNL
+	WSTR "            ¶¶0000¶¶7¶¶¶¶¶¶¶¶¶¶¶¶¶¶7¶¶0000¶¶"
+	WNL
+	WSTR "             ¶¶000¶¶¶a¯¯¶¶aaaa¶¶¯¯a¶¶¶000¶¶"
+	WNL
+	WSTR "             ¶¶000¶¶aa¯¯¶¶aaaa¶¶¯¯aa¶¶000¶¶"
+	WNL
+	WSTR "              ¶¶00¶¶aaa¯¯aaaaaa¯¯aaa¶¶00¶¶"
+	WNL
+	WSTR "               ¶¶000¶¶aaaaaaaaaaaa¶¶000¶¶"
+	WNL
+	WSTR "                ¶¶00¶¶¶¶aaaaaaaa¶¶¶¶00¶¶"
+	WNL
+	WSTR "                 ¶¶88888¶¶¶¶¶¶¶¶88888¶¶"
+	WNL
+	WSTR "                  ¶¶8855888888885588¶¶"
+	WNL
+	WSTR "                  ¶¶8855555555555588¶¶"
+	WNL
+	WSTR "                ¶¶11¶¶888855558888¶¶11¶¶"
+	WNL
+	WSTR "              ¶¶88881111¶¶1111¶¶11118888¶¶"
+	WNL
+	WSTR "              ¶¶¶¶¶¶8888111111118888¶¶¶¶¶¶"
+	WNL
+	WSTR "            ¶¶ƒƒ§§¶¶¶¶¶¶88888888¶¶¶¶¶¶§§ƒƒ¶¶"
+	WNL
+	WSTR "            ¶¶ƒƒƒƒ§§¶¶¯¶¶¶¶¶¶¶¶¶¶¯¶¶§§ƒƒƒƒ¶¶"
+	WNL
+	WSTR "            ¶¶¶¶¶¶¶¶¶              "
+	WNL
+return..1:
+	RTS
+methodBody.IO.askVsWho:
+	TSTO #4
+	BOV stack..overflow_error
+	ADDSP #1
+	PUSH R3
+	PUSH R2
+; ----------- Code de la methode askVsWho dans la classe IO
+; Beginning of method instructions:
+while..0:
+	LOAD #1, R2
+	LOAD R2, R1
+	CMP #1, R1
+	BNE end..while_0
+	WSTR "Play against human (1) or IA (2): "
+; Assign (0)
+	RINT
+	BOV io..error
+	LOAD R1, R2
+; Store assign (1)
+	STORE R2, 1(LB)
+; End assign (1)
+; Start IF
+; cond IF
+; Start And
+	LOAD #1, R2
+	LOAD 1(LB), R3
+; <=
+	SUB R3, R2
+	SLE R2
+; &&
+	CMP #0, R2
+	BEQ false..and_0
+	LOAD 1(LB), R2
+	LOAD #2, R3
+; <=
+	SUB R3, R2
+	SLE R2
+	CMP #0, R2
+	BEQ false..and_0
+	LOAD #1, R2
+	BRA end..and_0
+false..and_0:
+	LOAD #0, R2
+end..and_0:
+	LOAD R2, R1
+	BEQ else..0
+; IF then_body
+	LOAD 1(LB), R2
+	LOAD #2, R3
+; ==
+	CMP R3, R2
+	SEQ R2
+	LOAD R2, R1
+	BRA return..2
+	BRA end..if_0
+else..0:
+; IF else_body
+	WSTR "Bad input, need to be 1 or 2."
+	WNL
+; FI
+end..if_0:
+	BRA while..0
+end..while_0:
+	BRA no..return_error
+return..2:
+	POP R2
+	POP R3
+	RTS
 methodBody.IO.askWhereToPlay:
 	TSTO #6
 	BOV stack..overflow_error
@@ -317,7 +683,7 @@ methodBody.IO.askWhereToPlay:
 	LOAD #0, R2
 	STORE R2, 1(LB)
 ; Beginning of method instructions:
-while..0:
+while..1:
 	LOAD 1(LB), R2
 	LOAD #0, R3
 ; ==
@@ -325,7 +691,7 @@ while..0:
 	SEQ R2
 	LOAD R2, R1
 	CMP #1, R1
-	BNE end..while_0
+	BNE end..while_1
 	WSTR "Where would you play (1 - 9): "
 ; Assign (0)
 	RINT
@@ -344,21 +710,21 @@ while..0:
 	SLE R2
 ; &&
 	CMP #0, R2
-	BEQ false..and_0
+	BEQ false..and_1
 	LOAD 2(LB), R2
 	LOAD #9, R3
 ; <=
 	SUB R3, R2
 	SLE R2
 	CMP #0, R2
-	BEQ false..and_0
+	BEQ false..and_1
 	LOAD #1, R2
-	BRA end..and_0
-false..and_0:
+	BRA end..and_1
+false..and_1:
 	LOAD #0, R2
-end..and_0:
+end..and_1:
 	LOAD R2, R1
-	BEQ else..0
+	BEQ else..1
 ; IF then_body
 ; Start IF
 ; cond IF
@@ -376,34 +742,34 @@ end..and_0:
 	SUBSP #3
 	LOAD R1, R2
 	LOAD R2, R1
-	BEQ else..1
+	BEQ else..2
 ; IF then_body
 ; Assign (0)
 	LOAD #1, R2
 ; Store assign (1)
 	STORE R2, 1(LB)
 ; End assign (1)
-	BRA end..if_1
-else..1:
+	BRA end..if_2
+else..2:
 ; IF else_body
 	WSTR "This box is not empty!"
 	WNL
 ; FI
-end..if_1:
-	BRA end..if_0
-else..0:
+end..if_2:
+	BRA end..if_1
+else..1:
 ; IF else_body
 	WSTR "Bad input, need to be between 1 and 9."
 	WNL
 ; FI
-end..if_0:
-	BRA while..0
-end..while_0:
+end..if_1:
+	BRA while..1
+end..while_1:
 	LOAD 2(LB), R2
 	LOAD R2, R1
-	BRA return..0
+	BRA return..3
 	BRA no..return_error
-return..0:
+return..3:
 	POP R2
 	POP R3
 	RTS
