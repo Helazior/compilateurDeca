@@ -427,6 +427,12 @@ end..if_38:
 end..if_37:
 ; FI
 end..if_36:
+	LOAD #1, R11
+; -
+	LOAD #0, R12
+	SUB R11, R12
+	LOAD R12, R1
+	BRA return..13
 	BRA no..return_error
 return..13:
 	POP R2
@@ -2720,7 +2726,7 @@ io..error:
 	WNL
 	ERROR
 no..return_error:
-	WSTR "Error: Expected a return at the and of a no void method"
+	WSTR "Error: Expected a return at the end of a no void method"
 	WNL
 	ERROR
 div..by_zero_error:

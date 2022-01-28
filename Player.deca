@@ -19,6 +19,7 @@ class IA extends Player {
 		if (g.box00 == p && g.box01 == p && g.box02 == 0) {return 3;}
 		else if (g.box01 == p && g.box02 == p && g.box00 == 0) {return 1;}
 		else if (g.box00 == p && g.box02 == p && g.box01 == 0) {return 2;}
+		return -1;
 	}
 
 	int checkDouble1(Grid g, int p) {

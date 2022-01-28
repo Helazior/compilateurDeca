@@ -780,7 +780,7 @@ io..error:
 	WNL
 	ERROR
 no..return_error:
-	WSTR "Error: Expected a return at the and of a no void method"
+	WSTR "Error: Expected a return at the end of a no void method"
 	WNL
 	ERROR
 div..by_zero_error:
